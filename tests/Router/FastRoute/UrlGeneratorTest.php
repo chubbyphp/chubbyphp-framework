@@ -7,12 +7,12 @@ namespace Chubbyphp\Tests\Framework\Router\FastRoute;
 use Chubbyphp\Framework\Router\FastRoute\UrlGenerator;
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
+use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
+use FastRoute\RouteParser;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use FastRoute\RouteParser;
-use Chubbyphp\Framework\Router\UrlGeneratorException;
 
 /**
  * @covers \Chubbyphp\Framework\Router\FastRoute\UrlGenerator
@@ -75,6 +75,46 @@ final class UrlGeneratorTest extends TestCase
 
         $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
         $urlGenerator->requestTarget('user');
+    }
+
+    public function testRequestTargetWithInvalidParameters(): void
+    {
+        $this->expectException(UrlGeneratorException::class);
+        $this->expectExceptionMessage(
+            'Parameter "id" with value "c0b8bf5f-476b-4552-97aa-e37b8004a5c0" does not match "\d+"'
+        );
+        $this->expectExceptionCode(3);
+
+        /** @var RouteInterface|MockObject $route */
+        $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getPath')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+        ]);
+
+        /** @var RouteCollectionInterface|MockObject $routeCollection */
+        $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
+            Call::create('getRoutes')->with()->willReturn(['user' => $route]),
+        ]);
+
+        $parsedPath = [
+            [
+                '/user/',
+                ['id', '\\d+'],
+            ],
+            [
+                '/user/',
+                ['id', '\\d+'],
+                '/',
+                ['name', '[^/]+'],
+            ],
+        ];
+
+        /** @var RouteParser|MockObject $routeParser */
+        $routeParser = $this->getMockByCalls(RouteParser::class, [
+            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
+        ]);
+
+        $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
+        $urlGenerator->requestTarget('user', ['id' => 'c0b8bf5f-476b-4552-97aa-e37b8004a5c0']);
     }
 
     public function testRequestTargetSuccessful(): void
