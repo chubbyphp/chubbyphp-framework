@@ -81,10 +81,6 @@ $container[RouteCollection::class] = function () use ($psr11Container) {
     return $routeCollection;
 };
 
-$container[RouteDispatcher::class] = function () use ($container) {
-    return new RouteDispatcher($container[RouteCollection::class]);
-};
-
 $container[UrlGenerator::class] = function () use ($container) {
     return new UrlGenerator($container[RouteCollection::class]);
 };
@@ -138,7 +134,7 @@ $routeCollection = (new RouteCollection())
     ->route('', RouteInterface::GET, 'index', new LazyRequestHandler($psr11Container, 'requestHandler'));
 
 $app = new Application(
-    $container[RouteDispatcher::class],
+    new RouteDispatcher($container[RouteCollection::class]),
     new MiddlewareDispatcher(),
     new ExceptionResponseHandler($container[ResponseFactory::class])
 );
