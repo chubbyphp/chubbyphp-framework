@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\FastRoute;
 
+use Chubbyphp\Framework\Router\InvalidParameter;
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Framework\Router\UrlGeneratorInterface;
 use FastRoute\RouteParser;
 use FastRoute\RouteParser\Std;
-use Chubbyphp\Framework\Router\InvalidParameter;
 
 final class UrlGenerator implements UrlGeneratorInterface
 {
