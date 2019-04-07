@@ -6,7 +6,7 @@ namespace Chubbyphp\Tests\Framework\Router\FastRoute;
 
 use Chubbyphp\Framework\Router\FastRoute\RouteDispatcher;
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
-use Chubbyphp\Framework\Router\RouteException;
+use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
@@ -55,7 +55,7 @@ final class RouteDispatcherTest extends TestCase
 
     public function testDispatchNotFound(): void
     {
-        $this->expectException(RouteException::class);
+        $this->expectException(RouteDispatcherException::class);
         $this->expectExceptionMessage(
             'The page "/" you are looking for could not be found.'
                 .' Check the address bar to ensure your URL is spelled correctly.'
@@ -92,7 +92,7 @@ final class RouteDispatcherTest extends TestCase
 
     public function testDispatchMethodNotAllowed(): void
     {
-        $this->expectException(RouteException::class);
+        $this->expectException(RouteDispatcherException::class);
         $this->expectExceptionMessage(
             'Method "POST" at path "/api/pet?offset=1&limit=20" is not allowed. Must be one of: "GET"'
         );

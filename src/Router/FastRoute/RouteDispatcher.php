@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Framework\Router\FastRoute;
 
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
-use Chubbyphp\Framework\Router\RouteException;
+use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherInterface;
 use FastRoute\Dispatcher;
@@ -50,11 +50,11 @@ final class RouteDispatcher implements RouteDispatcherInterface
         $routeInfo = $this->dispatcher->dispatch($method, $path);
 
         if (Dispatcher::NOT_FOUND === $routeInfo[0]) {
-            throw RouteException::createForNotFound($request->getRequestTarget());
+            throw RouteDispatcherException::createForNotFound($request->getRequestTarget());
         }
 
         if (Dispatcher::METHOD_NOT_ALLOWED === $routeInfo[0]) {
-            throw RouteException::createForMethodNotAllowed(
+            throw RouteDispatcherException::createForMethodNotAllowed(
                 $method,
                 $routeInfo[1],
                 $request->getRequestTarget()

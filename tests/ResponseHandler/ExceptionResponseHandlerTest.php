@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\ResponseHandler;
 
 use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
-use Chubbyphp\Framework\Router\RouteException;
+use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,7 +23,7 @@ final class ExceptionResponseHandlerTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testCreateRouteExceptionResponse(): void
+    public function testCreateRouteDispatcherExceptionResponse(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -70,7 +70,7 @@ EOT;
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        $routeException = RouteException::createForNotFound('/');
+        $routeException = RouteDispatcherException::createForNotFound('/');
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
@@ -79,10 +79,10 @@ EOT;
 
         $responseHandler = new ExceptionResponseHandler($responseFactory);
 
-        self::assertSame($response, $responseHandler->createRouteExceptionResponse($request, $routeException));
+        self::assertSame($response, $responseHandler->createRouteDispatcherExceptionResponse($request, $routeException));
     }
 
-    public function testCreateRouteExceptionResponseInDebugMode(): void
+    public function testCreateRouteDispatcherExceptionResponseInDebugMode(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -129,7 +129,7 @@ EOT;
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        $routeException = RouteException::createForNotFound('/');
+        $routeException = RouteDispatcherException::createForNotFound('/');
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
@@ -138,7 +138,7 @@ EOT;
 
         $responseHandler = new ExceptionResponseHandler($responseFactory, true);
 
-        self::assertSame($response, $responseHandler->createRouteExceptionResponse($request, $routeException));
+        self::assertSame($response, $responseHandler->createRouteDispatcherExceptionResponse($request, $routeException));
     }
 
     public function testCreateExceptionResponse(): void

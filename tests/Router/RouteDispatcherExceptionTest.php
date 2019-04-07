@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Router;
 
-use Chubbyphp\Framework\Router\RouteException;
+use Chubbyphp\Framework\Router\RouteDispatcherException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Framework\Router\RouteException
+ * @covers \Chubbyphp\Framework\Router\RouteDispatcherException
  */
-final class RouteExceptionTest extends TestCase
+final class RouteDispatcherExceptionTest extends TestCase
 {
     public function testConstruct(): void
     {
@@ -18,17 +18,17 @@ final class RouteExceptionTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 'Call to private %s::__construct() from context \'%s\'',
-                RouteException::class,
-                RouteExceptionTest::class
+                RouteDispatcherException::class,
+                RouteDispatcherExceptionTest::class
             )
         );
 
-        new RouteException('test');
+        new RouteDispatcherException('test');
     }
 
     public function testCreateForNotFound(): void
     {
-        $exception = RouteException::createForNotFound('/');
+        $exception = RouteDispatcherException::createForNotFound('/');
 
         self::assertSame('Page not found', $exception->getTitle());
         self::assertSame(
@@ -41,7 +41,7 @@ final class RouteExceptionTest extends TestCase
 
     public function testCreateForMethodNotAllowed(): void
     {
-        $exception = RouteException::createForMethodNotAllowed('GET', ['POST', 'PUT'], '/');
+        $exception = RouteDispatcherException::createForMethodNotAllowed('GET', ['POST', 'PUT'], '/');
 
         self::assertSame('Method not allowed', $exception->getTitle());
         self::assertSame(

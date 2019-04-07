@@ -6,7 +6,7 @@ namespace Chubbyphp\Framework;
 
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherInterface;
-use Chubbyphp\Framework\Router\RouteException;
+use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -69,13 +69,13 @@ final class Application
                 $route->getRequestHandler(),
                 $this->requestWithRouteAttributes($request, $route)
             );
-        } catch (RouteException $routeException) {
+        } catch (RouteDispatcherException $routeException) {
             $this->logger->info($routeException->getTitle(), [
                 'message' => $routeException->getMessage(),
                 'code' => $routeException->getCode(),
             ]);
 
-            $response = $this->throwableHandler->createRouteExceptionResponse($request, $routeException);
+            $response = $this->throwableHandler->createRouteDispatcherExceptionResponse($request, $routeException);
         } catch (\Throwable $throwable) {
             $this->logger->error('Throwable', ['throwables' => $this->nestedThrowableToArray($throwable)]);
 

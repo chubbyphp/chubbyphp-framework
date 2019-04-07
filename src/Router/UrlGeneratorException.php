@@ -19,7 +19,7 @@ final class UrlGeneratorException extends \RuntimeException
      */
     public static function createForMissingParameter(): self
     {
-        return new self('Missing parameters');
+        return new self('Missing parameters', 1);
     }
 
     /**
@@ -37,7 +37,8 @@ final class UrlGeneratorException extends \RuntimeException
                 $parameter,
                 $value,
                 $pattern
-            )
+            ),
+            2
         );
     }
 }
