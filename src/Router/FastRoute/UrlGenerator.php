@@ -45,7 +45,7 @@ final class UrlGenerator implements UrlGeneratorInterface
     {
         $route = $this->getRoute($name);
 
-        $routePartSets = array_reverse($this->routeParser->parse($route->getPath()));
+        $routePartSets = array_reverse($this->routeParser->parse($route->getPattern()));
 
         $routeIndex = $this->getRouteIndex($routePartSets, $parameters);
 

@@ -32,7 +32,7 @@ final class RouteDispatcher implements RouteDispatcherInterface
         $this->routes = $routeCollection->getRoutes();
         $this->dispatcher = \FastRoute\simpleDispatcher(function (RouteCollector $routeCollector) {
             foreach ($this->routes as $route) {
-                $routeCollector->addRoute($route->getMethod(), $route->getPath(), $route->getName());
+                $routeCollector->addRoute($route->getMethod(), $route->getPattern(), $route->getName());
             }
         });
     }

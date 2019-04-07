@@ -47,7 +47,7 @@ final class UrlGeneratorTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPath')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
@@ -87,7 +87,7 @@ final class UrlGeneratorTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPath')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
@@ -121,10 +121,10 @@ final class UrlGeneratorTest extends TestCase
     {
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPath')->with()->willReturn('/user[/{id:\d+}]/{name}'),
-            Call::create('getPath')->with()->willReturn('/user[/{id:\d+}]/{name}'),
-            Call::create('getPath')->with()->willReturn('/user[/{id:\d+}]/{name}'),
-            Call::create('getPath')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */

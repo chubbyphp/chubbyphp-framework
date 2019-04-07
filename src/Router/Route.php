@@ -12,7 +12,7 @@ final class Route implements RouteInterface
     /**
      * @var string
      */
-    private $path;
+    private $pattern;
 
     /**
      * @var string
@@ -40,20 +40,20 @@ final class Route implements RouteInterface
     private $attributes = [];
 
     /**
-     * @param string                  $path
+     * @param string                  $pattern
      * @param string                  $method
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
      * @param MiddlewareInterface[]   $middlewares
      */
     public function __construct(
-        string $path,
+        string $pattern,
         string $method,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ) {
-        $this->path = $path;
+        $this->pattern = $pattern;
         $this->method = $method;
         $this->name = $name;
         $this->requestHandler = $requestHandler;
@@ -74,9 +74,9 @@ final class Route implements RouteInterface
     /**
      * @return string
      */
-    public function getPath(): string
+    public function getPattern(): string
     {
-        return $this->path;
+        return $this->pattern;
     }
 
     /**

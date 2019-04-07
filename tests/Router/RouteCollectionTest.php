@@ -49,7 +49,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route1 */
         $route1 = $routes['index'];
 
-        self::assertSame('/', $route1->getPath());
+        self::assertSame('/', $route1->getPattern());
         self::assertSame(RouteInterface::GET, $route1->getMethod());
         self::assertSame('index', $route1->getName());
         self::assertSame($requestHandler, $route1->getRequestHandler());
@@ -59,7 +59,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route2 */
         $route2 = $routes['pet_list'];
 
-        self::assertSame('/api/pet', $route2->getPath());
+        self::assertSame('/api/pet', $route2->getPattern());
         self::assertSame(RouteInterface::GET, $route2->getMethod());
         self::assertSame('pet_list', $route2->getName());
         self::assertSame($requestHandler, $route2->getRequestHandler());
@@ -69,7 +69,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route3 */
         $route3 = $routes['pet_create'];
 
-        self::assertSame('/api/pet', $route3->getPath());
+        self::assertSame('/api/pet', $route3->getPattern());
         self::assertSame(RouteInterface::POST, $route3->getMethod());
         self::assertSame('pet_create', $route3->getName());
         self::assertSame($requestHandler, $route3->getRequestHandler());
@@ -79,7 +79,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route4 */
         $route4 = $routes['pet_read'];
 
-        self::assertSame('/api/pet/{id}', $route4->getPath());
+        self::assertSame('/api/pet/{id}', $route4->getPattern());
         self::assertSame(RouteInterface::GET, $route4->getMethod());
         self::assertSame('pet_read', $route4->getName());
         self::assertSame($requestHandler, $route4->getRequestHandler());
@@ -89,7 +89,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route5 */
         $route5 = $routes['pet_update'];
 
-        self::assertSame('/api/pet/{id}', $route5->getPath());
+        self::assertSame('/api/pet/{id}', $route5->getPattern());
         self::assertSame(RouteInterface::PUT, $route5->getMethod());
         self::assertSame('pet_update', $route5->getName());
         self::assertSame($requestHandler, $route5->getRequestHandler());
@@ -99,7 +99,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route6 */
         $route6 = $routes['pet_delete'];
 
-        self::assertSame('/api/pet/{id}', $route6->getPath());
+        self::assertSame('/api/pet/{id}', $route6->getPattern());
         self::assertSame(RouteInterface::DELETE, $route6->getMethod());
         self::assertSame('pet_delete', $route6->getName());
         self::assertSame($requestHandler, $route6->getRequestHandler());

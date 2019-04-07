@@ -16,7 +16,7 @@ final class RouteCollection implements RouteCollectionInterface
     /**
      * @var string[]
      */
-    private $pathStack = [];
+    private $patternStack = [];
 
     /**
      * @var array[]
@@ -24,14 +24,14 @@ final class RouteCollection implements RouteCollectionInterface
     private $middlewaresStack = [];
 
     /**
-     * @param string $path
+     * @param string $pattern
      * @param array  $middlewares
      *
      * @return self
      */
-    public function group(string $path, array $middlewares = []): self
+    public function group(string $pattern, array $middlewares = []): self
     {
-        $this->pathStack[] = $path;
+        $this->patternStack[] = $pattern;
         $this->middlewaresStack[] = $middlewares;
 
         return $this;
@@ -42,14 +42,14 @@ final class RouteCollection implements RouteCollectionInterface
      */
     public function end(): self
     {
-        array_pop($this->pathStack);
+        array_pop($this->patternStack);
         array_pop($this->middlewaresStack);
 
         return $this;
     }
 
     /**
-     * @param string                  $path
+     * @param string                  $pattern
      * @param string                  $method
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
@@ -58,14 +58,14 @@ final class RouteCollection implements RouteCollectionInterface
      * @return self
      */
     public function route(
-        string $path,
+        string $pattern,
         string $method,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ): self {
         $this->routes[$name] = new Route(
-            $this->getPath($path),
+            $this->getPattern($pattern),
             $method,
             $name,
             $requestHandler,
@@ -76,13 +76,13 @@ final class RouteCollection implements RouteCollectionInterface
     }
 
     /**
-     * @param string $routePath
+     * @param string $pattern
      *
      * @return string
      */
-    private function getPath(string $routePath): string
+    private function getPattern(string $pattern): string
     {
-        return implode('', $this->pathStack).$routePath;
+        return implode('', $this->patternStack).$pattern;
     }
 
     /**

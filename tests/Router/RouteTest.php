@@ -29,7 +29,7 @@ final class RouteTest extends TestCase
 
         $route = new Route('/', RouteInterface::GET, 'index', $requestHandler, [$middleware]);
 
-        self::assertSame('/', $route->getPath());
+        self::assertSame('/', $route->getPattern());
         self::assertSame(RouteInterface::GET, $route->getMethod());
         self::assertSame('index', $route->getName());
         self::assertSame($requestHandler, $route->getRequestHandler());
@@ -50,7 +50,7 @@ final class RouteTest extends TestCase
 
         self::assertNotSame(spl_object_id($routeClone), spl_object_id($route));
 
-        self::assertSame('/', $routeClone->getPath());
+        self::assertSame('/', $routeClone->getPattern());
         self::assertSame(RouteInterface::GET, $routeClone->getMethod());
         self::assertSame('index', $routeClone->getName());
         self::assertSame($requestHandler, $routeClone->getRequestHandler());

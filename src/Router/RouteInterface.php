@@ -18,7 +18,7 @@ interface RouteInterface
     /**
      * @return string
      */
-    public function getPath(): string;
+    public function getPattern(): string;
 
     /**
      * @return string
