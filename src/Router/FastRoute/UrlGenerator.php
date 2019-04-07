@@ -93,21 +93,12 @@ final class UrlGenerator implements UrlGeneratorInterface
                 continue;
             }
 
-            $parameter = $routePart[0];
-
-            if (!isset($parameters[$parameter])) {
-                return null;
-            }
-
-            $pattern = '/^'.str_replace('/', '\/', $routePart[1]).'$/';
-            $value = (string) $parameters[$parameter];
-
-            if (1 !== preg_match($pattern, $value)) {
+            if (null === $parameter = $this->getParameter($routePart, $parameters)) {
                 return null;
             }
 
             $usedParameters[] = $parameter;
-            $requestTargetSegments[] = $value;
+            $requestTargetSegments[] = $parameters[$parameter];
         }
 
         foreach ($usedParameters as $usedParameter) {
@@ -115,5 +106,38 @@ final class UrlGenerator implements UrlGeneratorInterface
         }
 
         return implode('', $requestTargetSegments);
+    }
+
+    /**
+     * @param array $routePart
+     * @param array $parameters
+     *
+     * @return string|null
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function getParameter(array $routePart, array $parameters): ?string
+    {
+        $parameter = $routePart[0];
+
+        if (!isset($parameters[$parameter])) {
+            return null;
+        }
+
+        $pattern = '/^'.str_replace('/', '\/', $routePart[1]).'$/';
+        $value = (string) $parameters[$parameter];
+
+        if (1 !== preg_match($pattern, $value)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Parameter "%s" with value "%s" does not match "%s"',
+                    $parameter,
+                    $value,
+                    $pattern
+                )
+            );
+        }
+
+        return $parameter;
     }
 }
