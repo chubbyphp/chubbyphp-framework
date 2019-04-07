@@ -21,8 +21,7 @@
         "chubbyphp/chubbyphp-mock": "^1.4",
         "nikic/fast-route": "^1.3",
         "phpunit/phpunit": "^8.1",
-        "phploc/phploc": "^5.0",
-        "zendframework/zend-diactoros": "^2.1"
+        "phploc/phploc": "^5.0"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\Framework\\": "src/" }

@@ -37,7 +37,7 @@ composer require chubbyphp/chubbyphp-framework "^1.0"
 
 ## Usage
 
-### Sample using FastRoute and ZendDiactoros
+### Sample using Diactoros, FastRoute and Pimple
 
 ```php
 <?php
@@ -48,10 +48,15 @@ namespace App;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\RequestHandler\LazyRequestHandler;
 use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
 use Chubbyphp\Framework\Router\FastRoute\RouteDispatcher;
+use Chubbyphp\Framework\Router\FastRoute\UrlGenerator;
 use Chubbyphp\Framework\Router\RouteCollection;
 use Chubbyphp\Framework\Router\RouteInterface;
+use Chubbyphp\Framework\Router\UrlGeneratorInterface;
+use Pimple\Container;
+use Pimple\Psr11\Container as Psr11Container;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -61,45 +66,81 @@ use Zend\Diactoros\ServerRequestFactory;
 
 $loader = require __DIR__.'/vendor/autoload.php';
 
-$responseFactory = new ResponseFactory();
+$container = new Container();
+$psr11Container = new Psr11Container($container);
 
-$requestHandler = new class($responseFactory) implements RequestHandlerInterface
-{
-    /**
-     * @var ResponseFactoryInterface
-    */
-    private $responseFactory;
+$container[ResponseFactory::class] = function () {
+    return new ResponseFactory();
+};
 
-    /**
-     * @param ResponseFactoryInterface $responseFactory
-        */
-    public function __construct(ResponseFactoryInterface $responseFactory)
-    {
-        $this->responseFactory = $responseFactory;
-    }
+$container[RouteCollection::class] = function () use ($psr11Container) {
+    $routeCollection = new RouteCollection();
+    $routeCollection
+        ->route('/', RouteInterface::GET, 'index', new LazyRequestHandler($psr11Container, 'requestHandler'));
 
-    /**
-     * @param ServerRequestInterface $request
-        *
-        * @return ResponseInterface
-        */
-    public function handle(ServerRequestInterface $request): ResponseInterface
-    {
-        $response = $this->responseFactory->createResponse();
-        $response = $response->withHeader('Content-Type', 'application/json');
-        $response->getBody()->write(json_encode(['timestamp' => time()]));
+    return $routeCollection;
+};
 
-        return $response;
-    }
+$container[RouteDispatcher::class] = function () use ($container) {
+    return new RouteDispatcher($container[RouteCollection::class]);
+};
+
+$container[UrlGenerator::class] = function () use ($container) {
+    return new UrlGenerator($container[RouteCollection::class]);
+};
+
+$container['requestHandler'] = function () use ($container) {
+    return new class(
+        $container[ResponseFactory::class],
+        $container[UrlGenerator::class]
+    ) implements RequestHandlerInterface {
+        /**
+         * @var ResponseFactoryInterface
+         */
+        private $responseFactory;
+
+        /**
+         * @var UrlGeneratorInterface
+         */
+        private $urlGenerator;
+
+        /**
+         * @param ResponseFactoryInterface $responseFactory
+         * @param UrlGeneratorInterface    $urlGenerator
+         */
+        public function __construct(
+            ResponseFactoryInterface $responseFactory,
+            UrlGeneratorInterface $urlGenerator
+        ) {
+            $this->responseFactory = $responseFactory;
+            $this->urlGenerator = $urlGenerator;
+        }
+
+        /**
+         * @param ServerRequestInterface $request
+         *
+         * @return ResponseInterface
+         */
+        public function handle(ServerRequestInterface $request): ResponseInterface
+        {
+            $response = $this->responseFactory->createResponse();
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write(
+                json_encode(['url' => $this->urlGenerator->requestTarget('index')])
+            );
+
+            return $response;
+        }
+    };
 };
 
 $routeCollection = (new RouteCollection())
-    ->route('/', RouteInterface::GET, 'index', $requestHandler);
+    ->route('', RouteInterface::GET, 'index', new LazyRequestHandler($psr11Container, 'requestHandler'));
 
 $app = new Application(
-    new RouteDispatcher($routeCollection),
+    $container[RouteDispatcher::class],
     new MiddlewareDispatcher(),
-    new ExceptionResponseHandler($responseFactory)
+    new ExceptionResponseHandler($container[ResponseFactory::class])
 );
 
 $app->run(ServerRequestFactory::fromGlobals());
