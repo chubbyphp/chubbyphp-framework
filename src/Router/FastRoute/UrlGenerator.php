@@ -10,6 +10,7 @@ use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Framework\Router\UrlGeneratorInterface;
 use FastRoute\RouteParser;
 use FastRoute\RouteParser\Std;
+use Chubbyphp\Framework\Router\InvalidParameter;
 
 final class UrlGenerator implements UrlGeneratorInterface
 {
@@ -44,16 +45,22 @@ final class UrlGenerator implements UrlGeneratorInterface
     {
         $route = $this->getRoute($name);
 
-        $path = null;
-        foreach (array_reverse($this->routeParser->parse($route->getPath())) as $routeParts) {
-            if (null !== $path = $this->getPath($routeParts, $parameters)) {
-                break;
+        $routePartSets = array_reverse($this->routeParser->parse($route->getPath()));
+
+        $routeIndex = $this->getRouteIndex($routePartSets, $parameters);
+
+        $pathParts = [];
+        foreach ($routePartSets[$routeIndex] as $routePart) {
+            if (is_array($routePart)) {
+                $parameter = $routePart[0];
+                $pathParts[] = (string) $parameters[$parameter];
+                unset($parameters[$parameter]);
+            } else {
+                $pathParts[] = $routePart;
             }
         }
 
-        if (null === $path) {
-            throw UrlGeneratorException::createForMissingParameter();
-        }
+        $path = implode('', $pathParts);
 
         if ([] === $parameters) {
             return $path;
@@ -79,61 +86,46 @@ final class UrlGenerator implements UrlGeneratorInterface
     }
 
     /**
-     * @param array $routeParts
+     * @param array $routePartSets
      * @param array $parameters
      *
-     * @return string|null
+     * @return int
+     *
+     * @throws UrlGeneratorException
      */
-    private function getPath(array $routeParts, array &$parameters): ?string
+    private function getRouteIndex(array $routePartSets, array $parameters): int
     {
-        $usedParameters = [];
-        $requestTargetSegments = [];
+        foreach ($routePartSets as $routeIndex => $routeParts) {
+            $missingParameters = [];
+            $invalidParameters = [];
 
-        foreach ($routeParts as $routePart) {
-            if (is_string($routePart)) {
-                $requestTargetSegments[] = $routePart;
+            foreach ($routeParts as $routePart) {
+                if (is_array($routePart)) {
+                    $parameter = $routePart[0];
+                    if (!isset($parameters[$parameter])) {
+                        $missingParameters[] = $parameter;
 
-                continue;
+                        continue;
+                    }
+
+                    $pattern = $routePart[1];
+                    $value = (string) $parameters[$parameter];
+
+                    if (1 !== preg_match('/^'.str_replace('/', '\/', $pattern).'$/', $value)) {
+                        $invalidParameters[] = new InvalidParameter($parameter, $value, $pattern);
+                    }
+                }
             }
 
-            if (null === $parameter = $this->getParameter($routePart, $parameters)) {
-                return null;
+            if ([] !== $invalidParameters) {
+                throw UrlGeneratorException::createForInvalidParameters($invalidParameters);
             }
 
-            $usedParameters[] = $parameter;
-            $requestTargetSegments[] = $parameters[$parameter];
+            if ([] === $missingParameters) {
+                return $routeIndex;
+            }
         }
 
-        foreach ($usedParameters as $usedParameter) {
-            unset($parameters[$usedParameter]);
-        }
-
-        return implode('', $requestTargetSegments);
-    }
-
-    /**
-     * @param array $routePart
-     * @param array $parameters
-     *
-     * @return string|null
-     *
-     * @throws \InvalidArgumentException
-     */
-    private function getParameter(array $routePart, array $parameters): ?string
-    {
-        $parameter = $routePart[0];
-
-        if (!isset($parameters[$parameter])) {
-            return null;
-        }
-
-        $pattern = '/^'.str_replace('/', '\/', $routePart[1]).'$/';
-        $value = (string) $parameters[$parameter];
-
-        if (1 !== preg_match($pattern, $value)) {
-            throw UrlGeneratorException::createForInvalidParameter($parameter, $value, $pattern);
-        }
-
-        return $parameter;
+        throw UrlGeneratorException::createForMissingParameters($missingParameters);
     }
 }

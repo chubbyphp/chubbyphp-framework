@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Router;
 
+use Chubbyphp\Framework\Router\InvalidParameter;
 use Chubbyphp\Framework\Router\UrlGeneratorException;
 use PHPUnit\Framework\TestCase;
 
@@ -26,21 +27,19 @@ final class UrlGeneratorExceptionTest extends TestCase
         new UrlGeneratorException('test');
     }
 
-    public function testCreateForNotFound(): void
+    public function testCreateForMissingParameters(): void
     {
-        $exception = UrlGeneratorException::createForMissingParameter();
+        $exception = UrlGeneratorException::createForMissingParameters(['id', 'name']);
 
-        self::assertSame('Missing parameters', $exception->getMessage());
+        self::assertSame('Missing parameters: "id", "name"', $exception->getMessage());
         self::assertSame(1, $exception->getCode());
     }
 
-    public function testCreateForMethodNotAllowed(): void
+    public function testCreateForInvalidParameters(): void
     {
-        $exception = UrlGeneratorException::createForInvalidParameter(
-            'id',
-            '97a2c854-322a-4d0e-bd49-2e378d497919',
-            '\d+'
-        );
+        $exception = UrlGeneratorException::createForInvalidParameters([
+            new InvalidParameter('id', '97a2c854-322a-4d0e-bd49-2e378d497919', '\d+'),
+        ]);
 
         self::assertSame(
             'Parameter "id" with value "97a2c854-322a-4d0e-bd49-2e378d497919" does not match "\d+"',
