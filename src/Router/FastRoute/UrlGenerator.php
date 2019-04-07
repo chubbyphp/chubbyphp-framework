@@ -6,6 +6,7 @@ namespace Chubbyphp\Framework\Router\FastRoute;
 
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
+use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Framework\Router\UrlGeneratorInterface;
 use FastRoute\RouteParser;
 use FastRoute\RouteParser\Std;
@@ -36,6 +37,8 @@ final class UrlGenerator implements UrlGeneratorInterface
      * @param array  $parameters
      *
      * @return string
+     *
+     * @throws UrlGeneratorException
      */
     public function requestTarget(string $name, array $parameters): string
     {
@@ -49,7 +52,7 @@ final class UrlGenerator implements UrlGeneratorInterface
         }
 
         if (null === $path) {
-            throw new \InvalidArgumentException('Missing arguments to build the requestTarget');
+            throw UrlGeneratorException::createForMissingParameter();
         }
 
         if ([] === $parameters) {
@@ -128,14 +131,7 @@ final class UrlGenerator implements UrlGeneratorInterface
         $value = (string) $parameters[$parameter];
 
         if (1 !== preg_match($pattern, $value)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Parameter "%s" with value "%s" does not match "%s"',
-                    $parameter,
-                    $value,
-                    $pattern
-                )
-            );
+            throw UrlGeneratorException::createForInvalidParameter($parameter, $value, $pattern);
         }
 
         return $parameter;

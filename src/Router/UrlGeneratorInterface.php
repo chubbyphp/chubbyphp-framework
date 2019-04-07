@@ -6,5 +6,13 @@ namespace Chubbyphp\Framework\Router;
 
 interface UrlGeneratorInterface
 {
-    public function requestTarget(string $name, array $arguments): string;
+    /**
+     * @param string $name
+     * @param array  $parameters
+     *
+     * @return string
+     *
+     * @throws UrlGeneratorException
+     */
+    public function requestTarget(string $name, array $parameters): string;
 }

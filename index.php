@@ -59,8 +59,5 @@ $request = ServerRequestFactory::fromGlobals();
 
 $urlGenerator = new UrlGenerator($routeCollection);
 
-$requestTarget = $urlGenerator->requestTarget('index', ['id' => 1, 'name' => 'sample', 'key' => 'value']);
-
-// /user/1/sample?key=value
-
-var_dump($requestTarget);
+echo $urlGenerator->requestTarget('index', ['id' => 1, 'name' => 'sample', 'key' => 'value']) . PHP_EOL;
+echo $urlGenerator->requestTarget('index', ['id' => 1, 'key' => 'value']) . PHP_EOL;
