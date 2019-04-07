@@ -67,15 +67,15 @@ use Zend\Diactoros\ServerRequestFactory;
 $loader = require __DIR__.'/vendor/autoload.php';
 
 $container = new Container();
-$psr11Container = new Psr11Container($container);
+$psrContainer = new Psr11Container($container);
 
 $container[ResponseFactory::class] = function () {
     return new ResponseFactory();
 };
 
-$container[RouteCollection::class] = function () use ($psr11Container) {
+$container[RouteCollection::class] = function () use ($psrContainer) {
     return (new RouteCollection())
-        ->route('/', RouteInterface::GET, 'index', new LazyRequestHandler($psr11Container, 'requestHandler'));
+        ->route('/', RouteInterface::GET, 'index', new LazyRequestHandler($psrContainer, 'requestHandler'));
 };
 
 $container[UrlGenerator::class] = function () use ($container) {
