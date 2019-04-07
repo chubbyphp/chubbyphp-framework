@@ -8,7 +8,7 @@ use Chubbyphp\Framework\Router\RouteException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-interface ThrowableResponseHandlerInterface
+interface ExceptionResponseHandlerInterface
 {
     /**
      * @param ServerRequestInterface $request
@@ -23,9 +23,9 @@ interface ThrowableResponseHandlerInterface
 
     /**
      * @param ServerRequestInterface $request
-     * @param \Throwable             $throwable
+     * @param \Throwable             $exception
      *
      * @return ResponseInterface
      */
-    public function createThrowableResponse(ServerRequestInterface $request, \Throwable $throwable): ResponseInterface;
+    public function createExceptionResponse(ServerRequestInterface $request, \Throwable $exception): ResponseInterface;
 }

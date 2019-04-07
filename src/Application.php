@@ -8,7 +8,7 @@ use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteException;
 use Chubbyphp\Framework\Router\RouteInterface;
-use Chubbyphp\Framework\ResponseHandler\ThrowableResponseHandlerInterface;
+use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -27,7 +27,7 @@ final class Application
     private $middlewareDispatcher;
 
     /**
-     * @var ThrowableResponseHandlerInterface
+     * @var ExceptionResponseHandlerInterface
      */
     private $throwableHandler;
 
@@ -39,13 +39,13 @@ final class Application
     /**
      * @param RouteDispatcherInterface          $routeDispatcher
      * @param MiddlewareDispatcherInterface     $middlewareDispatcher
-     * @param ThrowableResponseHandlerInterface $throwableHandler
+     * @param ExceptionResponseHandlerInterface $throwableHandler
      * @param LoggerInterface|null              $logger
      */
     public function __construct(
         RouteDispatcherInterface $routeDispatcher,
         MiddlewareDispatcherInterface $middlewareDispatcher,
-        ThrowableResponseHandlerInterface $throwableHandler,
+        ExceptionResponseHandlerInterface $throwableHandler,
         LoggerInterface $logger = null
     ) {
         $this->routeDispatcher = $routeDispatcher;
@@ -79,7 +79,7 @@ final class Application
         } catch (\Throwable $throwable) {
             $this->logger->error('Throwable', ['throwables' => $this->nestedThrowableToArray($throwable)]);
 
-            $response = $this->throwableHandler->createThrowableResponse($request, $throwable);
+            $response = $this->throwableHandler->createExceptionResponse($request, $throwable);
         }
 
         if ($send) {

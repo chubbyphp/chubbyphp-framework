@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\ResponseHandler;
 
-use Chubbyphp\Framework\ResponseHandler\ThrowableResponseHandler;
+use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
 use Chubbyphp\Framework\Router\RouteException;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
@@ -17,9 +17,9 @@ use Psr\Http\Message\StreamInterface;
 use Chubbyphp\Mock\Argument\ArgumentCallback;
 
 /**
- * @covers \Chubbyphp\Framework\ResponseHandler\ThrowableResponseHandler
+ * @covers \Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler
  */
-final class ThrowableResponseHandlerTest extends TestCase
+final class ExceptionResponseHandlerTest extends TestCase
 {
     use MockByCallsTrait;
 
@@ -77,7 +77,7 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ThrowableResponseHandler($responseFactory);
+        $responseHandler = new ExceptionResponseHandler($responseFactory);
 
         self::assertSame($response, $responseHandler->createRouteExceptionResponse($request, $routeException));
     }
@@ -136,12 +136,12 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ThrowableResponseHandler($responseFactory, true);
+        $responseHandler = new ExceptionResponseHandler($responseFactory, true);
 
         self::assertSame($response, $responseHandler->createRouteExceptionResponse($request, $routeException));
     }
 
-    public function testCreateThrowableResponse(): void
+    public function testCreateExceptionResponse(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -195,12 +195,12 @@ EOT;
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ThrowableResponseHandler($responseFactory);
+        $responseHandler = new ExceptionResponseHandler($responseFactory);
 
-        self::assertSame($response, $responseHandler->createThrowableResponse($request, $exception));
+        self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }
 
-    public function testCreateThrowableResponseInDebugMode(): void
+    public function testCreateExceptionResponseInDebugMode(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -231,8 +231,8 @@ EOT;
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ThrowableResponseHandler($responseFactory, true);
+        $responseHandler = new ExceptionResponseHandler($responseFactory, true);
 
-        self::assertSame($response, $responseHandler->createThrowableResponse($request, $exception));
+        self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }
 }

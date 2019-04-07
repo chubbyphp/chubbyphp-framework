@@ -54,7 +54,7 @@ namespace Chubbyphp\Tests\Framework
 {
     use Chubbyphp\Framework\Application;
     use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
-    use Chubbyphp\Framework\ResponseHandler\ThrowableResponseHandlerInterface;
+    use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandlerInterface;
     use Chubbyphp\Framework\Router\RouteDispatcherInterface;
     use Chubbyphp\Framework\Router\RouteException;
     use Chubbyphp\Framework\Router\RouteInterface;
@@ -113,8 +113,8 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willReturn($response),
             ]);
 
-            /** @var ThrowableResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ThrowableResponseHandlerInterface::class);
+            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
+            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class);
 
             /** @var LoggerInterface|MockObject $logger */
             $logger = $this->getMockByCalls(LoggerInterface::class);
@@ -179,8 +179,8 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willReturn($response),
             ]);
 
-            /** @var ThrowableResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ThrowableResponseHandlerInterface::class);
+            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
+            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class);
 
             /** @var LoggerInterface|MockObject $logger */
             $logger = $this->getMockByCalls(LoggerInterface::class);
@@ -237,8 +237,8 @@ namespace Chubbyphp\Tests\Framework
             /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
 
-            /** @var ThrowableResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ThrowableResponseHandlerInterface::class, [
+            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
+            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
                 Call::create('createRouteExceptionResponse')->with($request, $routeException)->willReturn($response),
             ]);
 
@@ -294,8 +294,8 @@ namespace Chubbyphp\Tests\Framework
             /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
 
-            /** @var ThrowableResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ThrowableResponseHandlerInterface::class, [
+            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
+            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
                 Call::create('createRouteExceptionResponse')->with($request, $routeException)->willReturn($response),
             ]);
 
@@ -379,9 +379,9 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willThrowException($exception),
             ]);
 
-            /** @var ThrowableResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ThrowableResponseHandlerInterface::class, [
-                Call::create('createThrowableResponse')->with($request, $exception)->willReturn($response),
+            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
+            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+                Call::create('createExceptionResponse')->with($request, $exception)->willReturn($response),
             ]);
 
             /** @var LoggerInterface|MockObject $logger */
@@ -483,9 +483,9 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willThrowException($exception),
             ]);
 
-            /** @var ThrowableResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ThrowableResponseHandlerInterface::class, [
-                Call::create('createThrowableResponse')->with($request, $exception)->willReturn($response),
+            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
+            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+                Call::create('createExceptionResponse')->with($request, $exception)->willReturn($response),
             ]);
 
             /** @var LoggerInterface|MockObject $logger */

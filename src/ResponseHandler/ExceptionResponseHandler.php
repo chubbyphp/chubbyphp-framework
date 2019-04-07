@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @see https://github.com/slimphp/Slim/blob/3.x/Slim/Handlers/Error.php
  */
-final class ThrowableResponseHandler implements ThrowableResponseHandlerInterface
+final class ExceptionResponseHandler implements ExceptionResponseHandlerInterface
 {
     const ERROR_HTML = <<<'EOT'
 <html>
@@ -91,20 +91,20 @@ EOT;
 
     /**
      * @param ServerRequestInterface $request
-     * @param \Throwable             $throwable
+     * @param \Throwable             $exception
      *
      * @return ResponseInterface
      */
-    public function createThrowableResponse(ServerRequestInterface $request, \Throwable $throwable): ResponseInterface
+    public function createExceptionResponse(ServerRequestInterface $request, \Throwable $exception): ResponseInterface
     {
         if ($this->debug) {
             $html = '<p>The application could not run because of the following error:</p>';
             $html .= '<h2>Details</h2>';
-            $html .= $this->renderThrowable($throwable);
+            $html .= $this->renderException($exception);
 
-            while ($throwable = $throwable->getPrevious()) {
+            while ($exception = $exception->getPrevious()) {
                 $html .= '<h2>Previous exception</h2>';
-                $html .= $this->renderThrowable($throwable);
+                $html .= $this->renderException($exception);
             }
         } else {
             $html = '<p>A website error has occurred. Sorry for the temporary inconvenience.</p>';
@@ -122,19 +122,19 @@ EOT;
     }
 
     /**
-     * @param \Throwable $throwable
+     * @param \Throwable $exception
      *
      * @return string
      */
-    private function renderThrowable(\Throwable $throwable): string
+    private function renderException(\Throwable $exception): string
     {
-        $html = sprintf('<div><strong>Type:</strong> %s</div>', get_class($throwable));
-        $html .= sprintf('<div><strong>Code:</strong> %s</div>', $throwable->getCode());
-        $html .= sprintf('<div><strong>Message:</strong> %s</div>', htmlentities($throwable->getMessage()));
-        $html .= sprintf('<div><strong>File:</strong> %s</div>', $throwable->getFile());
-        $html .= sprintf('<div><strong>Line:</strong> %s</div>', $throwable->getLine());
+        $html = sprintf('<div><strong>Type:</strong> %s</div>', get_class($exception));
+        $html .= sprintf('<div><strong>Code:</strong> %s</div>', $exception->getCode());
+        $html .= sprintf('<div><strong>Message:</strong> %s</div>', htmlentities($exception->getMessage()));
+        $html .= sprintf('<div><strong>File:</strong> %s</div>', $exception->getFile());
+        $html .= sprintf('<div><strong>Line:</strong> %s</div>', $exception->getLine());
         $html .= '<h2>Trace</h2>';
-        $html .= sprintf('<pre>%s</pre>', htmlentities($throwable->getTraceAsString()));
+        $html .= sprintf('<pre>%s</pre>', htmlentities($exception->getTraceAsString()));
 
         return $html;
     }

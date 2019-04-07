@@ -48,7 +48,7 @@ namespace App;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
-use Chubbyphp\Framework\ResponseHandler\ThrowableResponseHandler;
+use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
 use Chubbyphp\Framework\Router\FastRoute\RouteDispatcher;
 use Chubbyphp\Framework\Router\RouteCollection;
 use Chubbyphp\Framework\Router\RouteInterface;
@@ -99,7 +99,7 @@ $routeCollection = (new RouteCollection())
 $app = new Application(
     new RouteDispatcher($routeCollection),
     new MiddlewareDispatcher(),
-    new ThrowableResponseHandler($responseFactory)
+    new ExceptionResponseHandler($responseFactory)
 );
 
 $app->run(ServerRequestFactory::fromGlobals());
