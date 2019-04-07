@@ -26,15 +26,16 @@ final class RouteDispatcher implements RouteDispatcherInterface
 
     /**
      * @param RouteCollectionInterface $data
+     * @param array                    $options
      */
-    public function __construct(RouteCollectionInterface $routeCollection)
+    public function __construct(RouteCollectionInterface $routeCollection, array $options = [])
     {
         $this->routes = $routeCollection->getRoutes();
         $this->dispatcher = \FastRoute\simpleDispatcher(function (RouteCollector $routeCollector) {
             foreach ($this->routes as $route) {
                 $routeCollector->addRoute($route->getMethod(), $route->getPattern(), $route->getName());
             }
-        });
+        }, $options);
     }
 
     /**
