@@ -60,6 +60,7 @@ final class RouteDispatcherTest extends TestCase
             'The page "/" you are looking for could not be found.'
                 .' Check the address bar to ensure your URL is spelled correctly.'
         );
+        $this->expectExceptionCode(404);
 
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
@@ -96,6 +97,7 @@ final class RouteDispatcherTest extends TestCase
         $this->expectExceptionMessage(
             'Method "POST" at path "/api/pet?offset=1&limit=20" is not allowed. Must be one of: "GET"'
         );
+        $this->expectExceptionCode(405);
 
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [

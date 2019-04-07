@@ -27,12 +27,20 @@ final class UrlGeneratorExceptionTest extends TestCase
         new UrlGeneratorException('test');
     }
 
+    public function testCreateForMissingRoute(): void
+    {
+        $exception = UrlGeneratorException::createForMissingRoute('name');
+
+        self::assertSame('Missing route: "name"', $exception->getMessage());
+        self::assertSame(1, $exception->getCode());
+    }
+
     public function testCreateForMissingParameters(): void
     {
         $exception = UrlGeneratorException::createForMissingParameters(['id', 'name']);
 
         self::assertSame('Missing parameters: "id", "name"', $exception->getMessage());
-        self::assertSame(1, $exception->getCode());
+        self::assertSame(2, $exception->getCode());
     }
 
     public function testCreateForInvalidParameters(): void
@@ -45,6 +53,6 @@ final class UrlGeneratorExceptionTest extends TestCase
             'Parameter "id" with value "97a2c854-322a-4d0e-bd49-2e378d497919" does not match "\d+"',
             $exception->getMessage()
         );
-        self::assertSame(2, $exception->getCode());
+        self::assertSame(3, $exception->getCode());
     }
 }

@@ -41,7 +41,7 @@ final class UrlGenerator implements UrlGeneratorInterface
      *
      * @throws UrlGeneratorException
      */
-    public function requestTarget(string $name, array $parameters): string
+    public function requestTarget(string $name, array $parameters = []): string
     {
         $route = $this->getRoute($name);
 
@@ -74,12 +74,12 @@ final class UrlGenerator implements UrlGeneratorInterface
      *
      * @return RouteInterface
      *
-     * @throws \InvalidArgumentException
+     * @throws UrlGeneratorException
      */
     private function getRoute(string $name): RouteInterface
     {
         if (!isset($this->routes[$name])) {
-            throw new \InvalidArgumentException(sprintf('There is no route with name: %s', $name));
+            throw UrlGeneratorException::createForMissingRoute($name);
         }
 
         return $this->routes[$name];

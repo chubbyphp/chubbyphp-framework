@@ -15,13 +15,23 @@ final class UrlGeneratorException extends \RuntimeException
     }
 
     /**
+     * @param string $name
+     *
+     * @return self
+     */
+    public static function createForMissingRoute(string $name): self
+    {
+        return new self(sprintf('Missing route: "%s"', $name), 1);
+    }
+
+    /**
      * @param string[] $missingParameters
      *
      * @return self
      */
     public static function createForMissingParameters(array $missingParameters): self
     {
-        return new self(sprintf('Missing parameters: "%s"', implode('", "', $missingParameters)), 1);
+        return new self(sprintf('Missing parameters: "%s"', implode('", "', $missingParameters)), 2);
     }
 
     /**
@@ -42,6 +52,6 @@ final class UrlGeneratorException extends \RuntimeException
             );
         }
 
-        return new self(trim($message), 2);
+        return new self(trim($message), 3);
     }
 }
