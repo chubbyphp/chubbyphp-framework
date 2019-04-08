@@ -43,7 +43,6 @@ final class RouteDispatcher implements RouteDispatcherInterface
 
     /**
      * @param array  $routes
-     * @param string $hash
      * @param string $cacheFile
      *
      * @return Dispatcher
