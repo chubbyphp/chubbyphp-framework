@@ -6,10 +6,13 @@ namespace Chubbyphp\Framework\Router\FastRoute;
 
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
-use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherInterface;
-use FastRoute\Dispatcher;
+use Chubbyphp\Framework\Router\RouteInterface;
+use FastRoute\DataGenerator\GroupCountBased as DataGenerator;
+use FastRoute\Dispatcher as DispatcherInterface;
+use FastRoute\Dispatcher\GroupCountBased as Dispatcher;
 use FastRoute\RouteCollector;
+use FastRoute\RouteParser\Std as RouteParser;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class RouteDispatcher implements RouteDispatcherInterface
@@ -20,22 +23,23 @@ final class RouteDispatcher implements RouteDispatcherInterface
     private $routes;
 
     /**
-     * @var Dispatcher
+     * @var DispatcherInterface
      */
     private $dispatcher;
 
     /**
      * @param RouteCollectionInterface $routeCollection
-     * @param array                    $options
      */
-    public function __construct(RouteCollectionInterface $routeCollection, array $options = [])
+    public function __construct(RouteCollectionInterface $routeCollection)
     {
         $this->routes = $routeCollection->getRoutes();
-        $this->dispatcher = \FastRoute\simpleDispatcher(function (RouteCollector $routeCollector) {
-            foreach ($this->routes as $route) {
-                $routeCollector->addRoute($route->getMethod(), $route->getPattern(), $route->getName());
-            }
-        }, $options);
+
+        $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
+        foreach ($this->routes as $route) {
+            $routeCollector->addRoute($route->getMethod(), $route->getPattern(), $route->getName());
+        }
+
+        $this->dispatcher = new Dispatcher($routeCollector->getData());
     }
 
     /**
