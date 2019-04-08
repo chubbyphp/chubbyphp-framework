@@ -4,8 +4,21 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 interface UrlGeneratorInterface
 {
+    /**
+     * @param ServerRequestInterface $request
+     * @param string                 $name
+     * @param array                  $parameters
+     *
+     * @return string
+     *
+     * @throws UrlGeneratorException
+     */
+    public function generateUri(ServerRequestInterface $request, string $name, array $parameters = []): string;
+
     /**
      * @param string $name
      * @param array  $parameters
@@ -14,5 +27,5 @@ interface UrlGeneratorInterface
      *
      * @throws UrlGeneratorException
      */
-    public function requestTargetFor(string $name, array $parameters = []): string;
+    public function generatePath(string $name, array $parameters = []): string;
 }

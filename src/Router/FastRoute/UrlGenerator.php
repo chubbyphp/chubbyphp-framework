@@ -11,6 +11,7 @@ use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Framework\Router\UrlGeneratorInterface;
 use FastRoute\RouteParser;
 use FastRoute\RouteParser\Std;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class UrlGenerator implements UrlGeneratorInterface
 {
@@ -35,6 +36,23 @@ final class UrlGenerator implements UrlGeneratorInterface
     }
 
     /**
+     * @param ServerRequestInterface $request
+     * @param string                 $name
+     * @param array                  $parameters
+     *
+     * @return string
+     *
+     * @throws UrlGeneratorException
+     */
+    public function generateUri(ServerRequestInterface $request, string $name, array $parameters = []): string
+    {
+        $uri = $request->getUri();
+        $requestTarget = $this->generatePath($name, $parameters);
+
+        return $uri->getScheme().'://'.$uri->getAuthority().$requestTarget;
+    }
+
+    /**
      * @param string $name
      * @param array  $parameters
      *
@@ -42,7 +60,7 @@ final class UrlGenerator implements UrlGeneratorInterface
      *
      * @throws UrlGeneratorException
      */
-    public function requestTargetFor(string $name, array $parameters = []): string
+    public function generatePath(string $name, array $parameters = []): string
     {
         $route = $this->getRoute($name);
 
