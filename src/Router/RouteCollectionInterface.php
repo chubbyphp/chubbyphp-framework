@@ -12,4 +12,9 @@ interface RouteCollectionInterface
      * @return RouteInterface[]
      */
     public function getRoutes(): array;
+
+    /**
+     * @return string
+     */
+    public function __toString(): string;
 }

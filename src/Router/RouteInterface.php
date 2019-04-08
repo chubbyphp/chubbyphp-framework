@@ -51,4 +51,9 @@ interface RouteInterface
      * @return array
      */
     public function getAttributes(): array;
+
+    /**
+     * @return string
+     */
+    public function __toString(): string;
 }

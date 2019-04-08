@@ -131,4 +131,12 @@ final class Route implements RouteInterface
     {
         return $this->attributes;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->pattern.'::'.$this->method.'::'.$this->name;
+    }
 }

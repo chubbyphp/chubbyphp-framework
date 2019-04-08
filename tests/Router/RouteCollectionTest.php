@@ -106,6 +106,17 @@ final class RouteCollectionTest extends TestCase
         self::assertSame($requestHandler, $route6->getRequestHandler());
         self::assertSame([$middleware1], $route6->getMiddlewares());
         self::assertSame([], $route6->getAttributes());
+
+        $expectedString = <<<'EOT'
+/::GET::index
+/api/pet::GET::pet_list
+/api/pet::POST::pet_create
+/api/pet/{id}::GET::pet_read
+/api/pet/{id}::PUT::pet_update
+/api/pet/{id}::DELETE::pet_delete
+EOT;
+
+        self::assertSame($expectedString, (string) $routeCollection);
     }
 
     public function testFrozenWithGroup(): void

@@ -132,4 +132,17 @@ final class RouteCollection implements RouteCollectionInterface
 
         return $this->routes;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        $string = '';
+        foreach ($this->getRoutes() as $route) {
+            $string .= (string) $route.PHP_EOL;
+        }
+
+        return trim($string);
+    }
 }

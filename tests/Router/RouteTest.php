@@ -35,6 +35,7 @@ final class RouteTest extends TestCase
         self::assertSame($requestHandler, $route->getRequestHandler());
         self::assertSame([$middleware], $route->getMiddlewares());
         self::assertSame([], $route->getAttributes());
+        self::assertSame('/::GET::index', (string) $route);
     }
 
     public function testWithAttributes(): void
@@ -45,16 +46,17 @@ final class RouteTest extends TestCase
         /** @var RequestHandlerInterface|MockObject $requestHandler */
         $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = new Route('/', RouteInterface::GET, 'index', $requestHandler, [$middleware]);
+        $route = new Route('/{key}', RouteInterface::GET, 'index', $requestHandler, [$middleware]);
         $routeClone = $route->withAttributes(['key' => 'value']);
 
         self::assertNotSame(spl_object_id($routeClone), spl_object_id($route));
 
-        self::assertSame('/', $routeClone->getPattern());
+        self::assertSame('/{key}', $routeClone->getPattern());
         self::assertSame(RouteInterface::GET, $routeClone->getMethod());
         self::assertSame('index', $routeClone->getName());
         self::assertSame($requestHandler, $routeClone->getRequestHandler());
         self::assertSame([$middleware], $routeClone->getMiddlewares());
         self::assertSame(['key' => 'value'], $routeClone->getAttributes());
+        self::assertSame('/{key}::GET::index', (string) $route);
     }
 }
