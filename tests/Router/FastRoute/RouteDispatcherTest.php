@@ -46,9 +46,14 @@ final class RouteDispatcherTest extends TestCase
         /** @var RouteCollectionInterface|MockObject $routeCollection */
         $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
             Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
+            Call::create('__toString')->with()->willReturn('/api/pet::GET::pet_list'),
         ]);
 
-        $routeDispatcher = new RouteDispatcher($routeCollection);
+        $cacheDir = sys_get_temp_dir().'/'.uniqid().'/'.uniqid();
+
+        mkdir($cacheDir, 0777, true);
+
+        $routeDispatcher = new RouteDispatcher($routeCollection, $cacheDir);
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }
@@ -84,9 +89,14 @@ final class RouteDispatcherTest extends TestCase
         /** @var RouteCollectionInterface|MockObject $routeCollection */
         $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
             Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
+            Call::create('__toString')->with()->willReturn('/api/pet::GET::pet_list'),
         ]);
 
-        $routeDispatcher = new RouteDispatcher($routeCollection);
+        $cacheDir = sys_get_temp_dir().'/'.uniqid().'/'.uniqid();
+
+        mkdir($cacheDir, 0777, true);
+
+        $routeDispatcher = new RouteDispatcher($routeCollection, $cacheDir);
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }
@@ -121,9 +131,14 @@ final class RouteDispatcherTest extends TestCase
         /** @var RouteCollectionInterface|MockObject $routeCollection */
         $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
             Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
+            Call::create('__toString')->with()->willReturn('/api/pet::GET::pet_list'),
         ]);
 
-        $routeDispatcher = new RouteDispatcher($routeCollection);
+        $cacheDir = sys_get_temp_dir().'/'.uniqid().'/'.uniqid();
+
+        mkdir($cacheDir, 0777, true);
+
+        $routeDispatcher = new RouteDispatcher($routeCollection, $cacheDir);
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }
