@@ -47,10 +47,10 @@ final class UrlGeneratorTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
@@ -58,28 +58,7 @@ final class UrlGeneratorTest extends TestCase
             Call::create('getRoutes')->with()->willReturn(['user' => $route]),
         ]);
 
-        $parsedPath = [
-            [
-                '/user/',
-                ['id', '\\d+'],
-            ],
-            [
-                '/user/',
-                ['id', '\\d+'],
-                '/',
-                ['name', '[^/]+'],
-            ],
-        ];
-
-        /** @var RouteParser|MockObject $routeParser */
-        $routeParser = $this->getMockByCalls(RouteParser::class, [
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-        ]);
-
-        $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
+        $urlGenerator = new UrlGenerator($routeCollection);
 
         self::assertSame(
             'https://user:password@localhost/user/1',
@@ -125,7 +104,7 @@ final class UrlGeneratorTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
@@ -133,25 +112,7 @@ final class UrlGeneratorTest extends TestCase
             Call::create('getRoutes')->with()->willReturn(['user' => $route]),
         ]);
 
-        $parsedPath = [
-            [
-                '/user/',
-                ['id', '\\d+'],
-            ],
-            [
-                '/user/',
-                ['id', '\\d+'],
-                '/',
-                ['name', '[^/]+'],
-            ],
-        ];
-
-        /** @var RouteParser|MockObject $routeParser */
-        $routeParser = $this->getMockByCalls(RouteParser::class, [
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-        ]);
-
-        $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
+        $urlGenerator = new UrlGenerator($routeCollection);
         $urlGenerator->generatePath('user');
     }
 
@@ -165,7 +126,7 @@ final class UrlGeneratorTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
@@ -173,25 +134,7 @@ final class UrlGeneratorTest extends TestCase
             Call::create('getRoutes')->with()->willReturn(['user' => $route]),
         ]);
 
-        $parsedPath = [
-            [
-                '/user/',
-                ['id', '\\d+'],
-            ],
-            [
-                '/user/',
-                ['id', '\\d+'],
-                '/',
-                ['name', '[^/]+'],
-            ],
-        ];
-
-        /** @var RouteParser|MockObject $routeParser */
-        $routeParser = $this->getMockByCalls(RouteParser::class, [
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-        ]);
-
-        $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
+        $urlGenerator = new UrlGenerator($routeCollection);
         $urlGenerator->generatePath('user', ['id' => 'c0b8bf5f-476b-4552-97aa-e37b8004a5c0']);
     }
 
@@ -199,10 +142,10 @@ final class UrlGeneratorTest extends TestCase
     {
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
-            Call::create('getPattern')->with()->willReturn('/user[/{id:\d+}]/{name}'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
@@ -210,28 +153,7 @@ final class UrlGeneratorTest extends TestCase
             Call::create('getRoutes')->with()->willReturn(['user' => $route]),
         ]);
 
-        $parsedPath = [
-            [
-                '/user/',
-                ['id', '\\d+'],
-            ],
-            [
-                '/user/',
-                ['id', '\\d+'],
-                '/',
-                ['name', '[^/]+'],
-            ],
-        ];
-
-        /** @var RouteParser|MockObject $routeParser */
-        $routeParser = $this->getMockByCalls(RouteParser::class, [
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-            Call::create('parse')->with('/user[/{id:\d+}]/{name}')->willReturn($parsedPath),
-        ]);
-
-        $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
+        $urlGenerator = new UrlGenerator($routeCollection);
 
         self::assertSame('/user/1', $urlGenerator->generatePath('user', ['id' => 1]));
         self::assertSame('/user/1?key=value', $urlGenerator->generatePath('user', ['id' => 1, 'key' => 'value']));

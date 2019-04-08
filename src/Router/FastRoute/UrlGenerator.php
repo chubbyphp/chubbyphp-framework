@@ -9,8 +9,7 @@ use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Framework\Router\UrlGeneratorInterface;
-use FastRoute\RouteParser;
-use FastRoute\RouteParser\Std;
+use FastRoute\RouteParser\Std as RouteParser;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class UrlGenerator implements UrlGeneratorInterface
@@ -27,12 +26,11 @@ final class UrlGenerator implements UrlGeneratorInterface
 
     /**
      * @param RouteCollectionInterface $routeCollection
-     * @param RouteParser|null         $routeParser
      */
-    public function __construct(RouteCollectionInterface $routeCollection, RouteParser $routeParser = null)
+    public function __construct(RouteCollectionInterface $routeCollection)
     {
         $this->routes = $routeCollection->getRoutes();
-        $this->routeParser = $routeParser ?? new Std();
+        $this->routeParser = new RouteParser();
     }
 
     /**

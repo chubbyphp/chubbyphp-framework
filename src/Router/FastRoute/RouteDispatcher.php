@@ -9,7 +9,6 @@ use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use FastRoute\DataGenerator\GroupCountBased as DataGenerator;
-use FastRoute\Dispatcher as DispatcherInterface;
 use FastRoute\Dispatcher\GroupCountBased as Dispatcher;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std as RouteParser;
@@ -23,7 +22,7 @@ final class RouteDispatcher implements RouteDispatcherInterface
     private $routes;
 
     /**
-     * @var DispatcherInterface
+     * @var Dispatcher
      */
     private $dispatcher;
 
