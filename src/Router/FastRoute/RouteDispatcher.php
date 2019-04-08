@@ -32,20 +32,34 @@ final class RouteDispatcher implements RouteDispatcherInterface
      */
     public function __construct(RouteCollectionInterface $routeCollection, string $cacheDir = null)
     {
-        $this->routes = $routeCollection->getRoutes();
+        $routes = $routeCollection->getRoutes();
 
-        $cacheFile = ($cacheDir ?? sys_get_temp_dir()).'/fast-route-'.hash('sha256', (string) $routeCollection).'.php';
+        $this->routes = $routes;
+        $this->dispatcher = $this->getDispatcher(
+            $routes,
+            ($cacheDir ?? sys_get_temp_dir()).'/fast-route-'.hash('sha256', (string) $routeCollection).'.php'
+        );
+    }
 
+    /**
+     * @param array  $routes
+     * @param string $hash
+     * @param string $cacheFile
+     *
+     * @return Dispatcher
+     */
+    private function getDispatcher(array $routes, string $cacheFile): Dispatcher
+    {
         if (!file_exists($cacheFile)) {
             $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
-            foreach ($this->routes as $route) {
+            foreach ($routes as $route) {
                 $routeCollector->addRoute($route->getMethod(), $route->getPattern(), $route->getName());
             }
 
             file_put_contents($cacheFile, '<?php return '.var_export($routeCollector->getData(), true).';');
         }
 
-        $this->dispatcher = new Dispatcher(require $cacheFile);
+        return new Dispatcher(require $cacheFile);
     }
 
     /**
