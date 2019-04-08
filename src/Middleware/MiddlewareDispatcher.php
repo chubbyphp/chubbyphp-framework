@@ -27,11 +27,9 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
             return $requestHandler->handle($request);
         }
 
-        $middlewares = array_values($middlewares);
-
         $this->validateMiddlewares($middlewares);
 
-        krsort($middlewares);
+        $middlewares = array_reverse($middlewares);
 
         $firstMiddleware = array_pop($middlewares);
 
