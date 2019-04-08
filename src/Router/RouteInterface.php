@@ -43,9 +43,9 @@ interface RouteInterface
     /**
      * @param array $attributes
      *
-     * @return self
+     * @return RouteInterface
      */
-    public function withAttributes(array $attributes): self;
+    public function withAttributes(array $attributes): RouteInterface;
 
     /**
      * @return array

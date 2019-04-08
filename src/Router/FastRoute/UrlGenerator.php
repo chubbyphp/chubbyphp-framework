@@ -26,7 +26,7 @@ final class UrlGenerator implements UrlGeneratorInterface
     private $routeParser;
 
     /**
-     * @param RouteCollectionInterface $data
+     * @param RouteCollectionInterface $routeCollection
      * @param RouteParser|null         $routeParser
      */
     public function __construct(RouteCollectionInterface $routeCollection, RouteParser $routeParser = null)

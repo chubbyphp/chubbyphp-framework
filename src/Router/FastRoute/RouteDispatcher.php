@@ -25,7 +25,7 @@ final class RouteDispatcher implements RouteDispatcherInterface
     private $dispatcher;
 
     /**
-     * @param RouteCollectionInterface $data
+     * @param RouteCollectionInterface $routeCollection
      * @param array                    $options
      */
     public function __construct(RouteCollectionInterface $routeCollection, array $options = [])
