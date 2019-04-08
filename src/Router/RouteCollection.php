@@ -11,7 +11,7 @@ final class RouteCollection implements RouteCollectionInterface
     /**
      * @var RouteInterface[]
      */
-    private $routes;
+    private $routes = [];
 
     /**
      * @var string[]
@@ -24,13 +24,24 @@ final class RouteCollection implements RouteCollectionInterface
     private $middlewaresStack = [];
 
     /**
+     * @var bool
+     */
+    private $freeze = false;
+
+    /**
      * @param string $pattern
      * @param array  $middlewares
      *
      * @return self
+     *
+     * @throws RouteCollectionException
      */
     public function group(string $pattern, array $middlewares = []): self
     {
+        if ($this->freeze) {
+            throw RouteCollectionException::createFreezeException();
+        }
+
         $this->patternStack[] = $pattern;
         $this->middlewaresStack[] = $middlewares;
 
@@ -39,9 +50,15 @@ final class RouteCollection implements RouteCollectionInterface
 
     /**
      * @return self
+     *
+     * @throws RouteCollectionException
      */
     public function end(): self
     {
+        if ($this->freeze) {
+            throw RouteCollectionException::createFreezeException();
+        }
+
         array_pop($this->patternStack);
         array_pop($this->middlewaresStack);
 
@@ -56,6 +73,8 @@ final class RouteCollection implements RouteCollectionInterface
      * @param array                   $middlewares
      *
      * @return self
+     *
+     * @throws RouteCollectionException
      */
     public function route(
         string $pattern,
@@ -64,6 +83,10 @@ final class RouteCollection implements RouteCollectionInterface
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ): self {
+        if ($this->freeze) {
+            throw RouteCollectionException::createFreezeException();
+        }
+
         $this->routes[$name] = new Route(
             $this->getPattern($pattern),
             $method,
@@ -105,6 +128,8 @@ final class RouteCollection implements RouteCollectionInterface
      */
     public function getRoutes(): array
     {
+        $this->freeze = true;
+
         return $this->routes;
     }
 }

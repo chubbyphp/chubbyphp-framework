@@ -11,6 +11,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Chubbyphp\Framework\Router\RouteCollectionException;
 
 /**
  * @covers \Chubbyphp\Framework\Router\RouteCollection
@@ -105,5 +106,41 @@ final class RouteCollectionTest extends TestCase
         self::assertSame($requestHandler, $route6->getRequestHandler());
         self::assertSame([$middleware1], $route6->getMiddlewares());
         self::assertSame([], $route6->getAttributes());
+    }
+
+    public function testFrozenWithGroup(): void
+    {
+        $this->expectException(RouteCollectionException::class);
+        $this->expectExceptionMessage('The route collection is frozen');
+        $this->expectExceptionCode(1);
+
+        $routeCollection = new RouteCollection();
+        $routeCollection->getRoutes();
+        $routeCollection->group('/api');
+    }
+
+    public function testFrozenWithRoute(): void
+    {
+        $this->expectException(RouteCollectionException::class);
+        $this->expectExceptionMessage('The route collection is frozen');
+        $this->expectExceptionCode(1);
+
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $routeCollection = new RouteCollection();
+        $routeCollection->getRoutes();
+        $routeCollection->route('', RouteInterface::POST, 'pet_create', $requestHandler);
+    }
+
+    public function testFrozenWithEnd(): void
+    {
+        $this->expectException(RouteCollectionException::class);
+        $this->expectExceptionMessage('The route collection is frozen');
+        $this->expectExceptionCode(1);
+
+        $routeCollection = new RouteCollection();
+        $routeCollection->getRoutes();
+        $routeCollection->end();
     }
 }
