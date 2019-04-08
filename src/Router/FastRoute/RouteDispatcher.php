@@ -34,7 +34,7 @@ final class RouteDispatcher implements RouteDispatcherInterface
     {
         $this->routes = $routeCollection->getRoutes();
 
-        $cacheFile = ($cacheDir ?? sys_get_temp_dir()).'/'.hash('sha256', (string) $routeCollection).'.php';
+        $cacheFile = ($cacheDir ?? sys_get_temp_dir()).'/fast-route-'.hash('sha256', (string) $routeCollection).'.php';
 
         if (!file_exists($cacheFile)) {
             $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
