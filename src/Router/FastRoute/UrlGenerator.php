@@ -41,7 +41,7 @@ final class UrlGenerator implements UrlGeneratorInterface
      *
      * @throws UrlGeneratorException
      */
-    public function requestTarget(string $name, array $parameters = []): string
+    public function requestTargetFor(string $name, array $parameters = []): string
     {
         $route = $this->getRoute($name);
 

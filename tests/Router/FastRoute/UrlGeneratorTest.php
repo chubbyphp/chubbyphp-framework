@@ -21,7 +21,7 @@ final class UrlGeneratorTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testRequestTargetWithMissingRoute(): void
+    public function testRequestTargetForWithMissingRoute(): void
     {
         $this->expectException(UrlGeneratorException::class);
         $this->expectExceptionMessage('Missing route: "user"');
@@ -36,10 +36,10 @@ final class UrlGeneratorTest extends TestCase
         $routeParser = $this->getMockByCalls(RouteParser::class);
 
         $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
-        $urlGenerator->requestTarget('user', ['id' => 1]);
+        $urlGenerator->requestTargetFor('user', ['id' => 1]);
     }
 
-    public function testRequestTargetWithMissingParameters(): void
+    public function testRequestTargetForWithMissingParameters(): void
     {
         $this->expectException(UrlGeneratorException::class);
         $this->expectExceptionMessage('Missing parameters: "id"');
@@ -74,10 +74,10 @@ final class UrlGeneratorTest extends TestCase
         ]);
 
         $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
-        $urlGenerator->requestTarget('user');
+        $urlGenerator->requestTargetFor('user');
     }
 
-    public function testRequestTargetWithInvalidParameters(): void
+    public function testRequestTargetForWithInvalidParameters(): void
     {
         $this->expectException(UrlGeneratorException::class);
         $this->expectExceptionMessage(
@@ -114,10 +114,10 @@ final class UrlGeneratorTest extends TestCase
         ]);
 
         $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
-        $urlGenerator->requestTarget('user', ['id' => 'c0b8bf5f-476b-4552-97aa-e37b8004a5c0']);
+        $urlGenerator->requestTargetFor('user', ['id' => 'c0b8bf5f-476b-4552-97aa-e37b8004a5c0']);
     }
 
-    public function testRequestTargetSuccessful(): void
+    public function testRequestTargetForSuccessful(): void
     {
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
@@ -155,12 +155,12 @@ final class UrlGeneratorTest extends TestCase
 
         $urlGenerator = new UrlGenerator($routeCollection, $routeParser);
 
-        self::assertSame('/user/1', $urlGenerator->requestTarget('user', ['id' => 1]));
-        self::assertSame('/user/1?key=value', $urlGenerator->requestTarget('user', ['id' => 1, 'key' => 'value']));
-        self::assertSame('/user/1/sample', $urlGenerator->requestTarget('user', ['id' => 1, 'name' => 'sample']));
+        self::assertSame('/user/1', $urlGenerator->requestTargetFor('user', ['id' => 1]));
+        self::assertSame('/user/1?key=value', $urlGenerator->requestTargetFor('user', ['id' => 1, 'key' => 'value']));
+        self::assertSame('/user/1/sample', $urlGenerator->requestTargetFor('user', ['id' => 1, 'name' => 'sample']));
         self::assertSame(
             '/user/1/sample?key=value',
-            $urlGenerator->requestTarget('user', ['id' => 1, 'name' => 'sample', 'key' => 'value'])
+            $urlGenerator->requestTargetFor('user', ['id' => 1, 'name' => 'sample', 'key' => 'value'])
         );
     }
 }
