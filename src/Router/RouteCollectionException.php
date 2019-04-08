@@ -15,8 +15,6 @@ final class RouteCollectionException extends \RuntimeException
     }
 
     /**
-     * @param string $path
-     *
      * @return self
      */
     public static function createFreezeException(): self
