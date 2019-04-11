@@ -29,7 +29,7 @@ final class Application
     /**
      * @var ExceptionResponseHandlerInterface
      */
-    private $throwableHandler;
+    private $exceptionHandler;
 
     /**
      * @var LoggerInterface
@@ -39,18 +39,18 @@ final class Application
     /**
      * @param RouteDispatcherInterface          $routeDispatcher
      * @param MiddlewareDispatcherInterface     $middlewareDispatcher
-     * @param ExceptionResponseHandlerInterface $throwableHandler
+     * @param ExceptionResponseHandlerInterface $exceptionHandler
      * @param LoggerInterface|null              $logger
      */
     public function __construct(
         RouteDispatcherInterface $routeDispatcher,
         MiddlewareDispatcherInterface $middlewareDispatcher,
-        ExceptionResponseHandlerInterface $throwableHandler,
+        ExceptionResponseHandlerInterface $exceptionHandler,
         LoggerInterface $logger = null
     ) {
         $this->routeDispatcher = $routeDispatcher;
         $this->middlewareDispatcher = $middlewareDispatcher;
-        $this->throwableHandler = $throwableHandler;
+        $this->exceptionHandler = $exceptionHandler;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -75,11 +75,11 @@ final class Application
                 'code' => $routeException->getCode(),
             ]);
 
-            $response = $this->throwableHandler->createRouteDispatcherExceptionResponse($request, $routeException);
+            $response = $this->exceptionHandler->createRouteDispatcherExceptionResponse($request, $routeException);
         } catch (\Throwable $throwable) {
             $this->logger->error('Throwable', ['throwables' => $this->nestedThrowableToArray($throwable)]);
 
-            $response = $this->throwableHandler->createExceptionResponse($request, $throwable);
+            $response = $this->exceptionHandler->createExceptionResponse($request, $throwable);
         }
 
         if ($send) {
