@@ -119,7 +119,7 @@ $container['requestHandler'] = function () use ($container) {
             $response = $this->responseFactory->createResponse();
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(
-                json_encode(['uri' => $this->urlGenerator->generateUri($request, 'index')])
+                json_encode(['uri' => $this->urlGenerator->generateUrl($request, 'index')])
             );
 
             return $response;

@@ -42,7 +42,7 @@ final class UrlGenerator implements UrlGeneratorInterface
      *
      * @throws UrlGeneratorException
      */
-    public function generateUri(ServerRequestInterface $request, string $name, array $parameters = []): string
+    public function generateUrl(ServerRequestInterface $request, string $name, array $parameters = []): string
     {
         $uri = $request->getUri();
         $requestTarget = $this->generatePath($name, $parameters);

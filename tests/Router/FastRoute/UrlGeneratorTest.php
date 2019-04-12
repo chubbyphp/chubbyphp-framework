@@ -62,19 +62,19 @@ final class UrlGeneratorTest extends TestCase
 
         self::assertSame(
             'https://user:password@localhost/user/1',
-            $urlGenerator->generateUri($request, 'user', ['id' => 1])
+            $urlGenerator->generateUrl($request, 'user', ['id' => 1])
         );
         self::assertSame(
             'https://user:password@localhost/user/1?key=value',
-            $urlGenerator->generateUri($request, 'user', ['id' => 1, 'key' => 'value'])
+            $urlGenerator->generateUrl($request, 'user', ['id' => 1, 'key' => 'value'])
         );
         self::assertSame(
             'https://user:password@localhost/user/1/sample',
-            $urlGenerator->generateUri($request, 'user', ['id' => 1, 'name' => 'sample'])
+            $urlGenerator->generateUrl($request, 'user', ['id' => 1, 'name' => 'sample'])
         );
         self::assertSame(
             'https://user:password@localhost/user/1/sample?key=value',
-            $urlGenerator->generateUri($request, 'user', ['id' => 1, 'name' => 'sample', 'key' => 'value'])
+            $urlGenerator->generateUrl($request, 'user', ['id' => 1, 'name' => 'sample', 'key' => 'value'])
         );
     }
 

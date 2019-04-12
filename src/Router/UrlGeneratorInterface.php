@@ -17,7 +17,7 @@ interface UrlGeneratorInterface
      *
      * @throws UrlGeneratorException
      */
-    public function generateUri(ServerRequestInterface $request, string $name, array $parameters = []): string;
+    public function generateUrl(ServerRequestInterface $request, string $name, array $parameters = []): string;
 
     /**
      * @param string $name
