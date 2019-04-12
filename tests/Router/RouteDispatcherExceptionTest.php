@@ -30,6 +30,7 @@ final class RouteDispatcherExceptionTest extends TestCase
     {
         $exception = RouteDispatcherException::createForNotFound('/');
 
+        self::assertSame('https://tools.ietf.org/html/rfc7231#section-6.5.4', $exception->getType());
         self::assertSame('Page not found', $exception->getTitle());
         self::assertSame(
             'The page "/" you are looking for could not be found.'
@@ -43,6 +44,7 @@ final class RouteDispatcherExceptionTest extends TestCase
     {
         $exception = RouteDispatcherException::createForMethodNotAllowed('GET', ['POST', 'PUT'], '/');
 
+        self::assertSame('https://tools.ietf.org/html/rfc7231#section-6.5.5', $exception->getType());
         self::assertSame('Method not allowed', $exception->getTitle());
         self::assertSame(
             'Method "GET" at path "/" is not allowed. Must be one of: "POST", "PUT"',
