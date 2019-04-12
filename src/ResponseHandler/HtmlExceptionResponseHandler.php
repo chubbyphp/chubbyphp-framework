@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @see https://github.com/slimphp/Slim/blob/3.x/Slim/Handlers/Error.php
  */
-final class ExceptionResponseHandler implements ExceptionResponseHandlerInterface
+final class HtmlExceptionResponseHandler implements ExceptionResponseHandlerInterface
 {
     const ERROR_HTML = <<<'EOT'
 <html>
@@ -79,6 +79,7 @@ EOT;
         RouteDispatcherException $routeException
     ): ResponseInterface {
         $response = $this->responseFactory->createResponse($routeException->getCode());
+        $response = $response->withHeader('Content-Type', 'text/html');
         $response->getBody()->write(sprintf(
             self::ERROR_HTML,
             $routeException->getTitle(),
@@ -111,6 +112,7 @@ EOT;
         }
 
         $response = $this->responseFactory->createResponse(500);
+        $response = $response->withHeader('Content-Type', 'text/html');
         $response->getBody()->write(sprintf(
             self::ERROR_HTML,
             'Application Error',

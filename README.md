@@ -49,7 +49,7 @@ namespace App;
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\RequestHandler\LazyRequestHandler;
-use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
+use Chubbyphp\Framework\ResponseHandler\JsonExceptionResponseHandler;
 use Chubbyphp\Framework\Router\FastRoute\RouteDispatcher;
 use Chubbyphp\Framework\Router\FastRoute\UrlGenerator;
 use Chubbyphp\Framework\Router\RouteCollection;
@@ -130,7 +130,7 @@ $container['requestHandler'] = function () use ($container) {
 $app = new Application(
     new RouteDispatcher($container[RouteCollection::class]),
     new MiddlewareDispatcher(),
-    new ExceptionResponseHandler($container[ResponseFactory::class])
+    new JsonExceptionResponseHandler($container[ResponseFactory::class])
 );
 
 $app->run(ServerRequestFactory::fromGlobals());

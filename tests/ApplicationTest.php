@@ -113,8 +113,8 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willReturn($response),
             ]);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class);
+            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
+            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class);
 
             /** @var LoggerInterface|MockObject $logger */
             $logger = $this->getMockByCalls(LoggerInterface::class);
@@ -122,7 +122,7 @@ namespace Chubbyphp\Tests\Framework
             $application = new Application(
                 $routeDispatcher,
                 $middlewareDispatcher,
-                $throwableResponseHandler,
+                $exceptionResponseHandler,
                 $logger
             );
 
@@ -179,8 +179,8 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willReturn($response),
             ]);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class);
+            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
+            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class);
 
             /** @var LoggerInterface|MockObject $logger */
             $logger = $this->getMockByCalls(LoggerInterface::class);
@@ -188,7 +188,7 @@ namespace Chubbyphp\Tests\Framework
             $application = new Application(
                 $routeDispatcher,
                 $middlewareDispatcher,
-                $throwableResponseHandler,
+                $exceptionResponseHandler,
                 $logger
             );
 
@@ -237,8 +237,8 @@ namespace Chubbyphp\Tests\Framework
             /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
+            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
                 Call::create('createRouteDispatcherExceptionResponse')->with($request, $routeException)->willReturn($response),
             ]);
 
@@ -254,7 +254,7 @@ namespace Chubbyphp\Tests\Framework
             $application = new Application(
                 $routeDispatcher,
                 $middlewareDispatcher,
-                $throwableResponseHandler,
+                $exceptionResponseHandler,
                 $logger
             );
 
@@ -294,8 +294,8 @@ namespace Chubbyphp\Tests\Framework
             /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
+            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
                 Call::create('createRouteDispatcherExceptionResponse')->with($request, $routeException)->willReturn($response),
             ]);
 
@@ -311,7 +311,7 @@ namespace Chubbyphp\Tests\Framework
             $application = new Application(
                 $routeDispatcher,
                 $middlewareDispatcher,
-                $throwableResponseHandler,
+                $exceptionResponseHandler,
                 $logger
             );
 
@@ -379,8 +379,8 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willThrowException($exception),
             ]);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
+            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
                 Call::create('createExceptionResponse')->with($request, $exception)->willReturn($response),
             ]);
 
@@ -390,13 +390,13 @@ namespace Chubbyphp\Tests\Framework
                     ->with(
                         'Throwable',
                         new ArgumentCallback(function (array $context) {
-                            self::assertArrayHasKey('throwables', $context);
+                            self::assertArrayHasKey('exceptions', $context);
 
-                            $throwables = $context['throwables'];
+                            $exceptions = $context['exceptions'];
 
-                            self::assertCount(2, $throwables);
+                            self::assertCount(2, $exceptions);
 
-                            $runtimeException = $throwables[0];
+                            $runtimeException = $exceptions[0];
 
                             self::assertArrayHasKey('message', $runtimeException);
                             self::assertArrayHasKey('code', $runtimeException);
@@ -407,7 +407,7 @@ namespace Chubbyphp\Tests\Framework
                             self::assertSame('runtime exception', $runtimeException['message']);
                             self::assertSame(418, $runtimeException['code']);
 
-                            $logicException = $throwables[1];
+                            $logicException = $exceptions[1];
 
                             self::assertArrayHasKey('message', $logicException);
                             self::assertArrayHasKey('code', $logicException);
@@ -424,7 +424,7 @@ namespace Chubbyphp\Tests\Framework
             $application = new Application(
                 $routeDispatcher,
                 $middlewareDispatcher,
-                $throwableResponseHandler,
+                $exceptionResponseHandler,
                 $logger
             );
 
@@ -483,8 +483,8 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willThrowException($exception),
             ]);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $throwableResponseHandler */
-            $throwableResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
+            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
                 Call::create('createExceptionResponse')->with($request, $exception)->willReturn($response),
             ]);
 
@@ -494,13 +494,13 @@ namespace Chubbyphp\Tests\Framework
                     ->with(
                         'Throwable',
                         new ArgumentCallback(function (array $context) {
-                            self::assertArrayHasKey('throwables', $context);
+                            self::assertArrayHasKey('exceptions', $context);
 
-                            $throwables = $context['throwables'];
+                            $exceptions = $context['exceptions'];
 
-                            self::assertCount(2, $throwables);
+                            self::assertCount(2, $exceptions);
 
-                            $runtimeException = $throwables[0];
+                            $runtimeException = $exceptions[0];
 
                             self::assertArrayHasKey('message', $runtimeException);
                             self::assertArrayHasKey('code', $runtimeException);
@@ -511,7 +511,7 @@ namespace Chubbyphp\Tests\Framework
                             self::assertSame('runtime exception', $runtimeException['message']);
                             self::assertSame(418, $runtimeException['code']);
 
-                            $logicException = $throwables[1];
+                            $logicException = $exceptions[1];
 
                             self::assertArrayHasKey('message', $logicException);
                             self::assertArrayHasKey('code', $logicException);
@@ -528,7 +528,7 @@ namespace Chubbyphp\Tests\Framework
             $application = new Application(
                 $routeDispatcher,
                 $middlewareDispatcher,
-                $throwableResponseHandler,
+                $exceptionResponseHandler,
                 $logger
             );
 

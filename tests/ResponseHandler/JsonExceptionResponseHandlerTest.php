@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\ResponseHandler;
 
-use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
+use Chubbyphp\Framework\ResponseHandler\JsonExceptionResponseHandler;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
@@ -17,9 +17,9 @@ use Psr\Http\Message\StreamInterface;
 use Chubbyphp\Mock\Argument\ArgumentCallback;
 
 /**
- * @covers \Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler
+ * @covers \Chubbyphp\Framework\ResponseHandler\JsonExceptionResponseHandler
  */
-final class ExceptionResponseHandlerTest extends TestCase
+final class JsonExceptionResponseHandlerTest extends TestCase
 {
     use MockByCallsTrait;
 
@@ -28,45 +28,20 @@ final class ExceptionResponseHandlerTest extends TestCase
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        $html = <<<'EOT'
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Page not found</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 30px;
-                font: 12px/1.5 Helvetica, Arial, Verdana, sans-serif;
-            }
-
-            h1 {
-                margin: 0;
-                font-size: 48px;
-                font-weight: normal;
-                line-height: 48px;
-            }
-
-            strong {
-                display: inline-block;
-                width: 65px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Page not found</h1>
-        <p>The page "/" you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.</p>
-    </body>
-</html>
-EOT;
+        $json = json_encode([
+            'type' => 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
+            'title' => 'Page not found',
+            'detail' => 'The page "/" you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.',
+        ]);
 
         /** @var StreamInterface|MockObject $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('write')->with($html),
+            Call::create('write')->with($json),
         ]);
 
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
+            Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
@@ -77,7 +52,7 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ExceptionResponseHandler($responseFactory);
+        $responseHandler = new JsonExceptionResponseHandler($responseFactory);
 
         self::assertSame($response, $responseHandler->createRouteDispatcherExceptionResponse($request, $routeException));
     }
@@ -87,45 +62,20 @@ EOT;
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        $html = <<<'EOT'
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Page not found</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 30px;
-                font: 12px/1.5 Helvetica, Arial, Verdana, sans-serif;
-            }
-
-            h1 {
-                margin: 0;
-                font-size: 48px;
-                font-weight: normal;
-                line-height: 48px;
-            }
-
-            strong {
-                display: inline-block;
-                width: 65px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Page not found</h1>
-        <p>The page "/" you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.</p>
-    </body>
-</html>
-EOT;
+        $json = json_encode([
+            'type' => 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
+            'title' => 'Page not found',
+            'detail' => 'The page "/" you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.',
+        ]);
 
         /** @var StreamInterface|MockObject $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('write')->with($html),
+            Call::create('write')->with($json),
         ]);
 
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
+            Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
@@ -136,7 +86,7 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ExceptionResponseHandler($responseFactory, true);
+        $responseHandler = new JsonExceptionResponseHandler($responseFactory, true);
 
         self::assertSame($response, $responseHandler->createRouteDispatcherExceptionResponse($request, $routeException));
     }
@@ -146,45 +96,19 @@ EOT;
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        $html = <<<'EOT'
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Application Error</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 30px;
-                font: 12px/1.5 Helvetica, Arial, Verdana, sans-serif;
-            }
-
-            h1 {
-                margin: 0;
-                font-size: 48px;
-                font-weight: normal;
-                line-height: 48px;
-            }
-
-            strong {
-                display: inline-block;
-                width: 65px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Application Error</h1>
-        <p>A website error has occurred. Sorry for the temporary inconvenience.</p>
-    </body>
-</html>
-EOT;
+        $json = json_encode([
+            'type' => 'https://tools.ietf.org/html/rfc7231#section-6.6.1',
+            'title' => 'Internal Server Error',
+        ]);
 
         /** @var StreamInterface|MockObject $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('write')->with($html),
+            Call::create('write')->with($json),
         ]);
 
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
+            Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
@@ -195,7 +119,7 @@ EOT;
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ExceptionResponseHandler($responseFactory);
+        $responseHandler = new JsonExceptionResponseHandler($responseFactory);
 
         self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }
@@ -208,19 +132,19 @@ EOT;
         /** @var StreamInterface|MockObject $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')
-                ->with(new ArgumentCallback(function (string $html) {
-                    self::assertStringContainsString('RuntimeException', $html);
-                    self::assertStringContainsString('runtime exception', $html);
-                    self::assertStringContainsString('418', $html);
-                    self::assertStringContainsString('Previous exception', $html);
-                    self::assertStringContainsString('LogicException', $html);
-                    self::assertStringContainsString('logic exception', $html);
-                    self::assertStringContainsString('42', $html);
+                ->with(new ArgumentCallback(function (string $json) {
+                    self::assertStringContainsString('RuntimeException', $json);
+                    self::assertStringContainsString('runtime exception', $json);
+                    self::assertStringContainsString('418', $json);
+                    self::assertStringContainsString('LogicException', $json);
+                    self::assertStringContainsString('logic exception', $json);
+                    self::assertStringContainsString('42', $json);
                 })),
         ]);
 
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
+            Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
@@ -231,7 +155,7 @@ EOT;
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ExceptionResponseHandler($responseFactory, true);
+        $responseHandler = new JsonExceptionResponseHandler($responseFactory, true);
 
         self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }

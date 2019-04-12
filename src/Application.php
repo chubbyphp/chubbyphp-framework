@@ -76,10 +76,10 @@ final class Application
             ]);
 
             $response = $this->exceptionHandler->createRouteDispatcherExceptionResponse($request, $routeException);
-        } catch (\Throwable $throwable) {
-            $this->logger->error('Throwable', ['throwables' => $this->nestedThrowableToArray($throwable)]);
+        } catch (\Throwable $exception) {
+            $this->logger->error('Throwable', ['exceptions' => ExceptionHelper::toArray($exception)]);
 
-            $response = $this->exceptionHandler->createExceptionResponse($request, $throwable);
+            $response = $this->exceptionHandler->createExceptionResponse($request, $exception);
         }
 
         if ($send) {
@@ -105,37 +105,6 @@ final class Application
         }
 
         return $request;
-    }
-
-    /**
-     * @param \Throwable $throwable
-     *
-     * @return array
-     */
-    private function nestedThrowableToArray(\Throwable $throwable): array
-    {
-        $throwables = [];
-        do {
-            $throwables[] = $this->throwableToArray($throwable);
-        } while ($throwable = $throwable->getPrevious());
-
-        return $throwables;
-    }
-
-    /**
-     * @param \Throwable $throwable
-     *
-     * @return array
-     */
-    private function throwableToArray(\Throwable $throwable): array
-    {
-        return [
-            'message' => $throwable->getMessage(),
-            'code' => $throwable->getCode(),
-            'file' => $throwable->getFile(),
-            'line' => $throwable->getLine(),
-            'trace' => $throwable->getTraceAsString(),
-        ];
     }
 
     /**
