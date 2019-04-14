@@ -68,7 +68,7 @@ $routeCollection
     ->route(
         '/hello/{name}',
         RouteInterface::GET,
-        'index',
+        'hello',
         new class($responseFactory) implements PsrRequestHandlerInterface {
             /**
              * @var ResponseFactoryInterface
