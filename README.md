@@ -51,7 +51,6 @@ use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler;
 use Chubbyphp\Framework\Router\FastRoute\RouteDispatcher;
 use Chubbyphp\Framework\Router\RouteCollection;
-use Chubbyphp\Framework\Router\RouteInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -65,9 +64,8 @@ $responseFactory = new ResponseFactory();
 
 $routeCollection = new RouteCollection();
 $routeCollection
-    ->route(
+    ->get(
         '/hello/{name}',
-        RouteInterface::GET,
         'hello',
         new class($responseFactory) implements PsrRequestHandlerInterface
         {

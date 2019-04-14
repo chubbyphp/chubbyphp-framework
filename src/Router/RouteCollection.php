@@ -99,6 +99,101 @@ final class RouteCollection implements RouteCollectionInterface
     }
 
     /**
+     * @param string                  $pattern
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     * @param array                   $middlewares
+     *
+     * @return self
+     *
+     * @throws RouteCollectionException
+     */
+    public function delete(
+        string $pattern,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = []
+    ): self {
+        return $this->route($pattern, RouteInterface::DELETE, $name, $requestHandler, $middlewares);
+    }
+
+    /**
+     * @param string                  $pattern
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     * @param array                   $middlewares
+     *
+     * @return self
+     *
+     * @throws RouteCollectionException
+     */
+    public function get(
+        string $pattern,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = []
+    ): self {
+        return $this->route($pattern, RouteInterface::GET, $name, $requestHandler, $middlewares);
+    }
+
+    /**
+     * @param string                  $pattern
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     * @param array                   $middlewares
+     *
+     * @return self
+     *
+     * @throws RouteCollectionException
+     */
+    public function patch(
+        string $pattern,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = []
+    ): self {
+        return $this->route($pattern, RouteInterface::PATCH, $name, $requestHandler, $middlewares);
+    }
+
+    /**
+     * @param string                  $pattern
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     * @param array                   $middlewares
+     *
+     * @return self
+     *
+     * @throws RouteCollectionException
+     */
+    public function post(
+        string $pattern,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = []
+    ): self {
+        return $this->route($pattern, RouteInterface::POST, $name, $requestHandler, $middlewares);
+    }
+
+    /**
+     * @param string                  $pattern
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     * @param array                   $middlewares
+     *
+     * @return self
+     *
+     * @throws RouteCollectionException
+     */
+    public function put(
+        string $pattern,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = []
+    ): self {
+        return $this->route($pattern, RouteInterface::PUT, $name, $requestHandler, $middlewares);
+    }
+
+    /**
      * @param string $pattern
      *
      * @return string

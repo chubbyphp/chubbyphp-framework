@@ -35,18 +35,19 @@ final class RouteCollectionTest extends TestCase
             ->route('/', RouteInterface::GET, 'index', $requestHandler)
             ->group('/api')
                 ->group('/pet', [$middleware1])
-                    ->route('', RouteInterface::GET, 'pet_list', $requestHandler, [$middleware2])
-                    ->route('', RouteInterface::POST, 'pet_create', $requestHandler)
-                    ->route('/{id}', RouteInterface::GET, 'pet_read', $requestHandler)
-                    ->route('/{id}', RouteInterface::PUT, 'pet_update', $requestHandler)
-                    ->route('/{id}', RouteInterface::DELETE, 'pet_delete', $requestHandler)
+                    ->get('', 'pet_list', $requestHandler, [$middleware2])
+                    ->post('', 'pet_create', $requestHandler)
+                    ->get('/{id}', 'pet_read', $requestHandler)
+                    ->patch('/{id}', 'pet_update', $requestHandler)
+                    ->put('/{id}', 'pet_replace', $requestHandler)
+                    ->delete('/{id}', 'pet_delete', $requestHandler)
                 ->end()
                 ->route('/ping', RouteInterface::GET, 'ping', $requestHandler)
             ->end();
 
         $routes = $routeCollection->getRoutes();
 
-        self::assertCount(7, $routes);
+        self::assertCount(8, $routes);
 
         /** @var RouteInterface $route1 */
         $route1 = $routes['index'];
@@ -92,38 +93,49 @@ final class RouteCollectionTest extends TestCase
         $route5 = $routes['pet_update'];
 
         self::assertSame('/api/pet/{id}', $route5->getPattern());
-        self::assertSame(RouteInterface::PUT, $route5->getMethod());
+        self::assertSame(RouteInterface::PATCH, $route5->getMethod());
         self::assertSame('pet_update', $route5->getName());
         self::assertSame($requestHandler, $route5->getRequestHandler());
         self::assertSame([$middleware1], $route5->getMiddlewares());
         self::assertSame([], $route5->getAttributes());
 
         /** @var RouteInterface $route6 */
-        $route6 = $routes['pet_delete'];
+        $route6 = $routes['pet_replace'];
 
         self::assertSame('/api/pet/{id}', $route6->getPattern());
-        self::assertSame(RouteInterface::DELETE, $route6->getMethod());
-        self::assertSame('pet_delete', $route6->getName());
+        self::assertSame(RouteInterface::PUT, $route6->getMethod());
+        self::assertSame('pet_replace', $route6->getName());
         self::assertSame($requestHandler, $route6->getRequestHandler());
         self::assertSame([$middleware1], $route6->getMiddlewares());
         self::assertSame([], $route6->getAttributes());
 
         /** @var RouteInterface $route7 */
-        $route7 = $routes['ping'];
+        $route7 = $routes['pet_delete'];
 
-        self::assertSame('/api/ping', $route7->getPattern());
-        self::assertSame(RouteInterface::GET, $route7->getMethod());
-        self::assertSame('ping', $route7->getName());
+        self::assertSame('/api/pet/{id}', $route7->getPattern());
+        self::assertSame(RouteInterface::DELETE, $route7->getMethod());
+        self::assertSame('pet_delete', $route7->getName());
         self::assertSame($requestHandler, $route7->getRequestHandler());
-        self::assertSame([], $route7->getMiddlewares());
+        self::assertSame([$middleware1], $route7->getMiddlewares());
         self::assertSame([], $route7->getAttributes());
+
+        /** @var RouteInterface $route8 */
+        $route8 = $routes['ping'];
+
+        self::assertSame('/api/ping', $route8->getPattern());
+        self::assertSame(RouteInterface::GET, $route8->getMethod());
+        self::assertSame('ping', $route8->getName());
+        self::assertSame($requestHandler, $route8->getRequestHandler());
+        self::assertSame([], $route8->getMiddlewares());
+        self::assertSame([], $route8->getAttributes());
 
         $expectedString = <<<'EOT'
 /::GET::index
 /api/pet::GET::pet_list
 /api/pet::POST::pet_create
 /api/pet/{id}::GET::pet_read
-/api/pet/{id}::PUT::pet_update
+/api/pet/{id}::PATCH::pet_update
+/api/pet/{id}::PUT::pet_replace
 /api/pet/{id}::DELETE::pet_delete
 /api/ping::GET::ping
 EOT;
