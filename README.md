@@ -32,7 +32,7 @@ A minimal Framework using PSR 3, PSR 7, PSR 11, PSR 15 and PSR 17.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-framework "^1.0"
+composer create-project chubbyphp/chubbyphp-framework -s dev my-app
 ```
 
 ## Usage
