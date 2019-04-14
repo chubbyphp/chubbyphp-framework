@@ -10,7 +10,21 @@
 
 ## Description
 
-A minimal Framework using PSR 3, PSR 7, PSR 11, PSR 15 and PSR 17.
+A minimal framework using [PHP Framework Interop Group - PSR][1]
+
+ * [Basic Coding Standard (1)][2]
+ * [Coding Style Guide (2)][3]
+ * [Logger Interface (3)][4]
+ * [Autoloading Standard (4)][5]
+ * [HTTP Message Interface (7)][6]
+ * [Container Interface (11)][7]
+ * [HTTP Handlers (15)][8]
+ * [HTTP Factories (17)][9]
+
+The goal of this framework is to achive the best combination of flexibility and simplicity by using standards.
+
+About flexibility: Everything should be replaceable the a framework user.
+About simplicity: Nothing should be more complex than needed to fulfill the flexibility.
 
 ## Requirements
 
@@ -29,7 +43,7 @@ A minimal Framework using PSR 3, PSR 7, PSR 11, PSR 15 and PSR 17.
 
 ## Installation
 
-Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][1].
+Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][20].
 
 ```sh
 composer create-project chubbyphp/chubbyphp-framework -s dev example
@@ -112,12 +126,23 @@ $app->run(ServerRequestFactory::fromGlobals());
 
 ## Web Server
 
-[Go to web server configuration][10]
+[Go to web server configuration][30]
 
 ## Copyright
 
 Dominik Zogg 2019
 
-[1]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
+[1]: https://www.php-fig.org/psr/
 
-[10]: doc/webserver.md
+[2]: https://www.php-fig.org/psr/psr-1
+[3]: https://www.php-fig.org/psr/psr-2
+[4]: https://www.php-fig.org/psr/psr-3
+[5]: https://www.php-fig.org/psr/psr-4
+[6]: https://www.php-fig.org/psr/psr-7
+[7]: https://www.php-fig.org/psr/psr-11
+[8]: https://www.php-fig.org/psr/psr-15
+[9]: https://www.php-fig.org/psr/psr-17
+
+[20]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
+
+[30]: doc/webserver.md
