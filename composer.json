@@ -26,6 +26,9 @@
     "autoload": {
         "psr-4": { "Chubbyphp\\Framework\\": "src/" }
     },
+    "autoload-dev": {
+        "psr-4": { "Chubbyphp\\Tests\\Framework\\": "tests/" }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
