@@ -69,7 +69,8 @@ $routeCollection
         '/hello/{name}',
         RouteInterface::GET,
         'hello',
-        new class($responseFactory) implements PsrRequestHandlerInterface {
+        new class($responseFactory) implements PsrRequestHandlerInterface
+        {
             /**
              * @var ResponseFactoryInterface
              */
