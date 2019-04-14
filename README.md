@@ -33,11 +33,19 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][1]
 
 ```sh
 composer create-project chubbyphp/chubbyphp-framework -s dev my-app
+cd my-app
+```
+
+### Install FastRoute and ZendDiactoros
+
+```sh
+composer require nikic/fast-route: "^1.3"
+composer require zendframework/zend-diactoros "^2.1.1"
 ```
 
 ## Usage
 
-### Basic Sample using Diactoros and FastRoute
+### Basic example using FastRoute and ZendDiactoros
 
 ```php
 <?php
