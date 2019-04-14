@@ -116,6 +116,26 @@ final class UrlGeneratorTest extends TestCase
         $urlGenerator->generatePath('user');
     }
 
+    public function testGeneratePathWithMultipleMissingParameters(): void
+    {
+        $this->expectException(UrlGeneratorException::class);
+        $this->expectExceptionMessage('Missing parameters: "id", "name"');
+        $this->expectExceptionCode(2);
+
+        /** @var RouteInterface|MockObject $route */
+        $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}/{name}'),
+        ]);
+
+        /** @var RouteCollectionInterface|MockObject $routeCollection */
+        $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
+            Call::create('getRoutes')->with()->willReturn(['user' => $route]),
+        ]);
+
+        $urlGenerator = new UrlGenerator($routeCollection);
+        $urlGenerator->generatePath('user');
+    }
+
     public function testGeneratePathWithInvalidParameters(): void
     {
         $this->expectException(UrlGeneratorException::class);

@@ -49,11 +49,20 @@ final class RouteDispatcherTest extends TestCase
             Call::create('__toString')->with()->willReturn('/api/pet::GET::pet_list'),
         ]);
 
-        $cacheDir = sys_get_temp_dir().'/'.uniqid().'/'.uniqid();
+        $dynamicCachePart = uniqid().'/'.uniqid();
+
+        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
 
         mkdir($cacheDir, 0777, true);
 
         $routeDispatcher = new RouteDispatcher($routeCollection, $cacheDir);
+
+        self::assertFileExists(
+            sprintf(
+                '/tmp/%s/fast-route-08762950c5cf2d82d7a739b6f8fcae2d37737f8d6111a9f63dbb8cf45f44675a.php',
+                $dynamicCachePart
+            )
+        );
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }
@@ -92,11 +101,20 @@ final class RouteDispatcherTest extends TestCase
             Call::create('__toString')->with()->willReturn('/api/pet::GET::pet_list'),
         ]);
 
-        $cacheDir = sys_get_temp_dir().'/'.uniqid().'/'.uniqid();
+        $dynamicCachePart = uniqid().'/'.uniqid();
+
+        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
 
         mkdir($cacheDir, 0777, true);
 
         $routeDispatcher = new RouteDispatcher($routeCollection, $cacheDir);
+
+        self::assertFileExists(
+            sprintf(
+                '/tmp/%s/fast-route-08762950c5cf2d82d7a739b6f8fcae2d37737f8d6111a9f63dbb8cf45f44675a.php',
+                $dynamicCachePart
+            )
+        );
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }
@@ -134,11 +152,20 @@ final class RouteDispatcherTest extends TestCase
             Call::create('__toString')->with()->willReturn('/api/pet::GET::pet_list'),
         ]);
 
-        $cacheDir = sys_get_temp_dir().'/'.uniqid().'/'.uniqid();
+        $dynamicCachePart = uniqid().'/'.uniqid();
+
+        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
 
         mkdir($cacheDir, 0777, true);
 
         $routeDispatcher = new RouteDispatcher($routeCollection, $cacheDir);
+
+        self::assertFileExists(
+            sprintf(
+                '/tmp/%s/fast-route-08762950c5cf2d82d7a739b6f8fcae2d37737f8d6111a9f63dbb8cf45f44675a.php',
+                $dynamicCachePart
+            )
+        );
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }

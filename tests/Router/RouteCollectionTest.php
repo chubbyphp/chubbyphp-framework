@@ -33,19 +33,20 @@ final class RouteCollectionTest extends TestCase
 
         $routeCollection = (new RouteCollection())
             ->route('/', RouteInterface::GET, 'index', $requestHandler)
-            ->group('/api', [$middleware1])
-                ->group('/pet')
+            ->group('/api')
+                ->group('/pet', [$middleware1])
                     ->route('', RouteInterface::GET, 'pet_list', $requestHandler, [$middleware2])
                     ->route('', RouteInterface::POST, 'pet_create', $requestHandler)
                     ->route('/{id}', RouteInterface::GET, 'pet_read', $requestHandler)
                     ->route('/{id}', RouteInterface::PUT, 'pet_update', $requestHandler)
                     ->route('/{id}', RouteInterface::DELETE, 'pet_delete', $requestHandler)
                 ->end()
+                ->route('/ping', RouteInterface::GET, 'ping', $requestHandler)
             ->end();
 
         $routes = $routeCollection->getRoutes();
 
-        self::assertCount(6, $routes);
+        self::assertCount(7, $routes);
 
         /** @var RouteInterface $route1 */
         $route1 = $routes['index'];
@@ -107,6 +108,16 @@ final class RouteCollectionTest extends TestCase
         self::assertSame([$middleware1], $route6->getMiddlewares());
         self::assertSame([], $route6->getAttributes());
 
+        /** @var RouteInterface $route7 */
+        $route7 = $routes['ping'];
+
+        self::assertSame('/api/ping', $route7->getPattern());
+        self::assertSame(RouteInterface::GET, $route7->getMethod());
+        self::assertSame('ping', $route7->getName());
+        self::assertSame($requestHandler, $route7->getRequestHandler());
+        self::assertSame([], $route7->getMiddlewares());
+        self::assertSame([], $route7->getAttributes());
+
         $expectedString = <<<'EOT'
 /::GET::index
 /api/pet::GET::pet_list
@@ -114,6 +125,7 @@ final class RouteCollectionTest extends TestCase
 /api/pet/{id}::GET::pet_read
 /api/pet/{id}::PUT::pet_update
 /api/pet/{id}::DELETE::pet_delete
+/api/ping::GET::ping
 EOT;
 
         self::assertSame($expectedString, (string) $routeCollection);

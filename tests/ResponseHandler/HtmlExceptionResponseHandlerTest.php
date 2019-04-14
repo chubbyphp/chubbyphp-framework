@@ -212,6 +212,10 @@ EOT;
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')
                 ->with(new ArgumentCallback(function (string $html) {
+                    self::assertStringContainsString(
+                        'The application could not run because of the following error',
+                        $html
+                    );
                     self::assertStringContainsString('RuntimeException', $html);
                     self::assertStringContainsString('runtime exception', $html);
                     self::assertStringContainsString('418', $html);

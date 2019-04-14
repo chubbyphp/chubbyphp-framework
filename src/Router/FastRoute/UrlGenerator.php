@@ -70,7 +70,7 @@ final class UrlGenerator implements UrlGeneratorInterface
         foreach ($routePartSets[$routeIndex] as $routePart) {
             if (is_array($routePart)) {
                 $parameter = $routePart[0];
-                $pathParts[] = (string) $parameters[$parameter];
+                $pathParts[] = $parameters[$parameter];
                 unset($parameters[$parameter]);
             } else {
                 $pathParts[] = $routePart;

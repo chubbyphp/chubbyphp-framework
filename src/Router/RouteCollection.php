@@ -140,7 +140,7 @@ final class RouteCollection implements RouteCollectionInterface
     {
         $string = '';
         foreach ($this->getRoutes() as $route) {
-            $string .= (string) $route.PHP_EOL;
+            $string .= $route.PHP_EOL;
         }
 
         return trim($string);

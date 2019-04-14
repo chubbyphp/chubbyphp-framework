@@ -126,7 +126,15 @@ namespace Chubbyphp\Tests\Framework
                 $logger
             );
 
+            TestHeader::reset();
+
+            ob_start();
+
             self::assertSame($response, $application->run($request, false));
+
+            self::assertEquals([], TestHeader::all());
+
+            self::assertSame('', ob_get_clean());
         }
 
         public function testRunFoundWithSend(): void
@@ -258,7 +266,15 @@ namespace Chubbyphp\Tests\Framework
                 $logger
             );
 
+            TestHeader::reset();
+
+            ob_start();
+
             self::assertSame($response, $application->run($request, false));
+
+            self::assertEquals([], TestHeader::all());
+
+            self::assertSame('', ob_get_clean());
         }
 
         public function testRunNotFoundWithSend(): void

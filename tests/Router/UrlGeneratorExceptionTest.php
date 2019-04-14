@@ -47,10 +47,12 @@ final class UrlGeneratorExceptionTest extends TestCase
     {
         $exception = UrlGeneratorException::createForInvalidParameters([
             new InvalidParameter('id', '97a2c854-322a-4d0e-bd49-2e378d497919', '\d+'),
+            new InvalidParameter('name', 'test123', '\[a-z]+'),
         ]);
 
         self::assertSame(
-            'Parameter "id" with value "97a2c854-322a-4d0e-bd49-2e378d497919" does not match "\d+"',
+            'Parameter "id" with value "97a2c854-322a-4d0e-bd49-2e378d497919" does not match "\d+"'.PHP_EOL
+                .'Parameter "name" with value "test123" does not match "\[a-z]+"',
             $exception->getMessage()
         );
         self::assertSame(3, $exception->getCode());
