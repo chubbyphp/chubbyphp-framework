@@ -32,8 +32,8 @@ A minimal Framework using PSR 3, PSR 7, PSR 11, PSR 15 and PSR 17.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][1].
 
 ```sh
-composer create-project chubbyphp/chubbyphp-framework -s dev my-app
-cd my-app
+composer create-project chubbyphp/chubbyphp-framework -s dev example
+cd example
 ```
 
 ### Install FastRoute and ZendDiactoros
@@ -110,8 +110,14 @@ $app = new Application(
 $app->run(ServerRequestFactory::fromGlobals());
 ```
 
+## Web Server
+
+[Go to web server configuration][10]
+
 ## Copyright
 
 Dominik Zogg 2019
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
+
+[10]: doc/webserver.md
