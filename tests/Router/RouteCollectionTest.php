@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Router;
 
 use Chubbyphp\Framework\Router\RouteCollection;
+use Chubbyphp\Framework\Router\RouteCollectionException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Chubbyphp\Framework\Router\RouteCollectionException;
 
 /**
  * @covers \Chubbyphp\Framework\Router\RouteCollection
