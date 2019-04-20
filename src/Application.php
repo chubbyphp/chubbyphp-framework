@@ -99,7 +99,7 @@ final class Application
         ServerRequestInterface $request,
         RouteInterface $route
     ): ServerRequestInterface {
-        $request = $request->withAttribute('_route', $route->getName());
+        $request = $request->withAttribute('route', $route);
         foreach ($route->getAttributes() as $attribute => $value) {
             $request = $request->withAttribute($attribute, $value);
         }

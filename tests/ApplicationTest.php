@@ -80,15 +80,6 @@ namespace Chubbyphp\Tests\Framework
 
         public function testRunFoundWithoutSend(): void
         {
-            /** @var ServerRequestInterface|MockObject $request */
-            $request = $this->getMockByCalls(ServerRequestInterface::class, [
-                Call::create('withAttribute')->with('_route', 'index')->willReturnSelf(),
-                Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
-            ]);
-
-            /** @var ResponseInterface|MockObject $response */
-            $response = $this->getMockByCalls(ResponseInterface::class);
-
             /** @var MiddlewareInterface|MockObject $middleware */
             $middleware = $this->getMockByCalls(MiddlewareInterface::class);
 
@@ -99,9 +90,17 @@ namespace Chubbyphp\Tests\Framework
             $route = $this->getMockByCalls(RouteInterface::class, [
                 Call::create('getMiddlewares')->with()->willReturn([$middleware]),
                 Call::create('getRequestHandler')->with()->willReturn($requestHandler),
-                Call::create('getName')->with()->willReturn('index'),
                 Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
             ]);
+
+            /** @var ServerRequestInterface|MockObject $request */
+            $request = $this->getMockByCalls(ServerRequestInterface::class, [
+                Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
+                Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
+            ]);
+
+            /** @var ResponseInterface|MockObject $response */
+            $response = $this->getMockByCalls(ResponseInterface::class);
 
             /** @var RouteDispatcherInterface|MockObject $routeDispatcher */
             $routeDispatcher = $this->getMockByCalls(RouteDispatcherInterface::class, [
@@ -139,9 +138,22 @@ namespace Chubbyphp\Tests\Framework
 
         public function testRunFoundWithSend(): void
         {
+            /** @var MiddlewareInterface|MockObject $middleware */
+            $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
+            /** @var RequestHandlerInterface|MockObject $requestHandler */
+            $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+            /** @var RouteInterface|MockObject $route */
+            $route = $this->getMockByCalls(RouteInterface::class, [
+                Call::create('getMiddlewares')->with()->willReturn([$middleware]),
+                Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
+            ]);
+
             /** @var ServerRequestInterface|MockObject $request */
             $request = $this->getMockByCalls(ServerRequestInterface::class, [
-                Call::create('withAttribute')->with('_route', 'index')->willReturnSelf(),
+                Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
                 Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
             ]);
 
@@ -161,20 +173,6 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('getReasonPhrase')->with()->willReturn('OK'),
                 Call::create('getHeaders')->with()->willReturn(['X-Name' => ['value1', 'value2']]),
                 Call::create('getBody')->with()->willReturn($responseBody),
-            ]);
-
-            /** @var MiddlewareInterface|MockObject $middleware */
-            $middleware = $this->getMockByCalls(MiddlewareInterface::class);
-
-            /** @var RequestHandlerInterface|MockObject $requestHandler */
-            $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
-
-            /** @var RouteInterface|MockObject $route */
-            $route = $this->getMockByCalls(RouteInterface::class, [
-                Call::create('getMiddlewares')->with()->willReturn([$middleware]),
-                Call::create('getRequestHandler')->with()->willReturn($requestHandler),
-                Call::create('getName')->with()->willReturn('index'),
-                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
             ]);
 
             /** @var RouteDispatcherInterface|MockObject $routeDispatcher */
@@ -360,17 +358,6 @@ namespace Chubbyphp\Tests\Framework
 
         public function testRunThrowableWithoutSend(): void
         {
-            /** @var ServerRequestInterface|MockObject $request */
-            $request = $this->getMockByCalls(ServerRequestInterface::class, [
-                Call::create('withAttribute')->with('_route', 'index')->willReturnSelf(),
-                Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
-            ]);
-
-            /** @var ResponseInterface|MockObject $response */
-            $response = $this->getMockByCalls(ResponseInterface::class);
-
-            $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
-
             /** @var MiddlewareInterface|MockObject $middleware */
             $middleware = $this->getMockByCalls(MiddlewareInterface::class);
 
@@ -381,9 +368,19 @@ namespace Chubbyphp\Tests\Framework
             $route = $this->getMockByCalls(RouteInterface::class, [
                 Call::create('getMiddlewares')->with()->willReturn([$middleware]),
                 Call::create('getRequestHandler')->with()->willReturn($requestHandler),
-                Call::create('getName')->with()->willReturn('index'),
                 Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
             ]);
+
+            /** @var ServerRequestInterface|MockObject $request */
+            $request = $this->getMockByCalls(ServerRequestInterface::class, [
+                Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
+                Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
+            ]);
+
+            /** @var ResponseInterface|MockObject $response */
+            $response = $this->getMockByCalls(ResponseInterface::class);
+
+            $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
 
             /** @var RouteDispatcherInterface|MockObject $routeDispatcher */
             $routeDispatcher = $this->getMockByCalls(RouteDispatcherInterface::class, [
@@ -449,9 +446,22 @@ namespace Chubbyphp\Tests\Framework
 
         public function testRunThrowableWithSend(): void
         {
+            /** @var MiddlewareInterface|MockObject $middleware */
+            $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
+            /** @var RequestHandlerInterface|MockObject $requestHandler */
+            $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+            /** @var RouteInterface|MockObject $route */
+            $route = $this->getMockByCalls(RouteInterface::class, [
+                Call::create('getMiddlewares')->with()->willReturn([$middleware]),
+                Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
+            ]);
+
             /** @var ServerRequestInterface|MockObject $request */
             $request = $this->getMockByCalls(ServerRequestInterface::class, [
-                Call::create('withAttribute')->with('_route', 'index')->willReturnSelf(),
+                Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
                 Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
             ]);
 
@@ -474,20 +484,6 @@ namespace Chubbyphp\Tests\Framework
             ]);
 
             $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
-
-            /** @var MiddlewareInterface|MockObject $middleware */
-            $middleware = $this->getMockByCalls(MiddlewareInterface::class);
-
-            /** @var RequestHandlerInterface|MockObject $requestHandler */
-            $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
-
-            /** @var RouteInterface|MockObject $route */
-            $route = $this->getMockByCalls(RouteInterface::class, [
-                Call::create('getMiddlewares')->with()->willReturn([$middleware]),
-                Call::create('getRequestHandler')->with()->willReturn($requestHandler),
-                Call::create('getName')->with()->willReturn('index'),
-                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
-            ]);
 
             /** @var RouteDispatcherInterface|MockObject $routeDispatcher */
             $routeDispatcher = $this->getMockByCalls(RouteDispatcherInterface::class, [
