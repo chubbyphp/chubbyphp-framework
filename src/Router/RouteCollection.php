@@ -165,6 +165,25 @@ final class RouteCollection implements RouteCollectionInterface
      *
      * @throws RouteCollectionException
      */
+    public function options(
+        string $pattern,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = []
+    ): self {
+        return $this->route($pattern, RouteInterface::OPTIONS, $name, $requestHandler, $middlewares);
+    }
+
+    /**
+     * @param string                  $pattern
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     * @param array                   $middlewares
+     *
+     * @return self
+     *
+     * @throws RouteCollectionException
+     */
     public function patch(
         string $pattern,
         string $name,
