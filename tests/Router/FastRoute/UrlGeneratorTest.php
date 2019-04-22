@@ -66,7 +66,7 @@ final class UrlGeneratorTest extends TestCase
         );
         self::assertSame(
             'https://user:password@localhost/user/1?key=value',
-            $urlGenerator->generateUrl($request, 'user', ['id' => 1, 'key' => 'value'])
+            $urlGenerator->generateUrl($request, 'user', ['id' => 1], ['key' => 'value'])
         );
         self::assertSame(
             'https://user:password@localhost/user/1/sample',
@@ -74,7 +74,7 @@ final class UrlGeneratorTest extends TestCase
         );
         self::assertSame(
             'https://user:password@localhost/user/1/sample?key=value',
-            $urlGenerator->generateUrl($request, 'user', ['id' => 1, 'name' => 'sample', 'key' => 'value'])
+            $urlGenerator->generateUrl($request, 'user', ['id' => 1, 'name' => 'sample'], ['key' => 'value'])
         );
     }
 
@@ -96,68 +96,6 @@ final class UrlGeneratorTest extends TestCase
         $urlGenerator->generatePath('user', ['id' => 1]);
     }
 
-    public function testGeneratePathWithMissingParameters(): void
-    {
-        $this->expectException(UrlGeneratorException::class);
-        $this->expectExceptionMessage('Missing parameters: "id"');
-        $this->expectExceptionCode(2);
-
-        /** @var RouteInterface|MockObject $route */
-        $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
-        ]);
-
-        /** @var RouteCollectionInterface|MockObject $routeCollection */
-        $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['user' => $route]),
-        ]);
-
-        $urlGenerator = new UrlGenerator($routeCollection);
-        $urlGenerator->generatePath('user');
-    }
-
-    public function testGeneratePathWithMultipleMissingParameters(): void
-    {
-        $this->expectException(UrlGeneratorException::class);
-        $this->expectExceptionMessage('Missing parameters: "id", "name"');
-        $this->expectExceptionCode(2);
-
-        /** @var RouteInterface|MockObject $route */
-        $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}/{name}'),
-        ]);
-
-        /** @var RouteCollectionInterface|MockObject $routeCollection */
-        $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['user' => $route]),
-        ]);
-
-        $urlGenerator = new UrlGenerator($routeCollection);
-        $urlGenerator->generatePath('user');
-    }
-
-    public function testGeneratePathWithInvalidParameters(): void
-    {
-        $this->expectException(UrlGeneratorException::class);
-        $this->expectExceptionMessage(
-            'Parameter "id" with value "c0b8bf5f-476b-4552-97aa-e37b8004a5c0" does not match "\d+"'
-        );
-        $this->expectExceptionCode(3);
-
-        /** @var RouteInterface|MockObject $route */
-        $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
-        ]);
-
-        /** @var RouteCollectionInterface|MockObject $routeCollection */
-        $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['user' => $route]),
-        ]);
-
-        $urlGenerator = new UrlGenerator($routeCollection);
-        $urlGenerator->generatePath('user', ['id' => 'c0b8bf5f-476b-4552-97aa-e37b8004a5c0']);
-    }
-
     public function testGeneratePathSuccessful(): void
     {
         /** @var RouteInterface|MockObject $route */
@@ -176,11 +114,11 @@ final class UrlGeneratorTest extends TestCase
         $urlGenerator = new UrlGenerator($routeCollection);
 
         self::assertSame('/user/1', $urlGenerator->generatePath('user', ['id' => 1]));
-        self::assertSame('/user/1?key=value', $urlGenerator->generatePath('user', ['id' => 1, 'key' => 'value']));
+        self::assertSame('/user/1?key=value', $urlGenerator->generatePath('user', ['id' => 1], ['key' => 'value']));
         self::assertSame('/user/1/sample', $urlGenerator->generatePath('user', ['id' => 1, 'name' => 'sample']));
         self::assertSame(
             '/user/1/sample?key=value',
-            $urlGenerator->generatePath('user', ['id' => 1, 'name' => 'sample', 'key' => 'value'])
+            $urlGenerator->generatePath('user', ['id' => 1, 'name' => 'sample'], ['key' => 'value'])
         );
     }
 }

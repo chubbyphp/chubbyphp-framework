@@ -44,32 +44,44 @@ final class UrlGenerator implements UrlGeneratorInterface
     /**
      * @param ServerRequestInterface $request
      * @param string                 $name
-     * @param array                  $parameters
+     * @param string[]               $attributes
+     * @param array                  $queryParams
      *
      * @return string
      *
      * @throws UrlGeneratorException
      */
-    public function generateUrl(ServerRequestInterface $request, string $name, array $parameters = []): string
-    {
+    public function generateUrl(
+        ServerRequestInterface $request,
+        string $name,
+        array $attributes = [],
+        array $queryParams = []
+    ): string {
         $uri = $request->getUri();
-        $requestTarget = $this->generatePath($name, $parameters);
+        $requestTarget = $this->generatePath($name, $attributes, $queryParams);
 
         return $uri->getScheme().'://'.$uri->getAuthority().$requestTarget;
     }
 
     /**
-     * @param string $name
-     * @param array  $parameters
+     * @param string   $name
+     * @param string[] $attributes
+     * @param array    $queryParams
      *
      * @return string
      *
      * @throws UrlGeneratorException
      */
-    public function generatePath(string $name, array $parameters = []): string
+    public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
         try {
-            return $this->generator->generate($name, $parameters);
+            $path = $this->generator->generate($name, $attributes);
+
+            if ([] === $queryParams) {
+                return $path;
+            }
+
+            return $path.'?'.http_build_query($queryParams);
         } catch (RouteNotFound $exception) {
             throw UrlGeneratorException::createForMissingRoute($name);
         }

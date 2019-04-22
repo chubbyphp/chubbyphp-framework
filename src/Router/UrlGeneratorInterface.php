@@ -11,21 +11,28 @@ interface UrlGeneratorInterface
     /**
      * @param ServerRequestInterface $request
      * @param string                 $name
-     * @param array                  $parameters
+     * @param string[]               $attributes
+     * @param array                  $queryParams
      *
      * @return string
      *
      * @throws UrlGeneratorException
      */
-    public function generateUrl(ServerRequestInterface $request, string $name, array $parameters = []): string;
+    public function generateUrl(
+        ServerRequestInterface $request,
+        string $name,
+        array $attributes = [],
+        array $queryParams = []
+    ): string;
 
     /**
-     * @param string $name
-     * @param array  $parameters
+     * @param string   $name
+     * @param string[] $attributes
+     * @param array    $queryParams
      *
      * @return string
      *
      * @throws UrlGeneratorException
      */
-    public function generatePath(string $name, array $parameters = []): string;
+    public function generatePath(string $name, array $attributes = [], array $queryParams = []): string;
 }

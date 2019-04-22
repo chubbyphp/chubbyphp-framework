@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\FastRoute;
 
-use Chubbyphp\Framework\Router\InvalidParameter;
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\UrlGeneratorException;
@@ -36,42 +35,46 @@ final class UrlGenerator implements UrlGeneratorInterface
     /**
      * @param ServerRequestInterface $request
      * @param string                 $name
-     * @param array                  $parameters
+     * @param string[]               $attributes
+     * @param array                  $queryParams
      *
      * @return string
      *
      * @throws UrlGeneratorException
      */
-    public function generateUrl(ServerRequestInterface $request, string $name, array $parameters = []): string
-    {
+    public function generateUrl(
+        ServerRequestInterface $request,
+        string $name,
+        array $attributes = [],
+        array $queryParams = []
+    ): string {
         $uri = $request->getUri();
-        $requestTarget = $this->generatePath($name, $parameters);
+        $requestTarget = $this->generatePath($name, $attributes, $queryParams);
 
         return $uri->getScheme().'://'.$uri->getAuthority().$requestTarget;
     }
 
     /**
-     * @param string $name
-     * @param array  $parameters
+     * @param string   $name
+     * @param string[] $attributes
+     * @param array    $queryParams
      *
      * @return string
      *
      * @throws UrlGeneratorException
      */
-    public function generatePath(string $name, array $parameters = []): string
+    public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
         $route = $this->getRoute($name);
 
         $routePartSets = array_reverse($this->routeParser->parse($route->getPattern()));
 
-        $routeIndex = $this->getRouteIndex($routePartSets, $parameters);
+        $routeIndex = $this->getRouteIndex($routePartSets, $attributes);
 
         $pathParts = [];
         foreach ($routePartSets[$routeIndex] as $routePart) {
             if (is_array($routePart)) {
-                $parameter = $routePart[0];
-                $pathParts[] = $parameters[$parameter];
-                unset($parameters[$parameter]);
+                $pathParts[] = $attributes[$routePart[0]] ?? '{'.$routePart[0].'}';
             } else {
                 $pathParts[] = $routePart;
             }
@@ -79,11 +82,11 @@ final class UrlGenerator implements UrlGeneratorInterface
 
         $path = implode('', $pathParts);
 
-        if ([] === $parameters) {
+        if ([] === $queryParams) {
             return $path;
         }
 
-        return $path.'?'.http_build_query($parameters);
+        return $path.'?'.http_build_query($queryParams);
     }
 
     /**
@@ -104,38 +107,23 @@ final class UrlGenerator implements UrlGeneratorInterface
 
     /**
      * @param array $routePartSets
-     * @param array $parameters
+     * @param array $attributes
      *
      * @return int
-     *
-     * @throws UrlGeneratorException
      */
-    private function getRouteIndex(array $routePartSets, array $parameters): int
+    private function getRouteIndex(array $routePartSets, array $attributes): int
     {
         foreach ($routePartSets as $routeIndex => $routeParts) {
             $missingParameters = [];
-            $invalidParameters = [];
-
             foreach ($routeParts as $routePart) {
                 if (is_array($routePart)) {
                     $parameter = $routePart[0];
-                    if (!isset($parameters[$parameter])) {
+                    if (!isset($attributes[$parameter])) {
                         $missingParameters[] = $parameter;
 
-                        continue;
-                    }
-
-                    $pattern = $routePart[1];
-                    $value = (string) $parameters[$parameter];
-
-                    if (1 !== preg_match('/^'.str_replace('/', '\/', $pattern).'$/', $value)) {
-                        $invalidParameters[] = new InvalidParameter($parameter, $value, $pattern);
+                        break;
                     }
                 }
-            }
-
-            if ([] !== $invalidParameters) {
-                throw UrlGeneratorException::createForInvalidParameters($invalidParameters);
             }
 
             if ([] === $missingParameters) {
@@ -143,6 +131,6 @@ final class UrlGenerator implements UrlGeneratorInterface
             }
         }
 
-        throw UrlGeneratorException::createForMissingParameters($missingParameters);
+        return $routeIndex;
     }
 }
