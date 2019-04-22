@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Router;
+namespace Chubbyphp\Tests\Framework\Router\FastRoute;
 
-use Chubbyphp\Framework\Router\RouteCollection;
+use Chubbyphp\Framework\Router\FastRoute\RouteCollection;
 use Chubbyphp\Framework\Router\RouteCollectionException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\MockByCallsTrait;
@@ -14,7 +14,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * @covers \Chubbyphp\Framework\Router\RouteCollection
+ * @covers \Chubbyphp\Framework\Router\FastRoute\RouteCollection
  */
 final class RouteCollectionTest extends TestCase
 {
@@ -32,19 +32,19 @@ final class RouteCollectionTest extends TestCase
         $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $routeCollection = (new RouteCollection())
-            ->get('/', [], 'index', $requestHandler)
-            ->options('/{path}', ['path' => '.*'], 'cors', $requestHandler)
-            ->group('/api', [])
-                ->group('/pet', [], [$middleware1])
-                    ->get('', [], 'pet_list', $requestHandler, [$middleware2])
-                    ->post('', [], 'pet_create', $requestHandler)
-                    ->get('/{id}', ['id' => '\d+'], 'pet_read', $requestHandler)
-                    ->head('/{id}', ['id' => '\d+'], 'pet_read_header', $requestHandler)
-                    ->patch('/{id}', ['id' => '\d+'], 'pet_update', $requestHandler)
-                    ->put('/{id}', ['id' => '\d+'], 'pet_replace', $requestHandler)
-                    ->delete('/{id}', ['id' => '\d+'], 'pet_delete', $requestHandler)
+            ->get('/', 'index', $requestHandler)
+            ->options('/{path:.*}', 'cors', $requestHandler)
+            ->group('/api')
+                ->group('/pet', [$middleware1])
+                    ->get('', 'pet_list', $requestHandler, [$middleware2])
+                    ->post('', 'pet_create', $requestHandler)
+                    ->get('/{id:\d+}', 'pet_read', $requestHandler)
+                    ->head('/{id:\d+}', 'pet_read_header', $requestHandler)
+                    ->patch('/{id:\d+}', 'pet_update', $requestHandler)
+                    ->put('/{id:\d+}', 'pet_replace', $requestHandler)
+                    ->delete('/{id:\d+}', 'pet_delete', $requestHandler)
                 ->end()
-                ->get('/ping', [], 'ping', $requestHandler)
+                ->get('/ping', 'ping', $requestHandler)
             ->end();
 
         $routes = $routeCollection->getRoutes();
@@ -64,7 +64,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route2 */
         $route2 = $routes['cors'];
 
-        self::assertSame('/{path}', $route2->getPattern());
+        self::assertSame('/{path:.*}', $route2->getPattern());
         self::assertSame(RouteInterface::OPTIONS, $route2->getMethod());
         self::assertSame('cors', $route2->getName());
         self::assertSame($requestHandler, $route2->getRequestHandler());
@@ -94,7 +94,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route5 */
         $route5 = $routes['pet_read'];
 
-        self::assertSame('/api/pet/{id}', $route5->getPattern());
+        self::assertSame('/api/pet/{id:\d+}', $route5->getPattern());
         self::assertSame(RouteInterface::GET, $route5->getMethod());
         self::assertSame('pet_read', $route5->getName());
         self::assertSame($requestHandler, $route5->getRequestHandler());
@@ -104,7 +104,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route6 */
         $route6 = $routes['pet_read_header'];
 
-        self::assertSame('/api/pet/{id}', $route6->getPattern());
+        self::assertSame('/api/pet/{id:\d+}', $route6->getPattern());
         self::assertSame(RouteInterface::HEAD, $route6->getMethod());
         self::assertSame('pet_read_header', $route6->getName());
         self::assertSame($requestHandler, $route6->getRequestHandler());
@@ -114,7 +114,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route7 */
         $route7 = $routes['pet_update'];
 
-        self::assertSame('/api/pet/{id}', $route7->getPattern());
+        self::assertSame('/api/pet/{id:\d+}', $route7->getPattern());
         self::assertSame(RouteInterface::PATCH, $route7->getMethod());
         self::assertSame('pet_update', $route7->getName());
         self::assertSame($requestHandler, $route7->getRequestHandler());
@@ -124,7 +124,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route8 */
         $route8 = $routes['pet_replace'];
 
-        self::assertSame('/api/pet/{id}', $route8->getPattern());
+        self::assertSame('/api/pet/{id:\d+}', $route8->getPattern());
         self::assertSame(RouteInterface::PUT, $route8->getMethod());
         self::assertSame('pet_replace', $route8->getName());
         self::assertSame($requestHandler, $route8->getRequestHandler());
@@ -134,7 +134,7 @@ final class RouteCollectionTest extends TestCase
         /** @var RouteInterface $route9 */
         $route9 = $routes['pet_delete'];
 
-        self::assertSame('/api/pet/{id}', $route9->getPattern());
+        self::assertSame('/api/pet/{id:\d+}', $route9->getPattern());
         self::assertSame(RouteInterface::DELETE, $route9->getMethod());
         self::assertSame('pet_delete', $route9->getName());
         self::assertSame($requestHandler, $route9->getRequestHandler());
@@ -153,14 +153,14 @@ final class RouteCollectionTest extends TestCase
 
         $expectedString = <<<'EOT'
 /::[]::GET::index
-/{path}::{"path":".*"}::OPTIONS::cors
+/{path:.*}::[]::OPTIONS::cors
 /api/pet::[]::GET::pet_list
 /api/pet::[]::POST::pet_create
-/api/pet/{id}::{"id":"\\d+"}::GET::pet_read
-/api/pet/{id}::{"id":"\\d+"}::HEAD::pet_read_header
-/api/pet/{id}::{"id":"\\d+"}::PATCH::pet_update
-/api/pet/{id}::{"id":"\\d+"}::PUT::pet_replace
-/api/pet/{id}::{"id":"\\d+"}::DELETE::pet_delete
+/api/pet/{id:\d+}::[]::GET::pet_read
+/api/pet/{id:\d+}::[]::HEAD::pet_read_header
+/api/pet/{id:\d+}::[]::PATCH::pet_update
+/api/pet/{id:\d+}::[]::PUT::pet_replace
+/api/pet/{id:\d+}::[]::DELETE::pet_delete
 /api/ping::[]::GET::ping
 EOT;
 
@@ -171,19 +171,19 @@ EOT;
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage(
-            'Chubbyphp\Framework\Router\RouteCollection::group expects parameter 1 to be '
+            'Chubbyphp\Framework\Router\FastRoute\RouteCollection::group expects parameter 1 to be '
                 .'Psr\Http\Server\MiddlewareInterface[], stdClass[] given'
         );
 
         $routeCollection = new RouteCollection();
-        $routeCollection->group('/api', [], [new \stdClass()]);
+        $routeCollection->group('/api', [new \stdClass()]);
     }
 
     public function testWithInvalidMiddlewareInRoute(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage(
-            'Chubbyphp\Framework\Router\RouteCollection::route expects parameter 1 to be '
+            'Chubbyphp\Framework\Router\FastRoute\RouteCollection::route expects parameter 1 to be '
                 .'Psr\Http\Server\MiddlewareInterface[], stdClass[] given'
         );
 
@@ -191,7 +191,7 @@ EOT;
         $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $routeCollection = new RouteCollection();
-        $routeCollection->get('/pets', [], 'pets', $requestHandler, [new \stdClass()]);
+        $routeCollection->get('/pets', 'pets', $requestHandler, [new \stdClass()]);
     }
 
     public function testFrozenWithGroup(): void
@@ -202,7 +202,7 @@ EOT;
 
         $routeCollection = new RouteCollection();
         $routeCollection->getRoutes();
-        $routeCollection->group('/api', []);
+        $routeCollection->group('/api');
     }
 
     public function testFrozenWithRoute(): void
@@ -216,7 +216,7 @@ EOT;
 
         $routeCollection = new RouteCollection();
         $routeCollection->getRoutes();
-        $routeCollection->post('/pets', [], 'pet_create', $requestHandler);
+        $routeCollection->post('/pets', 'pet_create', $requestHandler);
     }
 
     public function testFrozenWithEnd(): void

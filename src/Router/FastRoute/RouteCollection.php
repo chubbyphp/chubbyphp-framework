@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Framework\Router;
+namespace Chubbyphp\Framework\Router\FastRoute;
 
+use Chubbyphp\Framework\Router\RouteCollectionException;
+use Chubbyphp\Framework\Router\RouteCollectionInterface;
+use Chubbyphp\Framework\Router\RouteInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Chubbyphp\Framework\Router\Route;
 
 final class RouteCollection implements RouteCollectionInterface
 {
@@ -20,11 +24,6 @@ final class RouteCollection implements RouteCollectionInterface
     private $patternStack = [];
 
     /**
-     * @var array
-     */
-    private $optionsStack = [];
-
-    /**
      * @var array[]
      */
     private $middlewaresStack = [];
@@ -36,14 +35,13 @@ final class RouteCollection implements RouteCollectionInterface
 
     /**
      * @param string $pattern
-     * @param array  $options
      * @param array  $middlewares
      *
      * @return self
      *
      * @throws RouteCollectionException
      */
-    public function group(string $pattern, array $options, array $middlewares = []): self
+    public function group(string $pattern, array $middlewares = []): self
     {
         if ($this->freeze) {
             throw RouteCollectionException::createFreezeException();
@@ -52,7 +50,6 @@ final class RouteCollection implements RouteCollectionInterface
         $this->validateMiddlewares(__METHOD__, $middlewares);
 
         $this->patternStack[] = $pattern;
-        $this->optionsStack[] = $options;
         $this->middlewaresStack[] = $middlewares;
 
         return $this;
@@ -70,7 +67,6 @@ final class RouteCollection implements RouteCollectionInterface
         }
 
         array_pop($this->patternStack);
-        array_pop($this->optionsStack);
         array_pop($this->middlewaresStack);
 
         return $this;
@@ -78,7 +74,6 @@ final class RouteCollection implements RouteCollectionInterface
 
     /**
      * @param string                  $pattern
-     * @param array                   $options
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
      * @param array                   $middlewares
@@ -89,17 +84,15 @@ final class RouteCollection implements RouteCollectionInterface
      */
     public function delete(
         string $pattern,
-        array $options,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ): self {
-        return $this->route($pattern, $options, RouteInterface::DELETE, $name, $requestHandler, $middlewares);
+        return $this->route($pattern, RouteInterface::DELETE, $name, $requestHandler, $middlewares);
     }
 
     /**
      * @param string                  $pattern
-     * @param array                   $options
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
      * @param array                   $middlewares
@@ -110,17 +103,15 @@ final class RouteCollection implements RouteCollectionInterface
      */
     public function get(
         string $pattern,
-        array $options,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ): self {
-        return $this->route($pattern, $options, RouteInterface::GET, $name, $requestHandler, $middlewares);
+        return $this->route($pattern, RouteInterface::GET, $name, $requestHandler, $middlewares);
     }
 
     /**
      * @param string                  $pattern
-     * @param array                   $options
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
      * @param array                   $middlewares
@@ -131,17 +122,15 @@ final class RouteCollection implements RouteCollectionInterface
      */
     public function head(
         string $pattern,
-        array $options,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ): self {
-        return $this->route($pattern, $options, RouteInterface::HEAD, $name, $requestHandler, $middlewares);
+        return $this->route($pattern, RouteInterface::HEAD, $name, $requestHandler, $middlewares);
     }
 
     /**
      * @param string                  $pattern
-     * @param array                   $options
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
      * @param array                   $middlewares
@@ -152,17 +141,15 @@ final class RouteCollection implements RouteCollectionInterface
      */
     public function options(
         string $pattern,
-        array $options,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ): self {
-        return $this->route($pattern, $options, RouteInterface::OPTIONS, $name, $requestHandler, $middlewares);
+        return $this->route($pattern, RouteInterface::OPTIONS, $name, $requestHandler, $middlewares);
     }
 
     /**
      * @param string                  $pattern
-     * @param array                   $options
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
      * @param array                   $middlewares
@@ -173,17 +160,15 @@ final class RouteCollection implements RouteCollectionInterface
      */
     public function patch(
         string $pattern,
-        array $options,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ): self {
-        return $this->route($pattern, $options, RouteInterface::PATCH, $name, $requestHandler, $middlewares);
+        return $this->route($pattern, RouteInterface::PATCH, $name, $requestHandler, $middlewares);
     }
 
     /**
      * @param string                  $pattern
-     * @param array                   $options
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
      * @param array                   $middlewares
@@ -194,17 +179,15 @@ final class RouteCollection implements RouteCollectionInterface
      */
     public function post(
         string $pattern,
-        array $options,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ): self {
-        return $this->route($pattern, $options, RouteInterface::POST, $name, $requestHandler, $middlewares);
+        return $this->route($pattern, RouteInterface::POST, $name, $requestHandler, $middlewares);
     }
 
     /**
      * @param string                  $pattern
-     * @param array                   $options
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
      * @param array                   $middlewares
@@ -215,17 +198,15 @@ final class RouteCollection implements RouteCollectionInterface
      */
     public function put(
         string $pattern,
-        array $options,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ): self {
-        return $this->route($pattern, $options, RouteInterface::PUT, $name, $requestHandler, $middlewares);
+        return $this->route($pattern, RouteInterface::PUT, $name, $requestHandler, $middlewares);
     }
 
     /**
      * @param string                  $pattern
-     * @param array                   $options
      * @param string                  $method
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
@@ -237,7 +218,6 @@ final class RouteCollection implements RouteCollectionInterface
      */
     private function route(
         string $pattern,
-        array $options,
         string $method,
         string $name,
         RequestHandlerInterface $requestHandler,
@@ -251,7 +231,7 @@ final class RouteCollection implements RouteCollectionInterface
 
         $this->routes[$name] = new Route(
             $this->getPattern($pattern),
-            $this->getOptions($options),
+            [],
             $method,
             $name,
             $requestHandler,
@@ -289,21 +269,6 @@ final class RouteCollection implements RouteCollectionInterface
     private function getPattern(string $pattern): string
     {
         return implode('', $this->patternStack).$pattern;
-    }
-
-    /**
-     * @param array $routeOptions
-     *
-     * @return array
-     */
-    private function getOptions(array $routeOptions): array
-    {
-        $options = [];
-        foreach ($this->optionsStack as $optionsFromStack) {
-            $options = array_merge($options, $optionsFromStack);
-        }
-
-        return array_merge($options, $routeOptions);
     }
 
     /**

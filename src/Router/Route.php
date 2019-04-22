@@ -15,6 +15,11 @@ final class Route implements RouteInterface
     private $pattern;
 
     /**
+     * @var array
+     */
+    private $options;
+
+    /**
      * @var string
      */
     private $method;
@@ -41,6 +46,7 @@ final class Route implements RouteInterface
 
     /**
      * @param string                  $pattern
+     * @param array                   $options
      * @param string                  $method
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
@@ -48,12 +54,14 @@ final class Route implements RouteInterface
      */
     public function __construct(
         string $pattern,
+        array $options,
         string $method,
         string $name,
         RequestHandlerInterface $requestHandler,
         array $middlewares = []
     ) {
         $this->pattern = $pattern;
+        $this->options = $options;
         $this->method = $method;
         $this->name = $name;
         $this->requestHandler = $requestHandler;
@@ -77,6 +85,14 @@ final class Route implements RouteInterface
     public function getPattern(): string
     {
         return $this->pattern;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 
     /**
@@ -137,6 +153,6 @@ final class Route implements RouteInterface
      */
     public function __toString(): string
     {
-        return $this->pattern.'::'.$this->method.'::'.$this->name;
+        return $this->pattern.'::'.json_encode($this->options).'::'.$this->method.'::'.$this->name;
     }
 }

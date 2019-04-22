@@ -23,6 +23,11 @@ interface RouteInterface
     public function getPattern(): string;
 
     /**
+     * @return array
+     */
+    public function getOptions(): array;
+
+    /**
      * @return string
      */
     public function getMethod(): string;
