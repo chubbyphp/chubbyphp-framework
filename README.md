@@ -31,6 +31,7 @@ About simplicity: Nothing should be more complex than needed to fulfill the flex
  * php: ^7.2
  * psr/container: ^1.0
  * psr/http-factory: ^1.0
+ * psr/http-message-implementation: ^1.0
  * psr/http-message: ^1.0.1
  * psr/http-server-middleware: ^1.0.1
  * psr/log: ^1.1
