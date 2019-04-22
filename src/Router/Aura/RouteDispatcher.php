@@ -30,12 +30,12 @@ final class RouteDispatcher implements RouteDispatcherInterface
      */
     public function __construct(RouteCollectionInterface $routeCollection)
     {
-        $this->routes = $routeCollection->getRoutes();
+        $routes = $routeCollection->getRoutes();
 
         $routerContainer = new RouterContainer();
         $map = $routerContainer->getMap();
 
-        foreach ($this->routes as $route) {
+        foreach ($routes as $route) {
             $options = $route->getOptions();
 
             $auraRoute = $map->route($route->getName(), $route->getPattern());
@@ -44,6 +44,7 @@ final class RouteDispatcher implements RouteDispatcherInterface
             $auraRoute->defaults($options['defaults'] ?? []);
         }
 
+        $this->routes = $routes;
         $this->matcher = $routerContainer->getMatcher();
     }
 
