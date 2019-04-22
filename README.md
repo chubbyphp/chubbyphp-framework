@@ -55,8 +55,8 @@ cd example
 
 ### Basic
 
-[Aura.Router][30]
-[FastRoute][31]
+ * [Aura.Router][30]
+ * [FastRoute][31]
 
 ## Web Server
 
