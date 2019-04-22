@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Router\Aura;
 
+use Aura\RouteParser;
 use Chubbyphp\Framework\Router\Aura\UrlGenerator;
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
-use Aura\RouteParser;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;

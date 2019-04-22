@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\Aura;
 
+use Aura\Router\Exception\RouteNotFound;
 use Aura\Router\Generator;
 use Aura\Router\RouterContainer;
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
+use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Framework\Router\UrlGeneratorInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Aura\Router\Exception\RouteNotFound;
-use Chubbyphp\Framework\Router\UrlGeneratorException;
 
 final class UrlGenerator implements UrlGeneratorInterface
 {
