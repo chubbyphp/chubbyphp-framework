@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Router\Aura;
+namespace Chubbyphp\Tests\Framework\Router\AuraRouter;
 
-use Chubbyphp\Framework\Router\Aura\RouteDispatcher;
+use Chubbyphp\Framework\Router\AuraRouter\RouteDispatcher;
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteInterface;
@@ -16,7 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
- * @covers \Chubbyphp\Framework\Router\Aura\RouteDispatcher
+ * @covers \Chubbyphp\Framework\Router\AuraRouter\RouteDispatcher
  */
 final class RouteDispatcherTest extends TestCase
 {

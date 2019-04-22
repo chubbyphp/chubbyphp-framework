@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Framework\Router\Aura;
+namespace Chubbyphp\Framework\Router\AuraRouter;
 
 use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;

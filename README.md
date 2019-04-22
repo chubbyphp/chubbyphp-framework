@@ -53,141 +53,14 @@ cd example
 
 ## Usage
 
-### Basic example using Aura.Router
+### Basic
 
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
-use Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler;
-use Chubbyphp\Framework\Router\Aura\RouteDispatcher;
-use Chubbyphp\Framework\Router\RouteCollection;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface as PsrRequestHandlerInterface;
-use Zend\Diactoros\ResponseFactory;
-use Zend\Diactoros\ServerRequestFactory;
-
-$loader = require __DIR__.'/vendor/autoload.php';
-
-$responseFactory = new ResponseFactory();
-
-$routeCollection = new RouteCollection();
-$routeCollection
-    ->get(
-        '/hello/{name}',
-        ['tokens' => ['name' => '[a-z]+']],
-        'hello',
-        new class($responseFactory) implements PsrRequestHandlerInterface
-        {
-            /**
-             * @var ResponseFactoryInterface
-             */
-            private $responseFactory;
-
-            /**
-             * @param ResponseFactoryInterface $responseFactory
-             */
-            public function __construct(ResponseFactoryInterface $responseFactory)
-            {
-                $this->responseFactory = $responseFactory;
-            }
-
-            public function handle(ServerRequestInterface $request): ResponseInterface
-            {
-                $name = $request->getAttribute('name');
-                $response = $this->responseFactory->createResponse();
-                $response->getBody()->write(sprintf('Hello, %s', $name));
-
-                return $response;
-            }
-        }
-    );
-
-$app = new Application(
-    new RouteDispatcher($routeCollection),
-    new MiddlewareDispatcher(),
-    new HtmlExceptionResponseHandler($responseFactory)
-);
-
-$app->run(ServerRequestFactory::fromGlobals());
-
-```
-
-### Basic example using FastRoute
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
-use Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler;
-use Chubbyphp\Framework\Router\FastRoute\RouteCollection;
-use Chubbyphp\Framework\Router\FastRoute\RouteDispatcher;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface as PsrRequestHandlerInterface;
-use Zend\Diactoros\ResponseFactory;
-use Zend\Diactoros\ServerRequestFactory;
-
-$loader = require __DIR__.'/vendor/autoload.php';
-
-$responseFactory = new ResponseFactory();
-
-$routeCollection = new RouteCollection();
-$routeCollection
-    ->get(
-        '/hello/{name:[a-z]+}',
-        'hello',
-        new class($responseFactory) implements PsrRequestHandlerInterface
-        {
-            /**
-             * @var ResponseFactoryInterface
-             */
-            private $responseFactory;
-
-            /**
-             * @param ResponseFactoryInterface $responseFactory
-             */
-            public function __construct(ResponseFactoryInterface $responseFactory)
-            {
-                $this->responseFactory = $responseFactory;
-            }
-
-            public function handle(ServerRequestInterface $request): ResponseInterface
-            {
-                $name = $request->getAttribute('name');
-                $response = $this->responseFactory->createResponse();
-                $response->getBody()->write(sprintf('Hello, %s', $name));
-
-                return $response;
-            }
-        }
-    );
-
-$app = new Application(
-    new RouteDispatcher($routeCollection),
-    new MiddlewareDispatcher(),
-    new HtmlExceptionResponseHandler($responseFactory)
-);
-
-$app->run(ServerRequestFactory::fromGlobals());
-```
+[Aura.Router][30]
+[FastRoute][31]
 
 ## Web Server
 
-[Go to web server configuration][30]
+[Go to web server configuration][50]
 
 ## Copyright
 
@@ -206,4 +79,7 @@ Dominik Zogg 2019
 
 [20]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 
-[30]: doc/webserver.md
+[30]: doc/usage/basic/aurarouter.md
+[31]: doc/usage/basic/fastroute.md
+
+[50]: doc/webserver.md

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Framework\Router\Aura;
+namespace Chubbyphp\Framework\Router\AuraRouter;
 
 use Aura\Router\Exception\RouteNotFound;
 use Aura\Router\Generator;

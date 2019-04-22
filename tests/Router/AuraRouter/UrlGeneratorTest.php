@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Router\Aura;
+namespace Chubbyphp\Tests\Framework\Router\AuraRouter;
 
 use Aura\RouteParser;
-use Chubbyphp\Framework\Router\Aura\UrlGenerator;
+use Chubbyphp\Framework\Router\AuraRouter\UrlGenerator;
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\UrlGeneratorException;
@@ -17,7 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
- * @covers \Chubbyphp\Framework\Router\Aura\UrlGenerator
+ * @covers \Chubbyphp\Framework\Router\AuraRouter\UrlGenerator
  */
 final class UrlGeneratorTest extends TestCase
 {
