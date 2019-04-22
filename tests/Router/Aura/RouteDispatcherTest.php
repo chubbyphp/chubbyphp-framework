@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Router\FastRoute;
+namespace Chubbyphp\Tests\Framework\Router\Aura;
 
-use Chubbyphp\Framework\Router\FastRoute\RouteDispatcher;
+use Chubbyphp\Framework\Router\Aura\RouteDispatcher;
 use Chubbyphp\Framework\Router\RouteCollectionInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteInterface;
@@ -16,7 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
- * @covers \Chubbyphp\Framework\Router\FastRoute\RouteDispatcher
+ * @covers \Chubbyphp\Framework\Router\Aura\RouteDispatcher
  */
 final class RouteDispatcherTest extends TestCase
 {
@@ -27,42 +27,31 @@ final class RouteDispatcherTest extends TestCase
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
             Call::create('getPath')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pet'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getMethod')->with()->willReturn('GET'),
-            Call::create('getPattern')->with()->willReturn('/api/pet'),
+            Call::create('getOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
+            Call::create('getPattern')->with()->willReturn('/api/pet'),
+            Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('withAttributes')->with([])->willReturnSelf(),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
         $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
             Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
-            Call::create('__toString')->with()->willReturn('/api/pet::[]::GET::pet_list'),
         ]);
 
-        $dynamicCachePart = uniqid().'/'.uniqid();
-
-        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
-
-        mkdir($cacheDir, 0777, true);
-
-        $routeDispatcher = new RouteDispatcher($routeCollection, $cacheDir);
-
-        self::assertFileExists(
-            sprintf(
-                '/tmp/%s/fast-route-c0640d9cdd66db87f39880fd291299269a2ef68129a7b2c632fa62454f2b27ff.php',
-                $dynamicCachePart
-            )
-        );
+        $routeDispatcher = new RouteDispatcher($routeCollection);
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }
@@ -79,42 +68,30 @@ final class RouteDispatcherTest extends TestCase
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
             Call::create('getPath')->with()->willReturn('/'),
+            Call::create('getPath')->with()->willReturn('/'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getRequestTarget')->with()->willReturn('/'),
         ]);
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getMethod')->with()->willReturn('GET'),
-            Call::create('getPattern')->with()->willReturn('/api/pet'),
+            Call::create('getOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
+            Call::create('getPattern')->with()->willReturn('/api/pet'),
+            Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
         $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
             Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
-            Call::create('__toString')->with()->willReturn('/api/pet::[]::GET::pet_list'),
         ]);
 
-        $dynamicCachePart = uniqid().'/'.uniqid();
-
-        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
-
-        mkdir($cacheDir, 0777, true);
-
-        $routeDispatcher = new RouteDispatcher($routeCollection, $cacheDir);
-
-        self::assertFileExists(
-            sprintf(
-                '/tmp/%s/fast-route-c0640d9cdd66db87f39880fd291299269a2ef68129a7b2c632fa62454f2b27ff.php',
-                $dynamicCachePart
-            )
-        );
+        $routeDispatcher = new RouteDispatcher($routeCollection);
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }
@@ -130,42 +107,32 @@ final class RouteDispatcherTest extends TestCase
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
             Call::create('getPath')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pet'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('getMethod')->with()->willReturn('POST'),
             Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getMethod')->with()->willReturn('POST'),
+            Call::create('getMethod')->with()->willReturn('POST'),
             Call::create('getRequestTarget')->with()->willReturn('/api/pet?offset=1&limit=20'),
         ]);
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getMethod')->with()->willReturn('GET'),
-            Call::create('getPattern')->with()->willReturn('/api/pet'),
+            Call::create('getOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
+            Call::create('getPattern')->with()->willReturn('/api/pet'),
+            Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
         $routeCollection = $this->getMockByCalls(RouteCollectionInterface::class, [
             Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
-            Call::create('__toString')->with()->willReturn('/api/pet::[]::GET::pet_list'),
         ]);
 
-        $dynamicCachePart = uniqid().'/'.uniqid();
-
-        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
-
-        mkdir($cacheDir, 0777, true);
-
-        $routeDispatcher = new RouteDispatcher($routeCollection, $cacheDir);
-
-        self::assertFileExists(
-            sprintf(
-                '/tmp/%s/fast-route-c0640d9cdd66db87f39880fd291299269a2ef68129a7b2c632fa62454f2b27ff.php',
-                $dynamicCachePart
-            )
-        );
+        $routeDispatcher = new RouteDispatcher($routeCollection);
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }

@@ -37,8 +37,8 @@ About simplicity: Nothing should be more complex than needed to fulfill the flex
 
 ## Suggest
 
+ * aura/router: ^3.1
  * nikic/fast-route: ^1.3
- * pimple/pimple: ^3.2.3
  * zendframework/zend-diactoros: ^2.1.1
 
 ## Installation
@@ -50,16 +50,76 @@ composer create-project chubbyphp/chubbyphp-framework -s dev example
 cd example
 ```
 
-### Install FastRoute and ZendDiactoros
-
-```sh
-composer require nikic/fast-route: "^1.3"
-composer require zendframework/zend-diactoros "^2.1.1"
-```
-
 ## Usage
 
-### Basic example using FastRoute and ZendDiactoros
+### Basic example using Aura.Router
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler;
+use Chubbyphp\Framework\Router\Aura\RouteDispatcher;
+use Chubbyphp\Framework\Router\RouteCollection;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface as PsrRequestHandlerInterface;
+use Zend\Diactoros\ResponseFactory;
+use Zend\Diactoros\ServerRequestFactory;
+
+$loader = require __DIR__.'/vendor/autoload.php';
+
+$responseFactory = new ResponseFactory();
+
+$routeCollection = new RouteCollection();
+$routeCollection
+    ->get(
+        '/hello/{name}',
+        ['tokens' => ['name' => '[a-z]+']],
+        'hello',
+        new class($responseFactory) implements PsrRequestHandlerInterface
+        {
+            /**
+             * @var ResponseFactoryInterface
+             */
+            private $responseFactory;
+
+            /**
+             * @param ResponseFactoryInterface $responseFactory
+             */
+            public function __construct(ResponseFactoryInterface $responseFactory)
+            {
+                $this->responseFactory = $responseFactory;
+            }
+
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                $name = $request->getAttribute('name');
+                $response = $this->responseFactory->createResponse();
+                $response->getBody()->write(sprintf('Hello, %s', $name));
+
+                return $response;
+            }
+        }
+    );
+
+$app = new Application(
+    new RouteDispatcher($routeCollection),
+    new MiddlewareDispatcher(),
+    new HtmlExceptionResponseHandler($responseFactory)
+);
+
+$app->run(ServerRequestFactory::fromGlobals());
+
+```
+
+### Basic example using FastRoute
 
 ```php
 <?php
@@ -87,7 +147,7 @@ $responseFactory = new ResponseFactory();
 $routeCollection = new RouteCollection();
 $routeCollection
     ->get(
-        '/hello/{name}',
+        '/hello/{name:[a-z]+}',
         'hello',
         new class($responseFactory) implements PsrRequestHandlerInterface
         {
@@ -97,9 +157,9 @@ $routeCollection
             private $responseFactory;
 
             /**
-             * @param string $responseFactory
+             * @param ResponseFactoryInterface $responseFactory
              */
-            public function __construct(string $responseFactory)
+            public function __construct(ResponseFactoryInterface $responseFactory)
             {
                 $this->responseFactory = $responseFactory;
             }
@@ -108,7 +168,7 @@ $routeCollection
             {
                 $name = $request->getAttribute('name');
                 $response = $this->responseFactory->createResponse();
-                $response->getBody()->write("Hello, $name");
+                $response->getBody()->write(sprintf('Hello, %s', $name));
 
                 return $response;
             }
