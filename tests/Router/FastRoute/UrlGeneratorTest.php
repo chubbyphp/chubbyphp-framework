@@ -35,6 +35,8 @@ final class UrlGeneratorTest extends TestCase
             Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
             Call::create('getScheme')->with()->willReturn('https'),
             Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
+            Call::create('getScheme')->with()->willReturn('https'),
+            Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
@@ -43,10 +45,12 @@ final class UrlGeneratorTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getUri')->with()->willReturn($uri),
         ]);
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
@@ -60,6 +64,10 @@ final class UrlGeneratorTest extends TestCase
 
         $urlGenerator = new UrlGenerator($routeCollection);
 
+        self::assertSame(
+            'https://user:password@localhost/user/{id}',
+            $urlGenerator->generateUrl($request, 'user')
+        );
         self::assertSame(
             'https://user:password@localhost/user/1',
             $urlGenerator->generateUrl($request, 'user', ['id' => 1])
@@ -104,6 +112,7 @@ final class UrlGeneratorTest extends TestCase
             Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getPattern')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
         /** @var RouteCollectionInterface|MockObject $routeCollection */
@@ -113,6 +122,7 @@ final class UrlGeneratorTest extends TestCase
 
         $urlGenerator = new UrlGenerator($routeCollection);
 
+        self::assertSame('/user/{id}', $urlGenerator->generatePath('user'));
         self::assertSame('/user/1', $urlGenerator->generatePath('user', ['id' => 1]));
         self::assertSame('/user/1?key=value', $urlGenerator->generatePath('user', ['id' => 1], ['key' => 'value']));
         self::assertSame('/user/1/sample', $urlGenerator->generatePath('user', ['id' => 1, 'name' => 'sample']));
