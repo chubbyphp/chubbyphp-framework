@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 final class Route implements RouteInterface
 {
     /**
      * @var string
      */
-    private $path;
-
-    /**
-     * @var array
-     */
-    private $options;
+    private $name;
 
     /**
      * @var string
@@ -27,12 +22,12 @@ final class Route implements RouteInterface
     /**
      * @var string
      */
-    private $name;
+    private $path;
 
     /**
-     * @var RequestHandlerInterface
+     * @var array
      */
-    private $requestHandler;
+    private $pathOptions = [];
 
     /**
      * @var MiddlewareInterface[]
@@ -40,59 +35,174 @@ final class Route implements RouteInterface
     private $middlewares = [];
 
     /**
+     * @var RequestHandlerInterface
+     */
+    private $requestHandler;
+
+    /**
      * @var array
      */
     private $attributes = [];
 
     /**
-     * @param string                  $path
-     * @param array                   $options
      * @param string                  $method
+     * @param string                  $path
      * @param string                  $name
      * @param RequestHandlerInterface $requestHandler
-     * @param MiddlewareInterface[]   $middlewares
      */
-    public function __construct(
-        string $path,
-        array $options,
-        string $method,
-        string $name,
-        RequestHandlerInterface $requestHandler,
-        array $middlewares = []
-    ) {
-        $this->path = $path;
-        $this->options = $options;
+    private function __construct(string $method, string $path, string $name, RequestHandlerInterface $requestHandler)
+    {
         $this->method = $method;
+        $this->path = $path;
         $this->name = $name;
         $this->requestHandler = $requestHandler;
+    }
 
+    /**
+     * @param string                  $method
+     * @param string                  $path
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     *
+     * @return self
+     */
+    public static function create(
+        string $method,
+        string $path,
+        string $name,
+        RequestHandlerInterface $requestHandler
+    ): self {
+        return new self($method, $path, $name, $requestHandler);
+    }
+
+    /**
+     * @param string                  $path
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     *
+     * @return self
+     */
+    public static function delete(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    {
+        return new self(RouteInterface::DELETE, $path, $name, $requestHandler);
+    }
+
+    /**
+     * @param string                  $path
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     *
+     * @return self
+     */
+    public static function get(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    {
+        return new self(RouteInterface::GET, $path, $name, $requestHandler);
+    }
+
+    /**
+     * @param string                  $path
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     *
+     * @return self
+     */
+    public static function head(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    {
+        return new self(RouteInterface::HEAD, $path, $name, $requestHandler);
+    }
+
+    /**
+     * @param string                  $path
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     *
+     * @return self
+     */
+    public static function options(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    {
+        return new self(RouteInterface::OPTIONS, $path, $name, $requestHandler);
+    }
+
+    /**
+     * @param string                  $path
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     *
+     * @return self
+     */
+    public static function patch(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    {
+        return new self(RouteInterface::PATCH, $path, $name, $requestHandler);
+    }
+
+    /**
+     * @param string                  $path
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     *
+     * @return self
+     */
+    public static function post(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    {
+        return new self(RouteInterface::POST, $path, $name, $requestHandler);
+    }
+
+    /**
+     * @param string                  $path
+     * @param string                  $name
+     * @param RequestHandlerInterface $requestHandler
+     *
+     * @return self
+     */
+    public static function put(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    {
+        return new self(RouteInterface::PUT, $path, $name, $requestHandler);
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return self
+     */
+    public function pathOptions(array $pathOptions): self
+    {
+        $this->pathOptions = $pathOptions;
+
+        return $this;
+    }
+
+    /**
+     * @param MiddlewareInterface[] $middlewares
+     *
+     * @return self
+     */
+    public function middlewares(array $middlewares): self
+    {
         foreach ($middlewares as $middleware) {
-            $this->addMiddleware($middleware);
+            $this->middleware($middleware);
         }
+
+        return $this;
     }
 
     /**
      * @param MiddlewareInterface $middleware
+     *
+     * @return self
      */
-    private function addMiddleware(MiddlewareInterface $middleware)
+    public function middleware(MiddlewareInterface $middleware): self
     {
         $this->middlewares[] = $middleware;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getPath(): string
+    public function getName(): string
     {
-        return $this->path;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptions(): array
-    {
-        return $this->options;
+        return $this->name;
     }
 
     /**
@@ -106,17 +216,17 @@ final class Route implements RouteInterface
     /**
      * @return string
      */
-    public function getName(): string
+    public function getPath(): string
     {
-        return $this->name;
+        return $this->path;
     }
 
     /**
-     * @return RequestHandlerInterface
+     * @return array
      */
-    public function getRequestHandler(): RequestHandlerInterface
+    public function getPathOptions(): array
     {
-        return $this->requestHandler;
+        return $this->pathOptions;
     }
 
     /**
@@ -128,16 +238,24 @@ final class Route implements RouteInterface
     }
 
     /**
+     * @return RequestHandlerInterface
+     */
+    public function getRequestHandler(): RequestHandlerInterface
+    {
+        return $this->requestHandler;
+    }
+
+    /**
      * @param array $attributes
      *
      * @return RouteInterface
      */
     public function withAttributes(array $attributes): RouteInterface
     {
-        $self = clone $this;
-        $self->attributes = $attributes;
+        $clone = clone $this;
+        $clone->attributes = $attributes;
 
-        return $self;
+        return $clone;
     }
 
     /**
@@ -153,6 +271,6 @@ final class Route implements RouteInterface
      */
     public function __toString(): string
     {
-        return $this->path.'::'.json_encode($this->options).'::'.$this->method.'::'.$this->name;
+        return $this->name.'::'.$this->method.'::'.$this->path.'::'.json_encode($this->pathOptions);
     }
 }

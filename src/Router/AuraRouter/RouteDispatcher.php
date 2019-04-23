@@ -7,7 +7,7 @@ namespace Chubbyphp\Framework\Router\AuraRouter;
 use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
 use Aura\Router\Rule\Allows;
-use Chubbyphp\Framework\Router\RouteCollectionInterface;
+use Chubbyphp\Framework\Router\GroupInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
@@ -26,17 +26,17 @@ final class RouteDispatcher implements RouteDispatcherInterface
     private $matcher;
 
     /**
-     * @param RouteCollectionInterface $routeCollection
+     * @param GroupInterface $group
      */
-    public function __construct(RouteCollectionInterface $routeCollection)
+    public function __construct(GroupInterface $group)
     {
-        $routes = $routeCollection->getRoutes();
+        $routes = $group->getRoutes();
 
         $routerContainer = new RouterContainer();
         $map = $routerContainer->getMap();
 
         foreach ($routes as $route) {
-            $options = $route->getOptions();
+            $options = $route->getPathOptions();
 
             $auraRoute = $map->route($route->getName(), $route->getPath());
             $auraRoute->allows($route->getMethod());

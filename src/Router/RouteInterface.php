@@ -20,12 +20,7 @@ interface RouteInterface
     /**
      * @return string
      */
-    public function getPath(): string;
-
-    /**
-     * @return array
-     */
-    public function getOptions(): array;
+    public function getName(): string;
 
     /**
      * @return string
@@ -35,17 +30,22 @@ interface RouteInterface
     /**
      * @return string
      */
-    public function getName(): string;
+    public function getPath(): string;
 
     /**
-     * @return RequestHandlerInterface
+     * @return array
      */
-    public function getRequestHandler(): RequestHandlerInterface;
+    public function getPathOptions(): array;
 
     /**
      * @return MiddlewareInterface[]
      */
     public function getMiddlewares(): array;
+
+    /**
+     * @return RequestHandlerInterface
+     */
+    public function getRequestHandler(): RequestHandlerInterface;
 
     /**
      * @param array $attributes
