@@ -20,7 +20,7 @@ interface RouteInterface
     /**
      * @return string
      */
-    public function getPattern(): string;
+    public function getPath(): string;
 
     /**
      * @return array

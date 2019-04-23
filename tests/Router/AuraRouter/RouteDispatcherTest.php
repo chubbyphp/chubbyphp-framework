@@ -41,7 +41,7 @@ final class RouteDispatcherTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
-            Call::create('getPattern')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pet'),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('withAttributes')->with([])->willReturnSelf(),
         ]);
@@ -82,7 +82,7 @@ final class RouteDispatcherTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
-            Call::create('getPattern')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pet'),
             Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 
@@ -123,7 +123,7 @@ final class RouteDispatcherTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
-            Call::create('getPattern')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pet'),
             Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 

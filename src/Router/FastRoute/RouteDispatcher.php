@@ -52,7 +52,7 @@ final class RouteDispatcher implements RouteDispatcherInterface
         if (!file_exists($cacheFile)) {
             $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
             foreach ($routes as $route) {
-                $routeCollector->addRoute($route->getMethod(), $route->getPattern(), $route->getName());
+                $routeCollector->addRoute($route->getMethod(), $route->getPath(), $route->getName());
             }
 
             file_put_contents($cacheFile, '<?php return '.var_export($routeCollector->getData(), true).';');

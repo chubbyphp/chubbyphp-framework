@@ -52,7 +52,7 @@ final class UrlGeneratorTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getOptions')->with()->willReturn(['tokens' => ['id' => '\d+', 'name' => '[a-z]+']]),
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getPattern')->with()->willReturn('/user/{id}{/name}'),
+            Call::create('getPath')->with()->willReturn('/user/{id}{/name}'),
             Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 
@@ -109,7 +109,7 @@ final class UrlGeneratorTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getOptions')->with()->willReturn(['tokens' => ['id' => '\d+', 'name' => '[a-z]+']]),
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getPattern')->with()->willReturn('/user/{id}{/name}'),
+            Call::create('getPath')->with()->willReturn('/user/{id}{/name}'),
             Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 

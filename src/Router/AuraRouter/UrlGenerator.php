@@ -32,7 +32,7 @@ final class UrlGenerator implements UrlGeneratorInterface
         foreach ($this->routes as $route) {
             $options = $route->getOptions();
 
-            $auraRoute = $map->route($route->getName(), $route->getPattern());
+            $auraRoute = $map->route($route->getName(), $route->getPath());
             $auraRoute->allows($route->getMethod());
             $auraRoute->tokens($options['tokens'] ?? []);
             $auraRoute->defaults($options['defaults'] ?? []);
