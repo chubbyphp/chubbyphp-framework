@@ -10,8 +10,9 @@ namespace App;
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler;
-use Chubbyphp\Framework\Router\FastRoute\RouteCollection;
 use Chubbyphp\Framework\Router\FastRoute\RouteDispatcher;
+use Chubbyphp\Framework\Router\Group;
+use Chubbyphp\Framework\Router\Route;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,39 +24,40 @@ $loader = require __DIR__.'/vendor/autoload.php';
 
 $responseFactory = new ResponseFactory();
 
-$routeCollection = new RouteCollection();
-$routeCollection
-    ->get(
-        '/hello/{name:[a-z]+}',
-        'hello',
-        new class($responseFactory) implements PsrRequestHandlerInterface
-        {
-            /**
-             * @var ResponseFactoryInterface
-             */
-            private $responseFactory;
-
-            /**
-             * @param ResponseFactoryInterface $responseFactory
-             */
-            public function __construct(ResponseFactoryInterface $responseFactory)
+$group = Group::create('')
+    ->route(
+        Route::get(
+            '/hello/{name:[a-z]+}',
+            'hello',
+            new class($responseFactory) implements PsrRequestHandlerInterface
             {
-                $this->responseFactory = $responseFactory;
-            }
+                /**
+                 * @var ResponseFactoryInterface
+                 */
+                private $responseFactory;
 
-            public function handle(ServerRequestInterface $request): ResponseInterface
-            {
-                $name = $request->getAttribute('name');
-                $response = $this->responseFactory->createResponse();
-                $response->getBody()->write(sprintf('Hello, %s', $name));
+                /**
+                 * @param ResponseFactoryInterface $responseFactory
+                 */
+                public function __construct(ResponseFactoryInterface $responseFactory)
+                {
+                    $this->responseFactory = $responseFactory;
+                }
 
-                return $response;
+                public function handle(ServerRequestInterface $request): ResponseInterface
+                {
+                    $name = $request->getAttribute('name');
+                    $response = $this->responseFactory->createResponse();
+                    $response->getBody()->write(sprintf('Hello, %s', $name));
+
+                    return $response;
+                }
             }
-        }
+        )
     );
 
 $app = new Application(
-    new RouteDispatcher($routeCollection),
+    new RouteDispatcher($group),
     new MiddlewareDispatcher(),
     new HtmlExceptionResponseHandler($responseFactory)
 );

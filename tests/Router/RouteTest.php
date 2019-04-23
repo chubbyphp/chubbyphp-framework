@@ -9,8 +9,8 @@ use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 /**
  * @covers \Chubbyphp\Framework\Router\Route
@@ -19,46 +19,176 @@ final class RouteTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testConstruct(): void
+    public function testMinimal()
     {
-        /** @var MiddlewareInterface|MockObject $middleware */
-        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
-
         /** @var RequestHandlerInterface|MockObject $requestHandler */
         $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = new Route('/', [], RouteInterface::GET, 'index', $requestHandler, [$middleware]);
+        $route = Route::create(RouteInterface::GET, '/{id}', 'element_read', $requestHandler);
 
-        self::assertSame('/', $route->getPath());
-        self::assertSame([], $route->getOptions());
+        self::assertSame('element_read', $route->getName());
         self::assertSame(RouteInterface::GET, $route->getMethod());
-        self::assertSame('index', $route->getName());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame([], $route->getPathOptions());
+        self::assertSame([], $route->getMiddlewares());
         self::assertSame($requestHandler, $route->getRequestHandler());
-        self::assertSame([$middleware], $route->getMiddlewares());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('/::[]::GET::index', (string) $route);
+        self::assertSame('element_read::GET::/{id}::[]', (string) $route);
     }
 
-    public function testWithAttributes(): void
+    public function testMaximal()
     {
-        /** @var MiddlewareInterface|MockObject $middleware */
-        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
-
         /** @var RequestHandlerInterface|MockObject $requestHandler */
         $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = new Route('/{key}', ['key' => '\s+'], RouteInterface::GET, 'key', $requestHandler, [$middleware]);
-        $routeClone = $route->withAttributes(['key' => 'value']);
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
 
-        self::assertNotSame(spl_object_id($routeClone), spl_object_id($route));
+        $route = Route::create(RouteInterface::GET, '/{id}', 'element_read', $requestHandler)
+            ->pathOptions(['tokens' => ['id' => '\d+']])
+            ->middlewares([$middleware])
+        ;
 
-        self::assertSame('/{key}', $routeClone->getPath());
-        self::assertSame(['key' => '\s+'], $route->getOptions());
-        self::assertSame(RouteInterface::GET, $routeClone->getMethod());
-        self::assertSame('key', $routeClone->getName());
-        self::assertSame($requestHandler, $routeClone->getRequestHandler());
-        self::assertSame([$middleware], $routeClone->getMiddlewares());
-        self::assertSame(['key' => 'value'], $routeClone->getAttributes());
-        self::assertSame('/{key}::{"key":"\\\s+"}::GET::key', (string) $route);
+        self::assertSame('element_read', $route->getName());
+        self::assertSame(RouteInterface::GET, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
+        self::assertSame([$middleware], $route->getMiddlewares());
+        self::assertSame($requestHandler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+        self::assertSame('element_read::GET::/{id}::{"tokens":{"id":"\\\d+"}}', (string) $route);
+    }
+
+    public function testDelete()
+    {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::delete('/{id}', 'element_delete', $requestHandler);
+
+        self::assertSame('element_delete', $route->getName());
+        self::assertSame(RouteInterface::DELETE, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame([], $route->getPathOptions());
+        self::assertSame([], $route->getMiddlewares());
+        self::assertSame($requestHandler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+        self::assertSame('element_delete::DELETE::/{id}::[]', (string) $route);
+    }
+
+    public function testGet()
+    {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::get('/{id}', 'element_read', $requestHandler);
+
+        self::assertSame('element_read', $route->getName());
+        self::assertSame(RouteInterface::GET, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame([], $route->getPathOptions());
+        self::assertSame([], $route->getMiddlewares());
+        self::assertSame($requestHandler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+        self::assertSame('element_read::GET::/{id}::[]', (string) $route);
+    }
+
+    public function testHead()
+    {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::head('/{id}', 'element_read_header', $requestHandler);
+
+        self::assertSame('element_read_header', $route->getName());
+        self::assertSame(RouteInterface::HEAD, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame([], $route->getPathOptions());
+        self::assertSame([], $route->getMiddlewares());
+        self::assertSame($requestHandler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+        self::assertSame('element_read_header::HEAD::/{id}::[]', (string) $route);
+    }
+
+    public function testOptions()
+    {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::options('/{id}', 'element_options', $requestHandler);
+
+        self::assertSame('element_options', $route->getName());
+        self::assertSame(RouteInterface::OPTIONS, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame([], $route->getPathOptions());
+        self::assertSame([], $route->getMiddlewares());
+        self::assertSame($requestHandler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+        self::assertSame('element_options::OPTIONS::/{id}::[]', (string) $route);
+    }
+
+    public function testPatch()
+    {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::patch('/{id}', 'element_update', $requestHandler);
+
+        self::assertSame('element_update', $route->getName());
+        self::assertSame(RouteInterface::PATCH, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame([], $route->getPathOptions());
+        self::assertSame([], $route->getMiddlewares());
+        self::assertSame($requestHandler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+        self::assertSame('element_update::PATCH::/{id}::[]', (string) $route);
+    }
+
+    public function testPost()
+    {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::post('/{id}', 'element_create', $requestHandler);
+
+        self::assertSame('element_create', $route->getName());
+        self::assertSame(RouteInterface::POST, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame([], $route->getPathOptions());
+        self::assertSame([], $route->getMiddlewares());
+        self::assertSame($requestHandler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+        self::assertSame('element_create::POST::/{id}::[]', (string) $route);
+    }
+
+    public function testPut()
+    {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::put('/{id}', 'element_replace', $requestHandler);
+
+        self::assertSame('element_replace', $route->getName());
+        self::assertSame(RouteInterface::PUT, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame([], $route->getPathOptions());
+        self::assertSame([], $route->getMiddlewares());
+        self::assertSame($requestHandler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+        self::assertSame('element_replace::PUT::/{id}::[]', (string) $route);
+    }
+
+    public function testWithAttributes()
+    {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::create(RouteInterface::GET, '/{id}', 'element_read', $requestHandler);
+
+        $routeClone = $route->withAttributes(['id' => 5]);
+
+        self::assertNotSame($route, $routeClone);
+
+        self::assertSame(['id' => 5], $routeClone->getAttributes());
     }
 }

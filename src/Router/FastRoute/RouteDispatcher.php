@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\FastRoute;
 
-use Chubbyphp\Framework\Router\RouteCollectionInterface;
+use Chubbyphp\Framework\Router\GroupInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
@@ -27,18 +27,33 @@ final class RouteDispatcher implements RouteDispatcherInterface
     private $dispatcher;
 
     /**
-     * @param RouteCollectionInterface $routeCollection
-     * @param string|null              $cacheDir
+     * @param GroupInterface $group
+     * @param string|null    $cacheDir
      */
-    public function __construct(RouteCollectionInterface $routeCollection, string $cacheDir = null)
+    public function __construct(GroupInterface $group, string $cacheDir = null)
     {
-        $routes = $routeCollection->getRoutes();
+        $routes = $group->getRoutes();
 
         $this->routes = $routes;
         $this->dispatcher = $this->getDispatcher(
             $routes,
-            ($cacheDir ?? sys_get_temp_dir()).'/fast-route-'.hash('sha256', (string) $routeCollection).'.php'
+            ($cacheDir ?? sys_get_temp_dir()).'/fast-route-'.hash('sha256', $this->routesAsString($routes)).'.php'
         );
+    }
+
+    /**
+     * @param RouteInterface[] $routes
+     *
+     * @return string
+     */
+    private function routesAsString(array $routes): string
+    {
+        $string = '';
+        foreach ($routes as $route) {
+            $string .= $route.PHP_EOL;
+        }
+
+        return trim($string);
     }
 
     /**
