@@ -60,7 +60,8 @@ cd example
 
 ## Web Server
 
-[Go to web server configuration][80]
+ * [builtin (development only)][60]
+ * [nginx][61]
 
 ## Copyright
 
@@ -93,4 +94,5 @@ Dominik Zogg 2019
 [50]: doc/usage/basic/aurarouter.md
 [51]: doc/usage/basic/fastroute.md
 
-[80]: doc/webserver.md
+[60]: doc/webserver/builtin.md
+[61]: doc/webserver/nginx.md

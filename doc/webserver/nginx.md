@@ -1,14 +1,6 @@
-# Webserver
+# Nginx
 
 This documentation assumes, that the front controller is named index.php and is in the public directory.
-
-## Builtin webserver (development only)
-
-```sh
-php -S localhost:8888 -t public public/index.php
-```
-
-## Nginx
 
 ```nginx
 server {
