@@ -29,22 +29,22 @@ About simplicity: Nothing should be more complex than needed to fulfill the flex
 ## Requirements
 
  * php: ^7.2
- * psr/container: ^1.0
- * psr/http-factory: ^1.0
- * psr/http-message-implementation: ^1.0
- * psr/http-message: ^1.0.1
- * psr/http-server-middleware: ^1.0.1
- * psr/log: ^1.1
+ * [psr/container][20]: ^1.0
+ * [psr/http-factory][21]: ^1.0
+ * [psr/http-message-implementation][22]: ^1.0
+ * [psr/http-message][23]: ^1.0.1
+ * [psr/http-server-middleware][24]: ^1.0.1
+ * [psr/log][25]: ^1.1
 
 ## Suggest
 
- * aura/router: ^3.1
- * nikic/fast-route: ^1.3
- * zendframework/zend-diactoros: ^2.1.1
+ * [aura/router][30]: ^3.1
+ * [nikic/fast-route][31]: ^1.3
+ * [zendframework/zend-diactoros][32]: ^2.1.1
 
 ## Installation
 
-Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][20].
+Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][40].
 
 ```sh
 composer create-project chubbyphp/chubbyphp-framework -s dev example
@@ -55,12 +55,12 @@ cd example
 
 ### Basic
 
- * [Aura.Router][30]
- * [FastRoute][31]
+ * [Aura.Router][50]
+ * [FastRoute][51]
 
 ## Web Server
 
-[Go to web server configuration][50]
+[Go to web server configuration][80]
 
 ## Copyright
 
@@ -77,9 +77,20 @@ Dominik Zogg 2019
 [8]: https://www.php-fig.org/psr/psr-15
 [9]: https://www.php-fig.org/psr/psr-17
 
-[20]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
+[20]: https://packagist.org/packages/psr/container
+[21]: https://packagist.org/packages/psr/http-factory
+[22]: https://packagist.org/packages/psr/http-message-implementation
+[23]: https://packagist.org/packages/psr/http-message
+[24]: https://packagist.org/packages/psr/http-server-middleware
+[25]: https://packagist.org/packages/psr/log
 
-[30]: doc/usage/basic/aurarouter.md
-[31]: doc/usage/basic/fastroute.md
+[30]: https://packagist.org/packages/aura/router
+[31]: https://packagist.org/packages/nikic/fast-route
+[32]: https://packagist.org/packages/zendframework/zend-diactoros
 
-[50]: doc/webserver.md
+[40]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
+
+[50]: doc/usage/basic/aurarouter.md
+[51]: doc/usage/basic/fastroute.md
+
+[80]: doc/webserver.md
