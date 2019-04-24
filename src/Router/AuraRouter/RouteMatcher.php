@@ -7,12 +7,12 @@ namespace Chubbyphp\Framework\Router\AuraRouter;
 use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
 use Aura\Router\Rule\Allows;
-use Chubbyphp\Framework\Router\RouteDispatcherException;
-use Chubbyphp\Framework\Router\RouteDispatcherInterface;
+use Chubbyphp\Framework\Router\RouteMatcherException;
+use Chubbyphp\Framework\Router\RouteMatcherInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class RouteDispatcher implements RouteDispatcherInterface
+final class RouteMatcher implements RouteMatcherInterface
 {
     /**
      * @var RouteInterface[]
@@ -76,19 +76,19 @@ final class RouteDispatcher implements RouteDispatcherInterface
      *
      * @return RouteInterface
      */
-    public function dispatch(ServerRequestInterface $request): RouteInterface
+    public function match(ServerRequestInterface $request): RouteInterface
     {
         if (!$auraRoute = $this->matcher->match($request)) {
             $failedAuraRoute = $this->matcher->getFailedRoute();
             switch ($failedAuraRoute->failedRule) {
                 case Allows::class:
-                    throw RouteDispatcherException::createForMethodNotAllowed(
+                    throw RouteMatcherException::createForMethodNotAllowed(
                         $request->getMethod(),
                         $failedAuraRoute->allows,
                         $request->getRequestTarget()
                     );
                 default:
-                    throw RouteDispatcherException::createForNotFound($request->getRequestTarget());
+                    throw RouteMatcherException::createForNotFound($request->getRequestTarget());
             }
         }
 

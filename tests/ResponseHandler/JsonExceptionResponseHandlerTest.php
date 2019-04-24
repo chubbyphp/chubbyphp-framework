@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\ResponseHandler;
 
 use Chubbyphp\Framework\ResponseHandler\JsonExceptionResponseHandler;
-use Chubbyphp\Framework\Router\RouteDispatcherException;
+use Chubbyphp\Framework\Router\RouteMatcherException;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,7 +23,7 @@ final class JsonExceptionResponseHandlerTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testCreateRouteDispatcherExceptionResponse(): void
+    public function testCreateRouteMatcherExceptionResponse(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -45,7 +45,7 @@ final class JsonExceptionResponseHandlerTest extends TestCase
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        $routeException = RouteDispatcherException::createForNotFound('/');
+        $routeException = RouteMatcherException::createForNotFound('/');
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
@@ -54,10 +54,10 @@ final class JsonExceptionResponseHandlerTest extends TestCase
 
         $responseHandler = new JsonExceptionResponseHandler($responseFactory);
 
-        self::assertSame($response, $responseHandler->createRouteDispatcherExceptionResponse($request, $routeException));
+        self::assertSame($response, $responseHandler->createRouteMatcherExceptionResponse($request, $routeException));
     }
 
-    public function testCreateRouteDispatcherExceptionResponseInDebugMode(): void
+    public function testCreateRouteMatcherExceptionResponseInDebugMode(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -79,7 +79,7 @@ final class JsonExceptionResponseHandlerTest extends TestCase
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        $routeException = RouteDispatcherException::createForNotFound('/');
+        $routeException = RouteMatcherException::createForNotFound('/');
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
@@ -88,7 +88,7 @@ final class JsonExceptionResponseHandlerTest extends TestCase
 
         $responseHandler = new JsonExceptionResponseHandler($responseFactory, true);
 
-        self::assertSame($response, $responseHandler->createRouteDispatcherExceptionResponse($request, $routeException));
+        self::assertSame($response, $responseHandler->createRouteMatcherExceptionResponse($request, $routeException));
     }
 
     public function testCreateExceptionResponse(): void

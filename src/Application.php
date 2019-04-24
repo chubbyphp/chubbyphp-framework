@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Framework;
 
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
-use Chubbyphp\Framework\Router\RouteDispatcherInterface;
-use Chubbyphp\Framework\Router\RouteDispatcherException;
+use Chubbyphp\Framework\Router\RouteMatcherInterface;
+use Chubbyphp\Framework\Router\RouteMatcherException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -17,9 +17,9 @@ use Psr\Log\NullLogger;
 final class Application
 {
     /**
-     * @var RouteDispatcherInterface
+     * @var RouteMatcherInterface
      */
-    private $routeDispatcher;
+    private $routeMatcher;
 
     /**
      * @var MiddlewareDispatcherInterface
@@ -37,18 +37,18 @@ final class Application
     private $logger;
 
     /**
-     * @param RouteDispatcherInterface          $routeDispatcher
+     * @param RouteMatcherInterface             $routeMatcher
      * @param MiddlewareDispatcherInterface     $middlewareDispatcher
      * @param ExceptionResponseHandlerInterface $exceptionHandler
      * @param LoggerInterface|null              $logger
      */
     public function __construct(
-        RouteDispatcherInterface $routeDispatcher,
+        RouteMatcherInterface $routeMatcher,
         MiddlewareDispatcherInterface $middlewareDispatcher,
         ExceptionResponseHandlerInterface $exceptionHandler,
         LoggerInterface $logger = null
     ) {
-        $this->routeDispatcher = $routeDispatcher;
+        $this->routeMatcher = $routeMatcher;
         $this->middlewareDispatcher = $middlewareDispatcher;
         $this->exceptionHandler = $exceptionHandler;
         $this->logger = $logger ?? new NullLogger();
@@ -63,19 +63,19 @@ final class Application
     public function run(ServerRequestInterface $request, bool $send = true): ResponseInterface
     {
         try {
-            $route = $this->routeDispatcher->dispatch($request);
+            $route = $this->routeMatcher->match($request);
             $response = $this->middlewareDispatcher->dispatch(
                 $route->getMiddlewares(),
                 $route->getRequestHandler(),
                 $this->requestWithRouteAttributes($request, $route)
             );
-        } catch (RouteDispatcherException $routeException) {
+        } catch (RouteMatcherException $routeException) {
             $this->logger->info($routeException->getTitle(), [
                 'message' => $routeException->getMessage(),
                 'code' => $routeException->getCode(),
             ]);
 
-            $response = $this->exceptionHandler->createRouteDispatcherExceptionResponse($request, $routeException);
+            $response = $this->exceptionHandler->createRouteMatcherExceptionResponse($request, $routeException);
         } catch (\Throwable $exception) {
             $this->logger->error('Throwable', ['exceptions' => ExceptionHelper::toArray($exception)]);
 

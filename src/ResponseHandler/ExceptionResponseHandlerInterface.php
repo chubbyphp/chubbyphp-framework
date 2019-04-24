@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\ResponseHandler;
 
-use Chubbyphp\Framework\Router\RouteDispatcherException;
+use Chubbyphp\Framework\Router\RouteMatcherException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 interface ExceptionResponseHandlerInterface
 {
     /**
-     * @param ServerRequestInterface   $request
-     * @param RouteDispatcherException $routeException
+     * @param ServerRequestInterface $request
+     * @param RouteMatcherException  $routeException
      *
      * @return ResponseInterface
      */
-    public function createRouteDispatcherExceptionResponse(
+    public function createRouteMatcherExceptionResponse(
         ServerRequestInterface $request,
-        RouteDispatcherException $routeException
+        RouteMatcherException $routeException
     ): ResponseInterface;
 
     /**

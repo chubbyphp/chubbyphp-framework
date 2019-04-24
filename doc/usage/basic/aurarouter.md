@@ -10,7 +10,7 @@ namespace App;
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler;
-use Chubbyphp\Framework\Router\AuraRouter\RouteDispatcher;
+use Chubbyphp\Framework\Router\AuraRouter\RouteMatcher;
 use Chubbyphp\Framework\Router\Route;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -51,7 +51,7 @@ $route = Route::get('/hello/{name}', 'hello',
 )->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
 $app = new Application(
-    new RouteDispatcher([$route]),
+    new RouteMatcher([$route]),
     new MiddlewareDispatcher(),
     new HtmlExceptionResponseHandler($responseFactory)
 );

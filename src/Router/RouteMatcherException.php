@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-final class RouteDispatcherException extends \RuntimeException
+final class RouteMatcherException extends \RuntimeException
 {
     /**
      * @var string

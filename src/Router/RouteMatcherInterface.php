@@ -6,12 +6,12 @@ namespace Chubbyphp\Framework\Router;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-interface RouteDispatcherInterface
+interface RouteMatcherInterface
 {
     /**
      * @param ServerRequestInterface $request
      *
      * @return RouteInterface
      */
-    public function dispatch(ServerRequestInterface $request): RouteInterface;
+    public function match(ServerRequestInterface $request): RouteInterface;
 }

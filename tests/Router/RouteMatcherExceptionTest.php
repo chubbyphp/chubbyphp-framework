@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Router;
 
-use Chubbyphp\Framework\Router\RouteDispatcherException;
+use Chubbyphp\Framework\Router\RouteMatcherException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Framework\Router\RouteDispatcherException
+ * @covers \Chubbyphp\Framework\Router\RouteMatcherException
  */
-final class RouteDispatcherExceptionTest extends TestCase
+final class RouteMatcherExceptionTest extends TestCase
 {
     public function testConstruct(): void
     {
@@ -18,17 +18,17 @@ final class RouteDispatcherExceptionTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 'Call to private %s::__construct() from context \'%s\'',
-                RouteDispatcherException::class,
-                RouteDispatcherExceptionTest::class
+                RouteMatcherException::class,
+                RouteMatcherExceptionTest::class
             )
         );
 
-        new RouteDispatcherException('test');
+        new RouteMatcherException('test');
     }
 
     public function testCreateForNotFound(): void
     {
-        $exception = RouteDispatcherException::createForNotFound('/');
+        $exception = RouteMatcherException::createForNotFound('/');
 
         self::assertSame('https://tools.ietf.org/html/rfc7231#section-6.5.4', $exception->getType());
         self::assertSame('Page not found', $exception->getTitle());
@@ -42,7 +42,7 @@ final class RouteDispatcherExceptionTest extends TestCase
 
     public function testCreateForMethodNotAllowed(): void
     {
-        $exception = RouteDispatcherException::createForMethodNotAllowed('GET', ['POST', 'PUT'], '/');
+        $exception = RouteMatcherException::createForMethodNotAllowed('GET', ['POST', 'PUT'], '/');
 
         self::assertSame('https://tools.ietf.org/html/rfc7231#section-6.5.5', $exception->getType());
         self::assertSame('Method not allowed', $exception->getTitle());

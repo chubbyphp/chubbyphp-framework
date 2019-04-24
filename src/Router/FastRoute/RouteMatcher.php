@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\FastRoute;
 
-use Chubbyphp\Framework\Router\RouteDispatcherException;
-use Chubbyphp\Framework\Router\RouteDispatcherInterface;
+use Chubbyphp\Framework\Router\RouteMatcherException;
+use Chubbyphp\Framework\Router\RouteMatcherInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use FastRoute\DataGenerator\GroupCountBased as DataGenerator;
 use FastRoute\Dispatcher\GroupCountBased as Dispatcher;
@@ -13,7 +13,7 @@ use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std as RouteParser;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class RouteDispatcher implements RouteDispatcherInterface
+final class RouteMatcher implements RouteMatcherInterface
 {
     /**
      * @var RouteInterface[]
@@ -93,7 +93,7 @@ final class RouteDispatcher implements RouteDispatcherInterface
      *
      * @return RouteInterface
      */
-    public function dispatch(ServerRequestInterface $request): RouteInterface
+    public function match(ServerRequestInterface $request): RouteInterface
     {
         $method = $request->getMethod();
         $path = rawurldecode($request->getUri()->getPath());
@@ -101,11 +101,11 @@ final class RouteDispatcher implements RouteDispatcherInterface
         $routeInfo = $this->dispatcher->dispatch($method, $path);
 
         if (Dispatcher::NOT_FOUND === $routeInfo[0]) {
-            throw RouteDispatcherException::createForNotFound($request->getRequestTarget());
+            throw RouteMatcherException::createForNotFound($request->getRequestTarget());
         }
 
         if (Dispatcher::METHOD_NOT_ALLOWED === $routeInfo[0]) {
-            throw RouteDispatcherException::createForMethodNotAllowed(
+            throw RouteMatcherException::createForMethodNotAllowed(
                 $method,
                 $routeInfo[1],
                 $request->getRequestTarget()
