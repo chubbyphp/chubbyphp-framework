@@ -2,20 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Framework\Router\FastRoute;
+namespace Chubbyphp\Framework\Router;
 
-use Chubbyphp\Framework\Router\RouteInterface;
-use Chubbyphp\Framework\Router\UrlGeneratorException;
-use Chubbyphp\Framework\Router\UrlGeneratorInterface;
+use FastRoute\DataGenerator\GroupCountBased as DataGenerator;
+use FastRoute\Dispatcher\GroupCountBased as Dispatcher;
+use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std as RouteParser;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class UrlGenerator implements UrlGeneratorInterface
+final class FastRouteRouter implements RouterInterface
 {
     /**
      * @var RouteInterface[]
      */
     private $routes;
+
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
 
     /**
      * @var RouteParser
@@ -24,10 +29,12 @@ final class UrlGenerator implements UrlGeneratorInterface
 
     /**
      * @param RouteInterface[] $routes
+     * @param string|null      $cacheDir
      */
-    public function __construct(array $routes)
+    public function __construct(array $routes, string $cacheDir = null)
     {
         $this->routes = $this->getRoutesByName($routes);
+        $this->dispatcher = $this->getDispatcher($routes, $cacheDir ?? sys_get_temp_dir());
         $this->routeParser = new RouteParser();
     }
 
@@ -47,6 +54,74 @@ final class UrlGenerator implements UrlGeneratorInterface
     }
 
     /**
+     * @param array  $routes
+     * @param string $cacheDir
+     *
+     * @return Dispatcher
+     */
+    private function getDispatcher(array $routes, string $cacheDir): Dispatcher
+    {
+        $cacheFile = $cacheDir.'/fast-route-'.hash('sha256', $this->routesAsString($routes)).'.php';
+
+        if (!file_exists($cacheFile)) {
+            $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
+            foreach ($routes as $route) {
+                $routeCollector->addRoute($route->getMethod(), $route->getPath(), $route->getName());
+            }
+
+            file_put_contents($cacheFile, '<?php return '.var_export($routeCollector->getData(), true).';');
+        }
+
+        return new Dispatcher(require $cacheFile);
+    }
+
+    /**
+     * @param RouteInterface[] $routes
+     *
+     * @return string
+     */
+    private function routesAsString(array $routes): string
+    {
+        $string = '';
+        foreach ($routes as $route) {
+            $string .= $route.PHP_EOL;
+        }
+
+        return trim($string);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     *
+     * @return RouteInterface
+     */
+    public function match(ServerRequestInterface $request): RouteInterface
+    {
+        $method = $request->getMethod();
+        $path = rawurldecode($request->getUri()->getPath());
+
+        $routeInfo = $this->dispatcher->dispatch($method, $path);
+
+        if (Dispatcher::NOT_FOUND === $routeInfo[0]) {
+            throw RouterException::createForNotFound($request->getRequestTarget());
+        }
+
+        if (Dispatcher::METHOD_NOT_ALLOWED === $routeInfo[0]) {
+            throw RouterException::createForMethodNotAllowed(
+                $method,
+                $routeInfo[1],
+                $request->getRequestTarget()
+            );
+        }
+
+        /** @var RouteInterface $route */
+        $route = $this->routes[$routeInfo[1]];
+        $route = $route->withAttributes($routeInfo[2]);
+
+        return $route;
+    }
+
+    /**
      * @param ServerRequestInterface $request
      * @param string                 $name
      * @param string[]               $attributes
@@ -54,7 +129,7 @@ final class UrlGenerator implements UrlGeneratorInterface
      *
      * @return string
      *
-     * @throws UrlGeneratorException
+     * @throws RouterException
      */
     public function generateUrl(
         ServerRequestInterface $request,
@@ -75,7 +150,7 @@ final class UrlGenerator implements UrlGeneratorInterface
      *
      * @return string
      *
-     * @throws UrlGeneratorException
+     * @throws RouterException
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
@@ -108,12 +183,12 @@ final class UrlGenerator implements UrlGeneratorInterface
      *
      * @return RouteInterface
      *
-     * @throws UrlGeneratorException
+     * @throws RouterException
      */
     private function getRoute(string $name): RouteInterface
     {
         if (!isset($this->routes[$name])) {
-            throw UrlGeneratorException::createForMissingRoute($name);
+            throw RouterException::createForMissingRoute($name);
         }
 
         return $this->routes[$name];

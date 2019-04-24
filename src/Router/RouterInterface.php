@@ -6,8 +6,15 @@ namespace Chubbyphp\Framework\Router;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-interface UrlGeneratorInterface
+interface RouterInterface
 {
+    /**
+     * @param ServerRequestInterface $request
+     *
+     * @return RouteInterface
+     */
+    public function match(ServerRequestInterface $request): RouteInterface;
+
     /**
      * @param ServerRequestInterface $request
      * @param string                 $name
@@ -16,7 +23,7 @@ interface UrlGeneratorInterface
      *
      * @return string
      *
-     * @throws UrlGeneratorException
+     * @throws RouterException
      */
     public function generateUrl(
         ServerRequestInterface $request,
@@ -32,7 +39,7 @@ interface UrlGeneratorInterface
      *
      * @return string
      *
-     * @throws UrlGeneratorException
+     * @throws RouterException
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string;
 }

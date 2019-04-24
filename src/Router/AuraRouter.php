@@ -2,22 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Framework\Router\AuraRouter;
+namespace Chubbyphp\Framework\Router;
 
+use Aura\Router\Exception\RouteNotFound;
+use Aura\Router\Generator;
 use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
-use Aura\Router\Rule\Allows;
-use Chubbyphp\Framework\Router\RouteMatcherException;
-use Chubbyphp\Framework\Router\RouteMatcherInterface;
-use Chubbyphp\Framework\Router\RouteInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Aura\Router\Rule\Allows;
 
-final class RouteMatcher implements RouteMatcherInterface
+final class AuraRouter implements RouterInterface
 {
     /**
      * @var RouteInterface[]
      */
     private $routes = [];
+
+    /**
+     * @var Generator
+     */
+    private $generator;
 
     /**
      * @var Matcher
@@ -30,7 +34,11 @@ final class RouteMatcher implements RouteMatcherInterface
     public function __construct(array $routes)
     {
         $this->routes = $this->getRoutesByName($routes);
-        $this->matcher = $this->getMatcher($routes);
+
+        $routerContainer = $this->getRouterContainer($routes);
+
+        $this->generator = $routerContainer->getGenerator();
+        $this->matcher = $routerContainer->getMatcher();
     }
 
     /**
@@ -51,9 +59,9 @@ final class RouteMatcher implements RouteMatcherInterface
     /**
      * @param RouteInterface[] $routes
      *
-     * @return Matcher
+     * @return RouterContainer
      */
-    private function getMatcher(array $routes): Matcher
+    private function getRouterContainer(array $routes): RouterContainer
     {
         $routerContainer = new RouterContainer();
 
@@ -68,7 +76,7 @@ final class RouteMatcher implements RouteMatcherInterface
             $auraRoute->defaults($options['defaults'] ?? []);
         }
 
-        return $routerContainer->getMatcher();
+        return $routerContainer;
     }
 
     /**
@@ -82,13 +90,13 @@ final class RouteMatcher implements RouteMatcherInterface
             $failedAuraRoute = $this->matcher->getFailedRoute();
             switch ($failedAuraRoute->failedRule) {
                 case Allows::class:
-                    throw RouteMatcherException::createForMethodNotAllowed(
+                    throw RouterException::createForMethodNotAllowed(
                         $request->getMethod(),
                         $failedAuraRoute->allows,
                         $request->getRequestTarget()
                     );
                 default:
-                    throw RouteMatcherException::createForNotFound($request->getRequestTarget());
+                    throw RouterException::createForNotFound($request->getRequestTarget());
             }
         }
 
@@ -97,5 +105,51 @@ final class RouteMatcher implements RouteMatcherInterface
         $route = $route->withAttributes($auraRoute->attributes);
 
         return $route;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param string                 $name
+     * @param string[]               $attributes
+     * @param array                  $queryParams
+     *
+     * @return string
+     *
+     * @throws RouterException
+     */
+    public function generateUrl(
+        ServerRequestInterface $request,
+        string $name,
+        array $attributes = [],
+        array $queryParams = []
+    ): string {
+        $uri = $request->getUri();
+        $requestTarget = $this->generatePath($name, $attributes, $queryParams);
+
+        return $uri->getScheme().'://'.$uri->getAuthority().$requestTarget;
+    }
+
+    /**
+     * @param string   $name
+     * @param string[] $attributes
+     * @param array    $queryParams
+     *
+     * @return string
+     *
+     * @throws RouterException
+     */
+    public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
+    {
+        try {
+            $path = $this->generator->generate($name, $attributes);
+
+            if ([] === $queryParams) {
+                return $path;
+            }
+
+            return $path.'?'.http_build_query($queryParams);
+        } catch (RouteNotFound $exception) {
+            throw RouterException::createForMissingRoute($name);
+        }
     }
 }

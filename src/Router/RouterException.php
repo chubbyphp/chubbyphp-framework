@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-final class RouteMatcherException extends \RuntimeException
+final class RouterException extends \RuntimeException
 {
     /**
      * @var string
@@ -61,6 +61,16 @@ final class RouteMatcherException extends \RuntimeException
         $self->title = 'Method not allowed';
 
         return $self;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return self
+     */
+    public static function createForMissingRoute(string $name): self
+    {
+        return new self(sprintf('Missing route: "%s"', $name), 1);
     }
 
     /**

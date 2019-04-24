@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Chubbyphp\Framework;
 
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
-use Chubbyphp\Framework\Router\RouteMatcherInterface;
-use Chubbyphp\Framework\Router\RouteMatcherException;
-use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandlerInterface;
+use Chubbyphp\Framework\Router\RouteInterface;
+use Chubbyphp\Framework\Router\RouterException;
+use Chubbyphp\Framework\Router\RouterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -17,9 +17,9 @@ use Psr\Log\NullLogger;
 final class Application
 {
     /**
-     * @var RouteMatcherInterface
+     * @var RouterInterface
      */
-    private $routeMatcher;
+    private $router;
 
     /**
      * @var MiddlewareDispatcherInterface
@@ -37,18 +37,18 @@ final class Application
     private $logger;
 
     /**
-     * @param RouteMatcherInterface             $routeMatcher
+     * @param RouterInterface                   $router
      * @param MiddlewareDispatcherInterface     $middlewareDispatcher
      * @param ExceptionResponseHandlerInterface $exceptionHandler
      * @param LoggerInterface|null              $logger
      */
     public function __construct(
-        RouteMatcherInterface $routeMatcher,
+        RouterInterface $router,
         MiddlewareDispatcherInterface $middlewareDispatcher,
         ExceptionResponseHandlerInterface $exceptionHandler,
         LoggerInterface $logger = null
     ) {
-        $this->routeMatcher = $routeMatcher;
+        $this->router = $router;
         $this->middlewareDispatcher = $middlewareDispatcher;
         $this->exceptionHandler = $exceptionHandler;
         $this->logger = $logger ?? new NullLogger();
@@ -63,14 +63,14 @@ final class Application
     public function run(ServerRequestInterface $request, bool $send = true): ResponseInterface
     {
         try {
-            $route = $this->routeMatcher->match($request);
-        } catch (RouteMatcherException $routeException) {
+            $route = $this->router->match($request);
+        } catch (RouterException $routeException) {
             $this->logger->info($routeException->getTitle(), [
                 'message' => $routeException->getMessage(),
                 'code' => $routeException->getCode(),
             ]);
 
-            $response = $this->exceptionHandler->createRouteMatcherExceptionResponse($request, $routeException);
+            $response = $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
 
             if ($send) {
                 $this->send($response);

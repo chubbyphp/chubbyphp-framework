@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Router;
 
-use Chubbyphp\Framework\Router\RouteMatcherException;
+use Chubbyphp\Framework\Router\RouterException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Framework\Router\RouteMatcherException
+ * @covers \Chubbyphp\Framework\Router\RouterException
  */
-final class RouteMatcherExceptionTest extends TestCase
+final class RouterExceptionTest extends TestCase
 {
     public function testConstruct(): void
     {
@@ -18,17 +18,17 @@ final class RouteMatcherExceptionTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 'Call to private %s::__construct() from context \'%s\'',
-                RouteMatcherException::class,
-                RouteMatcherExceptionTest::class
+                RouterException::class,
+                RouterExceptionTest::class
             )
         );
 
-        new RouteMatcherException('test');
+        new RouterException('test');
     }
 
     public function testCreateForNotFound(): void
     {
-        $exception = RouteMatcherException::createForNotFound('/');
+        $exception = RouterException::createForNotFound('/');
 
         self::assertSame('https://tools.ietf.org/html/rfc7231#section-6.5.4', $exception->getType());
         self::assertSame('Page not found', $exception->getTitle());
@@ -42,7 +42,7 @@ final class RouteMatcherExceptionTest extends TestCase
 
     public function testCreateForMethodNotAllowed(): void
     {
-        $exception = RouteMatcherException::createForMethodNotAllowed('GET', ['POST', 'PUT'], '/');
+        $exception = RouterException::createForMethodNotAllowed('GET', ['POST', 'PUT'], '/');
 
         self::assertSame('https://tools.ietf.org/html/rfc7231#section-6.5.5', $exception->getType());
         self::assertSame('Method not allowed', $exception->getTitle());
@@ -51,5 +51,13 @@ final class RouteMatcherExceptionTest extends TestCase
             $exception->getMessage()
         );
         self::assertSame(405, $exception->getCode());
+    }
+
+    public function testCreateForMissingRoute(): void
+    {
+        $exception = RouterException::createForMissingRoute('name');
+
+        self::assertSame('Missing route: "name"', $exception->getMessage());
+        self::assertSame(1, $exception->getCode());
     }
 }

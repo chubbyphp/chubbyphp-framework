@@ -55,8 +55,8 @@ namespace Chubbyphp\Tests\Framework
     use Chubbyphp\Framework\Application;
     use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
     use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandlerInterface;
-    use Chubbyphp\Framework\Router\RouteMatcherInterface;
-    use Chubbyphp\Framework\Router\RouteMatcherException;
+    use Chubbyphp\Framework\Router\RouterInterface;
+    use Chubbyphp\Framework\Router\RouterException;
     use Chubbyphp\Framework\Router\RouteInterface;
     use Chubbyphp\Framework\TestHeader;
     use Chubbyphp\Mock\Argument\ArgumentCallback;
@@ -102,8 +102,8 @@ namespace Chubbyphp\Tests\Framework
             /** @var ResponseInterface|MockObject $response */
             $response = $this->getMockByCalls(ResponseInterface::class);
 
-            /** @var RouteMatcherInterface|MockObject $routeDispatcher */
-            $routeDispatcher = $this->getMockByCalls(RouteMatcherInterface::class, [
+            /** @var RouterInterface|MockObject $router */
+            $router = $this->getMockByCalls(RouterInterface::class, [
                 Call::create('match')->with($request)->willReturn($route),
             ]);
 
@@ -119,7 +119,7 @@ namespace Chubbyphp\Tests\Framework
             $logger = $this->getMockByCalls(LoggerInterface::class);
 
             $application = new Application(
-                $routeDispatcher,
+                $router,
                 $middlewareDispatcher,
                 $exceptionResponseHandler,
                 $logger
@@ -175,8 +175,8 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('getBody')->with()->willReturn($responseBody),
             ]);
 
-            /** @var RouteMatcherInterface|MockObject $routeDispatcher */
-            $routeDispatcher = $this->getMockByCalls(RouteMatcherInterface::class, [
+            /** @var RouterInterface|MockObject $router */
+            $router = $this->getMockByCalls(RouterInterface::class, [
                 Call::create('match')->with($request)->willReturn($route),
             ]);
 
@@ -192,7 +192,7 @@ namespace Chubbyphp\Tests\Framework
             $logger = $this->getMockByCalls(LoggerInterface::class);
 
             $application = new Application(
-                $routeDispatcher,
+                $router,
                 $middlewareDispatcher,
                 $exceptionResponseHandler,
                 $logger
@@ -233,10 +233,10 @@ namespace Chubbyphp\Tests\Framework
             /** @var ResponseInterface|MockObject $response */
             $response = $this->getMockByCalls(ResponseInterface::class);
 
-            $routeException = RouteMatcherException::createForNotFound('/');
+            $routeException = RouterException::createForNotFound('/');
 
-            /** @var RouteMatcherInterface|MockObject $routeDispatcher */
-            $routeDispatcher = $this->getMockByCalls(RouteMatcherInterface::class, [
+            /** @var RouterInterface|MockObject $router */
+            $router = $this->getMockByCalls(RouterInterface::class, [
                 Call::create('match')->with($request)->willThrowException($routeException),
             ]);
 
@@ -245,7 +245,7 @@ namespace Chubbyphp\Tests\Framework
 
             /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
             $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
-                Call::create('createRouteMatcherExceptionResponse')->with($request, $routeException)->willReturn($response),
+                Call::create('createRouterExceptionResponse')->with($request, $routeException)->willReturn($response),
             ]);
 
             /** @var LoggerInterface|MockObject $logger */
@@ -258,7 +258,7 @@ namespace Chubbyphp\Tests\Framework
             ]);
 
             $application = new Application(
-                $routeDispatcher,
+                $router,
                 $middlewareDispatcher,
                 $exceptionResponseHandler,
                 $logger
@@ -298,10 +298,10 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('getBody')->with()->willReturn($responseBody),
             ]);
 
-            $routeException = RouteMatcherException::createForNotFound('/');
+            $routeException = RouterException::createForNotFound('/');
 
-            /** @var RouteMatcherInterface|MockObject $routeDispatcher */
-            $routeDispatcher = $this->getMockByCalls(RouteMatcherInterface::class, [
+            /** @var RouterInterface|MockObject $router */
+            $router = $this->getMockByCalls(RouterInterface::class, [
                 Call::create('match')->with($request)->willThrowException($routeException),
             ]);
 
@@ -310,7 +310,7 @@ namespace Chubbyphp\Tests\Framework
 
             /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
             $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
-                Call::create('createRouteMatcherExceptionResponse')->with($request, $routeException)->willReturn($response),
+                Call::create('createRouterExceptionResponse')->with($request, $routeException)->willReturn($response),
             ]);
 
             /** @var LoggerInterface|MockObject $logger */
@@ -323,7 +323,7 @@ namespace Chubbyphp\Tests\Framework
             ]);
 
             $application = new Application(
-                $routeDispatcher,
+                $router,
                 $middlewareDispatcher,
                 $exceptionResponseHandler,
                 $logger
@@ -382,8 +382,8 @@ namespace Chubbyphp\Tests\Framework
 
             $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
 
-            /** @var RouteMatcherInterface|MockObject $routeDispatcher */
-            $routeDispatcher = $this->getMockByCalls(RouteMatcherInterface::class, [
+            /** @var RouterInterface|MockObject $router */
+            $router = $this->getMockByCalls(RouterInterface::class, [
                 Call::create('match')->with($request)->willReturn($route),
             ]);
 
@@ -435,7 +435,7 @@ namespace Chubbyphp\Tests\Framework
             ]);
 
             $application = new Application(
-                $routeDispatcher,
+                $router,
                 $middlewareDispatcher,
                 $exceptionResponseHandler,
                 $logger
@@ -485,8 +485,8 @@ namespace Chubbyphp\Tests\Framework
 
             $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
 
-            /** @var RouteMatcherInterface|MockObject $routeDispatcher */
-            $routeDispatcher = $this->getMockByCalls(RouteMatcherInterface::class, [
+            /** @var RouterInterface|MockObject $router */
+            $router = $this->getMockByCalls(RouterInterface::class, [
                 Call::create('match')->with($request)->willReturn($route),
             ]);
 
@@ -538,7 +538,7 @@ namespace Chubbyphp\Tests\Framework
             ]);
 
             $application = new Application(
-                $routeDispatcher,
+                $router,
                 $middlewareDispatcher,
                 $exceptionResponseHandler,
                 $logger

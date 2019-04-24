@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\ResponseHandler;
 
-use Chubbyphp\Framework\Router\RouteMatcherException;
+use Chubbyphp\Framework\Router\RouterException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -70,13 +70,13 @@ EOT;
 
     /**
      * @param ServerRequestInterface $request
-     * @param RouteMatcherException  $routeException
+     * @param RouterException        $routeException
      *
      * @return ResponseInterface
      */
-    public function createRouteMatcherExceptionResponse(
+    public function createRouterExceptionResponse(
         ServerRequestInterface $request,
-        RouteMatcherException $routeException
+        RouterException $routeException
     ): ResponseInterface {
         $response = $this->responseFactory->createResponse($routeException->getCode());
         $response = $response->withHeader('Content-Type', 'text/html');

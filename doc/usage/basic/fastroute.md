@@ -10,12 +10,12 @@ namespace App;
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler;
-use Chubbyphp\Framework\Router\FastRoute\RouteMatcher;
+use Chubbyphp\Framework\Router\FastRouteRouter;
 use Chubbyphp\Framework\Router\Route;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface as PsrRequestHandlerInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\ServerRequestFactory;
 
@@ -24,7 +24,7 @@ $loader = require __DIR__.'/vendor/autoload.php';
 $responseFactory = new ResponseFactory();
 
 $route = Route::get('/hello/{name:[a-z]+}', 'hello',
-    new class($responseFactory) implements PsrRequestHandlerInterface
+    new class($responseFactory) implements RequestHandlerInterface
     {
         /**
          * @var ResponseFactoryInterface
@@ -51,11 +51,10 @@ $route = Route::get('/hello/{name:[a-z]+}', 'hello',
 );
 
 $app = new Application(
-    new RouteMatcher([$route]),
+    new FastRouteRouter([$route]),
     new MiddlewareDispatcher(),
     new HtmlExceptionResponseHandler($responseFactory)
 );
 
 $app->run(ServerRequestFactory::fromGlobals());
-
 ```
