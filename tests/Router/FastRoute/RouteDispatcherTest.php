@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Router\FastRoute;
 
 use Chubbyphp\Framework\Router\FastRoute\RouteDispatcher;
-use Chubbyphp\Framework\Router\GroupInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\Call;
@@ -37,16 +36,12 @@ final class RouteDispatcherTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('__toString')->with()->willReturn('/api/pet::[]::GET::pet_list'),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getPath')->with()->willReturn('/api/pet'),
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('withAttributes')->with([])->willReturnSelf(),
-        ]);
-
-        /** @var GroupInterface|MockObject $group */
-        $group = $this->getMockByCalls(GroupInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
         ]);
 
         $dynamicCachePart = uniqid().'/'.uniqid();
@@ -55,7 +50,7 @@ final class RouteDispatcherTest extends TestCase
 
         mkdir($cacheDir, 0777, true);
 
-        $routeDispatcher = new RouteDispatcher($group, $cacheDir);
+        $routeDispatcher = new RouteDispatcher([$route], $cacheDir);
 
         self::assertFileExists(
             sprintf(
@@ -90,15 +85,11 @@ final class RouteDispatcherTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('__toString')->with()->willReturn('/api/pet::[]::GET::pet_list'),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getPath')->with()->willReturn('/api/pet'),
             Call::create('getName')->with()->willReturn('pet_list'),
-        ]);
-
-        /** @var GroupInterface|MockObject $group */
-        $group = $this->getMockByCalls(GroupInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
         ]);
 
         $dynamicCachePart = uniqid().'/'.uniqid();
@@ -107,7 +98,7 @@ final class RouteDispatcherTest extends TestCase
 
         mkdir($cacheDir, 0777, true);
 
-        $routeDispatcher = new RouteDispatcher($group, $cacheDir);
+        $routeDispatcher = new RouteDispatcher([$route], $cacheDir);
 
         self::assertFileExists(
             sprintf(
@@ -141,15 +132,11 @@ final class RouteDispatcherTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('__toString')->with()->willReturn('/api/pet::[]::GET::pet_list'),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getPath')->with()->willReturn('/api/pet'),
             Call::create('getName')->with()->willReturn('pet_list'),
-        ]);
-
-        /** @var GroupInterface|MockObject $group */
-        $group = $this->getMockByCalls(GroupInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
         ]);
 
         $dynamicCachePart = uniqid().'/'.uniqid();
@@ -158,7 +145,7 @@ final class RouteDispatcherTest extends TestCase
 
         mkdir($cacheDir, 0777, true);
 
-        $routeDispatcher = new RouteDispatcher($group, $cacheDir);
+        $routeDispatcher = new RouteDispatcher([$route], $cacheDir);
 
         self::assertFileExists(
             sprintf(

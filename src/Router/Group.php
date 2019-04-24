@@ -112,12 +112,12 @@ final class Group implements GroupInterface
     {
         $routes = [];
         foreach ($this->routes as $route) {
-            $routes[$route->getName()] = $this->createRoute($route);
+            $routes[] = $this->createRoute($route);
         }
 
         foreach ($this->groups as $group) {
             foreach ($group->getRoutes() as $route) {
-                $routes[$route->getName()] = $this->createRoute($route);
+                $routes[] = $this->createRoute($route);
             }
         }
 

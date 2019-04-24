@@ -62,11 +62,8 @@ final class GroupTest extends TestCase
 
         self::assertCount(2, $routes);
 
-        self::assertArrayHasKey('element_read', $routes);
-        self::assertArrayHasKey('another_route', $routes);
-
         /** @var RouteInterface */
-        $route1 = $routes['element_read'];
+        $route1 = $routes[0];
 
         self::assertSame('element_read', $route1->getName());
         self::assertSame(RouteInterface::GET, $route1->getMethod());
@@ -76,7 +73,7 @@ final class GroupTest extends TestCase
         self::assertSame($requestHandler, $route1->getRequestHandler());
 
         /** @var RouteInterface */
-        $route2 = $routes['another_route'];
+        $route2 = $routes[1];
 
         self::assertSame('another_route', $route2->getName());
         self::assertSame(RouteInterface::GET, $route2->getMethod());

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Router\AuraRouter;
 
 use Chubbyphp\Framework\Router\AuraRouter\RouteDispatcher;
-use Chubbyphp\Framework\Router\GroupInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\Call;
@@ -39,6 +38,7 @@ final class RouteDispatcherTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPathOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPath')->with()->willReturn('/api/pet'),
@@ -46,12 +46,7 @@ final class RouteDispatcherTest extends TestCase
             Call::create('withAttributes')->with([])->willReturnSelf(),
         ]);
 
-        /** @var GroupInterface|MockObject $group */
-        $group = $this->getMockByCalls(GroupInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
-        ]);
-
-        $routeDispatcher = new RouteDispatcher($group);
+        $routeDispatcher = new RouteDispatcher([$route]);
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }
@@ -80,18 +75,14 @@ final class RouteDispatcherTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPathOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPath')->with()->willReturn('/api/pet'),
             Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 
-        /** @var GroupInterface|MockObject $group */
-        $group = $this->getMockByCalls(GroupInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
-        ]);
-
-        $routeDispatcher = new RouteDispatcher($group);
+        $routeDispatcher = new RouteDispatcher([$route]);
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }
@@ -121,18 +112,14 @@ final class RouteDispatcherTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPathOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPath')->with()->willReturn('/api/pet'),
             Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 
-        /** @var GroupInterface|MockObject $group */
-        $group = $this->getMockByCalls(GroupInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['pet_list' => $route]),
-        ]);
-
-        $routeDispatcher = new RouteDispatcher($group);
+        $routeDispatcher = new RouteDispatcher([$route]);
 
         self::assertSame($route, $routeDispatcher->dispatch($request));
     }

@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Router\FastRoute;
 
 use Chubbyphp\Framework\Router\FastRoute\UrlGenerator;
-use Chubbyphp\Framework\Router\GroupInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
-use FastRoute\RouteParser;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -50,6 +48,7 @@ final class UrlGeneratorTest extends TestCase
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
@@ -57,12 +56,7 @@ final class UrlGeneratorTest extends TestCase
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
-        /** @var GroupInterface|MockObject $group */
-        $group = $this->getMockByCalls(GroupInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['user' => $route]),
-        ]);
-
-        $urlGenerator = new UrlGenerator($group);
+        $urlGenerator = new UrlGenerator([$route]);
 
         self::assertSame(
             'https://user:password@localhost/user/{id}',
@@ -92,15 +86,7 @@ final class UrlGeneratorTest extends TestCase
         $this->expectExceptionMessage('Missing route: "user"');
         $this->expectExceptionCode(1);
 
-        /** @var GroupInterface|MockObject $group */
-        $group = $this->getMockByCalls(GroupInterface::class, [
-            Call::create('getRoutes')->with()->willReturn([]),
-        ]);
-
-        /** @var RouteParser|MockObject $routeParser */
-        $routeParser = $this->getMockByCalls(RouteParser::class);
-
-        $urlGenerator = new UrlGenerator($group, $routeParser);
+        $urlGenerator = new UrlGenerator([]);
         $urlGenerator->generatePath('user', ['id' => 1]);
     }
 
@@ -108,6 +94,7 @@ final class UrlGeneratorTest extends TestCase
     {
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
@@ -115,12 +102,7 @@ final class UrlGeneratorTest extends TestCase
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
-        /** @var GroupInterface|MockObject $group */
-        $group = $this->getMockByCalls(GroupInterface::class, [
-            Call::create('getRoutes')->with()->willReturn(['user' => $route]),
-        ]);
-
-        $urlGenerator = new UrlGenerator($group);
+        $urlGenerator = new UrlGenerator([$route]);
 
         self::assertSame('/user/{id}', $urlGenerator->generatePath('user'));
         self::assertSame('/user/1', $urlGenerator->generatePath('user', ['id' => 1]));

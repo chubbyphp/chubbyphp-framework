@@ -10,7 +10,6 @@ use Aura\Router\RouterContainer;
 use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Framework\Router\UrlGeneratorInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Chubbyphp\Framework\Router\GroupInterface;
 
 final class UrlGenerator implements UrlGeneratorInterface
 {
@@ -20,16 +19,41 @@ final class UrlGenerator implements UrlGeneratorInterface
     private $generator;
 
     /**
-     * @param GroupInterface $group
+     * @param RouteInterface[] $routes
      */
-    public function __construct(GroupInterface $group)
+    public function __construct(array $routes)
     {
-        $this->routes = $group->getRoutes();
+        $this->routes = $this->getRoutesByName($routes);
+        $this->generator = $this->getGenerator($routes);
+    }
 
+    /**
+     * @param RouteInterface[] $routes
+     *
+     * @return RouteInterface[]
+     */
+    private function getRoutesByName(array $routes): array
+    {
+        $routesByName = [];
+        foreach ($routes as $route) {
+            $routesByName[$route->getName()] = $route;
+        }
+
+        return $routesByName;
+    }
+
+    /**
+     * @param RouteInterface[] $routes
+     *
+     * @return Matcher
+     */
+    private function getGenerator(array $routes): Generator
+    {
         $routerContainer = new RouterContainer();
+
         $map = $routerContainer->getMap();
 
-        foreach ($this->routes as $route) {
+        foreach ($routes as $route) {
             $options = $route->getPathOptions();
 
             $auraRoute = $map->route($route->getName(), $route->getPath());
@@ -38,7 +62,7 @@ final class UrlGenerator implements UrlGeneratorInterface
             $auraRoute->defaults($options['defaults'] ?? []);
         }
 
-        $this->generator = $routerContainer->getGenerator();
+        return $routerContainer->getGenerator();
     }
 
     /**

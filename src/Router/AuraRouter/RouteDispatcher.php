@@ -7,7 +7,6 @@ namespace Chubbyphp\Framework\Router\AuraRouter;
 use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
 use Aura\Router\Rule\Allows;
-use Chubbyphp\Framework\Router\GroupInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
@@ -18,7 +17,7 @@ final class RouteDispatcher implements RouteDispatcherInterface
     /**
      * @var RouteInterface[]
      */
-    private $routes;
+    private $routes = [];
 
     /**
      * @var Matcher
@@ -26,13 +25,38 @@ final class RouteDispatcher implements RouteDispatcherInterface
     private $matcher;
 
     /**
-     * @param GroupInterface $group
+     * @param RouteInterface[] $routes
      */
-    public function __construct(GroupInterface $group)
+    public function __construct(array $routes)
     {
-        $routes = $group->getRoutes();
+        $this->routes = $this->getRoutesByName($routes);
+        $this->matcher = $this->getMatcher($routes);
+    }
 
+    /**
+     * @param RouteInterface[] $routes
+     *
+     * @return RouteInterface[]
+     */
+    private function getRoutesByName(array $routes): array
+    {
+        $routesByName = [];
+        foreach ($routes as $route) {
+            $routesByName[$route->getName()] = $route;
+        }
+
+        return $routesByName;
+    }
+
+    /**
+     * @param RouteInterface[] $routes
+     *
+     * @return Matcher
+     */
+    private function getMatcher(array $routes): Matcher
+    {
         $routerContainer = new RouterContainer();
+
         $map = $routerContainer->getMap();
 
         foreach ($routes as $route) {
@@ -44,8 +68,7 @@ final class RouteDispatcher implements RouteDispatcherInterface
             $auraRoute->defaults($options['defaults'] ?? []);
         }
 
-        $this->routes = $routes;
-        $this->matcher = $routerContainer->getMatcher();
+        return $routerContainer->getMatcher();
     }
 
     /**

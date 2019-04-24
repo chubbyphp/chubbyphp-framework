@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\FastRoute;
 
-use Chubbyphp\Framework\Router\GroupInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\UrlGeneratorException;
 use Chubbyphp\Framework\Router\UrlGeneratorInterface;
@@ -24,12 +23,27 @@ final class UrlGenerator implements UrlGeneratorInterface
     private $routeParser;
 
     /**
-     * @param GroupInterface $group
+     * @param RouteInterface[] $routes
      */
-    public function __construct(GroupInterface $group)
+    public function __construct(array $routes)
     {
-        $this->routes = $group->getRoutes();
+        $this->routes = $this->getRoutesByName($routes);
         $this->routeParser = new RouteParser();
+    }
+
+    /**
+     * @param RouteInterface[] $routes
+     *
+     * @return RouteInterface[]
+     */
+    private function getRoutesByName(array $routes): array
+    {
+        $routesByName = [];
+        foreach ($routes as $route) {
+            $routesByName[$route->getName()] = $route;
+        }
+
+        return $routesByName;
     }
 
     /**

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\FastRoute;
 
-use Chubbyphp\Framework\Router\GroupInterface;
 use Chubbyphp\Framework\Router\RouteDispatcherException;
 use Chubbyphp\Framework\Router\RouteDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
@@ -27,18 +26,31 @@ final class RouteDispatcher implements RouteDispatcherInterface
     private $dispatcher;
 
     /**
-     * @param GroupInterface $group
-     * @param string|null    $cacheDir
+     * @param RouteInterface[] $routes
+     * @param string|null      $cacheDir
      */
-    public function __construct(GroupInterface $group, string $cacheDir = null)
+    public function __construct(array $routes, string $cacheDir = null)
     {
-        $routes = $group->getRoutes();
-
-        $this->routes = $routes;
+        $this->routes = $this->getRoutesByName($routes);
         $this->dispatcher = $this->getDispatcher(
             $routes,
             ($cacheDir ?? sys_get_temp_dir()).'/fast-route-'.hash('sha256', $this->routesAsString($routes)).'.php'
         );
+    }
+
+    /**
+     * @param RouteInterface[] $routes
+     *
+     * @return RouteInterface[]
+     */
+    private function getRoutesByName(array $routes): array
+    {
+        $routesByName = [];
+        foreach ($routes as $route) {
+            $routesByName[$route->getName()] = $route;
+        }
+
+        return $routesByName;
     }
 
     /**
