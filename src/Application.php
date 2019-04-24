@@ -62,13 +62,10 @@ final class Application
      */
     public function run(ServerRequestInterface $request, bool $send = true): ResponseInterface
     {
+        $route = null;
+
         try {
             $route = $this->routeMatcher->match($request);
-            $response = $this->middlewareDispatcher->dispatch(
-                $route->getMiddlewares(),
-                $route->getRequestHandler(),
-                $this->requestWithRouteAttributes($request, $route)
-            );
         } catch (RouteMatcherException $routeException) {
             $this->logger->info($routeException->getTitle(), [
                 'message' => $routeException->getMessage(),
@@ -76,10 +73,20 @@ final class Application
             ]);
 
             $response = $this->exceptionHandler->createRouteMatcherExceptionResponse($request, $routeException);
-        } catch (\Throwable $exception) {
-            $this->logger->error('Throwable', ['exceptions' => ExceptionHelper::toArray($exception)]);
+        }
 
-            $response = $this->exceptionHandler->createExceptionResponse($request, $exception);
+        if (null !== $route) {
+            try {
+                $response = $this->middlewareDispatcher->dispatch(
+                    $route->getMiddlewares(),
+                    $route->getRequestHandler(),
+                    $this->requestWithRouteAttributes($request, $route)
+                );
+            } catch (\Throwable $exception) {
+                $this->logger->error('Throwable', ['exceptions' => ExceptionHelper::toArray($exception)]);
+
+                $response = $this->exceptionHandler->createExceptionResponse($request, $exception);
+            }
         }
 
         if ($send) {
