@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @see https://github.com/slimphp/Slim/blob/3.x/Slim/Handlers/Error.php
  */
-final class HtmlExceptionResponseHandler implements ExceptionResponseHandlerInterface
+final class ExceptionResponseHandler implements ExceptionResponseHandlerInterface
 {
     const ERROR_HTML = <<<'EOT'
 <html>

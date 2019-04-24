@@ -9,7 +9,7 @@ namespace App;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
-use Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler;
+use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
 use Chubbyphp\Framework\Router\AuraRouter;
 use Chubbyphp\Framework\Router\Route;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -53,7 +53,7 @@ $route = Route::get('/hello/{name}', 'hello',
 $app = new Application(
     new AuraRouter([$route]),
     new MiddlewareDispatcher(),
-    new HtmlExceptionResponseHandler($responseFactory)
+    new ExceptionResponseHandler($responseFactory)
 );
 
 $app->run(ServerRequestFactory::fromGlobals());

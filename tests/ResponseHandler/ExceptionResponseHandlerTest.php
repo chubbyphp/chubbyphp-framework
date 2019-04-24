@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\ResponseHandler;
 
-use Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler;
+use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
 use Chubbyphp\Framework\Router\RouterException;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
@@ -17,9 +17,9 @@ use Psr\Http\Message\StreamInterface;
 use Chubbyphp\Mock\Argument\ArgumentCallback;
 
 /**
- * @covers \Chubbyphp\Framework\ResponseHandler\HtmlExceptionResponseHandler
+ * @covers \Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler
  */
-final class HtmlExceptionResponseHandlerTest extends TestCase
+final class ExceptionResponseHandlerTest extends TestCase
 {
     use MockByCallsTrait;
 
@@ -78,7 +78,7 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $responseHandler = new HtmlExceptionResponseHandler($responseFactory);
+        $responseHandler = new ExceptionResponseHandler($responseFactory);
 
         self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routeException));
     }
@@ -138,7 +138,7 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $responseHandler = new HtmlExceptionResponseHandler($responseFactory, true);
+        $responseHandler = new ExceptionResponseHandler($responseFactory, true);
 
         self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routeException));
     }
@@ -198,7 +198,7 @@ EOT;
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
 
-        $responseHandler = new HtmlExceptionResponseHandler($responseFactory);
+        $responseHandler = new ExceptionResponseHandler($responseFactory);
 
         self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }
@@ -239,7 +239,7 @@ EOT;
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
 
-        $responseHandler = new HtmlExceptionResponseHandler($responseFactory, true);
+        $responseHandler = new ExceptionResponseHandler($responseFactory, true);
 
         self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }
