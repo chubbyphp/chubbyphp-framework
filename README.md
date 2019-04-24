@@ -60,6 +60,8 @@ cd example
 
 ## Web Server
 
+This documentations assumes, that the front controller is named index.php and is in the public directory.
+
  * [builtin (development only)][60]
  * [nginx][61]
 

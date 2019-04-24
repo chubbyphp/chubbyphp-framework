@@ -1,7 +1,5 @@
 # Nginx
 
-This documentation assumes, that the front controller is named index.php and is in the public directory.
-
 ```nginx
 server {
     server_name example.tld;
