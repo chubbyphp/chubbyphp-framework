@@ -32,10 +32,7 @@ final class RouteMatcher implements RouteMatcherInterface
     public function __construct(array $routes, string $cacheDir = null)
     {
         $this->routes = $this->getRoutesByName($routes);
-        $this->dispatcher = $this->getDispatcher(
-            $routes,
-            ($cacheDir ?? sys_get_temp_dir()).'/fast-route-'.hash('sha256', $this->routesAsString($routes)).'.php'
-        );
+        $this->dispatcher = $this->getDispatcher($routes, $cacheDir ?? sys_get_temp_dir());
     }
 
     /**
@@ -54,6 +51,28 @@ final class RouteMatcher implements RouteMatcherInterface
     }
 
     /**
+     * @param array  $routes
+     * @param string $cacheDir
+     *
+     * @return Dispatcher
+     */
+    private function getDispatcher(array $routes, string $cacheDir): Dispatcher
+    {
+        $cacheFile = $cacheDir.'/fast-route-'.hash('sha256', $this->routesAsString($routes)).'.php';
+
+        if (!file_exists($cacheFile)) {
+            $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
+            foreach ($routes as $route) {
+                $routeCollector->addRoute($route->getMethod(), $route->getPath(), $route->getName());
+            }
+
+            file_put_contents($cacheFile, '<?php return '.var_export($routeCollector->getData(), true).';');
+        }
+
+        return new Dispatcher(require $cacheFile);
+    }
+
+    /**
      * @param RouteInterface[] $routes
      *
      * @return string
@@ -66,26 +85,6 @@ final class RouteMatcher implements RouteMatcherInterface
         }
 
         return trim($string);
-    }
-
-    /**
-     * @param array  $routes
-     * @param string $cacheFile
-     *
-     * @return Dispatcher
-     */
-    private function getDispatcher(array $routes, string $cacheFile): Dispatcher
-    {
-        if (!file_exists($cacheFile)) {
-            $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
-            foreach ($routes as $route) {
-                $routeCollector->addRoute($route->getMethod(), $route->getPath(), $route->getName());
-            }
-
-            file_put_contents($cacheFile, '<?php return '.var_export($routeCollector->getData(), true).';');
-        }
-
-        return new Dispatcher(require $cacheFile);
     }
 
     /**
