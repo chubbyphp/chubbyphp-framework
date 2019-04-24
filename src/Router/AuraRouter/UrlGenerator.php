@@ -23,23 +23,7 @@ final class UrlGenerator implements UrlGeneratorInterface
      */
     public function __construct(array $routes)
     {
-        $this->routes = $this->getRoutesByName($routes);
         $this->generator = $this->getGenerator($routes);
-    }
-
-    /**
-     * @param RouteInterface[] $routes
-     *
-     * @return RouteInterface[]
-     */
-    private function getRoutesByName(array $routes): array
-    {
-        $routesByName = [];
-        foreach ($routes as $route) {
-            $routesByName[$route->getName()] = $route;
-        }
-
-        return $routesByName;
     }
 
     /**

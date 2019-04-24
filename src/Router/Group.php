@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
 final class Group implements GroupInterface
@@ -35,10 +34,7 @@ final class Group implements GroupInterface
     private $groups = [];
 
     /**
-     * @param string                  $method
-     * @param string                  $path
-     * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param string $path
      */
     private function __construct(string $path)
     {
@@ -46,9 +42,7 @@ final class Group implements GroupInterface
     }
 
     /**
-     * @param string                  $path
-     * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param string $path
      *
      * @return self
      */

@@ -160,7 +160,7 @@ final class Route implements RouteInterface
     }
 
     /**
-     * @param array $config
+     * @param array $pathOptions
      *
      * @return self
      */
