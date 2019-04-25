@@ -81,7 +81,7 @@ composer require \
     chubbyphp/chubbyphp-framework "^1.0@alpha"
 ```
 
-## Concept
+## Workflow
 
 ![Application workflow](doc/images/workflow.png?raw=true "Application workflow")
 
