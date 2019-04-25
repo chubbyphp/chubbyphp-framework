@@ -61,9 +61,24 @@ Cyclomatic Complexity
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][40].
 
+Both example using the [zendframework/zend-diactoros][32] [psr/http-message-implementation][22] implementation.
+
+### Aura.Router
+
 ```sh
-composer create-project chubbyphp/chubbyphp-framework -s dev example
-cd example
+composer require \
+    aura/router "^3.1" \
+    zendframework/zend-diactoros "^2.1.1" \
+    chubbyphp/chubbyphp-framework "^1.0@alpha"
+```
+
+### FastRoute
+
+```sh
+composer require \
+    nikic/fast-route "^1.3" \
+    zendframework/zend-diactoros "^2.1.1" \
+    chubbyphp/chubbyphp-framework "^1.0@alpha"
 ```
 
 ## Concept
