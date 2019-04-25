@@ -56,5 +56,5 @@ $app = new Application(
     new ExceptionResponseHandler($responseFactory)
 );
 
-$app->run(ServerRequestFactory::fromGlobals());
+$app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ```

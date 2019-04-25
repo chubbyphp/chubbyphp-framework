@@ -11,10 +11,11 @@ use Chubbyphp\Framework\Router\RouterException;
 use Chubbyphp\Framework\Router\RouterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-final class Application
+final class Application implements RequestHandlerInterface
 {
     /**
      * @var RouterInterface
@@ -56,11 +57,10 @@ final class Application
 
     /**
      * @param ServerRequestInterface $request
-     * @param bool                   $send
      *
      * @return ResponseInterface
      */
-    public function run(ServerRequestInterface $request, bool $send = true): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
             $route = $this->router->match($request);
@@ -70,17 +70,11 @@ final class Application
                 'code' => $routeException->getCode(),
             ]);
 
-            $response = $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
-
-            if ($send) {
-                $this->send($response);
-            }
-
-            return $response;
+            return $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
         }
 
         try {
-            $response = $this->middlewareDispatcher->dispatch(
+            return $this->middlewareDispatcher->dispatch(
                 $route->getMiddlewares(),
                 $route->getRequestHandler(),
                 $this->requestWithRouteAttributes($request, $route)
@@ -88,38 +82,14 @@ final class Application
         } catch (\Throwable $exception) {
             $this->logger->error('Throwable', ['exceptions' => ExceptionHelper::toArray($exception)]);
 
-            $response = $this->exceptionHandler->createExceptionResponse($request, $exception);
+            return $this->exceptionHandler->createExceptionResponse($request, $exception);
         }
-
-        if ($send) {
-            $this->send($response);
-        }
-
-        return $response;
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param RouteInterface         $route
-     *
-     * @return ServerRequestInterface
-     */
-    private function requestWithRouteAttributes(
-        ServerRequestInterface $request,
-        RouteInterface $route
-    ): ServerRequestInterface {
-        $request = $request->withAttribute('route', $route);
-        foreach ($route->getAttributes() as $attribute => $value) {
-            $request = $request->withAttribute($attribute, $value);
-        }
-
-        return $request;
     }
 
     /**
      * @param ResponseInterface $response
      */
-    private function send(ResponseInterface $response)
+    public function send(ResponseInterface $response)
     {
         $statusCode = $response->getStatusCode();
 
@@ -145,5 +115,23 @@ final class Application
         while (!$body->eof()) {
             echo $body->read(256);
         }
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param RouteInterface         $route
+     *
+     * @return ServerRequestInterface
+     */
+    private function requestWithRouteAttributes(
+        ServerRequestInterface $request,
+        RouteInterface $route
+    ): ServerRequestInterface {
+        $request = $request->withAttribute('route', $route);
+        foreach ($route->getAttributes() as $attribute => $value) {
+            $request = $request->withAttribute($attribute, $value);
+        }
+
+        return $request;
     }
 }

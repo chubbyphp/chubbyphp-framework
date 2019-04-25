@@ -78,7 +78,7 @@ namespace Chubbyphp\Tests\Framework
     {
         use MockByCallsTrait;
 
-        public function testRunFoundWithoutSend(): void
+        public function testHandle(): void
         {
             /** @var MiddlewareInterface|MockObject $middleware */
             $middleware = $this->getMockByCalls(MiddlewareInterface::class);
@@ -125,18 +125,52 @@ namespace Chubbyphp\Tests\Framework
                 $logger
             );
 
-            TestHeader::reset();
-
-            ob_start();
-
-            self::assertSame($response, $application->run($request, false));
-
-            self::assertEquals([], TestHeader::all());
-
-            self::assertSame('', ob_get_clean());
+            self::assertSame($response, $application->handle($request));
         }
 
-        public function testRunFoundWithSend(): void
+        public function testHandleRouterException(): void
+        {
+            /** @var ServerRequestInterface|MockObject $request */
+            $request = $this->getMockByCalls(ServerRequestInterface::class);
+
+            /** @var ResponseInterface|MockObject $response */
+            $response = $this->getMockByCalls(ResponseInterface::class);
+
+            $routeException = RouterException::createForNotFound('/');
+
+            /** @var RouterInterface|MockObject $router */
+            $router = $this->getMockByCalls(RouterInterface::class, [
+                Call::create('match')->with($request)->willThrowException($routeException),
+            ]);
+
+            /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
+            $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
+
+            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
+            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+                Call::create('createRouterExceptionResponse')->with($request, $routeException)->willReturn($response),
+            ]);
+
+            /** @var LoggerInterface|MockObject $logger */
+            $logger = $this->getMockByCalls(LoggerInterface::class, [
+                Call::create('info')->with('Page not found', [
+                    'message' => 'The page "/" you are looking for could not be found.'
+                        .' Check the address bar to ensure your URL is spelled correctly.',
+                    'code' => 404,
+                ]),
+            ]);
+
+            $application = new Application(
+                $router,
+                $middlewareDispatcher,
+                $exceptionResponseHandler,
+                $logger
+            );
+
+            self::assertSame($response, $application->handle($request));
+        }
+
+        public function testHandleThrowable(): void
         {
             /** @var MiddlewareInterface|MockObject $middleware */
             $middleware = $this->getMockByCalls(MiddlewareInterface::class);
@@ -157,6 +191,75 @@ namespace Chubbyphp\Tests\Framework
                 Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
             ]);
 
+            /** @var ResponseInterface|MockObject $response */
+            $response = $this->getMockByCalls(ResponseInterface::class);
+
+            $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
+
+            /** @var RouterInterface|MockObject $router */
+            $router = $this->getMockByCalls(RouterInterface::class, [
+                Call::create('match')->with($request)->willReturn($route),
+            ]);
+
+            /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
+            $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
+                Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willThrowException($exception),
+            ]);
+
+            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
+            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+                Call::create('createExceptionResponse')->with($request, $exception)->willReturn($response),
+            ]);
+
+            /** @var LoggerInterface|MockObject $logger */
+            $logger = $this->getMockByCalls(LoggerInterface::class, [
+                Call::create('error')
+                    ->with(
+                        'Throwable',
+                        new ArgumentCallback(function (array $context) {
+                            self::assertArrayHasKey('exceptions', $context);
+
+                            $exceptions = $context['exceptions'];
+
+                            self::assertCount(2, $exceptions);
+
+                            $runtimeException = $exceptions[0];
+
+                            self::assertArrayHasKey('message', $runtimeException);
+                            self::assertArrayHasKey('code', $runtimeException);
+                            self::assertArrayHasKey('file', $runtimeException);
+                            self::assertArrayHasKey('line', $runtimeException);
+                            self::assertArrayHasKey('trace', $runtimeException);
+
+                            self::assertSame('runtime exception', $runtimeException['message']);
+                            self::assertSame(418, $runtimeException['code']);
+
+                            $logicException = $exceptions[1];
+
+                            self::assertArrayHasKey('message', $logicException);
+                            self::assertArrayHasKey('code', $logicException);
+                            self::assertArrayHasKey('file', $logicException);
+                            self::assertArrayHasKey('line', $logicException);
+                            self::assertArrayHasKey('trace', $logicException);
+
+                            self::assertSame('logic exception', $logicException['message']);
+                            self::assertSame(42, $logicException['code']);
+                        })
+                    ),
+            ]);
+
+            $application = new Application(
+                $router,
+                $middlewareDispatcher,
+                $exceptionResponseHandler,
+                $logger
+            );
+
+            self::assertSame($response, $application->handle($request));
+        }
+
+        public function testSend(): void
+        {
             /** @var StreamInterface|MockObject $responseBody */
             $responseBody = $this->getMockByCalls(StreamInterface::class, [
                 Call::create('isSeekable')->with()->willReturn(true),
@@ -176,14 +279,10 @@ namespace Chubbyphp\Tests\Framework
             ]);
 
             /** @var RouterInterface|MockObject $router */
-            $router = $this->getMockByCalls(RouterInterface::class, [
-                Call::create('match')->with($request)->willReturn($route),
-            ]);
+            $router = $this->getMockByCalls(RouterInterface::class);
 
             /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
-            $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
-                Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willReturn($response),
-            ]);
+            $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
 
             /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
             $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class);
@@ -202,359 +301,13 @@ namespace Chubbyphp\Tests\Framework
 
             ob_start();
 
-            self::assertSame($response, $application->run($request));
+            $application->send($response);
 
             self::assertEquals([
                 [
                     'header' => 'HTTP/1.1 200 OK',
                     'replace' => true,
                     'http_response_code' => 200,
-                ],
-                [
-                    'header' => 'X-Name: value1',
-                    'replace' => false,
-                    'http_response_code' => null,
-                ],
-                [
-                    'header' => 'X-Name: value2',
-                    'replace' => false,
-                    'http_response_code' => null,
-                ],
-            ], TestHeader::all());
-
-            self::assertSame('sample body', ob_get_clean());
-        }
-
-        public function testRunNotFoundWithoutSend(): void
-        {
-            /** @var ServerRequestInterface|MockObject $request */
-            $request = $this->getMockByCalls(ServerRequestInterface::class);
-
-            /** @var ResponseInterface|MockObject $response */
-            $response = $this->getMockByCalls(ResponseInterface::class);
-
-            $routeException = RouterException::createForNotFound('/');
-
-            /** @var RouterInterface|MockObject $router */
-            $router = $this->getMockByCalls(RouterInterface::class, [
-                Call::create('match')->with($request)->willThrowException($routeException),
-            ]);
-
-            /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
-            $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
-
-            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
-            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
-                Call::create('createRouterExceptionResponse')->with($request, $routeException)->willReturn($response),
-            ]);
-
-            /** @var LoggerInterface|MockObject $logger */
-            $logger = $this->getMockByCalls(LoggerInterface::class, [
-                Call::create('info')->with('Page not found', [
-                    'message' => 'The page "/" you are looking for could not be found.'
-                        .' Check the address bar to ensure your URL is spelled correctly.',
-                    'code' => 404,
-                ]),
-            ]);
-
-            $application = new Application(
-                $router,
-                $middlewareDispatcher,
-                $exceptionResponseHandler,
-                $logger
-            );
-
-            TestHeader::reset();
-
-            ob_start();
-
-            self::assertSame($response, $application->run($request, false));
-
-            self::assertEquals([], TestHeader::all());
-
-            self::assertSame('', ob_get_clean());
-        }
-
-        public function testRunNotFoundWithSend(): void
-        {
-            /** @var ServerRequestInterface|MockObject $request */
-            $request = $this->getMockByCalls(ServerRequestInterface::class);
-
-            /** @var StreamInterface|MockObject $responseBody */
-            $responseBody = $this->getMockByCalls(StreamInterface::class, [
-                Call::create('isSeekable')->with()->willReturn(true),
-                Call::create('rewind')->with(),
-                Call::create('eof')->with()->willReturn(false),
-                Call::create('read')->with(256)->willReturn('sample body'),
-                Call::create('eof')->with()->willReturn(true),
-            ]);
-
-            /** @var ResponseInterface|MockObject $response */
-            $response = $this->getMockByCalls(ResponseInterface::class, [
-                Call::create('getStatusCode')->with()->willReturn(404),
-                Call::create('getProtocolVersion')->with()->willReturn('1.1'),
-                Call::create('getReasonPhrase')->with()->willReturn('Not Found'),
-                Call::create('getHeaders')->with()->willReturn(['X-Name' => ['value1', 'value2']]),
-                Call::create('getBody')->with()->willReturn($responseBody),
-            ]);
-
-            $routeException = RouterException::createForNotFound('/');
-
-            /** @var RouterInterface|MockObject $router */
-            $router = $this->getMockByCalls(RouterInterface::class, [
-                Call::create('match')->with($request)->willThrowException($routeException),
-            ]);
-
-            /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
-            $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
-
-            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
-            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
-                Call::create('createRouterExceptionResponse')->with($request, $routeException)->willReturn($response),
-            ]);
-
-            /** @var LoggerInterface|MockObject $logger */
-            $logger = $this->getMockByCalls(LoggerInterface::class, [
-                Call::create('info')->with('Page not found', [
-                    'message' => 'The page "/" you are looking for could not be found.'
-                        .' Check the address bar to ensure your URL is spelled correctly.',
-                    'code' => 404,
-                ]),
-            ]);
-
-            $application = new Application(
-                $router,
-                $middlewareDispatcher,
-                $exceptionResponseHandler,
-                $logger
-            );
-
-            TestHeader::reset();
-
-            ob_start();
-
-            self::assertSame($response, $application->run($request));
-
-            self::assertEquals([
-                [
-                    'header' => 'HTTP/1.1 404 Not Found',
-                    'replace' => true,
-                    'http_response_code' => 404,
-                ],
-                [
-                    'header' => 'X-Name: value1',
-                    'replace' => false,
-                    'http_response_code' => null,
-                ],
-                [
-                    'header' => 'X-Name: value2',
-                    'replace' => false,
-                    'http_response_code' => null,
-                ],
-            ], TestHeader::all());
-
-            self::assertSame('sample body', ob_get_clean());
-        }
-
-        public function testRunThrowableWithoutSend(): void
-        {
-            /** @var MiddlewareInterface|MockObject $middleware */
-            $middleware = $this->getMockByCalls(MiddlewareInterface::class);
-
-            /** @var RequestHandlerInterface|MockObject $requestHandler */
-            $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
-
-            /** @var RouteInterface|MockObject $route */
-            $route = $this->getMockByCalls(RouteInterface::class, [
-                Call::create('getMiddlewares')->with()->willReturn([$middleware]),
-                Call::create('getRequestHandler')->with()->willReturn($requestHandler),
-                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
-            ]);
-
-            /** @var ServerRequestInterface|MockObject $request */
-            $request = $this->getMockByCalls(ServerRequestInterface::class, [
-                Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
-                Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
-            ]);
-
-            /** @var ResponseInterface|MockObject $response */
-            $response = $this->getMockByCalls(ResponseInterface::class);
-
-            $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
-
-            /** @var RouterInterface|MockObject $router */
-            $router = $this->getMockByCalls(RouterInterface::class, [
-                Call::create('match')->with($request)->willReturn($route),
-            ]);
-
-            /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
-            $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
-                Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willThrowException($exception),
-            ]);
-
-            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
-            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
-                Call::create('createExceptionResponse')->with($request, $exception)->willReturn($response),
-            ]);
-
-            /** @var LoggerInterface|MockObject $logger */
-            $logger = $this->getMockByCalls(LoggerInterface::class, [
-                Call::create('error')
-                    ->with(
-                        'Throwable',
-                        new ArgumentCallback(function (array $context) {
-                            self::assertArrayHasKey('exceptions', $context);
-
-                            $exceptions = $context['exceptions'];
-
-                            self::assertCount(2, $exceptions);
-
-                            $runtimeException = $exceptions[0];
-
-                            self::assertArrayHasKey('message', $runtimeException);
-                            self::assertArrayHasKey('code', $runtimeException);
-                            self::assertArrayHasKey('file', $runtimeException);
-                            self::assertArrayHasKey('line', $runtimeException);
-                            self::assertArrayHasKey('trace', $runtimeException);
-
-                            self::assertSame('runtime exception', $runtimeException['message']);
-                            self::assertSame(418, $runtimeException['code']);
-
-                            $logicException = $exceptions[1];
-
-                            self::assertArrayHasKey('message', $logicException);
-                            self::assertArrayHasKey('code', $logicException);
-                            self::assertArrayHasKey('file', $logicException);
-                            self::assertArrayHasKey('line', $logicException);
-                            self::assertArrayHasKey('trace', $logicException);
-
-                            self::assertSame('logic exception', $logicException['message']);
-                            self::assertSame(42, $logicException['code']);
-                        })
-                    ),
-            ]);
-
-            $application = new Application(
-                $router,
-                $middlewareDispatcher,
-                $exceptionResponseHandler,
-                $logger
-            );
-
-            self::assertSame($response, $application->run($request, false));
-        }
-
-        public function testRunThrowableWithSend(): void
-        {
-            /** @var MiddlewareInterface|MockObject $middleware */
-            $middleware = $this->getMockByCalls(MiddlewareInterface::class);
-
-            /** @var RequestHandlerInterface|MockObject $requestHandler */
-            $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
-
-            /** @var RouteInterface|MockObject $route */
-            $route = $this->getMockByCalls(RouteInterface::class, [
-                Call::create('getMiddlewares')->with()->willReturn([$middleware]),
-                Call::create('getRequestHandler')->with()->willReturn($requestHandler),
-                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
-            ]);
-
-            /** @var ServerRequestInterface|MockObject $request */
-            $request = $this->getMockByCalls(ServerRequestInterface::class, [
-                Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
-                Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
-            ]);
-
-            /** @var StreamInterface|MockObject $responseBody */
-            $responseBody = $this->getMockByCalls(StreamInterface::class, [
-                Call::create('isSeekable')->with()->willReturn(true),
-                Call::create('rewind')->with(),
-                Call::create('eof')->with()->willReturn(false),
-                Call::create('read')->with(256)->willReturn('sample body'),
-                Call::create('eof')->with()->willReturn(true),
-            ]);
-
-            /** @var ResponseInterface|MockObject $response */
-            $response = $this->getMockByCalls(ResponseInterface::class, [
-                Call::create('getStatusCode')->with()->willReturn(500),
-                Call::create('getProtocolVersion')->with()->willReturn('1.1'),
-                Call::create('getReasonPhrase')->with()->willReturn('Internal Server Error'),
-                Call::create('getHeaders')->with()->willReturn(['X-Name' => ['value1', 'value2']]),
-                Call::create('getBody')->with()->willReturn($responseBody),
-            ]);
-
-            $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
-
-            /** @var RouterInterface|MockObject $router */
-            $router = $this->getMockByCalls(RouterInterface::class, [
-                Call::create('match')->with($request)->willReturn($route),
-            ]);
-
-            /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
-            $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
-                Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willThrowException($exception),
-            ]);
-
-            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
-            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
-                Call::create('createExceptionResponse')->with($request, $exception)->willReturn($response),
-            ]);
-
-            /** @var LoggerInterface|MockObject $logger */
-            $logger = $this->getMockByCalls(LoggerInterface::class, [
-                Call::create('error')
-                    ->with(
-                        'Throwable',
-                        new ArgumentCallback(function (array $context) {
-                            self::assertArrayHasKey('exceptions', $context);
-
-                            $exceptions = $context['exceptions'];
-
-                            self::assertCount(2, $exceptions);
-
-                            $runtimeException = $exceptions[0];
-
-                            self::assertArrayHasKey('message', $runtimeException);
-                            self::assertArrayHasKey('code', $runtimeException);
-                            self::assertArrayHasKey('file', $runtimeException);
-                            self::assertArrayHasKey('line', $runtimeException);
-                            self::assertArrayHasKey('trace', $runtimeException);
-
-                            self::assertSame('runtime exception', $runtimeException['message']);
-                            self::assertSame(418, $runtimeException['code']);
-
-                            $logicException = $exceptions[1];
-
-                            self::assertArrayHasKey('message', $logicException);
-                            self::assertArrayHasKey('code', $logicException);
-                            self::assertArrayHasKey('file', $logicException);
-                            self::assertArrayHasKey('line', $logicException);
-                            self::assertArrayHasKey('trace', $logicException);
-
-                            self::assertSame('logic exception', $logicException['message']);
-                            self::assertSame(42, $logicException['code']);
-                        })
-                    ),
-            ]);
-
-            $application = new Application(
-                $router,
-                $middlewareDispatcher,
-                $exceptionResponseHandler,
-                $logger
-            );
-
-            TestHeader::reset();
-
-            ob_start();
-
-            self::assertSame($response, $application->run($request));
-
-            self::assertEquals([
-                [
-                    'header' => 'HTTP/1.1 500 Internal Server Error',
-                    'replace' => true,
-                    'http_response_code' => 500,
                 ],
                 [
                     'header' => 'X-Name: value1',
