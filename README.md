@@ -66,6 +66,10 @@ composer create-project chubbyphp/chubbyphp-framework -s dev example
 cd example
 ```
 
+## Concept
+
+![Application workflow](doc/images/workflow.png?raw=true "Application workflow")
+
 ## Usage
 
 ### Basic
