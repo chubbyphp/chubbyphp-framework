@@ -1,6 +1,3 @@
-# Aura.Router
-
-```php
 <?php
 
 declare(strict_types=1);
@@ -38,4 +35,3 @@ $app = new Application(
 );
 
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
-```

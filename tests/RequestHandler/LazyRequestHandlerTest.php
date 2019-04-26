@@ -21,7 +21,7 @@ final class LazyRequestHandlerTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testProcess(): void
+    public function testHandle(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
