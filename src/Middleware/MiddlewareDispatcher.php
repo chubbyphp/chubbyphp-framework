@@ -13,18 +13,18 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
 {
     /**
      * @param MiddlewareInterface[]   $middlewares
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      * @param ServerRequestInterface  $request
      *
      * @return ResponseInterface
      */
     public function dispatch(
         array $middlewares,
-        RequestHandlerInterface $requestHandler,
+        RequestHandlerInterface $handler,
         ServerRequestInterface $request
     ): ResponseInterface {
         if ([] === $middlewares) {
-            return $requestHandler->handle($request);
+            return $handler->handle($request);
         }
 
         $this->validateMiddlewares($middlewares);
@@ -34,10 +34,10 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
         $firstMiddleware = array_pop($middlewares);
 
         foreach ($middlewares as $middleware) {
-            $requestHandler = new MiddlewareRequestHandler($middleware, $requestHandler);
+            $handler = new MiddlewareRequestHandler($middleware, $handler);
         }
 
-        return $firstMiddleware->process($request, $requestHandler);
+        return $firstMiddleware->process($request, $handler);
     }
 
     /**

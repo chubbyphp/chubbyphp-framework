@@ -38,20 +38,20 @@ final class GroupTest extends TestCase
         /** @var MiddlewareInterface|MockObject $middleware3 */
         $middleware3 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $requestHandler */
-        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $group = Group::create('/{id}')
             ->pathOptions(['tokens' => ['id' => '\d+']])
             ->middleware($middleware1)
-            ->route(Route::get('/{slug}', 'element_read', $requestHandler)
+            ->route(Route::get('/{slug}', 'element_read', $handler)
                 ->pathOptions(['tokens' => ['slug' => '[a-z]+']])
                 ->middleware($middleware2)
             )
             ->group(Group::create('/{slug}')
                 ->pathOptions(['tokens' => ['slug' => '[a-z]+']])
                 ->middleware($middleware2)
-                ->route(Route::get('/{key}', 'another_route', $requestHandler)
+                ->route(Route::get('/{key}', 'another_route', $handler)
                     ->pathOptions(['tokens' => ['key' => '[a-z]+']])
                     ->middleware($middleware3)
                 )
@@ -70,7 +70,7 @@ final class GroupTest extends TestCase
         self::assertSame('/{id}/{slug}', $route1->getPath());
         self::assertSame(['tokens' => ['id' => '\d+', 'slug' => '[a-z]+']], $route1->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route1->getMiddlewares());
-        self::assertSame($requestHandler, $route1->getRequestHandler());
+        self::assertSame($handler, $route1->getRequestHandler());
 
         /** @var RouteInterface */
         $route2 = $routes[1];
@@ -83,6 +83,6 @@ final class GroupTest extends TestCase
             $route2->getPathOptions()
         );
         self::assertSame([$middleware1, $middleware2, $middleware3], $route2->getMiddlewares());
-        self::assertSame($requestHandler, $route2->getRequestHandler());
+        self::assertSame($handler, $route2->getRequestHandler());
     }
 }

@@ -37,7 +37,7 @@ final class Route implements RouteInterface
     /**
      * @var RequestHandlerInterface
      */
-    private $requestHandler;
+    private $handler;
 
     /**
      * @var array
@@ -48,21 +48,21 @@ final class Route implements RouteInterface
      * @param string                  $method
      * @param string                  $path
      * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      */
-    private function __construct(string $method, string $path, string $name, RequestHandlerInterface $requestHandler)
+    private function __construct(string $method, string $path, string $name, RequestHandlerInterface $handler)
     {
         $this->method = $method;
         $this->path = $path;
         $this->name = $name;
-        $this->requestHandler = $requestHandler;
+        $this->handler = $handler;
     }
 
     /**
      * @param string                  $method
      * @param string                  $path
      * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      *
      * @return self
      */
@@ -70,93 +70,93 @@ final class Route implements RouteInterface
         string $method,
         string $path,
         string $name,
-        RequestHandlerInterface $requestHandler
+        RequestHandlerInterface $handler
     ): self {
-        return new self($method, $path, $name, $requestHandler);
+        return new self($method, $path, $name, $handler);
     }
 
     /**
      * @param string                  $path
      * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      *
      * @return self
      */
-    public static function delete(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    public static function delete(string $path, string $name, RequestHandlerInterface $handler): self
     {
-        return new self(RouteInterface::DELETE, $path, $name, $requestHandler);
+        return new self(RouteInterface::DELETE, $path, $name, $handler);
     }
 
     /**
      * @param string                  $path
      * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      *
      * @return self
      */
-    public static function get(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    public static function get(string $path, string $name, RequestHandlerInterface $handler): self
     {
-        return new self(RouteInterface::GET, $path, $name, $requestHandler);
+        return new self(RouteInterface::GET, $path, $name, $handler);
     }
 
     /**
      * @param string                  $path
      * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      *
      * @return self
      */
-    public static function head(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    public static function head(string $path, string $name, RequestHandlerInterface $handler): self
     {
-        return new self(RouteInterface::HEAD, $path, $name, $requestHandler);
+        return new self(RouteInterface::HEAD, $path, $name, $handler);
     }
 
     /**
      * @param string                  $path
      * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      *
      * @return self
      */
-    public static function options(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    public static function options(string $path, string $name, RequestHandlerInterface $handler): self
     {
-        return new self(RouteInterface::OPTIONS, $path, $name, $requestHandler);
+        return new self(RouteInterface::OPTIONS, $path, $name, $handler);
     }
 
     /**
      * @param string                  $path
      * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      *
      * @return self
      */
-    public static function patch(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    public static function patch(string $path, string $name, RequestHandlerInterface $handler): self
     {
-        return new self(RouteInterface::PATCH, $path, $name, $requestHandler);
+        return new self(RouteInterface::PATCH, $path, $name, $handler);
     }
 
     /**
      * @param string                  $path
      * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      *
      * @return self
      */
-    public static function post(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    public static function post(string $path, string $name, RequestHandlerInterface $handler): self
     {
-        return new self(RouteInterface::POST, $path, $name, $requestHandler);
+        return new self(RouteInterface::POST, $path, $name, $handler);
     }
 
     /**
      * @param string                  $path
      * @param string                  $name
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      *
      * @return self
      */
-    public static function put(string $path, string $name, RequestHandlerInterface $requestHandler): self
+    public static function put(string $path, string $name, RequestHandlerInterface $handler): self
     {
-        return new self(RouteInterface::PUT, $path, $name, $requestHandler);
+        return new self(RouteInterface::PUT, $path, $name, $handler);
     }
 
     /**
@@ -242,7 +242,7 @@ final class Route implements RouteInterface
      */
     public function getRequestHandler(): RequestHandlerInterface
     {
-        return $this->requestHandler;
+        return $this->handler;
     }
 
     /**

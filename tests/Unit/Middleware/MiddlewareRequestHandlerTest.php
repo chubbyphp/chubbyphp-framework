@@ -29,21 +29,21 @@ final class MiddlewareRequestHandlerTest extends TestCase
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $requestHandler */
-        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class, [
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willReturn($response),
         ]);
 
         /** @var MiddlewareInterface|MockObject $middleware */
         $middleware = $this->getMockByCalls(MiddlewareInterface::class, [
             Call::create('process')
-            ->with($request, $requestHandler)
-            ->willReturnCallback(function (ServerRequestInterface $request, RequestHandlerInterface $requestHandler) {
-                return $requestHandler->handle($request);
+            ->with($request, $handler)
+            ->willReturnCallback(function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
+                return $handler->handle($request);
             }),
         ]);
 
-        $middlewareRequestHandler = new MiddlewareRequestHandler($middleware, $requestHandler);
+        $middlewareRequestHandler = new MiddlewareRequestHandler($middleware, $handler);
 
         self::assertSame($response, $middlewareRequestHandler->handle($request));
     }

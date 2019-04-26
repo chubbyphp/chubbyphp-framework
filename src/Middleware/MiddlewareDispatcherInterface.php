@@ -13,14 +13,14 @@ interface MiddlewareDispatcherInterface
 {
     /**
      * @param MiddlewareInterface[]   $middlewares
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      * @param ServerRequestInterface  $request
      *
      * @return ResponseInterface
      */
     public function dispatch(
         array $middlewares,
-        RequestHandlerInterface $requestHandler,
+        RequestHandlerInterface $handler,
         ServerRequestInterface $request
     ): ResponseInterface;
 }

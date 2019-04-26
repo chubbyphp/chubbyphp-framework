@@ -30,12 +30,12 @@ final class LazyMiddlewareTest extends TestCase
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $requestHandler */
-        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware */
         $middleware = $this->getMockByCalls(MiddlewareInterface::class, [
-            Call::create('process')->with($request, $requestHandler)->willReturn($response),
+            Call::create('process')->with($request, $handler)->willReturn($response),
         ]);
 
         /** @var ContainerInterface|MockObject $container */
@@ -45,6 +45,6 @@ final class LazyMiddlewareTest extends TestCase
 
         $lazyMiddleware = new LazyMiddleware($container, 'id');
 
-        self::assertSame($response, $lazyMiddleware->process($request, $requestHandler));
+        self::assertSame($response, $lazyMiddleware->process($request, $handler));
     }
 }

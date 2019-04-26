@@ -31,14 +31,14 @@ final class MiddlewareDispatcherTest extends TestCase
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $requestHandler */
-        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class, [
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willReturn($response),
         ]);
 
         $middlewareDispatcher = new MiddlewareDispatcher();
 
-        self::assertSame($response, $middlewareDispatcher->dispatch([], $requestHandler, $request));
+        self::assertSame($response, $middlewareDispatcher->dispatch([], $handler, $request));
     }
 
     public function testWithMiddlewares(): void
@@ -52,8 +52,8 @@ final class MiddlewareDispatcherTest extends TestCase
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $requestHandler */
-        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class, [
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willReturn($response),
         ]);
 
@@ -62,10 +62,10 @@ final class MiddlewareDispatcherTest extends TestCase
             Call::create('process')
                 ->with($request, new ArgumentInstanceOf(MiddlewareRequestHandler::class))
                 ->willReturnCallback(
-                    function (ServerRequestInterface $request, RequestHandlerInterface $requestHandler) {
+                    function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
                         $request->withAttribute('middleware', 1);
 
-                        return $requestHandler->handle($request);
+                        return $handler->handle($request);
                     }
                 ),
         ]);
@@ -73,12 +73,12 @@ final class MiddlewareDispatcherTest extends TestCase
         /** @var MiddlewareInterface|MockObject $middleware2 */
         $middleware2 = $this->getMockByCalls(MiddlewareInterface::class, [
             Call::create('process')
-                ->with($request, $requestHandler)
+                ->with($request, $handler)
                 ->willReturnCallback(
-                    function (ServerRequestInterface $request, RequestHandlerInterface $requestHandler) {
+                    function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
                         $request->withAttribute('middleware', 2);
 
-                        return $requestHandler->handle($request);
+                        return $handler->handle($request);
                     }
                 ),
         ]);
@@ -87,7 +87,7 @@ final class MiddlewareDispatcherTest extends TestCase
 
         self::assertSame(
             $response,
-            $middlewareDispatcher->dispatch([$middleware1, $middleware2], $requestHandler, $request)
+            $middlewareDispatcher->dispatch([$middleware1, $middleware2], $handler, $request)
         );
     }
 
@@ -109,8 +109,8 @@ final class MiddlewareDispatcherTest extends TestCase
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $requestHandler */
-        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $middleware = new \stdClass();
 
@@ -118,7 +118,7 @@ final class MiddlewareDispatcherTest extends TestCase
 
         self::assertSame(
             $response,
-            $middlewareDispatcher->dispatch([$middleware], $requestHandler, $request)
+            $middlewareDispatcher->dispatch([$middleware], $handler, $request)
         );
     }
 }

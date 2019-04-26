@@ -19,16 +19,16 @@ final class MiddlewareRequestHandler implements RequestHandlerInterface
     /**
      * @var RequestHandlerInterface
      */
-    private $requestHandler;
+    private $handler;
 
     /**
      * @param MiddlewareInterface     $middleware
-     * @param RequestHandlerInterface $requestHandler
+     * @param RequestHandlerInterface $handler
      */
-    public function __construct(MiddlewareInterface $middleware, RequestHandlerInterface $requestHandler)
+    public function __construct(MiddlewareInterface $middleware, RequestHandlerInterface $handler)
     {
         $this->middleware = $middleware;
-        $this->requestHandler = $requestHandler;
+        $this->handler = $handler;
     }
 
     /**
@@ -38,6 +38,6 @@ final class MiddlewareRequestHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->middleware->process($request, $this->requestHandler);
+        return $this->middleware->process($request, $this->handler);
     }
 }

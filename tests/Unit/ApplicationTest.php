@@ -83,13 +83,13 @@ namespace Chubbyphp\Tests\Framework\Unit
             /** @var MiddlewareInterface|MockObject $middleware */
             $middleware = $this->getMockByCalls(MiddlewareInterface::class);
 
-            /** @var RequestHandlerInterface|MockObject $requestHandler */
-            $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+            /** @var RequestHandlerInterface|MockObject $handler */
+            $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
             /** @var RouteInterface|MockObject $route */
             $route = $this->getMockByCalls(RouteInterface::class, [
                 Call::create('getMiddlewares')->with()->willReturn([$middleware]),
-                Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+                Call::create('getRequestHandler')->with()->willReturn($handler),
                 Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
             ]);
 
@@ -109,7 +109,7 @@ namespace Chubbyphp\Tests\Framework\Unit
 
             /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
-                Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willReturn($response),
+                Call::create('dispatch')->with([$middleware], $handler, $request)->willReturn($response),
             ]);
 
             /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
@@ -175,13 +175,13 @@ namespace Chubbyphp\Tests\Framework\Unit
             /** @var MiddlewareInterface|MockObject $middleware */
             $middleware = $this->getMockByCalls(MiddlewareInterface::class);
 
-            /** @var RequestHandlerInterface|MockObject $requestHandler */
-            $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+            /** @var RequestHandlerInterface|MockObject $handler */
+            $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
             /** @var RouteInterface|MockObject $route */
             $route = $this->getMockByCalls(RouteInterface::class, [
                 Call::create('getMiddlewares')->with()->willReturn([$middleware]),
-                Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+                Call::create('getRequestHandler')->with()->willReturn($handler),
                 Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
             ]);
 
@@ -203,7 +203,7 @@ namespace Chubbyphp\Tests\Framework\Unit
 
             /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
-                Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willThrowException($exception),
+                Call::create('dispatch')->with([$middleware], $handler, $request)->willThrowException($exception),
             ]);
 
             /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
