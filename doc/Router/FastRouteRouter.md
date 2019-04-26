@@ -91,6 +91,6 @@ $cacheDir = sys_get_temp_dir();
 
 $router = new FastRouteRouter([$route], $cacheDir);
 
-/** @var string $url */
-$url = $router->generatePath('index', [], []);
+/** @var string $path */
+$path = $router->generatePath('index', [], []);
 ```

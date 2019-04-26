@@ -85,8 +85,8 @@ $route = Route::get('/', 'index', new CallbackRequestHandler(
 
 $router = new AuraRouter([$route]);
 
-/** @var string $url */
-$url = $router->generatePath('index', [], []);
+/** @var string $path */
+$path = $router->generatePath('index', [], []);
 ```
 
 ## Route
