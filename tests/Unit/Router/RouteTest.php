@@ -41,19 +41,23 @@ final class RouteTest extends TestCase
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        /** @var MiddlewareInterface|MockObject $middleware */
-        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+        /** @var MiddlewareInterface|MockObject $middleware1 */
+        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware2 */
+        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
 
         $route = Route::create(RouteInterface::GET, '/{id}', 'element_read', $handler)
             ->pathOptions(['tokens' => ['id' => '\d+']])
-            ->middlewares([$middleware])
+            ->middlewares([$middleware1])
+            ->middleware($middleware2)
         ;
 
         self::assertSame('element_read', $route->getName());
         self::assertSame(RouteInterface::GET, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
-        self::assertSame([$middleware], $route->getMiddlewares());
+        self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
         self::assertSame('element_read::GET::/{id}::{"tokens":{"id":"\\\d+"}}', (string) $route);

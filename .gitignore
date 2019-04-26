@@ -6,6 +6,7 @@
 build/
 composer.lock
 composer.symlink
+infectionlog.txt
 phpunit
 phpunit.xml
 vendor/

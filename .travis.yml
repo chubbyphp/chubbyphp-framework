@@ -21,4 +21,5 @@ before_script:
 
 script:
   - vendor/bin/phpunit --coverage-text --verbose
+  - vendor/bin/infection --initial-tests-php-options='-d zend_extension=xdebug.so'
   - vendor/bin/phploc src --verbose
