@@ -64,6 +64,20 @@ final class Group implements GroupInterface
     }
 
     /**
+     * @param MiddlewareInterface[] $middlewares
+     *
+     * @return self
+     */
+    public function middlewares(array $middlewares): self
+    {
+        foreach ($middlewares as $middleware) {
+            $this->middleware($middleware);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param MiddlewareInterface $middleware
      *
      * @return self
@@ -76,18 +90,6 @@ final class Group implements GroupInterface
     }
 
     /**
-     * @param Route $route
-     *
-     * @return self
-     */
-    public function route(Route $route): self
-    {
-        $this->routes[] = $route;
-
-        return $this;
-    }
-
-    /**
      * @param Group $group
      *
      * @return self
@@ -95,6 +97,18 @@ final class Group implements GroupInterface
     public function group(Group $group): self
     {
         $this->groups[] = $group;
+
+        return $this;
+    }
+
+    /**
+     * @param RouteInterface $route
+     *
+     * @return self
+     */
+    public function route(RouteInterface $route): self
+    {
+        $this->routes[] = $route;
 
         return $this;
     }

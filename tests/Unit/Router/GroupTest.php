@@ -50,7 +50,7 @@ final class GroupTest extends TestCase
             )
             ->group(Group::create('/{slug}')
                 ->pathOptions(['tokens' => ['slug' => '[a-z]+']])
-                ->middleware($middleware2)
+                ->middlewares([$middleware2])
                 ->route(Route::get('/{key}', 'another_route', $handler)
                     ->pathOptions(['tokens' => ['key' => '[a-z]+']])
                     ->middleware($middleware3)
