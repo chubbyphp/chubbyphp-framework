@@ -72,8 +72,16 @@ final class AuraRouter implements RouterInterface
 
             $auraRoute = $map->route($route->getName(), $route->getPath());
             $auraRoute->allows($route->getMethod());
-            $auraRoute->tokens($options['tokens'] ?? []);
+
+            $auraRoute->accepts($options['accepts'] ?? []);
+            $auraRoute->auth($options['auth'] ?? null);
             $auraRoute->defaults($options['defaults'] ?? []);
+            $auraRoute->extras($options['extras'] ?? []);
+            $auraRoute->host($options['host'] ?? null);
+            $auraRoute->secure($options['secure'] ?? null);
+            $auraRoute->special($options['special'] ?? null);
+            $auraRoute->tokens($options['tokens'] ?? []);
+            $auraRoute->wildcard($options['wildcard'] ?? null);
         }
 
         return $routerContainer;
