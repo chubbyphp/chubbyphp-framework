@@ -19,7 +19,9 @@ $group = Group::create('/api');
 
 use Chubbyphp\Framework\Router\Group;
 
-$group = Group::create('/api');
+/** @var Group $group */
+$group = ...;
+
 $group->pathOptions([]);
 ```
 
@@ -34,7 +36,9 @@ use Psr\Http\Server\MiddlewareInterface;
 /** @var MiddlewareInterface $middleware */
 $middleware = ...;
 
-$group = Group::create('/api');
+/** @var Group $group */
+$group = ...;
+
 $group->middlewares([$middleware]);
 ```
 
@@ -49,7 +53,9 @@ use Psr\Http\Server\MiddlewareInterface;
 /** @var MiddlewareInterface $middleware */
 $middleware = ...;
 
-$group = Group::create('/api');
+/** @var Group $group */
+$group = ...;
+
 $group->middleware($middleware);
 ```
 
@@ -60,8 +66,13 @@ $group->middleware($middleware);
 
 use Chubbyphp\Framework\Router\Group;
 
-$group = Group::create('/api');
-$group->group(Group::create('/pets'));
+/** @var Group $group */
+$group = ...;
+
+/** @var Group $group */
+$subGroup = ...;
+
+$group->group($subGroup);
 ```
 
 ### route
@@ -75,7 +86,9 @@ use Chubbyphp\Framework\Router\RouteInterface;
 /** @var RouteInterface $route */
 $route = ...;
 
-$group = Group::create('/api');
+/** @var Group $group */
+$group = ...;
+
 $group->route($route);
 ```
 
@@ -96,8 +109,16 @@ $route2 = ...;
 /** @var RouteInterface $route3 */
 $route3 = ...;
 
-$group = Group::create('/api');
-$group->group(Group::create('/pets')->route($route1)->route($route2));
+/** @var Group $group */
+$subGroup = ...;
+
+$subGroup->route($route1);
+$subGroup->route($route2);
+
+/** @var Group $group */
+$group = ...;
+
+$group->group($subGroup);
 $group->route($route3);
 
 /** @var RouteInterface[] $routes */
