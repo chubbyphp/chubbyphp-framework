@@ -89,7 +89,7 @@ composer require \
 
 ### Examples
 
- * [Aura.Router][50]
+ * [AuraRouter][50]
  * [FastRoute][51]
 
 ### Middleware
@@ -105,6 +105,10 @@ composer require \
 ### ResponseHandler
 
  * [ExceptionResponseHandler][80]
+
+### Router
+
+ * [AuraRouter][90]
 
 ## Webserver
 
@@ -153,6 +157,8 @@ Dominik Zogg 2019
 [71]: doc/RequestHandler/LazyRequestHandler.md
 
 [80]: doc/ResponseHandler/ExceptionResponseHandler.md
+
+[90]: doc/Router/AuraRouter.md
 
 [100]: doc/Webserver/Builtin.md
 [101]: doc/Webserver/Nginx.md

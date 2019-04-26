@@ -1,4 +1,4 @@
-# Aura.Router
+# AuraRouter
 
 ```php
 <?php
@@ -39,32 +39,3 @@ $app = new Application(
 
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ```
-
-## Path Options
-
-Supported options:
-
- * [defaults][10]
- * [host][11]
- * [secure][12]
- * [special][13]
- * [tokens][10]
- * [wildcard][14]
-
-Not supported options:
-
- * [accepts][20] => 406
- * [allows][21] => handled by abstraction
- * [auth][22] => 401
- * [extras][23] => hidden by abstraction
-
-[10]: https://github.com/auraphp/Aura.Router/blob/3.x/docs/defining-routes.md#placeholder-tokens-and-default-values
-[11]: https://github.com/auraphp/Aura.Router/blob/3.x/docs/defining-routes.md#host-matching
-[12]: https://github.com/auraphp/Aura.Router/blob/3.x/docs/defining-routes.md#secure-protocols
-[13]: https://github.com/auraphp/Aura.Router/blob/3.x/docs/defining-routes.md#route-specific-matching-logic
-[14]: https://github.com/auraphp/Aura.Router/blob/3.x/docs/defining-routes.md#wildcard-attributes
-
-[20]: https://github.com/auraphp/Aura.Router/blob/3.x/docs/defining-routes.md#accept-headers
-[21]: https://github.com/auraphp/Aura.Router/blob/3.x/docs/defining-routes.md#multiple-http-verbs
-[22]: https://github.com/auraphp/Aura.Router/blob/3.x/docs/defining-routes.md#authentication
-[23]: https://github.com/auraphp/Aura.Router/blob/3.x/docs/defining-routes.md#custom-extras
