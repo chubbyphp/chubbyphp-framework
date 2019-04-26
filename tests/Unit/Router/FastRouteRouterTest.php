@@ -34,8 +34,8 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
         ]);
 
-        /** @var RouteInterface|MockObject $route */
-        $route = $this->getMockByCalls(RouteInterface::class, [
+        /** @var RouteInterface|MockObject $route1 */
+        $route1 = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('__toString')->with()->willReturn('/api/pets::[]::GET::pet_list'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -44,20 +44,29 @@ final class FastRouteRouterTest extends TestCase
             Call::create('withAttributes')->with([])->willReturnSelf(),
         ]);
 
+        /** @var RouteInterface|MockObject $route2 */
+        $route2 = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('pet_read'),
+            Call::create('__toString')->with()->willReturn('/api/pets/{id}::[]::GET::pet_read'),
+            Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getPath')->with()->willReturn('/api/pets/{id}'),
+            Call::create('getName')->with()->willReturn('pet_read'),
+        ]);
+
         $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
 
         mkdir($cacheDir, 0777, true);
 
-        $router = new FastRouteRouter([$route], $cacheDir);
+        $router = new FastRouteRouter([$route1, $route2], $cacheDir);
 
         self::assertFileExists(
             sprintf(
-                '%s/fast-route-60604cc89fbb413657da7514fb584cb803fc10fad04d651a689f8fb704682566.php',
+                '%s/fast-route-384a68b194c60a9e9d107231153d789800e90c32e4f31b523ef742fe8098f13d.php',
                 $cacheDir
             )
         );
 
-        self::assertSame($route, $router->match($request));
+        self::assertSame($route1, $router->match($request));
     }
 
     public function testMatchNotFound(): void

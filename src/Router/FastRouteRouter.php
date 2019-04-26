@@ -203,21 +203,16 @@ final class FastRouteRouter implements RouterInterface
     private function getRouteIndex(array $routePartSets, array $attributes): int
     {
         foreach ($routePartSets as $routeIndex => $routeParts) {
-            $missingParameters = [];
             foreach ($routeParts as $routePart) {
                 if (is_array($routePart)) {
                     $parameter = $routePart[0];
                     if (!isset($attributes[$parameter])) {
-                        $missingParameters[] = $parameter;
-
-                        break;
+                        continue 2;
                     }
                 }
             }
 
-            if ([] === $missingParameters) {
-                return $routeIndex;
-            }
+            return $routeIndex;
         }
 
         return $routeIndex;

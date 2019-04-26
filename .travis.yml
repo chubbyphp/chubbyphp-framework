@@ -21,6 +21,6 @@ before_script:
 
 script:
   - vendor/bin/phpunit --coverage-text --verbose
-  - vendor/bin/infection --verbose
+  - vendor/bin/infection --min-msi=100 --min-covered-msi=100 --verbose
   - vendor/bin/phpstan analyse
   - vendor/bin/phploc src --verbose

@@ -9,5 +9,5 @@ parameters:
             path: %currentWorkingDirectory%/src/Router/AuraRouter.php
         -
             # By definition its not possible to get into this loop without at least one element
-            message: '#Variable \$routeIndex might not be defined\.#'
+            message: '#Undefined variable: \$routeIndex#'
             path: %currentWorkingDirectory%/src/Router/FastRouteRouter.php
