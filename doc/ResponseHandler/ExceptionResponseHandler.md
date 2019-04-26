@@ -1,6 +1,8 @@
 # ExceptionResponseHandler
 
-## createRouterExceptionResponse
+## Methods
+
+### createRouterExceptionResponse
 
 ```php
 <?php
@@ -26,7 +28,7 @@ $exceptionResponseHandler = new ExceptionResponseHandler($responseFactory);
 $response = $exceptionResponseHandler->createRouterExceptionResponse($request, $routeException);
 ```
 
-## createExceptionResponse
+### createExceptionResponse
 
 ```php
 <?php

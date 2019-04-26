@@ -1,5 +1,9 @@
 # CallbackRequestHandler
 
+## Methods
+
+### handle
+
 ```php
 <?php
 

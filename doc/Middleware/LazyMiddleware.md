@@ -1,5 +1,9 @@
 # LazyMiddleware
 
+## Methods
+
+### process
+
 ```php
 <?php
 

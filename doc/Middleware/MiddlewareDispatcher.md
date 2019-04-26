@@ -1,5 +1,9 @@
 # MiddlewareDispatcher
 
+## Methods
+
+### dispatch
+
 ```php
 <?php
 

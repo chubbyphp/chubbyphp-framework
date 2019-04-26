@@ -109,10 +109,9 @@ composer require \
 ### Router
 
  * [AuraRouter][90]
+ * [FastRouteRouter][91]
 
 ## Webserver
-
-This documentations assumes, that the front controller is named index.php and is in the public directory.
 
  * [Builtin (development only)][100]
  * [Nginx][101]
@@ -159,6 +158,7 @@ Dominik Zogg 2019
 [80]: doc/ResponseHandler/ExceptionResponseHandler.md
 
 [90]: doc/Router/AuraRouter.md
+[91]: doc/Router/FastRouteRouter.md
 
 [100]: doc/Webserver/Builtin.md
 [101]: doc/Webserver/Nginx.md
