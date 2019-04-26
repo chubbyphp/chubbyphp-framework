@@ -111,6 +111,7 @@ composer require \
  * [AuraRouter][90]
  * [FastRouteRouter][91]
  * [Group][92]
+ * [Route][93]
 
 ## Webserver
 
@@ -161,6 +162,7 @@ Dominik Zogg 2019
 [90]: doc/Router/AuraRouter.md
 [91]: doc/Router/FastRouteRouter.md
 [92]: doc/Router/Group.md
+[93]: doc/Router/Route.md
 
 [100]: doc/Webserver/Builtin.md
 [101]: doc/Webserver/Nginx.md
