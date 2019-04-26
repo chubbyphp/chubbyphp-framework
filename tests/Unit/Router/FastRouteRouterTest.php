@@ -25,7 +25,7 @@ final class FastRouteRouterTest extends TestCase
     {
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
-            Call::create('getPath')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pets'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
@@ -37,9 +37,9 @@ final class FastRouteRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
-            Call::create('__toString')->with()->willReturn('/api/pet::[]::GET::pet_list'),
+            Call::create('__toString')->with()->willReturn('/api/pets::[]::GET::pet_list'),
             Call::create('getMethod')->with()->willReturn('GET'),
-            Call::create('getPath')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pets'),
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('withAttributes')->with([])->willReturnSelf(),
         ]);
@@ -86,9 +86,9 @@ final class FastRouteRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
-            Call::create('__toString')->with()->willReturn('/api/pet::[]::GET::pet_list'),
+            Call::create('__toString')->with()->willReturn('/api/pets::[]::GET::pet_list'),
             Call::create('getMethod')->with()->willReturn('GET'),
-            Call::create('getPath')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pets'),
             Call::create('getName')->with()->willReturn('pet_list'),
         ]);
 
@@ -114,28 +114,28 @@ final class FastRouteRouterTest extends TestCase
     {
         $this->expectException(RouterException::class);
         $this->expectExceptionMessage(
-            'Method "POST" at path "/api/pet?offset=1&limit=20" is not allowed. Must be one of: "GET"'
+            'Method "POST" at path "/api/pets?offset=1&limit=20" is not allowed. Must be one of: "GET"'
         );
         $this->expectExceptionCode(405);
 
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
-            Call::create('getPath')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pets'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getMethod')->with()->willReturn('POST'),
             Call::create('getUri')->with()->willReturn($uri),
-            Call::create('getRequestTarget')->with()->willReturn('/api/pet?offset=1&limit=20'),
+            Call::create('getRequestTarget')->with()->willReturn('/api/pets?offset=1&limit=20'),
         ]);
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
-            Call::create('__toString')->with()->willReturn('/api/pet::[]::GET::pet_list'),
+            Call::create('__toString')->with()->willReturn('/api/pets::[]::GET::pet_list'),
             Call::create('getMethod')->with()->willReturn('GET'),
-            Call::create('getPath')->with()->willReturn('/api/pet'),
+            Call::create('getPath')->with()->willReturn('/api/pets'),
             Call::create('getName')->with()->willReturn('pet_list'),
         ]);
 

@@ -74,7 +74,6 @@ final class AuraRouter implements RouterInterface
             $auraRoute->allows($route->getMethod());
 
             $auraRoute->defaults($options['defaults'] ?? []);
-            $auraRoute->extras($options['extras'] ?? []);
             $auraRoute->host($options['host'] ?? null);
             $auraRoute->secure($options['secure'] ?? null);
             $auraRoute->special($options['special'] ?? null);
