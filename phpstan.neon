@@ -1,0 +1,13 @@
+parameters:
+    level: 7
+    paths:
+        - src
+    ignoreErrors:
+        -
+            # Generator:generate has wrong phpdoc, it eighter return a string or exception
+            message: '#Method Chubbyphp\\Framework\\Router\\AuraRouter::generatePath\(\) should return string but returns string\|false#'
+            path: %currentWorkingDirectory%/src/Router/AuraRouter.php
+        -
+            # By definition its not possible to get into this loop without at least one element
+            message: '#Variable \$routeIndex might not be defined\.#'
+            path: %currentWorkingDirectory%/src/Router/FastRouteRouter.php

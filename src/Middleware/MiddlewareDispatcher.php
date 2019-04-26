@@ -31,6 +31,7 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
 
         $middlewares = array_reverse($middlewares);
 
+        /** @var MiddlewareInterface $firstMiddleware */
         $firstMiddleware = array_pop($middlewares);
 
         foreach ($middlewares as $middleware) {
@@ -52,7 +53,7 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
                         '%s::dispatch() expects parameter 1 to be %s[], %s[] given',
                         self::class,
                         MiddlewareInterface::class,
-                        is_object($middleware) ? get_class($middleware) : gettype($middleware)
+                        get_class($middleware)
                     )
                 );
             }

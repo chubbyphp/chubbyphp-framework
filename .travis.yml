@@ -22,4 +22,5 @@ before_script:
 script:
   - vendor/bin/phpunit --coverage-text --verbose
   - vendor/bin/infection --verbose
+  - vendor/bin/phpstan analyse
   - vendor/bin/phploc src --verbose

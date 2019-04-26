@@ -24,7 +24,7 @@ final class Group implements GroupInterface
     private $middlewares = [];
 
     /**
-     * @var Route[]
+     * @var RouteInterface[]
      */
     private $routes = [];
 

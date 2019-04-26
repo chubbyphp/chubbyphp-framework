@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\RequestHandler;
 
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -17,8 +16,7 @@ final class CallbackRequestHandler implements RequestHandlerInterface
     private $callback;
 
     /**
-     * @param ContainerInterface $container
-     * @param string             $id
+     * @param callable $callback
      */
     public function __construct(callable $callback)
     {
