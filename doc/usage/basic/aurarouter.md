@@ -21,15 +21,15 @@ $loader = require __DIR__.'/vendor/autoload.php';
 
 $responseFactory = new ResponseFactory();
 
-$route = Route::get('/hello/{name}', 'hello',
-    new CallbackRequestHandler(function (ServerRequestInterface $request) use ($responseFactory) {
+$route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+    function (ServerRequestInterface $request) use ($responseFactory) {
         $name = $request->getAttribute('name');
         $response = $responseFactory->createResponse();
         $response->getBody()->write(sprintf('Hello, %s', $name));
 
         return $response;
-    })
-)->pathOptions(['tokens' => ['name' => '[a-z]+']]);
+    }
+))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
 $app = new Application(
     new AuraRouter([$route]),
