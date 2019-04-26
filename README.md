@@ -83,21 +83,29 @@ composer require \
 
 ## Workflow
 
-![Application workflow](doc/images/workflow.png?raw=true "Application workflow")
+![Application workflow](doc/Resources/workflow.png?raw=true "Application workflow")
 
 ## Usage
 
-### Basic
+### Examples
 
  * [Aura.Router][50]
  * [FastRoute][51]
 
-## Web Server
+### Middleware
+
+ * [LazyMiddleware][60]
+
+### RequestHandler
+
+ * [LazyRequestHandler][70]
+
+## Webserver
 
 This documentations assumes, that the front controller is named index.php and is in the public directory.
 
- * [builtin (development only)][60]
- * [nginx][61]
+ * [builtin (development only)][100]
+ * [nginx][101]
 
 ## Copyright
 
@@ -129,8 +137,12 @@ Dominik Zogg 2019
 
 [40]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 
-[50]: doc/usage/basic/aurarouter.md
-[51]: doc/usage/basic/fastroute.md
+[50]: doc/Examples/AuraRouter.md
+[51]: doc/Examples/FastRoute.md
 
-[60]: doc/webserver/builtin.md
-[61]: doc/webserver/nginx.md
+[60]: doc/Middleware/LazyMiddleware.md
+
+[70]: doc/RequestHandler/LazyRequestHandler.md
+
+[100]: doc/Webserver/Builtin.md
+[101]: doc/Webserver/Nginx.md
