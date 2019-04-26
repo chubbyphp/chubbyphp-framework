@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Middleware;
+namespace Chubbyphp\Tests\Framework\Unit\Middleware;
 
 use Chubbyphp\Framework\Middleware\MiddlewareRequestHandler;
 use Chubbyphp\Mock\Call;

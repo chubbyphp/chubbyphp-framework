@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\ResponseHandler;
+namespace Chubbyphp\Tests\Framework\Unit\ResponseHandler;
 
 use Chubbyphp\Framework\ExceptionHelper;
 use PHPUnit\Framework\TestCase;

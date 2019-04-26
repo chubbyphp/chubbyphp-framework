@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\RequestHandler;
+namespace Chubbyphp\Tests\Framework\Unit\RequestHandler;
 
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Mock\MockByCallsTrait;

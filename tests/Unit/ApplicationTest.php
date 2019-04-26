@@ -50,7 +50,7 @@ namespace Chubbyphp\Framework
     }
 }
 
-namespace Chubbyphp\Tests\Framework
+namespace Chubbyphp\Tests\Framework\Unit
 {
     use Chubbyphp\Framework\Application;
     use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
