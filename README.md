@@ -87,7 +87,41 @@ composer require \
 
 ## Usage
 
-[Application][45]
+### Application
+
+```php
+<?php
+
+use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
+use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandlerInterface;
+use Chubbyphp\Framework\Router\RouterInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+
+/** @var RouterInterface $router */
+$router = ...;
+
+/** @var MiddlewareDispatcherInterface $middlewareDispatcher */
+$middlewareDispatcher = ...;
+
+/** @var ExceptionResponseHandlerInterface $exceptionHandler */
+$exceptionHandler = ...;
+
+/** @var LoggerInterface $logger */
+$logger = ...;
+
+/** @var ServerRequestInterface $request */
+$request = ...;
+
+$app = new Application($router, $middlewareDispatcher, $exceptionHandler, $logger);
+
+/** @var ResponseInterface $response */
+$response = $app->handle($request);
+
+$app->send($response);
+```
 
 ### Examples
 
@@ -149,8 +183,6 @@ Dominik Zogg 2019
 [32]: https://packagist.org/packages/zendframework/zend-diactoros
 
 [40]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
-
-[45]: doc/Application.md
 
 [50]: doc/Examples/AuraRouter.md
 [51]: doc/Examples/FastRoute.md
