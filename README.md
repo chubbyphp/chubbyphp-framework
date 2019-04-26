@@ -95,17 +95,23 @@ composer require \
 ### Middleware
 
  * [LazyMiddleware][60]
+ * [MiddlewareDispatcher][61]
 
 ### RequestHandler
 
- * [LazyRequestHandler][70]
+ * [CallbackRequestHandler][70]
+ * [LazyRequestHandler][71]
+
+### ResponseHandler
+
+ * [ExceptionResponseHandler][80]
 
 ## Webserver
 
 This documentations assumes, that the front controller is named index.php and is in the public directory.
 
- * [builtin (development only)][100]
- * [nginx][101]
+ * [Builtin (development only)][100]
+ * [Nginx][101]
 
 ## Copyright
 
@@ -141,8 +147,12 @@ Dominik Zogg 2019
 [51]: doc/Examples/FastRoute.md
 
 [60]: doc/Middleware/LazyMiddleware.md
+[61]: doc/Middleware/MiddlewareDispatcher.md
 
-[70]: doc/RequestHandler/LazyRequestHandler.md
+[70]: doc/RequestHandler/CallbackRequestHandler.md
+[71]: doc/RequestHandler/LazyRequestHandler.md
+
+[80]: doc/ResponseHandler/ExceptionResponseHandler.md
 
 [100]: doc/Webserver/Builtin.md
 [101]: doc/Webserver/Nginx.md

@@ -19,5 +19,7 @@ $request = ...;
 $handler = ...;
 
 $lazyMiddleware = new LazyMiddleware($container, 'middleware');
+
+/** @var ResponseInterface $response */
 $response = $lazyMiddleware->process($request, $handler);
 ```
