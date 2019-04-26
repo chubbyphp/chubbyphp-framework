@@ -44,9 +44,7 @@ final class FastRouteRouterTest extends TestCase
             Call::create('withAttributes')->with([])->willReturnSelf(),
         ]);
 
-        $dynamicCachePart = uniqid().'/'.uniqid();
-
-        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
+        $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
 
         mkdir($cacheDir, 0777, true);
 
@@ -54,8 +52,8 @@ final class FastRouteRouterTest extends TestCase
 
         self::assertFileExists(
             sprintf(
-                '/tmp/%s/fast-route-c0640d9cdd66db87f39880fd291299269a2ef68129a7b2c632fa62454f2b27ff.php',
-                $dynamicCachePart
+                '%s/fast-route-60604cc89fbb413657da7514fb584cb803fc10fad04d651a689f8fb704682566.php',
+                $cacheDir
             )
         );
 
@@ -92,9 +90,7 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getName')->with()->willReturn('pet_list'),
         ]);
 
-        $dynamicCachePart = uniqid().'/'.uniqid();
-
-        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
+        $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
 
         mkdir($cacheDir, 0777, true);
 
@@ -102,8 +98,8 @@ final class FastRouteRouterTest extends TestCase
 
         self::assertFileExists(
             sprintf(
-                '/tmp/%s/fast-route-c0640d9cdd66db87f39880fd291299269a2ef68129a7b2c632fa62454f2b27ff.php',
-                $dynamicCachePart
+                '%s/fast-route-60604cc89fbb413657da7514fb584cb803fc10fad04d651a689f8fb704682566.php',
+                $cacheDir
             )
         );
 
@@ -139,9 +135,7 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getName')->with()->willReturn('pet_list'),
         ]);
 
-        $dynamicCachePart = uniqid().'/'.uniqid();
-
-        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
+        $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
 
         mkdir($cacheDir, 0777, true);
 
@@ -149,8 +143,8 @@ final class FastRouteRouterTest extends TestCase
 
         self::assertFileExists(
             sprintf(
-                '/tmp/%s/fast-route-c0640d9cdd66db87f39880fd291299269a2ef68129a7b2c632fa62454f2b27ff.php',
-                $dynamicCachePart
+                '%s/fast-route-60604cc89fbb413657da7514fb584cb803fc10fad04d651a689f8fb704682566.php',
+                $cacheDir
             )
         );
 
@@ -196,9 +190,7 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
-        $dynamicCachePart = uniqid().'/'.uniqid();
-
-        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
+        $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
 
         mkdir($cacheDir, 0777, true);
 
@@ -206,8 +198,8 @@ final class FastRouteRouterTest extends TestCase
 
         self::assertFileExists(
             sprintf(
-                '/tmp/%s/fast-route-2ef8ecb8c9627c24ae92c4a5092ef35648ac9a2e8ffae6deeaeb0ed5739ee1b2.php',
-                $dynamicCachePart
+                '%s/fast-route-2ef8ecb8c9627c24ae92c4a5092ef35648ac9a2e8ffae6deeaeb0ed5739ee1b2.php',
+                $cacheDir
             )
         );
 
@@ -239,9 +231,7 @@ final class FastRouteRouterTest extends TestCase
         $this->expectExceptionMessage('Missing route: "user"');
         $this->expectExceptionCode(1);
 
-        $dynamicCachePart = uniqid().'/'.uniqid();
-
-        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
+        $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
 
         mkdir($cacheDir, 0777, true);
 
@@ -249,8 +239,8 @@ final class FastRouteRouterTest extends TestCase
 
         self::assertFileExists(
             sprintf(
-                '/tmp/%s/fast-route-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.php',
-                $dynamicCachePart
+                '%s/fast-route-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.php',
+                $cacheDir
             )
         );
 
@@ -273,9 +263,7 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
-        $dynamicCachePart = uniqid().'/'.uniqid();
-
-        $cacheDir = sys_get_temp_dir().'/'.$dynamicCachePart;
+        $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
 
         mkdir($cacheDir, 0777, true);
 
@@ -283,8 +271,8 @@ final class FastRouteRouterTest extends TestCase
 
         self::assertFileExists(
             sprintf(
-                '/tmp/%s/fast-route-2ef8ecb8c9627c24ae92c4a5092ef35648ac9a2e8ffae6deeaeb0ed5739ee1b2.php',
-                $dynamicCachePart
+                '%s/fast-route-2ef8ecb8c9627c24ae92c4a5092ef35648ac9a2e8ffae6deeaeb0ed5739ee1b2.php',
+                $cacheDir
             )
         );
 

@@ -35,8 +35,12 @@ final class FastRouteTest extends TestCase
             }
         ));
 
+        $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
+
+        mkdir($cacheDir, 0777, true);
+
         $app = new Application(
-            new FastRouteRouter([$route]),
+            new FastRouteRouter([$route], $cacheDir),
             new MiddlewareDispatcher(),
             new ExceptionResponseHandler($responseFactory)
         );
@@ -72,8 +76,12 @@ final class FastRouteTest extends TestCase
             }
         ));
 
+        $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
+
+        mkdir($cacheDir, 0777, true);
+
         $app = new Application(
-            new FastRouteRouter([$route]),
+            new FastRouteRouter([$route], $cacheDir),
             new MiddlewareDispatcher(),
             new ExceptionResponseHandler($responseFactory)
         );
@@ -109,8 +117,12 @@ final class FastRouteTest extends TestCase
             }
         ));
 
+        $cacheDir = sys_get_temp_dir().'/fast-route/'.uniqid().'/'.uniqid();
+
+        mkdir($cacheDir, 0777, true);
+
         $app = new Application(
-            new FastRouteRouter([$route]),
+            new FastRouteRouter([$route], $cacheDir),
             new MiddlewareDispatcher(),
             new ExceptionResponseHandler($responseFactory)
         );
