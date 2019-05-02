@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App;
 
 use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\ErrorHandler;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
@@ -18,6 +19,8 @@ use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\ServerRequestFactory;
 
 $loader = require __DIR__.'/vendor/autoload.php';
+
+set_error_handler([ErrorHandler::class, 'handle']);
 
 $responseFactory = new ResponseFactory();
 
