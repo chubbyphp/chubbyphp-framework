@@ -10,7 +10,8 @@
 
 ## Description
 
-A minimal framework using [PHP Framework Interop Group - PSR][1]
+A minimal middleware based micro framework using [PHP Framework Interop Group - PSR][1], with the goal is to achive
+the best combination of flexibility and simplicity by using standards.
 
  * [Basic Coding Standard (1)][2]
  * [Coding Style Guide (2)][3]
@@ -20,11 +21,6 @@ A minimal framework using [PHP Framework Interop Group - PSR][1]
  * [Container Interface (11)][7]
  * [HTTP Handlers (15)][8]
  * [HTTP Factories (17)][9]
-
-The goal of this framework is to achive the best combination of flexibility and simplicity by using standards.
-
-About flexibility: Everything should be replaceable the a framework user.
-About simplicity: Nothing should be more complex than needed to fulfill the flexibility.
 
 ### Lines of Code
 
