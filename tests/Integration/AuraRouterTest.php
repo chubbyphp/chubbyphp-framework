@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Integration;
 
 use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\ExceptionHandler;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
 use Chubbyphp\Framework\Router\AuraRouter;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\NullLogger;
 use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\ServerRequest;
 
@@ -21,6 +22,40 @@ use Zend\Diactoros\ServerRequest;
  */
 final class AuraRouterTest extends TestCase
 {
+    public function testOk(): void
+    {
+        $responseFactory = new ResponseFactory();
+
+        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+            function (ServerRequestInterface $request) use ($responseFactory) {
+                $name = $request->getAttribute('name');
+                $response = $responseFactory->createResponse();
+                $response->getBody()->write(sprintf('Hello, %s', $name));
+
+                return $response;
+            }
+        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
+
+        $app = new Application(
+            new AuraRouter([$route]),
+            new MiddlewareDispatcher(),
+            new ExceptionHandler($responseFactory, new NullLogger(), true)
+        );
+
+        $request = new ServerRequest(
+            [],
+            [],
+            '/hello/test',
+            RouteInterface::GET,
+            'php://memory'
+        );
+
+        $response = $app->handle($request);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('Hello, test', (string) $response->getBody());
+    }
+
     public function testTestNotFound(): void
     {
         $responseFactory = new ResponseFactory();
@@ -38,7 +73,7 @@ final class AuraRouterTest extends TestCase
         $app = new Application(
             new AuraRouter([$route]),
             new MiddlewareDispatcher(),
-            new ExceptionResponseHandler($responseFactory)
+            new ExceptionHandler($responseFactory, new NullLogger(), true)
         );
 
         $request = new ServerRequest(
@@ -75,7 +110,7 @@ final class AuraRouterTest extends TestCase
         $app = new Application(
             new AuraRouter([$route]),
             new MiddlewareDispatcher(),
-            new ExceptionResponseHandler($responseFactory)
+            new ExceptionHandler($responseFactory, new NullLogger(), true)
         );
 
         $request = new ServerRequest(
@@ -95,24 +130,20 @@ final class AuraRouterTest extends TestCase
         );
     }
 
-    public function testOk(): void
+    public function testException(): void
     {
         $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
-                $name = $request->getAttribute('name');
-                $response = $responseFactory->createResponse();
-                $response->getBody()->write(sprintf('Hello, %s', $name));
-
-                return $response;
+            function () {
+                throw new \RuntimeException('Something went wrong');
             }
         ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application(
             new AuraRouter([$route]),
             new MiddlewareDispatcher(),
-            new ExceptionResponseHandler($responseFactory)
+            new ExceptionHandler($responseFactory, new NullLogger(), true)
         );
 
         $request = new ServerRequest(
@@ -125,7 +156,11 @@ final class AuraRouterTest extends TestCase
 
         $response = $app->handle($request);
 
-        self::assertSame(200, $response->getStatusCode());
-        self::assertSame('Hello, test', (string) $response->getBody());
+        self::assertSame(500, $response->getStatusCode());
+
+        $body = (string) $response->getBody();
+
+        self::assertStringContainsString('RuntimeException', $body);
+        self::assertStringContainsString('Something went wrong', $body);
     }
 }

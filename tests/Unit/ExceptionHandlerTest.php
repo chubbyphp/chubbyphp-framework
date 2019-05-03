@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Unit\ResponseHandler;
+namespace Chubbyphp\Tests\Framework\Unit;
 
-use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
+use Chubbyphp\Framework\ExceptionHandler;
 use Chubbyphp\Framework\Router\RouterException;
+use Chubbyphp\Mock\Argument\ArgumentCallback;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -14,12 +15,12 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
-use Chubbyphp\Mock\Argument\ArgumentCallback;
+use Psr\Log\LoggerInterface;
 
 /**
- * @covers \Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler
+ * @covers \Chubbyphp\Framework\ExceptionHandler
  */
-final class ExceptionResponseHandlerTest extends TestCase
+final class ExceptionHandlerTest extends TestCase
 {
     use MockByCallsTrait;
 
@@ -47,9 +48,13 @@ final class ExceptionResponseHandlerTest extends TestCase
                 line-height: 48px;
             }
 
-            strong {
-                display: inline-block;
-                width: 65px;
+            .key {
+                width: 100px;
+                display: inline-flex;
+            }
+
+            .value {
+                display: inline-flex;
             }
         </style>
     </head>
@@ -78,7 +83,16 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ExceptionResponseHandler($responseFactory);
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->getMockByCalls(LoggerInterface::class, [
+            Call::create('info')->with('Route exception', [
+                'title' => 'Page not found',
+                'message' => 'The page "/" you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.',
+                'code' => 404,
+            ]),
+        ]);
+
+        $responseHandler = new ExceptionHandler($responseFactory, $logger);
 
         self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routeException));
     }
@@ -107,9 +121,13 @@ EOT;
                 line-height: 48px;
             }
 
-            strong {
-                display: inline-block;
-                width: 65px;
+            .key {
+                width: 100px;
+                display: inline-flex;
+            }
+
+            .value {
+                display: inline-flex;
             }
         </style>
     </head>
@@ -138,7 +156,16 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ExceptionResponseHandler($responseFactory, true);
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->getMockByCalls(LoggerInterface::class, [
+            Call::create('info')->with('Route exception', [
+                'title' => 'Page not found',
+                'message' => 'The page "/" you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.',
+                'code' => 404,
+            ]),
+        ]);
+
+        $responseHandler = new ExceptionHandler($responseFactory, $logger);
 
         self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routeException));
     }
@@ -167,9 +194,13 @@ EOT;
                 line-height: 48px;
             }
 
-            strong {
-                display: inline-block;
-                width: 65px;
+            .key {
+                width: 100px;
+                display: inline-flex;
+            }
+
+            .value {
+                display: inline-flex;
             }
         </style>
     </head>
@@ -191,14 +222,52 @@ EOT;
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        $exception = new \RuntimeException('runtime exceptiion', 418, new \Exception('exception', 42));
+        $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ExceptionResponseHandler($responseFactory);
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->getMockByCalls(LoggerInterface::class, [
+            Call::create('error')->with(
+                'Exception',
+                new ArgumentCallback(function (array $context) {
+                    self::assertArrayHasKey('exceptions', $context);
+
+                    $exceptions = $context['exceptions'];
+
+                    self::assertCount(2, $exceptions);
+
+                    $runtimeException = $exceptions[0];
+
+                    self::assertArrayHasKey('message', $runtimeException);
+                    self::assertArrayHasKey('code', $runtimeException);
+                    self::assertArrayHasKey('file', $runtimeException);
+                    self::assertArrayHasKey('line', $runtimeException);
+                    self::assertArrayHasKey('trace', $runtimeException);
+
+                    self::assertSame('RuntimeException', $runtimeException['class']);
+                    self::assertSame('runtime exception', $runtimeException['message']);
+                    self::assertSame(418, $runtimeException['code']);
+
+                    $logicException = $exceptions[1];
+
+                    self::assertArrayHasKey('message', $logicException);
+                    self::assertArrayHasKey('code', $logicException);
+                    self::assertArrayHasKey('file', $logicException);
+                    self::assertArrayHasKey('line', $logicException);
+                    self::assertArrayHasKey('trace', $logicException);
+
+                    self::assertSame('LogicException', $logicException['class']);
+                    self::assertSame('logic exception', $logicException['message']);
+                    self::assertSame(42, $logicException['code']);
+                })
+            ),
+        ]);
+
+        $responseHandler = new ExceptionHandler($responseFactory, $logger);
 
         self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }
@@ -213,13 +282,12 @@ EOT;
             Call::create('write')
                 ->with(new ArgumentCallback(function (string $html) {
                     self::assertStringContainsString(
-                        'The application could not run because of the following error',
+                        'A website error has occurred. Sorry for the temporary inconvenience.',
                         $html
                     );
                     self::assertStringContainsString('RuntimeException', $html);
                     self::assertStringContainsString('runtime exception', $html);
                     self::assertStringContainsString('418', $html);
-                    self::assertStringContainsString('Previous exception', $html);
                     self::assertStringContainsString('LogicException', $html);
                     self::assertStringContainsString('logic exception', $html);
                     self::assertStringContainsString('42', $html);
@@ -239,7 +307,45 @@ EOT;
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
 
-        $responseHandler = new ExceptionResponseHandler($responseFactory, true);
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->getMockByCalls(LoggerInterface::class, [
+            Call::create('error')->with(
+                'Exception',
+                new ArgumentCallback(function (array $context) {
+                    self::assertArrayHasKey('exceptions', $context);
+
+                    $exceptions = $context['exceptions'];
+
+                    self::assertCount(2, $exceptions);
+
+                    $runtimeException = $exceptions[0];
+
+                    self::assertArrayHasKey('message', $runtimeException);
+                    self::assertArrayHasKey('code', $runtimeException);
+                    self::assertArrayHasKey('file', $runtimeException);
+                    self::assertArrayHasKey('line', $runtimeException);
+                    self::assertArrayHasKey('trace', $runtimeException);
+
+                    self::assertSame('RuntimeException', $runtimeException['class']);
+                    self::assertSame('runtime exception', $runtimeException['message']);
+                    self::assertSame(418, $runtimeException['code']);
+
+                    $logicException = $exceptions[1];
+
+                    self::assertArrayHasKey('message', $logicException);
+                    self::assertArrayHasKey('code', $logicException);
+                    self::assertArrayHasKey('file', $logicException);
+                    self::assertArrayHasKey('line', $logicException);
+                    self::assertArrayHasKey('trace', $logicException);
+
+                    self::assertSame('LogicException', $logicException['class']);
+                    self::assertSame('logic exception', $logicException['message']);
+                    self::assertSame(42, $logicException['code']);
+                })
+            ),
+        ]);
+
+        $responseHandler = new ExceptionHandler($responseFactory, $logger, true);
 
         self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }

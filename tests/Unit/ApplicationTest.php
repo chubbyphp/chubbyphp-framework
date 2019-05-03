@@ -53,13 +53,12 @@ namespace Chubbyphp\Framework
 namespace Chubbyphp\Tests\Framework\Unit
 {
     use Chubbyphp\Framework\Application;
+    use Chubbyphp\Framework\ExceptionHandlerInterface;
     use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
-    use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandlerInterface;
-    use Chubbyphp\Framework\Router\RouterInterface;
-    use Chubbyphp\Framework\Router\RouterException;
     use Chubbyphp\Framework\Router\RouteInterface;
+    use Chubbyphp\Framework\Router\RouterException;
+    use Chubbyphp\Framework\Router\RouterInterface;
     use Chubbyphp\Framework\TestHeader;
-    use Chubbyphp\Mock\Argument\ArgumentCallback;
     use Chubbyphp\Mock\Call;
     use Chubbyphp\Mock\MockByCallsTrait;
     use PHPUnit\Framework\MockObject\MockObject;
@@ -69,7 +68,6 @@ namespace Chubbyphp\Tests\Framework\Unit
     use Psr\Http\Message\StreamInterface;
     use Psr\Http\Server\MiddlewareInterface;
     use Psr\Http\Server\RequestHandlerInterface;
-    use Psr\Log\LoggerInterface;
 
     /**
      * @covers \Chubbyphp\Framework\Application
@@ -88,9 +86,9 @@ namespace Chubbyphp\Tests\Framework\Unit
 
             /** @var RouteInterface|MockObject $route */
             $route = $this->getMockByCalls(RouteInterface::class, [
+                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
                 Call::create('getMiddlewares')->with()->willReturn([$middleware]),
                 Call::create('getRequestHandler')->with()->willReturn($handler),
-                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
             ]);
 
             /** @var ServerRequestInterface|MockObject $request */
@@ -112,17 +110,13 @@ namespace Chubbyphp\Tests\Framework\Unit
                 Call::create('dispatch')->with([$middleware], $handler, $request)->willReturn($response),
             ]);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
-            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class);
-
-            /** @var LoggerInterface|MockObject $logger */
-            $logger = $this->getMockByCalls(LoggerInterface::class);
+            /** @var ExceptionHandlerInterface|MockObject $exceptionHandler */
+            $exceptionHandler = $this->getMockByCalls(ExceptionHandlerInterface::class);
 
             $application = new Application(
                 $router,
                 $middlewareDispatcher,
-                $exceptionResponseHandler,
-                $logger
+                $exceptionHandler
             );
 
             self::assertSame($response, $application->handle($request));
@@ -146,25 +140,15 @@ namespace Chubbyphp\Tests\Framework\Unit
             /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
-            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+            /** @var ExceptionHandlerInterface|MockObject $exceptionHandler */
+            $exceptionHandler = $this->getMockByCalls(ExceptionHandlerInterface::class, [
                 Call::create('createRouterExceptionResponse')->with($request, $routeException)->willReturn($response),
-            ]);
-
-            /** @var LoggerInterface|MockObject $logger */
-            $logger = $this->getMockByCalls(LoggerInterface::class, [
-                Call::create('info')->with('Page not found', [
-                    'message' => 'The page "/" you are looking for could not be found.'
-                        .' Check the address bar to ensure your URL is spelled correctly.',
-                    'code' => 404,
-                ]),
             ]);
 
             $application = new Application(
                 $router,
                 $middlewareDispatcher,
-                $exceptionResponseHandler,
-                $logger
+                $exceptionHandler
             );
 
             self::assertSame($response, $application->handle($request));
@@ -180,9 +164,9 @@ namespace Chubbyphp\Tests\Framework\Unit
 
             /** @var RouteInterface|MockObject $route */
             $route = $this->getMockByCalls(RouteInterface::class, [
+                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
                 Call::create('getMiddlewares')->with()->willReturn([$middleware]),
                 Call::create('getRequestHandler')->with()->willReturn($handler),
-                Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
             ]);
 
             /** @var ServerRequestInterface|MockObject $request */
@@ -206,53 +190,15 @@ namespace Chubbyphp\Tests\Framework\Unit
                 Call::create('dispatch')->with([$middleware], $handler, $request)->willThrowException($exception),
             ]);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
-            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class, [
+            /** @var ExceptionHandlerInterface|MockObject $exceptionHandler */
+            $exceptionHandler = $this->getMockByCalls(ExceptionHandlerInterface::class, [
                 Call::create('createExceptionResponse')->with($request, $exception)->willReturn($response),
-            ]);
-
-            /** @var LoggerInterface|MockObject $logger */
-            $logger = $this->getMockByCalls(LoggerInterface::class, [
-                Call::create('error')
-                    ->with(
-                        'Throwable',
-                        new ArgumentCallback(function (array $context) {
-                            self::assertArrayHasKey('exceptions', $context);
-
-                            $exceptions = $context['exceptions'];
-
-                            self::assertCount(2, $exceptions);
-
-                            $runtimeException = $exceptions[0];
-
-                            self::assertArrayHasKey('message', $runtimeException);
-                            self::assertArrayHasKey('code', $runtimeException);
-                            self::assertArrayHasKey('file', $runtimeException);
-                            self::assertArrayHasKey('line', $runtimeException);
-                            self::assertArrayHasKey('trace', $runtimeException);
-
-                            self::assertSame('runtime exception', $runtimeException['message']);
-                            self::assertSame(418, $runtimeException['code']);
-
-                            $logicException = $exceptions[1];
-
-                            self::assertArrayHasKey('message', $logicException);
-                            self::assertArrayHasKey('code', $logicException);
-                            self::assertArrayHasKey('file', $logicException);
-                            self::assertArrayHasKey('line', $logicException);
-                            self::assertArrayHasKey('trace', $logicException);
-
-                            self::assertSame('logic exception', $logicException['message']);
-                            self::assertSame(42, $logicException['code']);
-                        })
-                    ),
             ]);
 
             $application = new Application(
                 $router,
                 $middlewareDispatcher,
-                $exceptionResponseHandler,
-                $logger
+                $exceptionHandler
             );
 
             self::assertSame($response, $application->handle($request));
@@ -284,17 +230,13 @@ namespace Chubbyphp\Tests\Framework\Unit
             /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
 
-            /** @var ExceptionResponseHandlerInterface|MockObject $exceptionResponseHandler */
-            $exceptionResponseHandler = $this->getMockByCalls(ExceptionResponseHandlerInterface::class);
-
-            /** @var LoggerInterface|MockObject $logger */
-            $logger = $this->getMockByCalls(LoggerInterface::class);
+            /** @var ExceptionHandlerInterface|MockObject $exceptionHandler */
+            $exceptionHandler = $this->getMockByCalls(ExceptionHandlerInterface::class);
 
             $application = new Application(
                 $router,
                 $middlewareDispatcher,
-                $exceptionResponseHandler,
-                $logger
+                $exceptionHandler
             );
 
             TestHeader::reset();

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Framework\ResponseHandler;
+namespace Chubbyphp\Framework;
 
 use Chubbyphp\Framework\Router\RouterException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-interface ExceptionResponseHandlerInterface
+interface ExceptionHandlerInterface
 {
     /**
      * @param ServerRequestInterface $request

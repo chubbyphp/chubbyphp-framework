@@ -9,12 +9,13 @@ namespace App;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\ErrorHandler;
+use Chubbyphp\Framework\ExceptionHandler;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\ResponseHandler\ExceptionResponseHandler;
 use Chubbyphp\Framework\Router\AuraRouter;
 use Chubbyphp\Framework\Router\Route;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\NullLogger;
 use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\ServerRequestFactory;
 
@@ -37,7 +38,7 @@ $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
 $app = new Application(
     new AuraRouter([$route]),
     new MiddlewareDispatcher(),
-    new ExceptionResponseHandler($responseFactory)
+    new ExceptionHandler($responseFactory, new NullLogger(), true)
 );
 
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
