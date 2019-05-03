@@ -33,7 +33,6 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('element_read::GET::/{id}::[]', (string) $route);
     }
 
     public function testMaximal()
@@ -60,7 +59,6 @@ final class RouteTest extends TestCase
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('element_read::GET::/{id}::{"tokens":{"id":"\\\d+"}}', (string) $route);
     }
 
     public function testDelete()
@@ -77,7 +75,6 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('element_delete::DELETE::/{id}::[]', (string) $route);
     }
 
     public function testGet()
@@ -94,7 +91,6 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('element_read::GET::/{id}::[]', (string) $route);
     }
 
     public function testHead()
@@ -111,7 +107,6 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('element_read_header::HEAD::/{id}::[]', (string) $route);
     }
 
     public function testOptions()
@@ -128,7 +123,6 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('element_options::OPTIONS::/{id}::[]', (string) $route);
     }
 
     public function testPatch()
@@ -145,7 +139,6 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('element_update::PATCH::/{id}::[]', (string) $route);
     }
 
     public function testPost()
@@ -162,7 +155,6 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('element_create::POST::/{id}::[]', (string) $route);
     }
 
     public function testPut()
@@ -179,7 +171,6 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
-        self::assertSame('element_replace::PUT::/{id}::[]', (string) $route);
     }
 
     public function testWithAttributes()

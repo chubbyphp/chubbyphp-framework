@@ -265,12 +265,4 @@ final class Route implements RouteInterface
     {
         return $this->attributes;
     }
-
-    /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->name.'::'.$this->method.'::'.$this->path.'::'.json_encode($this->pathOptions);
-    }
 }

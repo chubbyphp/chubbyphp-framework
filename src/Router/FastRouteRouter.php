@@ -29,12 +29,15 @@ final class FastRouteRouter implements RouterInterface
 
     /**
      * @param RouteInterface[] $routes
-     * @param string|null      $cacheDir
+     * @param string|null      $cacheFile
      */
-    public function __construct(array $routes, string $cacheDir = null)
+    public function __construct(array $routes, string $cacheFile = null)
     {
         $this->routes = $this->getRoutesByName($routes);
-        $this->dispatcher = $this->getDispatcher($routes, $cacheDir ?? sys_get_temp_dir());
+        $this->dispatcher = $this->getDispatcher(
+            $routes,
+            $cacheFile ?? tempnam(sys_get_temp_dir(), 'fast-route-').'.php'
+        );
         $this->routeParser = new RouteParser();
     }
 
@@ -54,15 +57,13 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param array  $routes
-     * @param string $cacheDir
+     * @param RouteInterface[] $routes
+     * @param string           $cacheFile
      *
      * @return Dispatcher
      */
-    private function getDispatcher(array $routes, string $cacheDir): Dispatcher
+    private function getDispatcher(array $routes, string $cacheFile): Dispatcher
     {
-        $cacheFile = $cacheDir.'/fast-route-'.hash('sha256', $this->routesAsString($routes)).'.php';
-
         if (!file_exists($cacheFile)) {
             $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
             foreach ($routes as $route) {
@@ -73,21 +74,6 @@ final class FastRouteRouter implements RouterInterface
         }
 
         return new Dispatcher(require $cacheFile);
-    }
-
-    /**
-     * @param RouteInterface[] $routes
-     *
-     * @return string
-     */
-    private function routesAsString(array $routes): string
-    {
-        $string = '';
-        foreach ($routes as $route) {
-            $string .= $route.PHP_EOL;
-        }
-
-        return trim($string);
     }
 
     /**
@@ -195,8 +181,8 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param array $routePartSets
-     * @param array $attributes
+     * @param array    $routePartSets
+     * @param string[] $attributes
      *
      * @return int
      */
