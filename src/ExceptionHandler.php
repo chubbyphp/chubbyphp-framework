@@ -36,6 +36,10 @@ final class ExceptionHandler implements ExceptionHandlerInterface
                 line-height: 48px;
             }
 
+            .block {
+                margin-bottom: 20px;
+            }
+
             .key {
                 width: 100px;
                 display: inline-flex;
@@ -129,6 +133,7 @@ EOT;
             $html .= '<h2>Details</h2>';
 
             foreach ($exceptionsData as $exceptionData) {
+                $html .= '<div class="block">';
                 foreach ($exceptionData as $key => $value) {
                     $html .= sprintf(
                         '<div><div class="key"><strong>%s</strong></div><div class="value">%s</div></div>',
@@ -136,6 +141,7 @@ EOT;
                         nl2br((string) $value)
                     );
                 }
+                $html .= '</div>';
             }
         }
 

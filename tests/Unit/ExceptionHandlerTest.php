@@ -48,6 +48,10 @@ final class ExceptionHandlerTest extends TestCase
                 line-height: 48px;
             }
 
+            .block {
+                margin-bottom: 20px;
+            }
+
             .key {
                 width: 100px;
                 display: inline-flex;
@@ -121,6 +125,10 @@ EOT;
                 line-height: 48px;
             }
 
+            .block {
+                margin-bottom: 20px;
+            }
+
             .key {
                 width: 100px;
                 display: inline-flex;
@@ -192,6 +200,10 @@ EOT;
                 font-size: 48px;
                 font-weight: normal;
                 line-height: 48px;
+            }
+
+            .block {
+                margin-bottom: 20px;
             }
 
             .key {
@@ -285,6 +297,9 @@ EOT;
                         'A website error has occurred. Sorry for the temporary inconvenience.',
                         $html
                     );
+                    self::assertStringContainsString('div class="block"', $html);
+                    self::assertStringContainsString('div class="key"', $html);
+                    self::assertStringContainsString('div class="value"', $html);
                     self::assertStringContainsString('RuntimeException', $html);
                     self::assertStringContainsString('runtime exception', $html);
                     self::assertStringContainsString('418', $html);
