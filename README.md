@@ -57,11 +57,13 @@ Average Complexity per Method   1.59
   Maximum Method Complexity     5.00
 ```
 
+![Application workflow](doc/Resources/workflow.png?raw=true "Application workflow")
+
 ## Requirements
 
  * php: ^7.2
  * [psr/container][20]: ^1.0
- * [psr/http-factory][21]: ^1.0
+ * [psr/http-factory][21]: ^1.0.1
  * [psr/http-message-implementation][22]: ^1.0
  * [psr/http-message][23]: ^1.0.1
  * [psr/http-server-middleware][24]: ^1.0.1
@@ -71,7 +73,7 @@ Average Complexity per Method   1.59
 
  * [aura/router][30]: ^3.1
  * [nikic/fast-route][31]: ^1.3
- * [zendframework/zend-diactoros][32]: ^2.1.1
+ * [zendframework/zend-diactoros][32]: ^2.1.2
 
 ## Installation
 
@@ -88,6 +90,50 @@ composer require \
     chubbyphp/chubbyphp-framework "^1.0@alpha"
 ```
 
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\ErrorHandler;
+use Chubbyphp\Framework\ExceptionHandler;
+use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
+use Chubbyphp\Framework\Router\AuraRouter;
+use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\NullLogger;
+use Zend\Diactoros\ResponseFactory;
+use Zend\Diactoros\ServerRequestFactory;
+
+$loader = require __DIR__.'/vendor/autoload.php';
+
+set_error_handler([ErrorHandler::class, 'handle']);
+
+$responseFactory = new ResponseFactory();
+
+$route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+    function (ServerRequestInterface $request) use ($responseFactory) {
+        $name = $request->getAttribute('name');
+        $response = $responseFactory->createResponse();
+        $response->getBody()->write(sprintf('Hello, %s', $name));
+
+        return $response;
+    }
+))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
+
+$app = new Application(
+    new AuraRouter([$route]),
+    new MiddlewareDispatcher(),
+    new ExceptionHandler($responseFactory, new NullLogger(), true)
+);
+
+$app->send($app->handle(ServerRequestFactory::fromGlobals()));
+```
+
 ### FastRoute
 
 ```sh
@@ -97,19 +143,54 @@ composer require \
     chubbyphp/chubbyphp-framework "^1.0@alpha"
 ```
 
-## Workflow
+```php
+<?php
 
-![Application workflow](doc/Resources/workflow.png?raw=true "Application workflow")
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\ErrorHandler;
+use Chubbyphp\Framework\ExceptionHandler;
+use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
+use Chubbyphp\Framework\Router\FastRouteRouter;
+use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\NullLogger;
+use Zend\Diactoros\ResponseFactory;
+use Zend\Diactoros\ServerRequestFactory;
+
+$loader = require __DIR__.'/vendor/autoload.php';
+
+set_error_handler([ErrorHandler::class, 'handle']);
+
+$responseFactory = new ResponseFactory();
+
+$route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+    function (ServerRequestInterface $request) use ($responseFactory) {
+        $name = $request->getAttribute('name');
+        $response = $responseFactory->createResponse();
+        $response->getBody()->write(sprintf('Hello, %s', $name));
+
+        return $response;
+    }
+));
+
+$app = new Application(
+    new FastRouteRouter([$route]),
+    new MiddlewareDispatcher(),
+    new ExceptionHandler($responseFactory, new NullLogger(), true)
+);
+
+$app->send($app->handle(ServerRequestFactory::fromGlobals()));
+```
 
 ## Usage
 
  * [Application][50]
  * [ExceptionHandler][51]
-
-### Examples
-
- * [AuraRouter][60]
- * [FastRoute][61]
 
 ### Middleware
 
@@ -165,9 +246,6 @@ Dominik Zogg 2019
 
 [50]: doc/Application.md
 [51]: doc/ExceptionHandler.md
-
-[60]: doc/Examples/AuraRouter.md
-[61]: doc/Examples/FastRoute.md
 
 [70]: doc/Middleware/LazyMiddleware.md
 [71]: doc/Middleware/MiddlewareDispatcher.md
