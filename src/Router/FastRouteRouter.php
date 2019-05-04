@@ -34,10 +34,7 @@ final class FastRouteRouter implements RouterInterface
     public function __construct(array $routes, string $cacheFile = null)
     {
         $this->routes = $this->getRoutesByName($routes);
-        $this->dispatcher = $this->getDispatcher(
-            $routes,
-            $cacheFile ?? tempnam(sys_get_temp_dir(), 'fast-route-').'.php'
-        );
+        $this->dispatcher = $this->getDispatcher($routes, $cacheFile);
         $this->routeParser = new RouteParser();
     }
 
@@ -58,22 +55,39 @@ final class FastRouteRouter implements RouterInterface
 
     /**
      * @param RouteInterface[] $routes
-     * @param string           $cacheFile
+     * @param string|null      $cacheFile
      *
      * @return Dispatcher
      */
-    private function getDispatcher(array $routes, string $cacheFile): Dispatcher
+    private function getDispatcher(array $routes, string $cacheFile = null): Dispatcher
     {
-        if (!file_exists($cacheFile)) {
-            $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
-            foreach ($routes as $route) {
-                $routeCollector->addRoute($route->getMethod(), $route->getPath(), $route->getName());
-            }
+        if (null === $cacheFile) {
+            return new Dispatcher($this->getRouteCollector($routes)->getData());
+        }
 
-            file_put_contents($cacheFile, '<?php return '.var_export($routeCollector->getData(), true).';');
+        if (!file_exists($cacheFile)) {
+            file_put_contents(
+                $cacheFile,
+                '<?php return '.var_export($this->getRouteCollector($routes)->getData(), true).';'
+            );
         }
 
         return new Dispatcher(require $cacheFile);
+    }
+
+    /**
+     * @param RouteInterface[] $routes
+     *
+     * @return RouteCollector
+     */
+    private function getRouteCollector(array $routes): RouteCollector
+    {
+        $routeCollector = new RouteCollector(new RouteParser(), new DataGenerator());
+        foreach ($routes as $route) {
+            $routeCollector->addRoute($route->getMethod(), $route->getPath(), $route->getName());
+        }
+
+        return $routeCollector;
     }
 
     /**
