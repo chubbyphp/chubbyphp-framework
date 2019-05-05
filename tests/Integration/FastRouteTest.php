@@ -13,7 +13,6 @@ use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\NullLogger;
 use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\ServerRequest;
 
@@ -39,7 +38,7 @@ final class FastRouteTest extends TestCase
         $app = new Application(
             new FastRouteRouter([$route]),
             new MiddlewareDispatcher(),
-            new ExceptionHandler($responseFactory, new NullLogger(), true)
+            new ExceptionHandler($responseFactory, true)
         );
 
         $request = new ServerRequest(
@@ -73,7 +72,7 @@ final class FastRouteTest extends TestCase
         $app = new Application(
             new FastRouteRouter([$route]),
             new MiddlewareDispatcher(),
-            new ExceptionHandler($responseFactory, new NullLogger(), true)
+            new ExceptionHandler($responseFactory, true)
         );
 
         $request = new ServerRequest(
@@ -110,7 +109,7 @@ final class FastRouteTest extends TestCase
         $app = new Application(
             new FastRouteRouter([$route]),
             new MiddlewareDispatcher(),
-            new ExceptionHandler($responseFactory, new NullLogger(), true)
+            new ExceptionHandler($responseFactory, true)
         );
 
         $request = new ServerRequest(
@@ -143,7 +142,7 @@ final class FastRouteTest extends TestCase
         $app = new Application(
             new FastRouteRouter([$route]),
             new MiddlewareDispatcher(),
-            new ExceptionHandler($responseFactory, new NullLogger(), true)
+            new ExceptionHandler($responseFactory, true)
         );
 
         $request = new ServerRequest(

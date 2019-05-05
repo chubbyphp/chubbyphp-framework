@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * @copyright Parts of this code are copied by the Slim Framework
@@ -74,17 +75,17 @@ EOT;
 
     /**
      * @param ResponseFactoryInterface $responseFactory
-     * @param LoggerInterface          $logger
      * @param bool                     $debug
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        LoggerInterface $logger,
-        bool $debug = false
+        bool $debug = false,
+        LoggerInterface $logger = null
     ) {
         $this->responseFactory = $responseFactory;
-        $this->logger = $logger;
         $this->debug = $debug;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**

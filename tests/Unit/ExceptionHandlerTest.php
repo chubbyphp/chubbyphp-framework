@@ -96,7 +96,7 @@ EOT;
             ]),
         ]);
 
-        $responseHandler = new ExceptionHandler($responseFactory, $logger);
+        $responseHandler = new ExceptionHandler($responseFactory, false, $logger);
 
         self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routeException));
     }
@@ -173,7 +173,7 @@ EOT;
             ]),
         ]);
 
-        $responseHandler = new ExceptionHandler($responseFactory, $logger);
+        $responseHandler = new ExceptionHandler($responseFactory, false, $logger);
 
         self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routeException));
     }
@@ -279,7 +279,75 @@ EOT;
             ),
         ]);
 
-        $responseHandler = new ExceptionHandler($responseFactory, $logger);
+        $responseHandler = new ExceptionHandler($responseFactory, false, $logger);
+
+        self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
+    }
+
+    public function testCreateExceptionResponseWithoutLogger(): void
+    {
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class);
+
+        $html = <<<'EOT'
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Application Error</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 30px;
+                font: 12px/1.5 Helvetica, Arial, Verdana, sans-serif;
+            }
+
+            h1 {
+                margin: 0;
+                font-size: 48px;
+                font-weight: normal;
+                line-height: 48px;
+            }
+
+            .block {
+                margin-bottom: 20px;
+            }
+
+            .key {
+                width: 100px;
+                display: inline-flex;
+            }
+
+            .value {
+                display: inline-flex;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Application Error</h1>
+        <p>A website error has occurred. Sorry for the temporary inconvenience.</p>
+    </body>
+</html>
+EOT;
+
+        /** @var StreamInterface|MockObject $responseBody */
+        $responseBody = $this->getMockByCalls(StreamInterface::class, [
+            Call::create('write')->with($html),
+        ]);
+
+        /** @var ResponseInterface|MockObject $response */
+        $response = $this->getMockByCalls(ResponseInterface::class, [
+            Call::create('withHeader')->with('Content-Type', 'text/html')->willReturnSelf(),
+            Call::create('getBody')->with()->willReturn($responseBody),
+        ]);
+
+        $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
+
+        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
+            Call::create('createResponse')->with(500, '')->willReturn($response),
+        ]);
+
+        $responseHandler = new ExceptionHandler($responseFactory);
 
         self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }
@@ -360,7 +428,7 @@ EOT;
             ),
         ]);
 
-        $responseHandler = new ExceptionHandler($responseFactory, $logger, true);
+        $responseHandler = new ExceptionHandler($responseFactory, true, $logger);
 
         self::assertSame($response, $responseHandler->createExceptionResponse($request, $exception));
     }
