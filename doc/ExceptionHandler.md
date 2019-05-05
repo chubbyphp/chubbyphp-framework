@@ -12,12 +12,9 @@ use Chubbyphp\Framework\Router\RouterException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\NullLogger;
 
 /** @var ResponseFactoryInterface $responseFactory */
 $responseFactory = ...;
-
-$logger = new NullLogger();
 
 /** @var ServerRequestInterface $request */
 $request = ...;
@@ -40,19 +37,16 @@ use Chubbyphp\Framework\ExceptionHandler;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\NullLogger;
 
 /** @var ResponseFactoryInterface $responseFactory */
 $responseFactory = ...;
-
-$logger = new NullLogger();
 
 /** @var ServerRequestInterface $request */
 $request = ...;
 
 $exception = new \Exception('sample');
 
-$exceptionResponseHandler = new ExceptionHandler($responseFactory, $logger);
+$exceptionResponseHandler = new ExceptionHandler($responseFactory);
 
 /** @var ResponseInterface $response */
 $response = $exceptionResponseHandler->createExceptionResponse($request, $exception);

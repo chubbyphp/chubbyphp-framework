@@ -66,7 +66,6 @@ use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\AuraRouter;
 use Chubbyphp\Framework\Router\Route;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\NullLogger;
 use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\ServerRequestFactory;
 
@@ -89,7 +88,7 @@ $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
 $app = new Application(
     new AuraRouter([$route]),
     new MiddlewareDispatcher(),
-    new ExceptionHandler($responseFactory, new NullLogger(), true)
+    new ExceptionHandler($responseFactory, true)
 );
 
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
@@ -117,7 +116,6 @@ use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\FastRouteRouter;
 use Chubbyphp\Framework\Router\Route;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\NullLogger;
 use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\ServerRequestFactory;
 
@@ -140,7 +138,7 @@ $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
 $app = new Application(
     new FastRouteRouter([$route]),
     new MiddlewareDispatcher(),
-    new ExceptionHandler($responseFactory, new NullLogger(), true)
+    new ExceptionHandler($responseFactory, true)
 );
 
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
