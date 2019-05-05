@@ -41,7 +41,9 @@ $route = Route::get('/ping', 'ping', new PingController($responseFactory));
 ```
 
 ```php
-$route = Route::get('/ping', 'ping', $container[PingController::class]);
+$psrContainer = new \Pimple\Psr11\Container($container);
+
+$route = Route::get('/ping', 'ping', new LazyRequestHandler($psrContainer, PingController::class));
 ```
 
 ## Test the application
