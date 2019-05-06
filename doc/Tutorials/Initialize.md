@@ -15,7 +15,7 @@ We're installing chubbyphp-framework with fast-route and zend-diactoros.
 
 ```bash
 cd /path/to/my/project
-composer require chubbyphp/chubbyphp-framework "^1.0@alpha,>=1.0-alpha8" \
+composer require chubbyphp/chubbyphp-framework "^1.0@beta,>=1.0-beta1" \
     nikic/fast-route "^1.3" zendframework/zend-diactoros "^2.1.2"
 ```
 
