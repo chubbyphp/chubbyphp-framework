@@ -2,12 +2,16 @@
 
 ## Composer
 
+We're installing chubbyphp/chubbyphp-config a minimal configuration library with environment support.
+
 ```bash
 cd /path/to/my/project
 composer require chubbyphp/chubbyphp-config "^1.1.2"
 ```
 
 ## Add var/cache to .gitignore
+
+We're adding the var/cache directory to the .gitignore.
 
 ```
 cd /path/to/my/project
@@ -16,12 +20,16 @@ printf "var/cache\n" >> .gitignore
 
 ## Create a app/Config
 
+We're creating and Config directory where all configurations will take place in.
+
 ```bash
 cd /path/to/my/project
 mkdir app/Config
 ```
 
 ## Create app/Config/AbstractConfig.php
+
+We're creating the AbstractConfig.php which contains the basic implementation of the config interface.
 
 ```php
 <?php
@@ -83,6 +91,8 @@ abstract class AbstractConfig implements ConfigInterface
 
 ## Create app/Config/ProdConfig.php
 
+We're creating the ProdConfig.php which contains the production configuration based on the AbstractConfig.php
+
 ```php
 <?php
 
@@ -114,6 +124,8 @@ class ProdConfig extends AbstractConfig
 ```
 
 ## Create app/Config/DevConfig.php
+
+We're creating the DevConfig.php which contains the development configuration based on the ProdConfig.php
 
 ```php
 <?php
@@ -148,6 +160,9 @@ class DevConfig extends ProdConfig
 
 ## Add ConfigServiceProvider to app/container.php
 
+We're adding the ConfigServiceProvider to the container.php. It's important to keep it
+the last service provider, who beeing able to override all others.
+
 ```php
 <?php
 
@@ -176,23 +191,9 @@ $container->register(new ConfigServiceProvider($configProvider));
 return $container;
 ```
 
-## Create public/index_dev.php
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Zend\Diactoros\ServerRequestFactory;
-
-$env = 'dev';
-
-$app = require __DIR__.'/../app/app.php';
-
-$app->send($app->handle(ServerRequestFactory::fromGlobals()));
-```
-
 ## Create public/index_prod.php
+
+We're creating the index.php which is the production frontcontroller of the web application.
 
 ```php
 <?php
@@ -208,7 +209,27 @@ $app = require __DIR__.'/../app/app.php';
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ```
 
+## Create public/index_dev.php
+
+We're creating the index.php which is the development frontcontroller of the web application.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Zend\Diactoros\ServerRequestFactory;
+
+$env = 'dev';
+
+$app = require __DIR__.'/../app/app.php';
+
+$app->send($app->handle(ServerRequestFactory::fromGlobals()));
+```
+
 ## Replace public/index.php with a symlink to public/index_dev.php
+
+We're replacing the exiting index.php with a symlink to the index_dev.php, which contains the $env variable.
 
 ```bash
 cd /path/to/my/project/public
@@ -216,6 +237,8 @@ ln -sf index_dev.php index.php
 ```
 
 ## Use config value in app/app.php
+
+We're start to use the configuration by using the `routerCacheFile` and the `debug` config key.
 
 Replace the following line with:
 
@@ -227,6 +250,8 @@ $app = new Application(
 );
 ```
 
+with:
+
 ```php
 $app = new Application(
     new FastRouteRouter([$route], $container['routerCacheFile']),
@@ -236,6 +261,8 @@ $app = new Application(
 ```
 
 ## Test the application
+
+We're testing the current state.
 
 ```bash
 cd /path/to/my/project

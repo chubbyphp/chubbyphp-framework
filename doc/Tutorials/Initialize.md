@@ -1,13 +1,8 @@
 # Initialize
 
-## Create
-
-```bash
-mkdir /path/to/my/project
-cd /path/to/my/project
-```
-
 ## Create .gitignore
+
+We're adding the vendor directory to the .gitignore.
 
 ```
 cd /path/to/my/project
@@ -15,6 +10,8 @@ printf "vendor\n" > .gitignore
 ```
 
 ## Composer
+
+We're installing chubbyphp-framework with fast-route and zend-diactoros.
 
 ```bash
 cd /path/to/my/project
@@ -24,12 +21,16 @@ composer require chubbyphp/chubbyphp-framework "^1.0@alpha,>=1.0-alpha8" \
 
 ## Create app
 
+We're creating and app directory where the whole application will take place in.
+
 ```bash
 cd /path/to/my/project
 mkdir app
 ```
 
 ## Add autoload section to composer.json
+
+We're creating the app directory and add it to the autoload section of composer with the App namespace.
 
 ```json
 {
@@ -47,6 +48,8 @@ composer dump-autoload
 
 ## Create app/bootstrap.php
 
+We're creating the bootstrap.php, which adds the autoloader and registers the error handler.
+
 ```php
 <?php
 
@@ -62,6 +65,8 @@ set_error_handler([ErrorHandler::class, 'handle']);
 ```
 
 ## Create app/app.php
+
+We're creating the app.php which contains the whole (web) application.
 
 ```php
 <?php
@@ -108,12 +113,16 @@ return $app;
 
 ## Create public
 
+We're creating the public directory where all public files take place in.
+
 ```bash
 cd /path/to/my/project
 mkdir public
 ```
 
 ## Create public/index.php
+
+We're creating the index.php which is the frontcontroller of the web application.
 
 ```php
 <?php
@@ -128,6 +137,8 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ```
 
 ## Test the application
+
+We're testing the current state.
 
 ```bash
 cd /path/to/my/project

@@ -2,6 +2,8 @@
 
 ## Create app/ServiceProvider/ControllerServiceProvider.php
 
+We're creating the ControllerServiceProvider.php which contains the controller service defintions.
+
 ```php
 <?php
 
@@ -28,7 +30,10 @@ final class ControllerServiceProvider implements ServiceProviderInterface
 }
 ```
 
-## Register the ControllerServiceProvider to app/app.php (cause its only web related)
+## Register the ControllerServiceProvider to app/app.php.
+
+We're registering the created ControllerServiceProvider within app.php.
+The reason why we took this app.php instead of the container.php is, cause its only web app related.
 
 ```php
 $container->register(new ControllerServiceProvider());
@@ -36,9 +41,14 @@ $container->register(new ControllerServiceProvider());
 
 ## Replace Route within app/app.php
 
+We're replacing the not lazy route definition which a lazy ones using the PingController service defintion.
+The LazyRequestHandler depends on a Psr11 Container implementation, thats the reason for use this adapter.
+
 ```php
 $route = Route::get('/ping', 'ping', new PingController($responseFactory));
 ```
+
+with:
 
 ```php
 $psrContainer = new \Pimple\Psr11\Container($container);
@@ -47,6 +57,8 @@ $route = Route::get('/ping', 'ping', new LazyRequestHandler($psrContainer, PingC
 ```
 
 ## Test the application
+
+We're testing the current state.
 
 ```bash
 cd /path/to/my/project

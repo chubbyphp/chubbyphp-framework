@@ -2,12 +2,16 @@
 
 ## Create a app/Controller
 
+We're creating and Controller directory where all controllers will take place in.
+
 ```bash
 cd /path/to/my/project
 mkdir app/Controller
 ```
 
 ## Create app/Controller/PingController.php
+
+We're creating the PingController.php which implements the PSR15's RequestHandlerInterface.
 
 ```php
 <?php
@@ -58,6 +62,9 @@ class PingController implements RequestHandlerInterface
 
 ## Replace Route within app/app.php
 
+We're replacing the exising $route definition with the app.php whith one using the PingController.php.
+This is only a temporary replacement, cause we lost the lazyness of the callable.
+
 ```php
 $route = Route::get('/ping', 'ping', new CallbackRequestHandler(
     function (ServerRequestInterface $request) use ($responseFactory) {
@@ -79,6 +86,8 @@ $route = Route::get('/ping', 'ping', new PingController($responseFactory));
 ```
 
 ## Test the application
+
+We're testing the current state.
 
 ```bash
 cd /path/to/my/project
