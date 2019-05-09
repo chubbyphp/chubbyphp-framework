@@ -38,6 +38,19 @@ final class LazyRequestHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->container->get($this->id)->handle($request);
+        $requestHandler = $this->container->get($this->id);
+        if (!$requestHandler instanceof RequestHandlerInterface) {
+            throw new \TypeError(
+                sprintf(
+                    '%s() expects service with id "%s" to be %s, %s given',
+                    __METHOD__,
+                    $this->id,
+                    RequestHandlerInterface::class,
+                    is_object($requestHandler) ? get_class($requestHandler) : gettype($requestHandler)
+                )
+            );
+        }
+
+        return $requestHandler->handle($request);
     }
 }

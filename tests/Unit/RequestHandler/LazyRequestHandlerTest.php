@@ -36,10 +36,62 @@ final class LazyRequestHandlerTest extends TestCase
 
         /** @var ContainerInterface|MockObject $container */
         $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with('id')->willReturn($requestHander),
+            Call::create('get')->with('serviceName')->willReturn($requestHander),
         ]);
 
-        $lazyRequestHandler = new LazyRequestHandler($container, 'id');
+        $lazyRequestHandler = new LazyRequestHandler($container, 'serviceName');
+
+        self::assertSame($response, $lazyRequestHandler->handle($request));
+    }
+
+    public function testHandleWithWrongObject(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage(
+            'Chubbyphp\Framework\RequestHandler\LazyRequestHandler::handle() expects service with id "serviceName"'
+                .' to be Psr\Http\Server\RequestHandlerInterface, stdClass given'
+        );
+
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class);
+
+        /** @var ResponseInterface|MockObject $response */
+        $response = $this->getMockByCalls(ResponseInterface::class);
+
+        $requestHander = new \stdClass();
+
+        /** @var ContainerInterface|MockObject $container */
+        $container = $this->getMockByCalls(ContainerInterface::class, [
+            Call::create('get')->with('serviceName')->willReturn($requestHander),
+        ]);
+
+        $lazyRequestHandler = new LazyRequestHandler($container, 'serviceName');
+
+        self::assertSame($response, $lazyRequestHandler->handle($request));
+    }
+
+    public function testHandleWithString(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage(
+            'Chubbyphp\Framework\RequestHandler\LazyRequestHandler::handle() expects service with id "serviceName"'
+                .' to be Psr\Http\Server\RequestHandlerInterface, string given'
+        );
+
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class);
+
+        /** @var ResponseInterface|MockObject $response */
+        $response = $this->getMockByCalls(ResponseInterface::class);
+
+        $requestHander = '';
+
+        /** @var ContainerInterface|MockObject $container */
+        $container = $this->getMockByCalls(ContainerInterface::class, [
+            Call::create('get')->with('serviceName')->willReturn($requestHander),
+        ]);
+
+        $lazyRequestHandler = new LazyRequestHandler($container, 'serviceName');
 
         self::assertSame($response, $lazyRequestHandler->handle($request));
     }
