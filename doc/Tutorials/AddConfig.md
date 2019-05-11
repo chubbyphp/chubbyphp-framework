@@ -6,7 +6,7 @@ We're installing chubbyphp/chubbyphp-config a minimal configuration library with
 
 ```bash
 cd /path/to/my/project
-composer require chubbyphp/chubbyphp-config "^1.1.2"
+composer require chubbyphp/chubbyphp-config "^1.2"
 ```
 
 ## Add var/cache to .gitignore
@@ -55,7 +55,7 @@ abstract class AbstractConfig implements ConfigInterface
     public static function create(string $rootDir): ConfigInterface
     {
         $config = new static();
-        $config->rootDir = $rootDir;
+        $config->rootDir = realpath($rootDir);
 
         return $config;
     }
@@ -177,7 +177,7 @@ use Chubbyphp\Config\ConfigProvider;
 use Chubbyphp\Config\Pimple\ConfigServiceProvider;
 use Pimple\Container;
 
-$configProvider = new ConfigProvider(__DIR__.'/../', [
+$configProvider = new ConfigProvider(__DIR__.'/..', [
     new ConfigMapping('dev', DevConfig::class),
     new ConfigMapping('prod', ProdConfig::class),
 ]);
