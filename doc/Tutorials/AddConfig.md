@@ -18,7 +18,7 @@ cd /path/to/my/project
 printf "var/cache\n" >> .gitignore
 ```
 
-## Create a app/Config
+## Create app/Config directory
 
 We're creating and Config directory where all configurations will take place in.
 

@@ -19,7 +19,7 @@ composer require chubbyphp/chubbyphp-framework "^1.0@beta" \
     nikic/fast-route "^1.3" zendframework/zend-diactoros "^2.1.2"
 ```
 
-## Create app
+## Create app directory
 
 We're creating and app directory where the whole application will take place in.
 
@@ -111,7 +111,7 @@ $app = new Application(
 return $app;
 ```
 
-## Create public
+## Create public directory
 
 We're creating the public directory where all public files take place in.
 

@@ -1,6 +1,6 @@
 # Add http factory service provider
 
-## Create a app/ServiceProvider
+## Create app/ServiceProvider directory
 
 We're creating and ServiceProvider directory where all service providers will take place in.
 

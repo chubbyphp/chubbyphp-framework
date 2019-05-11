@@ -1,6 +1,6 @@
 # Move PingController into a class
 
-## Create a app/Controller
+## Create app/Controller directory
 
 We're creating and Controller directory where all controllers will take place in.
 
