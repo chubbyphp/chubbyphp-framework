@@ -179,6 +179,7 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
  * [Move PingController into a class][153]
  * [Add HttpFactoryServiceProvider][154]
  * [Add ControllerServiceProvider][155]
+ * [Add Console][156]
 
 ## Copyright
 
@@ -233,3 +234,4 @@ Dominik Zogg 2019
 [153]: doc/Tutorials/MovePingControllerIntoAClass.md
 [154]: doc/Tutorials/AddHttpFactoryServiceProvider.md
 [155]: doc/Tutorials/AddControllerServiceProvider.md
+[156]: doc/Tutorials/AddConsole.md
