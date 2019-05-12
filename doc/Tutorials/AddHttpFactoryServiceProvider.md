@@ -39,18 +39,18 @@ final class HttpFactoryServiceProvider implements ServiceProviderInterface
 }
 ```
 
-## Register the FactoryServiceProvider to app/app.php
+## Register the FactoryServiceProvider to app/web.php
 
-We're registering the created HttpFactoryServiceProvider within app.php.
-The reason why we took this app.php instead of the container.php is, cause its only web app related.
+We're registering the created HttpFactoryServiceProvider within web.php.
+The reason why we took this web.php instead of the container.php is, cause its only web app related.
 
 ```php
 $container->register(new HttpFactoryServiceProvider());
 ```
 
-## Replace Route within app/app.php
+## Replace Route within app/web.php
 
-We're replacing the ResponseFactory within the app.php with the service defintion.
+We're replacing the ResponseFactory within the web.php with the service defintion.
 
 ```php
 $responseFactory = new ResponseFactory();

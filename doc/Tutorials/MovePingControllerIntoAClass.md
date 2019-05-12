@@ -60,9 +60,9 @@ class PingController implements RequestHandlerInterface
 }
 ```
 
-## Replace Route within app/app.php
+## Replace Route within app/web.php
 
-We're replacing the exising $route definition with the app.php whith one using the PingController.php.
+We're replacing the exising $route definition with the web.php whith one using the PingController.php.
 This is only a temporary replacement, cause we lost the lazyness of the callable.
 
 ```php

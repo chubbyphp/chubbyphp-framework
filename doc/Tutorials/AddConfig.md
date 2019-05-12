@@ -204,9 +204,9 @@ use Zend\Diactoros\ServerRequestFactory;
 
 $env = 'prod';
 
-$app = require __DIR__.'/../app/app.php';
+$web = require __DIR__.'/../app/web.php';
 
-$app->send($app->handle(ServerRequestFactory::fromGlobals()));
+$web->send($web->handle(ServerRequestFactory::fromGlobals()));
 ```
 
 ## Create public/index_dev.php
@@ -222,9 +222,9 @@ use Zend\Diactoros\ServerRequestFactory;
 
 $env = 'dev';
 
-$app = require __DIR__.'/../app/app.php';
+$web = require __DIR__.'/../app/web.php';
 
-$app->send($app->handle(ServerRequestFactory::fromGlobals()));
+$web->send($web->handle(ServerRequestFactory::fromGlobals()));
 ```
 
 ## Replace public/index.php with a symlink to public/index_dev.php
@@ -236,14 +236,14 @@ cd /path/to/my/project/public
 ln -sf index_dev.php index.php
 ```
 
-## Use config value in app/app.php
+## Use config value in app/web.php
 
 We're start to use the configuration by using the `routerCacheFile` and the `debug` config key.
 
 Replace the following line with:
 
 ```php
-$app = new Application(
+$web = new Application(
     new FastRouteRouter([$route]),
     new MiddlewareDispatcher(),
     new ExceptionHandler($responseFactory, true)
@@ -253,7 +253,7 @@ $app = new Application(
 with:
 
 ```php
-$app = new Application(
+$web = new Application(
     new FastRouteRouter([$route], $container['routerCacheFile']),
     new MiddlewareDispatcher(),
     new ExceptionHandler($responseFactory, $container['debug'])

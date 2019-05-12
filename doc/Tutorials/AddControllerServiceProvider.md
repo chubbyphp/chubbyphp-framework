@@ -30,16 +30,16 @@ final class ControllerServiceProvider implements ServiceProviderInterface
 }
 ```
 
-## Register the ControllerServiceProvider to app/app.php.
+## Register the ControllerServiceProvider to app/web.php.
 
-We're registering the created ControllerServiceProvider within app.php.
-The reason why we took this app.php instead of the container.php is, cause its only web app related.
+We're registering the created ControllerServiceProvider within web.php.
+The reason why we took this web.php instead of the container.php is, cause its only web app related.
 
 ```php
 $container->register(new ControllerServiceProvider());
 ```
 
-## Replace Route within app/app.php
+## Replace Route within app/web.php
 
 We're replacing the not lazy route definition which a lazy ones using the PingController service defintion.
 The LazyRequestHandler depends on a Psr11 Container implementation, thats the reason for use this adapter.

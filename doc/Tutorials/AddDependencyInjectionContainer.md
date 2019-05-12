@@ -27,9 +27,9 @@ $container = new Container();
 return $container;
 ```
 
-## Add app/container.php to app/app.php
+## Add app/container.php to app/web.php
 
-We're adding the container to the app.php by replacing the following line:
+We're adding the container to the web.php by replacing the following line:
 
 ```php
 require __DIR__.'/bootstrap.php';

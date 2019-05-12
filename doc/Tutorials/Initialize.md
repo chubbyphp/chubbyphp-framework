@@ -64,9 +64,9 @@ $loader = require __DIR__.'/../vendor/autoload.php';
 set_error_handler([ErrorHandler::class, 'handle']);
 ```
 
-## Create app/app.php
+## Create app/web.php
 
-We're creating the app.php which contains the whole (web) application.
+We're creating the web.php which contains the whole (web) application.
 
 ```php
 <?php
@@ -102,13 +102,13 @@ $route = Route::get('/ping', 'ping', new CallbackRequestHandler(
     }
 ));
 
-$app = new Application(
+$web = new Application(
     new FastRouteRouter([$route]),
     new MiddlewareDispatcher(),
     new ExceptionHandler($responseFactory, true)
 );
 
-return $app;
+return $web;
 ```
 
 ## Create public directory
@@ -131,9 +131,9 @@ declare(strict_types=1);
 
 use Zend\Diactoros\ServerRequestFactory;
 
-$app = require __DIR__.'/../app/app.php';
+$web = require __DIR__.'/../app/web.php';
 
-$app->send($app->handle(ServerRequestFactory::fromGlobals()));
+$web->send($web->handle(ServerRequestFactory::fromGlobals()));
 ```
 
 ## Test the application
