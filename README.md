@@ -174,6 +174,7 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ## Skeleton
 
  * [chubbyphp/chubbyphp-framework-skeleton][200]
+ * [chubbyphp/petstore][201]
 
 ## Copyright
 
@@ -223,3 +224,4 @@ Dominik Zogg 2019
 [101]: doc/Webserver/Nginx.md
 
 [200]:https://packagist.org/packages/chubbyphp/chubbyphp-framework-skeleton
+[201]:https://packagist.org/packages/chubbyphp/petstore
