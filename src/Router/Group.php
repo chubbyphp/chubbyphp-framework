@@ -24,14 +24,9 @@ final class Group implements GroupInterface
     private $middlewares = [];
 
     /**
-     * @var RouteInterface[]
+     * @var GroupInterface[]|RouteInterface[]
      */
-    private $routes = [];
-
-    /**
-     * @var Group[]
-     */
-    private $groups = [];
+    private $children = [];
 
     /**
      * @param string $path
@@ -96,7 +91,7 @@ final class Group implements GroupInterface
      */
     public function group(Group $group): self
     {
-        $this->groups[] = $group;
+        $this->children[] = $group;
 
         return $this;
     }
@@ -108,7 +103,7 @@ final class Group implements GroupInterface
      */
     public function route(RouteInterface $route): self
     {
-        $this->routes[] = $route;
+        $this->children[] = $route;
 
         return $this;
     }
@@ -119,13 +114,13 @@ final class Group implements GroupInterface
     public function getRoutes(): array
     {
         $routes = [];
-        foreach ($this->routes as $route) {
-            $routes[] = $this->createRoute($route);
-        }
-
-        foreach ($this->groups as $group) {
-            foreach ($group->getRoutes() as $route) {
-                $routes[] = $this->createRoute($route);
+        foreach ($this->children as $child) {
+            if ($child instanceof GroupInterface) {
+                foreach ($child->getRoutes() as $route) {
+                    $routes[] = $this->createRoute($route);
+                }
+            } else {
+                $routes[] = $this->createRoute($child);
             }
         }
 

@@ -56,11 +56,15 @@ final class GroupTest extends TestCase
                     ->middleware($middleware3)
                 )
             )
+            ->route(Route::get('/{slug}/{key}/{subKey}', 'yet_another_route', $handler)
+                ->pathOptions(['tokens' => ['slug' => '[a-z]+', 'key' => '[a-z]+', 'subKey' => '[a-z]+']])
+                ->middleware($middleware2)
+            )
         ;
 
         $routes = $group->getRoutes();
 
-        self::assertCount(2, $routes);
+        self::assertCount(3, $routes);
 
         /** @var RouteInterface */
         $route1 = $routes[0];
@@ -84,5 +88,18 @@ final class GroupTest extends TestCase
         );
         self::assertSame([$middleware1, $middleware2, $middleware3], $route2->getMiddlewares());
         self::assertSame($handler, $route2->getRequestHandler());
+
+        /** @var RouteInterface */
+        $route3 = $routes[2];
+
+        self::assertSame('yet_another_route', $route3->getName());
+        self::assertSame(RouteInterface::GET, $route3->getMethod());
+        self::assertSame('/{id}/{slug}/{key}/{subKey}', $route3->getPath());
+        self::assertSame(
+            ['tokens' => ['id' => '\d+', 'slug' => '[a-z]+', 'key' => '[a-z]+', 'subKey' => '[a-z]+']],
+            $route3->getPathOptions()
+        );
+        self::assertSame([$middleware1, $middleware2], $route3->getMiddlewares());
+        self::assertSame($handler, $route3->getRequestHandler());
     }
 }
