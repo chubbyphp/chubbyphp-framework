@@ -47,7 +47,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][40
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^1.0@beta" \
+composer require chubbyphp/chubbyphp-framework "^1.0" \
     aura/router "^3.1" zendframework/zend-diactoros "^2.1.2"
 ```
 
@@ -97,7 +97,7 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^1.0@beta" \
+composer require chubbyphp/chubbyphp-framework "^1.0" \
     nikic/fast-route "^1.3" zendframework/zend-diactoros "^2.1.2"
 ```
 
