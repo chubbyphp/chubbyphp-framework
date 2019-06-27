@@ -27,7 +27,7 @@
         "phploc/phploc": "^5.0",
         "phpstan/phpstan": "^0.11.8",
         "phpunit/phpunit": "^8.2.3",
-        "zendframework/zend-diactoros": "^2.1"
+        "zendframework/zend-diactoros": "^2.0"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\Framework\\": "src/" }

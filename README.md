@@ -38,7 +38,7 @@ the best combination of flexibility and simplicity by using standards.
 
  * [aura/router][30]: ^3.1
  * [nikic/fast-route][31]: ^1.3
- * [zendframework/zend-diactoros][32]: ^2.1.2
+ * [zendframework/zend-diactoros][32]: ^2.0
 
 ## Installation
 
@@ -48,7 +48,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][40
 
 ```bash
 composer require chubbyphp/chubbyphp-framework "^1.0" \
-    aura/router "^3.1" zendframework/zend-diactoros "^2.1.2"
+    aura/router "^3.1" zendframework/zend-diactoros "^2.0"
 ```
 
 ```php
@@ -98,7 +98,7 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 
 ```bash
 composer require chubbyphp/chubbyphp-framework "^1.0" \
-    nikic/fast-route "^1.3" zendframework/zend-diactoros "^2.1.2"
+    nikic/fast-route "^1.3" zendframework/zend-diactoros "^2.0"
 ```
 
 ```php
