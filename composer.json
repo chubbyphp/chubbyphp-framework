@@ -1,7 +1,18 @@
 {
     "name": "chubbyphp/chubbyphp-framework",
     "description": "A minimal Framework using PSR 3, PSR 7, PSR 11, PSR 15 and PSR 17.",
-    "keywords": ["chubbyphp", "framework", "middleware"],
+    "keywords": [
+        "chubbyphp",
+        "framework",
+        "microframework",
+        "middleware",
+        "requesthandler",
+        "psr-3",
+        "psr-7",
+        "psr-11",
+        "psr-15",
+        "psr-17"
+    ],
     "license": "MIT",
     "authors": [
         {
