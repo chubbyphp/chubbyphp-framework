@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Chubbyphp\Framework;
 
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
+use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\RouterException;
 use Chubbyphp\Framework\Router\RouterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 final class Application implements RequestHandlerInterface
@@ -29,18 +31,38 @@ final class Application implements RequestHandlerInterface
     private $exceptionHandler;
 
     /**
+     * @var MiddlewareInterface[]
+     */
+    private $middlewares;
+
+    /**
      * @param RouterInterface               $router
      * @param MiddlewareDispatcherInterface $middlewareDispatcher
      * @param ExceptionHandlerInterface     $exceptionHandler
+     * @param MiddlewareInterface[]         $middlewares
      */
     public function __construct(
         RouterInterface $router,
         MiddlewareDispatcherInterface $middlewareDispatcher,
-        ExceptionHandlerInterface $exceptionHandler
+        ExceptionHandlerInterface $exceptionHandler,
+        array $middlewares = []
     ) {
         $this->router = $router;
         $this->middlewareDispatcher = $middlewareDispatcher;
         $this->exceptionHandler = $exceptionHandler;
+
+        $this->middlewares = [];
+        foreach ($middlewares as $middleware) {
+            $this->addMiddleware($middleware);
+        }
+    }
+
+    /**
+     * @param MiddlewareInterface $middleware
+     */
+    private function addMiddleware(MiddlewareInterface $middleware): void
+    {
+        $this->middlewares[] = $middleware;
     }
 
     /**
@@ -51,20 +73,26 @@ final class Application implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $route = $this->router->match($request);
-        } catch (RouterException $routeException) {
-            return $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
-        }
-
-        $request = $request->withAttribute('route', $route);
-        foreach ($route->getAttributes() as $attribute => $value) {
-            $request = $request->withAttribute($attribute, $value);
-        }
-
-        try {
             return $this->middlewareDispatcher->dispatch(
-                $route->getMiddlewares(),
-                $route->getRequestHandler(),
+                $this->middlewares,
+                new CallbackRequestHandler(function (ServerRequestInterface $request) {
+                    try {
+                        $route = $this->router->match($request);
+                    } catch (RouterException $routeException) {
+                        return $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
+                    }
+
+                    $request = $request->withAttribute('route', $route);
+                    foreach ($route->getAttributes() as $attribute => $value) {
+                        $request = $request->withAttribute($attribute, $value);
+                    }
+
+                    return $this->middlewareDispatcher->dispatch(
+                        $route->getMiddlewares(),
+                        $route->getRequestHandler(),
+                        $request
+                    );
+                }),
                 $request
             );
         } catch (\Throwable $exception) {
