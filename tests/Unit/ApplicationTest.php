@@ -137,8 +137,8 @@ namespace Chubbyphp\Tests\Framework\Unit
 
         public function testHandleWithMiddlewares(): void
         {
-            /** @var MiddlewareInterface|MockObject $baseMiddleware */
-            $baseMiddleware = $this->getMockByCalls(MiddlewareInterface::class);
+            /** @var MiddlewareInterface|MockObject $routeIndependMiddleware */
+            $routeIndependMiddleware = $this->getMockByCalls(MiddlewareInterface::class);
 
             /** @var MiddlewareInterface|MockObject $middleware */
             $middleware = $this->getMockByCalls(MiddlewareInterface::class);
@@ -175,8 +175,8 @@ namespace Chubbyphp\Tests\Framework\Unit
                             array $middlewares,
                             CallbackRequestHandler $requestHandler,
                             ServerRequestInterface $request
-                        ) use ($baseMiddleware) {
-                            self::assertSame([$baseMiddleware], $middlewares);
+                        ) use ($routeIndependMiddleware) {
+                            self::assertSame([$routeIndependMiddleware], $middlewares);
 
                             return $requestHandler->handle($request);
                         }
@@ -191,7 +191,7 @@ namespace Chubbyphp\Tests\Framework\Unit
                 $router,
                 $middlewareDispatcher,
                 $exceptionHandler,
-                [$baseMiddleware]
+                [$routeIndependMiddleware]
             );
 
             self::assertSame($response, $application->handle($request));
