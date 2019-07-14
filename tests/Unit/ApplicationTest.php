@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework
 {
-    class TestHeader
+    final class TestHeader
     {
         /**
          * @var array
@@ -72,6 +72,8 @@ namespace Chubbyphp\Tests\Framework\Unit
 
     /**
      * @covers \Chubbyphp\Framework\Application
+     *
+     * @internal
      */
     final class ApplicationTest extends TestCase
     {

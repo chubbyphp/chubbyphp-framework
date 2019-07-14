@@ -13,6 +13,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @covers \Chubbyphp\Framework\RequestHandler\CallbackRequestHandler
+ *
+ * @internal
  */
 final class CallbackRequestHandlerTest extends TestCase
 {

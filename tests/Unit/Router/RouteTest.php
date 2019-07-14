@@ -9,17 +9,19 @@ use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * @covers \Chubbyphp\Framework\Router\Route
+ *
+ * @internal
  */
 final class RouteTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testMinimal()
+    public function testMinimal(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
@@ -35,7 +37,7 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
@@ -61,7 +63,7 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
@@ -77,7 +79,7 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
@@ -93,7 +95,7 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testHead()
+    public function testHead(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
@@ -109,7 +111,7 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testOptions()
+    public function testOptions(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
@@ -125,7 +127,7 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testPatch()
+    public function testPatch(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
@@ -141,7 +143,7 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
@@ -157,7 +159,7 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
@@ -173,7 +175,7 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testWithAttributes()
+    public function testWithAttributes(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);

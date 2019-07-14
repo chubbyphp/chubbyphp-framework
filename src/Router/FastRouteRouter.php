@@ -39,6 +39,93 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
+     * @param ServerRequestInterface $request
+     *
+     * @return RouteInterface
+     */
+    public function match(ServerRequestInterface $request): RouteInterface
+    {
+        $method = $request->getMethod();
+        $path = rawurldecode($request->getUri()->getPath());
+
+        $routeInfo = $this->dispatcher->dispatch($method, $path);
+
+        if (Dispatcher::NOT_FOUND === $routeInfo[0]) {
+            throw RouterException::createForNotFound($request->getRequestTarget());
+        }
+
+        if (Dispatcher::METHOD_NOT_ALLOWED === $routeInfo[0]) {
+            throw RouterException::createForMethodNotAllowed(
+                $method,
+                $routeInfo[1],
+                $request->getRequestTarget()
+            );
+        }
+
+        /** @var RouteInterface $route */
+        $route = $this->routes[$routeInfo[1]];
+
+        return $route->withAttributes($routeInfo[2]);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param string                 $name
+     * @param string[]               $attributes
+     * @param array                  $queryParams
+     *
+     * @throws RouterException
+     *
+     * @return string
+     */
+    public function generateUrl(
+        ServerRequestInterface $request,
+        string $name,
+        array $attributes = [],
+        array $queryParams = []
+    ): string {
+        $uri = $request->getUri();
+        $requestTarget = $this->generatePath($name, $attributes, $queryParams);
+
+        return $uri->getScheme().'://'.$uri->getAuthority().$requestTarget;
+    }
+
+    /**
+     * @param string   $name
+     * @param string[] $attributes
+     * @param array    $queryParams
+     *
+     * @throws RouterException
+     *
+     * @return string
+     */
+    public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
+    {
+        $route = $this->getRoute($name);
+
+        $routePartSets = array_reverse($this->routeParser->parse($route->getPath()));
+
+        $routeIndex = $this->getRouteIndex($routePartSets, $attributes);
+
+        $pathParts = [];
+        foreach ($routePartSets[$routeIndex] as $routePart) {
+            if (is_array($routePart)) {
+                $pathParts[] = $attributes[$routePart[0]] ?? '{'.$routePart[0].'}';
+            } else {
+                $pathParts[] = $routePart;
+            }
+        }
+
+        $path = implode('', $pathParts);
+
+        if ([] === $queryParams) {
+            return $path;
+        }
+
+        return $path.'?'.http_build_query($queryParams);
+    }
+
+    /**
      * @param RouteInterface[] $routes
      *
      * @return RouteInterface[]
@@ -91,99 +178,11 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param ServerRequestInterface $request
-     *
-     * @return RouteInterface
-     */
-    public function match(ServerRequestInterface $request): RouteInterface
-    {
-        $method = $request->getMethod();
-        $path = rawurldecode($request->getUri()->getPath());
-
-        $routeInfo = $this->dispatcher->dispatch($method, $path);
-
-        if (Dispatcher::NOT_FOUND === $routeInfo[0]) {
-            throw RouterException::createForNotFound($request->getRequestTarget());
-        }
-
-        if (Dispatcher::METHOD_NOT_ALLOWED === $routeInfo[0]) {
-            throw RouterException::createForMethodNotAllowed(
-                $method,
-                $routeInfo[1],
-                $request->getRequestTarget()
-            );
-        }
-
-        /** @var RouteInterface $route */
-        $route = $this->routes[$routeInfo[1]];
-        $route = $route->withAttributes($routeInfo[2]);
-
-        return $route;
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param string                 $name
-     * @param string[]               $attributes
-     * @param array                  $queryParams
-     *
-     * @return string
-     *
-     * @throws RouterException
-     */
-    public function generateUrl(
-        ServerRequestInterface $request,
-        string $name,
-        array $attributes = [],
-        array $queryParams = []
-    ): string {
-        $uri = $request->getUri();
-        $requestTarget = $this->generatePath($name, $attributes, $queryParams);
-
-        return $uri->getScheme().'://'.$uri->getAuthority().$requestTarget;
-    }
-
-    /**
-     * @param string   $name
-     * @param string[] $attributes
-     * @param array    $queryParams
-     *
-     * @return string
-     *
-     * @throws RouterException
-     */
-    public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
-    {
-        $route = $this->getRoute($name);
-
-        $routePartSets = array_reverse($this->routeParser->parse($route->getPath()));
-
-        $routeIndex = $this->getRouteIndex($routePartSets, $attributes);
-
-        $pathParts = [];
-        foreach ($routePartSets[$routeIndex] as $routePart) {
-            if (is_array($routePart)) {
-                $pathParts[] = $attributes[$routePart[0]] ?? '{'.$routePart[0].'}';
-            } else {
-                $pathParts[] = $routePart;
-            }
-        }
-
-        $path = implode('', $pathParts);
-
-        if ([] === $queryParams) {
-            return $path;
-        }
-
-        return $path.'?'.http_build_query($queryParams);
-    }
-
-    /**
      * @param string $name
      *
-     * @return RouteInterface
-     *
      * @throws RouterException
+     *
+     * @return RouteInterface
      */
     private function getRoute(string $name): RouteInterface
     {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 final class Route implements RouteInterface
 {

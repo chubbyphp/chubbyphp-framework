@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Framework\ExceptionHelper
+ *
+ * @internal
  */
 final class ExceptionHelperTest extends TestCase
 {

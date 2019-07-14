@@ -18,6 +18,8 @@ use Zend\Diactoros\ServerRequest;
 
 /**
  * @coversNothing
+ *
+ * @internal
  */
 final class AuraRouterTest extends TestCase
 {
@@ -134,7 +136,7 @@ final class AuraRouterTest extends TestCase
         $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function () {
+            function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
         ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);

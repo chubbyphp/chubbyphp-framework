@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Framework\Router\RouterException
+ *
+ * @internal
  */
 final class RouterExceptionTest extends TestCase
 {

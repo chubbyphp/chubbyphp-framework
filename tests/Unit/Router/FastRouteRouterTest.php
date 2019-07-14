@@ -16,6 +16,8 @@ use Psr\Http\Message\UriInterface;
 
 /**
  * @covers \Chubbyphp\Framework\Router\FastRouteRouter
+ *
+ * @internal
  */
 final class FastRouteRouterTest extends TestCase
 {

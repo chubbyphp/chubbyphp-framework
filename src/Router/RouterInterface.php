@@ -21,9 +21,9 @@ interface RouterInterface
      * @param string[]               $attributes
      * @param array                  $queryParams
      *
-     * @return string
-     *
      * @throws RouterException
+     *
+     * @return string
      */
     public function generateUrl(
         ServerRequestInterface $request,
@@ -37,9 +37,9 @@ interface RouterInterface
      * @param string[] $attributes
      * @param array    $queryParams
      *
-     * @return string
-     *
      * @throws RouterException
+     *
+     * @return string
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string;
 }

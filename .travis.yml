@@ -24,3 +24,4 @@ script:
   - vendor/bin/infection --threads=$(nproc) --min-msi=100 --min-covered-msi=100 --verbose
   - vendor/bin/phpstan analyse
   - vendor/bin/phploc src --verbose
+  - vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation

@@ -8,8 +8,8 @@ use Aura\Router\Exception\RouteNotFound;
 use Aura\Router\Generator;
 use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
-use Psr\Http\Message\ServerRequestInterface;
 use Aura\Router\Rule\Allows;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class AuraRouter implements RouterInterface
 {
@@ -39,6 +39,79 @@ final class AuraRouter implements RouterInterface
 
         $this->generator = $routerContainer->getGenerator();
         $this->matcher = $routerContainer->getMatcher();
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     *
+     * @return RouteInterface
+     */
+    public function match(ServerRequestInterface $request): RouteInterface
+    {
+        if (!$auraRoute = $this->matcher->match($request)) {
+            $failedAuraRoute = $this->matcher->getFailedRoute();
+            switch ($failedAuraRoute->failedRule) {
+                case Allows::class:
+                    throw RouterException::createForMethodNotAllowed(
+                        $request->getMethod(),
+                        $failedAuraRoute->allows,
+                        $request->getRequestTarget()
+                    );
+                default:
+                    throw RouterException::createForNotFound($request->getRequestTarget());
+            }
+        }
+
+        /** @var RouteInterface $route */
+        $route = $this->routes[$auraRoute->name];
+
+        return $route->withAttributes($auraRoute->attributes);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param string                 $name
+     * @param string[]               $attributes
+     * @param array                  $queryParams
+     *
+     * @throws RouterException
+     *
+     * @return string
+     */
+    public function generateUrl(
+        ServerRequestInterface $request,
+        string $name,
+        array $attributes = [],
+        array $queryParams = []
+    ): string {
+        $uri = $request->getUri();
+        $requestTarget = $this->generatePath($name, $attributes, $queryParams);
+
+        return $uri->getScheme().'://'.$uri->getAuthority().$requestTarget;
+    }
+
+    /**
+     * @param string   $name
+     * @param string[] $attributes
+     * @param array    $queryParams
+     *
+     * @throws RouterException
+     *
+     * @return string
+     */
+    public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
+    {
+        try {
+            $path = $this->generator->generate($name, $attributes);
+
+            if ([] === $queryParams) {
+                return $path;
+            }
+
+            return $path.'?'.http_build_query($queryParams);
+        } catch (RouteNotFound $exception) {
+            throw RouterException::createForMissingRoute($name);
+        }
     }
 
     /**
@@ -82,79 +155,5 @@ final class AuraRouter implements RouterInterface
         }
 
         return $routerContainer;
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return RouteInterface
-     */
-    public function match(ServerRequestInterface $request): RouteInterface
-    {
-        if (!$auraRoute = $this->matcher->match($request)) {
-            $failedAuraRoute = $this->matcher->getFailedRoute();
-            switch ($failedAuraRoute->failedRule) {
-                case Allows::class:
-                    throw RouterException::createForMethodNotAllowed(
-                        $request->getMethod(),
-                        $failedAuraRoute->allows,
-                        $request->getRequestTarget()
-                    );
-                default:
-                    throw RouterException::createForNotFound($request->getRequestTarget());
-            }
-        }
-
-        /** @var RouteInterface $route */
-        $route = $this->routes[$auraRoute->name];
-        $route = $route->withAttributes($auraRoute->attributes);
-
-        return $route;
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param string                 $name
-     * @param string[]               $attributes
-     * @param array                  $queryParams
-     *
-     * @return string
-     *
-     * @throws RouterException
-     */
-    public function generateUrl(
-        ServerRequestInterface $request,
-        string $name,
-        array $attributes = [],
-        array $queryParams = []
-    ): string {
-        $uri = $request->getUri();
-        $requestTarget = $this->generatePath($name, $attributes, $queryParams);
-
-        return $uri->getScheme().'://'.$uri->getAuthority().$requestTarget;
-    }
-
-    /**
-     * @param string   $name
-     * @param string[] $attributes
-     * @param array    $queryParams
-     *
-     * @return string
-     *
-     * @throws RouterException
-     */
-    public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
-    {
-        try {
-            $path = $this->generator->generate($name, $attributes);
-
-            if ([] === $queryParams) {
-                return $path;
-            }
-
-            return $path.'?'.http_build_query($queryParams);
-        } catch (RouteNotFound $exception) {
-            throw RouterException::createForMissingRoute($name);
-        }
     }
 }

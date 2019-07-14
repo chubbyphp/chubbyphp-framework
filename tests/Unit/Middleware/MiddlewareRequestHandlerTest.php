@@ -16,6 +16,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * @covers \Chubbyphp\Framework\Middleware\MiddlewareRequestHandler
+ *
+ * @internal
  */
 final class MiddlewareRequestHandlerTest extends TestCase
 {

@@ -58,14 +58,6 @@ final class Application implements RequestHandlerInterface
     }
 
     /**
-     * @param MiddlewareInterface $middleware
-     */
-    private function addMiddleware(MiddlewareInterface $middleware): void
-    {
-        $this->middlewares[] = $middleware;
-    }
-
-    /**
      * @param ServerRequestInterface $request
      *
      * @return ResponseInterface
@@ -90,34 +82,9 @@ final class Application implements RequestHandlerInterface
     }
 
     /**
-     * @param ServerRequestInterface $request
-     *
-     * @return ResponseInterface
-     */
-    private function routeAndDispatch(ServerRequestInterface $request): ResponseInterface
-    {
-        try {
-            $route = $this->router->match($request);
-        } catch (RouterException $routeException) {
-            return $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
-        }
-
-        $request = $request->withAttribute('route', $route);
-        foreach ($route->getAttributes() as $attribute => $value) {
-            $request = $request->withAttribute($attribute, $value);
-        }
-
-        return $this->middlewareDispatcher->dispatch(
-            $route->getMiddlewares(),
-            $route->getRequestHandler(),
-            $request
-        );
-    }
-
-    /**
      * @param ResponseInterface $response
      */
-    public function send(ResponseInterface $response)
+    public function send(ResponseInterface $response): void
     {
         $statusCode = $response->getStatusCode();
 
@@ -143,5 +110,38 @@ final class Application implements RequestHandlerInterface
         while (!$body->eof()) {
             echo $body->read(256);
         }
+    }
+
+    /**
+     * @param MiddlewareInterface $middleware
+     */
+    private function addMiddleware(MiddlewareInterface $middleware): void
+    {
+        $this->middlewares[] = $middleware;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     *
+     * @return ResponseInterface
+     */
+    private function routeAndDispatch(ServerRequestInterface $request): ResponseInterface
+    {
+        try {
+            $route = $this->router->match($request);
+        } catch (RouterException $routeException) {
+            return $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
+        }
+
+        $request = $request->withAttribute('route', $route);
+        foreach ($route->getAttributes() as $attribute => $value) {
+            $request = $request->withAttribute($attribute, $value);
+        }
+
+        return $this->middlewareDispatcher->dispatch(
+            $route->getMiddlewares(),
+            $route->getRequestHandler(),
+            $request
+        );
     }
 }

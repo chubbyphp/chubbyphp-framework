@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Unit\Router;
 
+use Aura\Router\Route;
 use Chubbyphp\Framework\Router\AuraRouter;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterException;
@@ -13,10 +14,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Aura\Router\Route;
 
 /**
  * @covers \Chubbyphp\Framework\Router\AuraRouter
+ *
+ * @internal
  */
 final class AuraRouterTest extends TestCase
 {

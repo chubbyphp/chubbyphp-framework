@@ -140,7 +140,8 @@ final class Group implements GroupInterface
             $route->getName(),
             $route->getRequestHandler()
         )
-        ->pathOptions(array_merge_recursive($this->pathOptions, $route->getPathOptions()))
-        ->middlewares(array_merge($this->middlewares, $route->getMiddlewares()));
+            ->pathOptions(array_merge_recursive($this->pathOptions, $route->getPathOptions()))
+            ->middlewares(array_merge($this->middlewares, $route->getMiddlewares()))
+        ;
     }
 }

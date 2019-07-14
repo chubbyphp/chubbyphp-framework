@@ -16,6 +16,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * @covers \Chubbyphp\Framework\RequestHandler\LazyRequestHandler
+ *
+ * @internal
  */
 final class LazyRequestHandlerTest extends TestCase
 {

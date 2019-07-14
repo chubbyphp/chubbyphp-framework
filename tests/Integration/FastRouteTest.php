@@ -18,6 +18,8 @@ use Zend\Diactoros\ServerRequest;
 
 /**
  * @coversNothing
+ *
+ * @internal
  */
 final class FastRouteTest extends TestCase
 {
@@ -134,7 +136,7 @@ final class FastRouteTest extends TestCase
         $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-            function () {
+            function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
         ));

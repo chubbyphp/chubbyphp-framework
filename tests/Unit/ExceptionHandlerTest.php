@@ -19,6 +19,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Chubbyphp\Framework\ExceptionHandler
+ *
+ * @internal
  */
 final class ExceptionHandlerTest extends TestCase
 {
@@ -245,7 +247,7 @@ EOT;
         $logger = $this->getMockByCalls(LoggerInterface::class, [
             Call::create('error')->with(
                 'Exception',
-                new ArgumentCallback(function (array $context) {
+                new ArgumentCallback(function (array $context): void {
                     self::assertArrayHasKey('exceptions', $context);
 
                     $exceptions = $context['exceptions'];
@@ -360,7 +362,7 @@ EOT;
         /** @var StreamInterface|MockObject $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')
-                ->with(new ArgumentCallback(function (string $html) {
+                ->with(new ArgumentCallback(function (string $html): void {
                     self::assertStringContainsString(
                         'A website error has occurred. Sorry for the temporary inconvenience.',
                         $html
@@ -394,7 +396,7 @@ EOT;
         $logger = $this->getMockByCalls(LoggerInterface::class, [
             Call::create('error')->with(
                 'Exception',
-                new ArgumentCallback(function (array $context) {
+                new ArgumentCallback(function (array $context): void {
                     self::assertArrayHasKey('exceptions', $context);
 
                     $exceptions = $context['exceptions'];

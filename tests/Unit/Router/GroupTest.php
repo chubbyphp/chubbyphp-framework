@@ -15,19 +15,21 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * @covers \Chubbyphp\Framework\Router\Group
+ *
+ * @internal
  */
 final class GroupTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $group = Group::create('');
 
         self::assertSame([], $group->getRoutes());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         /** @var MiddlewareInterface|MockObject $middleware1 */
         $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);

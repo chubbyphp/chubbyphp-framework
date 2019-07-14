@@ -17,6 +17,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * @covers \Chubbyphp\Framework\Middleware\LazyMiddleware
+ *
+ * @internal
  */
 final class LazyMiddlewareTest extends TestCase
 {
