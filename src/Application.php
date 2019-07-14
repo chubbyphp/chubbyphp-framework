@@ -73,31 +73,45 @@ final class Application implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
+            if ([] === $this->middlewares) {
+                return $this->routeAndDispatch($request);
+            }
+
             return $this->middlewareDispatcher->dispatch(
                 $this->middlewares,
                 new CallbackRequestHandler(function (ServerRequestInterface $request) {
-                    try {
-                        $route = $this->router->match($request);
-                    } catch (RouterException $routeException) {
-                        return $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
-                    }
-
-                    $request = $request->withAttribute('route', $route);
-                    foreach ($route->getAttributes() as $attribute => $value) {
-                        $request = $request->withAttribute($attribute, $value);
-                    }
-
-                    return $this->middlewareDispatcher->dispatch(
-                        $route->getMiddlewares(),
-                        $route->getRequestHandler(),
-                        $request
-                    );
+                    return $this->routeAndDispatch($request);
                 }),
                 $request
             );
         } catch (\Throwable $exception) {
             return $this->exceptionHandler->createExceptionResponse($request, $exception);
         }
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     *
+     * @return ResponseInterface
+     */
+    private function routeAndDispatch(ServerRequestInterface $request): ResponseInterface
+    {
+        try {
+            $route = $this->router->match($request);
+        } catch (RouterException $routeException) {
+            return $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
+        }
+
+        $request = $request->withAttribute('route', $route);
+        foreach ($route->getAttributes() as $attribute => $value) {
+            $request = $request->withAttribute($attribute, $value);
+        }
+
+        return $this->middlewareDispatcher->dispatch(
+            $route->getMiddlewares(),
+            $route->getRequestHandler(),
+            $request
+        );
     }
 
     /**
