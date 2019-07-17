@@ -30,7 +30,6 @@ return PhpCsFixer\Config::create()
         'php_unit_mock' => true,
         'php_unit_namespaced' => true,
         'php_unit_no_expectation_annotation' => true,
-        'simplified_null_return' => true,
         'ternary_to_null_coalescing' => true,
         'void_return' => true,
     ])
