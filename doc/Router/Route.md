@@ -228,7 +228,7 @@ use Psr\Http\Server\MiddlewareInterface;
 /** @var Route $route */
 $route = ...;
 
-/** @var MiddlewareInterface[] $middlewares */
+/** @var array<MiddlewareInterface> $middlewares */
 $middlewares = $route->getMiddlewares();
 ```
 

@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class AuraRouter implements RouterInterface
 {
     /**
-     * @var RouteInterface[]
+     * @var array<RouteInterface>
      */
     private $routes = [];
 
@@ -29,7 +29,7 @@ final class AuraRouter implements RouterInterface
     private $matcher;
 
     /**
-     * @param RouteInterface[] $routes
+     * @param array<RouteInterface> $routes
      */
     public function __construct(array $routes)
     {
@@ -41,11 +41,6 @@ final class AuraRouter implements RouterInterface
         $this->matcher = $routerContainer->getMatcher();
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return RouteInterface
-     */
     public function match(ServerRequestInterface $request): RouteInterface
     {
         if (!$auraRoute = $this->matcher->match($request)) {
@@ -71,8 +66,8 @@ final class AuraRouter implements RouterInterface
     /**
      * @param ServerRequestInterface $request
      * @param string                 $name
-     * @param string[]               $attributes
-     * @param array                  $queryParams
+     * @param array<string, string>  $attributes
+     * @param array<string, mixed>   $queryParams
      *
      * @throws RouterException
      *
@@ -91,9 +86,9 @@ final class AuraRouter implements RouterInterface
     }
 
     /**
-     * @param string   $name
-     * @param string[] $attributes
-     * @param array    $queryParams
+     * @param string                $name
+     * @param array<string, string> $attributes
+     * @param array<string, mixed>  $queryParams
      *
      * @throws RouterException
      *
@@ -115,9 +110,9 @@ final class AuraRouter implements RouterInterface
     }
 
     /**
-     * @param RouteInterface[] $routes
+     * @param array<RouteInterface> $routes
      *
-     * @return RouteInterface[]
+     * @return array<RouteInterface>
      */
     private function getRoutesByName(array $routes): array
     {
@@ -130,7 +125,7 @@ final class AuraRouter implements RouterInterface
     }
 
     /**
-     * @param RouteInterface[] $routes
+     * @param array<RouteInterface> $routes
      *
      * @return RouterContainer
      */

@@ -9,53 +9,41 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 interface RouteInterface
 {
-    const DELETE = 'DELETE';
-    const GET = 'GET';
-    const HEAD = 'HEAD';
-    const OPTIONS = 'OPTIONS';
-    const PATCH = 'PATCH';
-    const POST = 'POST';
-    const PUT = 'PUT';
+    public const DELETE = 'DELETE';
+    public const GET = 'GET';
+    public const HEAD = 'HEAD';
+    public const OPTIONS = 'OPTIONS';
+    public const PATCH = 'PATCH';
+    public const POST = 'POST';
+    public const PUT = 'PUT';
 
-    /**
-     * @return string
-     */
     public function getName(): string;
 
-    /**
-     * @return string
-     */
     public function getMethod(): string;
 
-    /**
-     * @return string
-     */
     public function getPath(): string;
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getPathOptions(): array;
 
     /**
-     * @return MiddlewareInterface[]
+     * @return array<MiddlewareInterface>
      */
     public function getMiddlewares(): array;
 
-    /**
-     * @return RequestHandlerInterface
-     */
     public function getRequestHandler(): RequestHandlerInterface;
 
     /**
-     * @param array $attributes
+     * @param array<string, string> $attributes
      *
      * @return RouteInterface
      */
     public function withAttributes(array $attributes): RouteInterface;
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     public function getAttributes(): array;
 }

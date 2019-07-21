@@ -6,14 +6,6 @@ namespace Chubbyphp\Framework;
 
 final class ErrorHandler
 {
-    /**
-     * @param int    $severity
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     *
-     * @return bool
-     */
     public static function handle(
         int $severity,
         string $message,

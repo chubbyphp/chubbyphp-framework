@@ -22,22 +22,12 @@ final class LazyMiddleware implements MiddlewareInterface
      */
     private $id;
 
-    /**
-     * @param ContainerInterface $container
-     * @param string             $id
-     */
     public function __construct(ContainerInterface $container, string $id)
     {
         $this->container = $container;
         $this->id = $id;
     }
 
-    /**
-     * @param ServerRequestInterface  $request
-     * @param RequestHandlerInterface $handler
-     *
-     * @return ResponseInterface
-     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $middleware = $this->container->get($this->id);

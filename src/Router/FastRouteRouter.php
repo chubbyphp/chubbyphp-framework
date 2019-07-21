@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class FastRouteRouter implements RouterInterface
 {
     /**
-     * @var RouteInterface[]
+     * @var array<RouteInterface>
      */
     private $routes;
 
@@ -28,21 +28,16 @@ final class FastRouteRouter implements RouterInterface
     private $routeParser;
 
     /**
-     * @param RouteInterface[] $routes
-     * @param string|null      $cacheFile
+     * @param array<RouteInterface> $routes
+     * @param string|null           $cacheFile
      */
-    public function __construct(array $routes, string $cacheFile = null)
+    public function __construct(array $routes, ?string $cacheFile = null)
     {
         $this->routes = $this->getRoutesByName($routes);
         $this->dispatcher = $this->getDispatcher($routes, $cacheFile);
         $this->routeParser = new RouteParser();
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return RouteInterface
-     */
     public function match(ServerRequestInterface $request): RouteInterface
     {
         $method = $request->getMethod();
@@ -71,8 +66,8 @@ final class FastRouteRouter implements RouterInterface
     /**
      * @param ServerRequestInterface $request
      * @param string                 $name
-     * @param string[]               $attributes
-     * @param array                  $queryParams
+     * @param array<string, string>  $attributes
+     * @param array<string, mixed>   $queryParams
      *
      * @throws RouterException
      *
@@ -91,9 +86,9 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param string   $name
-     * @param string[] $attributes
-     * @param array    $queryParams
+     * @param string                $name
+     * @param array<string, string> $attributes
+     * @param array<string, mixed>  $queryParams
      *
      * @throws RouterException
      *
@@ -126,9 +121,9 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param RouteInterface[] $routes
+     * @param array<RouteInterface> $routes
      *
-     * @return RouteInterface[]
+     * @return array<RouteInterface>
      */
     private function getRoutesByName(array $routes): array
     {
@@ -141,12 +136,12 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param RouteInterface[] $routes
-     * @param string|null      $cacheFile
+     * @param array<RouteInterface> $routes
+     * @param string|null           $cacheFile
      *
      * @return Dispatcher
      */
-    private function getDispatcher(array $routes, string $cacheFile = null): Dispatcher
+    private function getDispatcher(array $routes, ?string $cacheFile = null): Dispatcher
     {
         if (null === $cacheFile) {
             return new Dispatcher($this->getRouteCollector($routes)->getData());
@@ -163,7 +158,7 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param RouteInterface[] $routes
+     * @param array<RouteInterface> $routes
      *
      * @return RouteCollector
      */
@@ -177,13 +172,6 @@ final class FastRouteRouter implements RouterInterface
         return $routeCollector;
     }
 
-    /**
-     * @param string $name
-     *
-     * @throws RouterException
-     *
-     * @return RouteInterface
-     */
     private function getRoute(string $name): RouteInterface
     {
         if (!isset($this->routes[$name])) {
@@ -194,8 +182,8 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param array    $routePartSets
-     * @param string[] $attributes
+     * @param array<int, array<int, array|string>> $routePartSets
+     * @param array<string>                        $attributes
      *
      * @return int
      */

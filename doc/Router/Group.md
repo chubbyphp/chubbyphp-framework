@@ -121,7 +121,7 @@ $group = ...;
 $group->group($subGroup);
 $group->route($route3);
 
-/** @var RouteInterface[] $routes */
+/** @var array<RouteInterface> $routes */
 $routes = $group->getRoutes();
 
 $route1 = $routes[0];

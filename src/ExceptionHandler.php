@@ -18,7 +18,7 @@ use Psr\Log\NullLogger;
  */
 final class ExceptionHandler implements ExceptionHandlerInterface
 {
-    const EXCEPTION_HTML = <<<'EOT'
+    public const EXCEPTION_HTML = <<<'EOT'
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -73,27 +73,16 @@ EOT;
      */
     private $debug;
 
-    /**
-     * @param ResponseFactoryInterface $responseFactory
-     * @param bool                     $debug
-     * @param LoggerInterface          $logger
-     */
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         bool $debug = false,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->responseFactory = $responseFactory;
         $this->debug = $debug;
         $this->logger = $logger ?? new NullLogger();
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param RouterException        $routeException
-     *
-     * @return ResponseInterface
-     */
     public function createRouterExceptionResponse(
         ServerRequestInterface $request,
         RouterException $routeException
@@ -116,12 +105,6 @@ EOT;
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param \Throwable             $exception
-     *
-     * @return ResponseInterface
-     */
     public function createExceptionResponse(ServerRequestInterface $request, \Throwable $exception): ResponseInterface
     {
         $exceptionsData = ExceptionHelper::toArray($exception);
@@ -131,19 +114,7 @@ EOT;
         $html = '<p>A website error has occurred. Sorry for the temporary inconvenience.</p>';
 
         if ($this->debug) {
-            $html .= '<h2>Details</h2>';
-
-            foreach ($exceptionsData as $exceptionData) {
-                $html .= '<div class="block">';
-                foreach ($exceptionData as $key => $value) {
-                    $html .= sprintf(
-                        '<div><div class="key"><strong>%s</strong></div><div class="value">%s</div></div>',
-                        ucfirst($key),
-                        nl2br((string) $value)
-                    );
-                }
-                $html .= '</div>';
-            }
+            $html .= $this->addDebugToHtml($exceptionsData);
         }
 
         $response = $this->responseFactory->createResponse(500);
@@ -156,5 +127,29 @@ EOT;
         ));
 
         return $response;
+    }
+
+    /**
+     * @param array<array<string, string>> $exceptionsData
+     *
+     * @return string
+     */
+    private function addDebugToHtml(array $exceptionsData): string
+    {
+        $html = '<h2>Details</h2>';
+        foreach ($exceptionsData as $exceptionData) {
+            $html .= '<div class="block">';
+            foreach ($exceptionData as $key => $value) {
+                $html .= sprintf(
+                    '<div><div class="key"><strong>%s</strong></div><div class="value">%s</div></div>',
+                    ucfirst($key),
+                    nl2br((string) $value)
+                );
+            }
+
+            $html .= '</div>';
+        }
+
+        return $html;
     }
 }

@@ -12,9 +12,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 interface MiddlewareDispatcherInterface
 {
     /**
-     * @param MiddlewareInterface[]   $middlewares
-     * @param RequestHandlerInterface $handler
-     * @param ServerRequestInterface  $request
+     * @param array<MiddlewareInterface> $middlewares
+     * @param RequestHandlerInterface    $handler
+     * @param ServerRequestInterface     $request
      *
      * @return ResponseInterface
      */

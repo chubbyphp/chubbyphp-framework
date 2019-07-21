@@ -10,22 +10,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface ExceptionHandlerInterface
 {
-    /**
-     * @param ServerRequestInterface $request
-     * @param RouterException        $routeException
-     *
-     * @return ResponseInterface
-     */
     public function createRouterExceptionResponse(
         ServerRequestInterface $request,
         RouterException $routeException
     ): ResponseInterface;
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param \Throwable             $exception
-     *
-     * @return ResponseInterface
-     */
     public function createExceptionResponse(ServerRequestInterface $request, \Throwable $exception): ResponseInterface;
 }

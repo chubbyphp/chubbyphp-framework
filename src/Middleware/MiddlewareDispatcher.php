@@ -12,9 +12,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
 {
     /**
-     * @param MiddlewareInterface[]   $middlewares
-     * @param RequestHandlerInterface $handler
-     * @param ServerRequestInterface  $request
+     * @param array<MiddlewareInterface> $middlewares
+     * @param RequestHandlerInterface    $handler
+     * @param ServerRequestInterface     $request
      *
      * @return ResponseInterface
      */
@@ -42,7 +42,7 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
     }
 
     /**
-     * @param MiddlewareInterface[] $middlewares
+     * @param array<MiddlewareInterface> $middlewares
      */
     private function validateMiddlewares(array $middlewares): void
     {

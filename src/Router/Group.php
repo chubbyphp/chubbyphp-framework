@@ -14,40 +14,32 @@ final class Group implements GroupInterface
     private $path;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $pathOptions = [];
 
     /**
-     * @var MiddlewareInterface[]
+     * @var array<MiddlewareInterface>
      */
     private $middlewares = [];
 
     /**
-     * @var GroupInterface[]|RouteInterface[]
+     * @var array<GroupInterface>|array<RouteInterface>
      */
     private $children = [];
 
-    /**
-     * @param string $path
-     */
     private function __construct(string $path)
     {
         $this->path = $path;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return self
-     */
     public static function create(string $path): self
     {
         return new self($path);
     }
 
     /**
-     * @param array $pathOptions
+     * @param array<string, mixed> $pathOptions
      *
      * @return self
      */
@@ -59,7 +51,7 @@ final class Group implements GroupInterface
     }
 
     /**
-     * @param MiddlewareInterface[] $middlewares
+     * @param array<MiddlewareInterface> $middlewares
      *
      * @return self
      */
@@ -72,11 +64,6 @@ final class Group implements GroupInterface
         return $this;
     }
 
-    /**
-     * @param MiddlewareInterface $middleware
-     *
-     * @return self
-     */
     public function middleware(MiddlewareInterface $middleware): self
     {
         $this->middlewares[] = $middleware;
@@ -84,11 +71,6 @@ final class Group implements GroupInterface
         return $this;
     }
 
-    /**
-     * @param Group $group
-     *
-     * @return self
-     */
     public function group(Group $group): self
     {
         $this->children[] = $group;
@@ -96,11 +78,6 @@ final class Group implements GroupInterface
         return $this;
     }
 
-    /**
-     * @param RouteInterface $route
-     *
-     * @return self
-     */
     public function route(RouteInterface $route): self
     {
         $this->children[] = $route;
@@ -109,7 +86,7 @@ final class Group implements GroupInterface
     }
 
     /**
-     * @return RouteInterface[]
+     * @return array<RouteInterface>
      */
     public function getRoutes(): array
     {
@@ -127,11 +104,6 @@ final class Group implements GroupInterface
         return $routes;
     }
 
-    /**
-     * @param RouteInterface $route
-     *
-     * @return RouteInterface
-     */
     private function createRoute(RouteInterface $route): RouteInterface
     {
         return Route::create(

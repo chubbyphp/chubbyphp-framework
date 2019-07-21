@@ -16,19 +16,11 @@ final class RouterException extends \RuntimeException
      */
     private $title;
 
-    /**
-     * @param mixed ...$args
-     */
-    private function __construct(...$args)
+    private function __construct(string $message, int $code, ?\Throwable $previous = null)
     {
-        parent::__construct(...$args);
+        parent::__construct($message, $code, $previous);
     }
 
-    /**
-     * @param string $path
-     *
-     * @return self
-     */
     public static function createForNotFound(string $path): self
     {
         $self = new self(sprintf(
@@ -43,9 +35,9 @@ final class RouterException extends \RuntimeException
     }
 
     /**
-     * @param string $method
-     * @param array  $methods
-     * @param string $path
+     * @param string        $method
+     * @param array<string> $methods
+     * @param string        $path
      *
      * @return self
      */
@@ -63,27 +55,16 @@ final class RouterException extends \RuntimeException
         return $self;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return self
-     */
     public static function createForMissingRoute(string $name): self
     {
         return new self(sprintf('Missing route: "%s"', $name), 1);
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;

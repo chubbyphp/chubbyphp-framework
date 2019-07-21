@@ -21,21 +21,12 @@ final class LazyRequestHandler implements RequestHandlerInterface
      */
     private $id;
 
-    /**
-     * @param ContainerInterface $container
-     * @param string             $id
-     */
     public function __construct(ContainerInterface $container, string $id)
     {
         $this->container = $container;
         $this->id = $id;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return ResponseInterface
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $requestHandler = $this->container->get($this->id);

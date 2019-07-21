@@ -31,7 +31,7 @@ final class Application implements RequestHandlerInterface
     private $exceptionHandler;
 
     /**
-     * @var MiddlewareInterface[]
+     * @var array<MiddlewareInterface>
      */
     private $middlewares;
 
@@ -39,7 +39,7 @@ final class Application implements RequestHandlerInterface
      * @param RouterInterface               $router
      * @param MiddlewareDispatcherInterface $middlewareDispatcher
      * @param ExceptionHandlerInterface     $exceptionHandler
-     * @param MiddlewareInterface[]         $middlewares
+     * @param array<MiddlewareInterface>    $middlewares
      */
     public function __construct(
         RouterInterface $router,
@@ -57,11 +57,6 @@ final class Application implements RequestHandlerInterface
         }
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return ResponseInterface
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
@@ -81,9 +76,6 @@ final class Application implements RequestHandlerInterface
         }
     }
 
-    /**
-     * @param ResponseInterface $response
-     */
     public function send(ResponseInterface $response): void
     {
         $statusCode = $response->getStatusCode();
@@ -112,19 +104,11 @@ final class Application implements RequestHandlerInterface
         }
     }
 
-    /**
-     * @param MiddlewareInterface $middleware
-     */
     private function addMiddleware(MiddlewareInterface $middleware): void
     {
         $this->middlewares[] = $middleware;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return ResponseInterface
-     */
     private function routeAndDispatch(ServerRequestInterface $request): ResponseInterface
     {
         try {

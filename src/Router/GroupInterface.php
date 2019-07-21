@@ -7,7 +7,7 @@ namespace Chubbyphp\Framework\Router;
 interface GroupInterface
 {
     /**
-     * @return RouteInterface[]
+     * @return array<RouteInterface>
      */
     public function getRoutes(): array;
 }

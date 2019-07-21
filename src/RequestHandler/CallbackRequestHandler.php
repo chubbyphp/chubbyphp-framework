@@ -15,19 +15,11 @@ final class CallbackRequestHandler implements RequestHandlerInterface
      */
     private $callback;
 
-    /**
-     * @param callable $callback
-     */
     public function __construct(callable $callback)
     {
         $this->callback = $callback;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return ResponseInterface
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $callback = $this->callback;

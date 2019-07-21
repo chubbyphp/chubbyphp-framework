@@ -8,18 +8,13 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface RouterInterface
 {
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return RouteInterface
-     */
     public function match(ServerRequestInterface $request): RouteInterface;
 
     /**
      * @param ServerRequestInterface $request
      * @param string                 $name
-     * @param string[]               $attributes
-     * @param array                  $queryParams
+     * @param array<string, string>  $attributes
+     * @param array<string, mixed>   $queryParams
      *
      * @throws RouterException
      *
@@ -33,9 +28,9 @@ interface RouterInterface
     ): string;
 
     /**
-     * @param string   $name
-     * @param string[] $attributes
-     * @param array    $queryParams
+     * @param string                $name
+     * @param array<string, string> $attributes
+     * @param array<string, mixed>  $queryParams
      *
      * @throws RouterException
      *
