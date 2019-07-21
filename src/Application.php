@@ -117,7 +117,9 @@ final class Application implements RequestHandlerInterface
             return $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
         }
 
+        // @deprecated remove this line in v2
         $request = $request->withAttribute('route', $route);
+
         foreach ($route->getAttributes() as $attribute => $value) {
             $request = $request->withAttribute($attribute, $value);
         }

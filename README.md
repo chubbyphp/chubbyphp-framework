@@ -44,6 +44,10 @@ the best combination of flexibility and simplicity by using standards.
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][40].
 
+**IMPORTANT**: Please do not use the attribute 'route' within the $request, it will be dropped in version 2.
+One of the goals of this framework is, that you're code is not depending on it.
+If you need the route then use the router explicit as a dependency (if its not preventable).
+
 ### Aura.Router
 
 ```bash
