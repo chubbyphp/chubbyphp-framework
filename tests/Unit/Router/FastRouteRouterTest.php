@@ -190,8 +190,13 @@ final class FastRouteRouterTest extends TestCase
             $router->generateUrl($request, 'user', ['id' => 1, 'name' => 'sample'])
         );
         self::assertSame(
-            'https://user:password@localhost/user/1/sample?key=value',
-            $router->generateUrl($request, 'user', ['id' => 1, 'name' => 'sample'], ['key' => 'value'])
+            'https://user:password@localhost/user/1/sample?key1=value1&key2=value2',
+            $router->generateUrl(
+                $request,
+                'user',
+                ['id' => 1, 'name' => 'sample'],
+                ['key1' => 'value1', 'key2' => 'value2']
+            )
         );
     }
 
@@ -227,8 +232,12 @@ final class FastRouteRouterTest extends TestCase
         self::assertSame('/user/1?key=value', $router->generatePath('user', ['id' => 1], ['key' => 'value']));
         self::assertSame('/user/1/sample', $router->generatePath('user', ['id' => 1, 'name' => 'sample']));
         self::assertSame(
-            '/user/1/sample?key=value',
-            $router->generatePath('user', ['id' => 1, 'name' => 'sample'], ['key' => 'value'])
+            '/user/1/sample?key1=value1&key2=value2',
+            $router->generatePath(
+                'user',
+                ['id' => 1, 'name' => 'sample'],
+                ['key1' => 'value1', 'key2' => 'value2']
+            )
         );
     }
 }

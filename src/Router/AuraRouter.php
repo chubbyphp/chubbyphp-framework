@@ -103,7 +103,7 @@ final class AuraRouter implements RouterInterface
                 return $path;
             }
 
-            return $path.'?'.http_build_query($queryParams);
+            return $path.'?'.http_build_query($queryParams, '', '&');
         } catch (RouteNotFound $exception) {
             throw RouterException::createForMissingRoute($name);
         }
