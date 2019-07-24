@@ -117,7 +117,7 @@ final class FastRouteRouter implements RouterInterface
             return $path;
         }
 
-        return $path.'?'.http_build_query($queryParams, '', '&');
+        return $path.'?'.http_build_query($queryParams);
     }
 
     /**
