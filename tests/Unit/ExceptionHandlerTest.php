@@ -368,14 +368,19 @@ EOT;
                         $html
                     );
                     self::assertStringContainsString('div class="block"', $html);
-                    self::assertStringContainsString('div class="key"', $html);
-                    self::assertStringContainsString('div class="value"', $html);
-                    self::assertStringContainsString('RuntimeException', $html);
-                    self::assertStringContainsString('runtime exception', $html);
-                    self::assertStringContainsString('418', $html);
-                    self::assertStringContainsString('LogicException', $html);
-                    self::assertStringContainsString('logic exception', $html);
-                    self::assertStringContainsString('42', $html);
+                    self::assertStringContainsString('<div class="key"><strong>Class</strong></div>', $html);
+                    self::assertStringContainsString('<div class="value">RuntimeException</div>', $html);
+                    self::assertStringContainsString('<div class="key"><strong>Message</strong></div>', $html);
+                    self::assertStringContainsString('<div class="value">runtime exception</div>', $html);
+                    self::assertStringContainsString('<div class="key"><strong>Code</strong></div>', $html);
+                    self::assertStringContainsString('<div class="value">418</div>', $html);
+
+                    self::assertStringContainsString('<div class="key"><strong>Class</strong></div>', $html);
+                    self::assertStringContainsString('<div class="value">LogicException</div>', $html);
+                    self::assertStringContainsString('<div class="key"><strong>Message</strong></div>', $html);
+                    self::assertStringContainsString('<div class="value">logic exception</div>', $html);
+                    self::assertStringContainsString('<div class="key"><strong>Code</strong></div>', $html);
+                    self::assertStringContainsString('<div class="value">42</div>', $html);
                 })),
         ]);
 
