@@ -96,6 +96,7 @@ namespace Chubbyphp\Tests\Framework\Unit
 
             /** @var ServerRequestInterface|MockObject $request */
             $request = $this->getMockByCalls(ServerRequestInterface::class, [
+                // @deprecated remove this line in v2
                 Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
                 Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
             ]);
@@ -145,6 +146,7 @@ namespace Chubbyphp\Tests\Framework\Unit
 
             /** @var ServerRequestInterface|MockObject $request */
             $request = $this->getMockByCalls(ServerRequestInterface::class, [
+                // @deprecated remove this line in v2
                 Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
                 Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
             ]);
@@ -285,6 +287,7 @@ namespace Chubbyphp\Tests\Framework\Unit
 
             /** @var ServerRequestInterface|MockObject $request */
             $request = $this->getMockByCalls(ServerRequestInterface::class, [
+                // @deprecated remove this line in v2
                 Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
                 Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
             ]);
@@ -338,6 +341,7 @@ namespace Chubbyphp\Tests\Framework\Unit
 
             /** @var ServerRequestInterface|MockObject $request */
             $request = $this->getMockByCalls(ServerRequestInterface::class, [
+                // @deprecated remove this line in v2
                 Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
                 Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
             ]);
