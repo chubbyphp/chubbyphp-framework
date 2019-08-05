@@ -31,7 +31,8 @@ the best combination of flexibility and simplicity by using standards.
  * [psr/http-factory][21]: ^1.0.1
  * [psr/http-message-implementation][22]: ^1.0
  * [psr/http-message][23]: ^1.0.1
- * [psr/http-server-middleware][24]: ^1.0.1
+ * [psr/http-server-handler][24]: ^1.0.1
+ * [psr/http-server-middleware][25]: ^1.0.1
  * [psr/log][25]: ^1.1
 
 ## Suggest
@@ -211,8 +212,9 @@ Dominik Zogg 2019
 [21]: https://packagist.org/packages/psr/http-factory
 [22]: https://packagist.org/packages/psr/http-message-implementation
 [23]: https://packagist.org/packages/psr/http-message
-[24]: https://packagist.org/packages/psr/http-server-middleware
-[25]: https://packagist.org/packages/psr/log
+[24]: https://packagist.org/packages/psr/http-server-handler
+[25]: https://packagist.org/packages/psr/http-server-middleware
+[26]: https://packagist.org/packages/psr/log
 
 [30]: https://packagist.org/packages/aura/router
 [31]: https://packagist.org/packages/nikic/fast-route
