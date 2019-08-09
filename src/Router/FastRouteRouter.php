@@ -28,14 +28,21 @@ final class FastRouteRouter implements RouterInterface
     private $routeParser;
 
     /**
+     * @var string
+     */
+    private $basePath;
+
+    /**
      * @param array<RouteInterface> $routes
      * @param string|null           $cacheFile
+     * @param string|null           $basePath
      */
-    public function __construct(array $routes, ?string $cacheFile = null)
+    public function __construct(array $routes, ?string $cacheFile = null, string $basePath = '')
     {
         $this->routes = $this->getRoutesByName($routes);
         $this->dispatcher = $this->getDispatcher($routes, $cacheFile);
         $this->routeParser = new RouteParser();
+        $this->basePath = $basePath;
     }
 
     public function match(ServerRequestInterface $request): RouteInterface
@@ -114,10 +121,10 @@ final class FastRouteRouter implements RouterInterface
         $path = implode('', $pathParts);
 
         if ([] === $queryParams) {
-            return $path;
+            return $this->basePath.$path;
         }
 
-        return $path.'?'.http_build_query($queryParams);
+        return $this->basePath.$path.'?'.http_build_query($queryParams);
     }
 
     /**

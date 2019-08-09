@@ -54,7 +54,7 @@ $route = Route::get('/', 'index', new CallbackRequestHandler(
     }
 ));
 
-$router = new FastRouteRouter([$route]);
+$router = new FastRouteRouter([$route]/*, '/path/to/cache', '/path/to/directory'*/);
 
 /** @var string $url */
 $url = $router->generateUrl($request, 'index', [], []);
@@ -83,7 +83,7 @@ $route = Route::get('/', 'index', new CallbackRequestHandler(
     }
 ));
 
-$router = new FastRouteRouter([$route]);
+$router = new FastRouteRouter([$route]/*, '/path/to/cache', '/path/to/directory'*/);
 
 /** @var string $path */
 $path = $router->generatePath('index', [], []);

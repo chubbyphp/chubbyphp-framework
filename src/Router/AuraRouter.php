@@ -29,9 +29,15 @@ final class AuraRouter implements RouterInterface
     private $matcher;
 
     /**
-     * @param array<RouteInterface> $routes
+     * @var string
      */
-    public function __construct(array $routes)
+    private $basePath;
+
+    /**
+     * @param array<RouteInterface> $routes
+     * @param string                $basePath
+     */
+    public function __construct(array $routes, string $basePath = '')
     {
         $this->routes = $this->getRoutesByName($routes);
 
@@ -39,6 +45,7 @@ final class AuraRouter implements RouterInterface
 
         $this->generator = $routerContainer->getGenerator();
         $this->matcher = $routerContainer->getMatcher();
+        $this->basePath = $basePath;
     }
 
     public function match(ServerRequestInterface $request): RouteInterface
@@ -100,10 +107,10 @@ final class AuraRouter implements RouterInterface
             $path = $this->generator->generate($name, $attributes);
 
             if ([] === $queryParams) {
-                return $path;
+                return $this->basePath.$path;
             }
 
-            return $path.'?'.http_build_query($queryParams);
+            return $this->basePath.$path.'?'.http_build_query($queryParams);
         } catch (RouteNotFound $exception) {
             throw RouterException::createForMissingRoute($name);
         }
