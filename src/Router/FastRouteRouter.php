@@ -35,7 +35,7 @@ final class FastRouteRouter implements RouterInterface
     /**
      * @param array<RouteInterface> $routes
      * @param string|null           $cacheFile
-     * @param string|null           $basePath
+     * @param string                $basePath
      */
     public function __construct(array $routes, ?string $cacheFile = null, string $basePath = '')
     {

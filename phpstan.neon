@@ -4,8 +4,5 @@ parameters:
         - src
     ignoreErrors:
         -
-            message: '#Method Chubbyphp\\Framework\\Router\\AuraRouter::generatePath\(\) should return string but returns string\|false#'
-            path: %currentWorkingDirectory%/src/Router/AuraRouter.php
-        -
             message: '#Undefined variable: \$routeIndex#'
             path: %currentWorkingDirectory%/src/Router/FastRouteRouter.php
