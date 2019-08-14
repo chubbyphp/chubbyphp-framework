@@ -82,7 +82,7 @@ EOT;
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        $routeException = RouterException::createForNotFound('/');
+        $routerException = RouterException::createForNotFound('/');
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
@@ -100,7 +100,7 @@ EOT;
 
         $responseHandler = new ExceptionHandler($responseFactory, false, $logger);
 
-        self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routeException));
+        self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routerException));
     }
 
     public function testCreateRouterExceptionResponseInDebugMode(): void
@@ -159,7 +159,7 @@ EOT;
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        $routeException = RouterException::createForNotFound('/');
+        $routerException = RouterException::createForNotFound('/');
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
@@ -177,7 +177,7 @@ EOT;
 
         $responseHandler = new ExceptionHandler($responseFactory, false, $logger);
 
-        self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routeException));
+        self::assertSame($response, $responseHandler->createRouterExceptionResponse($request, $routerException));
     }
 
     public function testCreateExceptionResponse(): void

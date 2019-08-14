@@ -12,7 +12,7 @@ interface ExceptionHandlerInterface
 {
     public function createRouterExceptionResponse(
         ServerRequestInterface $request,
-        RouterException $routeException
+        RouterException $routerException
     ): ResponseInterface;
 
     public function createExceptionResponse(ServerRequestInterface $request, \Throwable $exception): ResponseInterface;

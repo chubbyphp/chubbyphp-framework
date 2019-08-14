@@ -113,8 +113,8 @@ final class Application implements RequestHandlerInterface
     {
         try {
             $route = $this->router->match($request);
-        } catch (RouterException $routeException) {
-            return $this->exceptionHandler->createRouterExceptionResponse($request, $routeException);
+        } catch (RouterException $routerException) {
+            return $this->exceptionHandler->createRouterExceptionResponse($request, $routerException);
         }
 
         // @deprecated remove this line in v2

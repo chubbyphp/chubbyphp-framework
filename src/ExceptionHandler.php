@@ -85,21 +85,21 @@ EOT;
 
     public function createRouterExceptionResponse(
         ServerRequestInterface $request,
-        RouterException $routeException
+        RouterException $routerException
     ): ResponseInterface {
         $this->logger->info('Route exception', [
-            'title' => $routeException->getTitle(),
-            'message' => $routeException->getMessage(),
-            'code' => $routeException->getCode(),
+            'title' => $routerException->getTitle(),
+            'message' => $routerException->getMessage(),
+            'code' => $routerException->getCode(),
         ]);
 
-        $response = $this->responseFactory->createResponse($routeException->getCode());
+        $response = $this->responseFactory->createResponse($routerException->getCode());
         $response = $response->withHeader('Content-Type', 'text/html');
         $response->getBody()->write(sprintf(
             self::EXCEPTION_HTML,
-            $routeException->getTitle(),
-            $routeException->getTitle(),
-            '<p>'.$routeException->getMessage().'</p>'
+            $routerException->getTitle(),
+            $routerException->getTitle(),
+            '<p>'.$routerException->getMessage().'</p>'
         ));
 
         return $response;

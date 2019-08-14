@@ -19,13 +19,13 @@ $responseFactory = ...;
 /** @var ServerRequestInterface $request */
 $request = ...;
 
-/** @var RouterException $routeException */
-$routeException = ...;
+/** @var RouterException $routerException */
+$routerException = ...;
 
 $exceptionResponseHandler = new ExceptionHandler($responseFactory);
 
 /** @var ResponseInterface $response */
-$response = $exceptionResponseHandler->createRouterExceptionResponse($request, $routeException);
+$response = $exceptionResponseHandler->createRouterExceptionResponse($request, $routerException);
 ```
 
 ### createExceptionResponse
