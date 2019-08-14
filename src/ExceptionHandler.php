@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 /**
- * @copyright Parts of this code are copied by the Slim Framework
+ * @copyright Parts of this code are copied from the Slim Framework
  *
  * @see https://github.com/slimphp/Slim/blob/3.x/Slim/Handlers/Error.php
  */
