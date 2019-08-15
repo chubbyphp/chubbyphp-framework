@@ -2,23 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Framework;
+namespace Chubbyphp\Framework\Middleware;
 
-use Chubbyphp\Framework\Router\RouterException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-/**
- * @copyright Parts of this code are copied from the Slim Framework
- *
- * @see https://github.com/slimphp/Slim/blob/3.x/Slim/Handlers/Error.php
- */
-final class ExceptionHandler implements ExceptionHandlerInterface
+final class ExceptionMiddleware implements MiddlewareInterface
 {
-    public const EXCEPTION_HTML = <<<'EOT'
+    private const HTML = <<<'EOT'
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -52,7 +48,6 @@ final class ExceptionHandler implements ExceptionHandlerInterface
         </style>
     </head>
     <body>
-        <h1>%s</h1>
         %s
     </body>
 </html>
@@ -64,14 +59,14 @@ EOT;
     private $responseFactory;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var bool
      */
     private $debug;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
@@ -83,50 +78,59 @@ EOT;
         $this->logger = $logger ?? new NullLogger();
     }
 
-    public function createRouterExceptionResponse(
-        ServerRequestInterface $request,
-        RouterException $routerException
-    ): ResponseInterface {
-        $this->logger->info('Route exception', [
-            'title' => $routerException->getTitle(),
-            'message' => $routerException->getMessage(),
-            'code' => $routerException->getCode(),
-        ]);
-
-        $response = $this->responseFactory->createResponse($routerException->getCode());
-        $response = $response->withHeader('Content-Type', 'text/html');
-        $response->getBody()->write(sprintf(
-            self::EXCEPTION_HTML,
-            $routerException->getTitle(),
-            $routerException->getTitle(),
-            '<p>'.$routerException->getMessage().'</p>'
-        ));
-
-        return $response;
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        try {
+            return $handler->handle($request);
+        } catch (\Throwable $exception) {
+            return $this->handleException($exception);
+        }
     }
 
-    public function createExceptionResponse(ServerRequestInterface $request, \Throwable $exception): ResponseInterface
+    private function handleException(\Throwable $exception): ResponseInterface
     {
-        $exceptionsData = ExceptionHelper::toArray($exception);
+        $exceptionsData = $this->toExceptionArray($exception);
 
         $this->logger->error('Exception', ['exceptions' => $exceptionsData]);
 
-        $html = '<p>A website error has occurred. Sorry for the temporary inconvenience.</p>';
+        $body = '<h1>Application Error</h1>'
+            .'<p>A website error has occurred. Sorry for the temporary inconvenience.</p>';
 
         if ($this->debug) {
-            $html .= $this->addDebugToHtml($exceptionsData);
+            $body .= $this->addDebugToBody($exceptionsData);
         }
 
         $response = $this->responseFactory->createResponse(500);
         $response = $response->withHeader('Content-Type', 'text/html');
         $response->getBody()->write(sprintf(
-            self::EXCEPTION_HTML,
+            self::HTML,
             'Application Error',
-            'Application Error',
-            $html
+            $body
         ));
 
         return $response;
+    }
+
+    /**
+     * @param \Throwable $exception
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function toExceptionArray(\Throwable $exception): array
+    {
+        $exceptions = [];
+        do {
+            $exceptions[] = [
+                'class' => get_class($exception),
+                'message' => $exception->getMessage(),
+                'code' => $exception->getCode(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => $exception->getTraceAsString(),
+            ];
+        } while ($exception = $exception->getPrevious());
+
+        return $exceptions;
     }
 
     /**
@@ -134,22 +138,22 @@ EOT;
      *
      * @return string
      */
-    private function addDebugToHtml(array $exceptionsData): string
+    private function addDebugToBody(array $exceptionsData): string
     {
-        $html = '<h2>Details</h2>';
+        $body = '<h2>Details</h2>';
         foreach ($exceptionsData as $exceptionData) {
-            $html .= '<div class="block">';
+            $body .= '<div class="block">';
             foreach ($exceptionData as $key => $value) {
-                $html .= sprintf(
+                $body .= sprintf(
                     '<div><div class="key"><strong>%s</strong></div><div class="value">%s</div></div>',
                     ucfirst($key),
                     nl2br((string) $value)
                 );
             }
 
-            $html .= '</div>';
+            $body .= '</div>';
         }
 
-        return $html;
+        return $body;
     }
 }

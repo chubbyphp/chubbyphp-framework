@@ -22,8 +22,6 @@ the best combination of flexibility and simplicity by using standards.
  * [HTTP Handlers (15)][8]
  * [HTTP Factories (17)][9]
 
-![Application workflow](doc/Resources/workflow.png?raw=true "Application workflow")
-
 ## Requirements
 
  * php: ^7.2
@@ -57,14 +55,10 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][40
 
 ## Usage
 
-**IMPORTANT**: Please do not use the attribute 'route' within the $request, it will be dropped in version 2.
-One of the goals of this framework is, that you're code is not depending on it.
-If you need the route then use the router explicit as a dependency (if its not preventable).
-
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^1.2" \
+composer require chubbyphp/chubbyphp-framework "^2.0" \
     aura/router "^3.1" zendframework/zend-diactoros "^2.0"
 ```
 
@@ -77,8 +71,8 @@ namespace App;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\ErrorHandler;
-use Chubbyphp\Framework\ExceptionHandler;
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
+use Chubbyphp\Framework\Middleware\RouterMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\AuraRouter;
 use Chubbyphp\Framework\Router\Route;
@@ -102,11 +96,10 @@ $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
     }
 ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
-$app = new Application(
-    new AuraRouter([$route]),
-    new MiddlewareDispatcher(),
-    new ExceptionHandler($responseFactory, true)
-);
+$app = new Application([
+    new ExceptionMiddleware($responseFactory, true),
+    new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
+]);
 
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ```
@@ -114,7 +107,7 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^1.2" \
+composer require chubbyphp/chubbyphp-framework "^2.0" \
     nikic/fast-route "^1.3" zendframework/zend-diactoros "^2.0"
 ```
 
@@ -127,8 +120,8 @@ namespace App;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\ErrorHandler;
-use Chubbyphp\Framework\ExceptionHandler;
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
+use Chubbyphp\Framework\Middleware\RouterMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\FastRouteRouter;
 use Chubbyphp\Framework\Router\Route;
@@ -152,22 +145,21 @@ $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
     }
 ));
 
-$app = new Application(
-    new FastRouteRouter([$route]),
-    new MiddlewareDispatcher(),
-    new ExceptionHandler($responseFactory, true)
-);
+$app = new Application([
+    new ExceptionMiddleware($responseFactory, true),
+    new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
+]);
+
 
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ```
 
- * [Application][50]
- * [ExceptionHandler][51]
-
 ### Middleware
 
- * [LazyMiddleware][70]
- * [MiddlewareDispatcher][71]
+ * [ExceptionMiddleware][70]
+ * [LazyMiddleware][71]
+ * [MiddlewareDispatcher][72]
+ * [RouterMiddleware][73]
 
 ### RequestHandler
 
@@ -227,11 +219,10 @@ Dominik Zogg 2019
 
 [40]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 
-[50]: doc/Application.md
-[51]: doc/ExceptionHandler.md
-
-[70]: doc/Middleware/LazyMiddleware.md
-[71]: doc/Middleware/MiddlewareDispatcher.md
+[70]: doc/Middleware/ExceptionMiddleware.md
+[71]: doc/Middleware/LazyMiddleware.md
+[72]: doc/Middleware/MiddlewareDispatcher.md
+[73]: doc/Middleware/RouterMiddleware.md
 
 [80]: doc/RequestHandler/CallbackRequestHandler.md
 [81]: doc/RequestHandler/LazyRequestHandler.md

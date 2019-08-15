@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Integration;
 
 use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\ExceptionHandler;
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
+use Chubbyphp\Framework\Middleware\RouterMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\FastRouteRouter;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
+use Chubbyphp\Framework\Router\RouterException;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
@@ -37,11 +38,10 @@ final class FastRouteNyholmPsr7Test extends TestCase
             }
         ));
 
-        $app = new Application(
-            new FastRouteRouter([$route]),
-            new MiddlewareDispatcher(),
-            new ExceptionHandler($psr17Factory, true)
-        );
+        $app = new Application([
+            new ExceptionMiddleware($psr17Factory, true),
+            new RouterMiddleware(new FastRouteRouter([$route]), $psr17Factory),
+        ]);
 
         $request = new ServerRequest(
             RouteInterface::GET,
@@ -68,11 +68,10 @@ final class FastRouteNyholmPsr7Test extends TestCase
             }
         ));
 
-        $app = new Application(
-            new FastRouteRouter([$route]),
-            new MiddlewareDispatcher(),
-            new ExceptionHandler($psr17Factory, true)
-        );
+        $app = new Application([
+            new ExceptionMiddleware($psr17Factory, true),
+            new RouterMiddleware(new FastRouteRouter([$route]), $psr17Factory),
+        ]);
 
         $request = new ServerRequest(
             RouteInterface::GET,
@@ -102,11 +101,10 @@ final class FastRouteNyholmPsr7Test extends TestCase
             }
         ));
 
-        $app = new Application(
-            new FastRouteRouter([$route]),
-            new MiddlewareDispatcher(),
-            new ExceptionHandler($psr17Factory, true)
-        );
+        $app = new Application([
+            new ExceptionMiddleware($psr17Factory, true),
+            new RouterMiddleware(new FastRouteRouter([$route]), $psr17Factory),
+        ]);
 
         $request = new ServerRequest(
             RouteInterface::POST,
@@ -132,11 +130,10 @@ final class FastRouteNyholmPsr7Test extends TestCase
             }
         ));
 
-        $app = new Application(
-            new FastRouteRouter([$route]),
-            new MiddlewareDispatcher(),
-            new ExceptionHandler($psr17Factory, true)
-        );
+        $app = new Application([
+            new ExceptionMiddleware($psr17Factory, true),
+            new RouterMiddleware(new FastRouteRouter([$route]), $psr17Factory),
+        ]);
 
         $request = new ServerRequest(
             RouteInterface::GET,
@@ -151,5 +148,74 @@ final class FastRouteNyholmPsr7Test extends TestCase
 
         self::assertStringContainsString('RuntimeException', $body);
         self::assertStringContainsString('Something went wrong', $body);
+    }
+
+    public function testExceptionWithoutExceptionMiddleware(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Something went wrong');
+
+        $psr17Factory = new Psr17Factory();
+
+        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+            function (): void {
+                throw new \RuntimeException('Something went wrong');
+            }
+        ));
+
+        $app = new Application([
+            new RouterMiddleware(new FastRouteRouter([$route]), $psr17Factory),
+        ]);
+
+        $request = new ServerRequest(
+            RouteInterface::GET,
+            '/hello/test'
+        );
+
+        $app->handle($request);
+    }
+
+    public function testMissingRouterMiddleware(): void
+    {
+        $psr17Factory = new Psr17Factory();
+
+        $app = new Application([
+            new ExceptionMiddleware($psr17Factory, true),
+        ]);
+
+        $request = new ServerRequest(
+            RouteInterface::GET,
+            '/hello/test'
+        );
+
+        $response = $app->handle($request);
+
+        self::assertSame(500, $response->getStatusCode());
+
+        $body = (string) $response->getBody();
+
+        self::assertStringContainsString(
+            'Request attribute "route" missing or wrong type "NULL"'
+                .', please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware',
+            $body
+        );
+    }
+
+    public function testMissingRouterMiddlewareWithoutExceptionMiddleware(): void
+    {
+        $this->expectException(RouterException::class);
+        $this->expectExceptionMessage(
+            'Request attribute "route" missing or wrong type "NULL"'
+                .', please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware'
+        );
+
+        $app = new Application([]);
+
+        $request = new ServerRequest(
+            RouteInterface::GET,
+            '/hello/test'
+        );
+
+        $app->handle($request);
     }
 }

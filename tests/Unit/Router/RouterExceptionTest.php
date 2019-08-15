@@ -25,7 +25,7 @@ final class RouterExceptionTest extends TestCase
             )
         );
 
-        new RouterException('test');
+        new RouterException('test', 0);
     }
 
     public function testCreateForNotFound(): void
@@ -61,5 +61,17 @@ final class RouterExceptionTest extends TestCase
 
         self::assertSame('Missing route: "name"', $exception->getMessage());
         self::assertSame(1, $exception->getCode());
+    }
+
+    public function testCreateForMissingRouteAttribute(): void
+    {
+        $exception = RouterException::createForMissingRouteAttribute(new \stdClass());
+
+        self::assertSame(
+            'Request attribute "route" missing or wrong type "stdClass",'
+                .' please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware',
+            $exception->getMessage()
+        );
+        self::assertSame(2, $exception->getCode());
     }
 }

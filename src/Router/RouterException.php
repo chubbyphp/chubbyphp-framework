@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
+use Chubbyphp\Framework\Middleware\RouterMiddleware;
+
 final class RouterException extends \RuntimeException
 {
     /**
@@ -58,6 +60,20 @@ final class RouterException extends \RuntimeException
     public static function createForMissingRoute(string $name): self
     {
         return new self(sprintf('Missing route: "%s"', $name), 1);
+    }
+
+    /**
+     * @param mixed $route
+     *
+     * @return self
+     */
+    public static function createForMissingRouteAttribute($route): self
+    {
+        return new self(sprintf(
+            'Request attribute "route" missing or wrong type "%s", please add the "%s" middleware',
+            is_object($route) ? get_class($route) : gettype($route),
+            RouterMiddleware::class
+        ), 2);
     }
 
     public function getType(): string
