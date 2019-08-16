@@ -16,8 +16,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class Application implements RequestHandlerInterface
 {
-    public const ROUTE_ATTRIBUTE = 'route';
-
     /**
      * @var array<MiddlewareInterface>
      */
@@ -49,7 +47,7 @@ final class Application implements RequestHandlerInterface
         return $this->middlewareDispatcher->dispatch(
             $this->middlewares,
             new CallbackRequestHandler(function (ServerRequestInterface $request) {
-                $route = $request->getAttribute(self::ROUTE_ATTRIBUTE);
+                $route = $request->getAttribute('route');
 
                 if (!$route instanceof RouteInterface) {
                     throw RouterException::createForMissingRouteAttribute($route);

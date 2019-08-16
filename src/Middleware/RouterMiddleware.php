@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Middleware;
 
-use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Router\RouterException;
 use Chubbyphp\Framework\Router\RouterInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -89,7 +88,7 @@ EOT;
             return $this->routeExceptionResponse($routerException);
         }
 
-        $request = $request->withAttribute(Application::ROUTE_ATTRIBUTE, $route);
+        $request = $request->withAttribute('route', $route);
 
         foreach ($route->getAttributes() as $attribute => $value) {
             $request = $request->withAttribute($attribute, $value);
