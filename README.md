@@ -150,7 +150,6 @@ $app = new Application([
     new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
 ]);
 
-
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ```
 
