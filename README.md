@@ -182,6 +182,35 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
  * [chubbyphp/chubbyphp-framework-skeleton][200]
  * [chubbyphp/petstore][201]
 
+## Migration
+
+Replace the code from the first block with the code of the second ones.
+
+```php
+use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\ExceptionHandler;
+use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\Router\FastRouteRouter;
+
+$app = new Application(
+    new FastRouteRouter([$route]),
+    new MiddlewareDispatcher(),
+    new ExceptionHandler($responseFactory, true)
+);
+```
+
+```php
+use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
+use Chubbyphp\Framework\Middleware\RouterMiddleware;
+use Chubbyphp\Framework\Router\FastRouteRouter;
+
+$app = new Application([
+    new ExceptionMiddleware($responseFactory, true),
+    new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
+]);
+```
+
 ## Copyright
 
 Dominik Zogg 2019
