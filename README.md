@@ -58,7 +58,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][40
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.0" \
+composer require chubbyphp/chubbyphp-framework "^2.1" \
     aura/router "^3.1" zendframework/zend-diactoros "^2.0"
 ```
 
@@ -107,7 +107,7 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.0" \
+composer require chubbyphp/chubbyphp-framework "^2.1" \
     nikic/fast-route "^1.3" zendframework/zend-diactoros "^2.0"
 ```
 
@@ -155,10 +155,11 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 
 ### Middleware
 
- * [ExceptionMiddleware][70]
- * [LazyMiddleware][71]
- * [MiddlewareDispatcher][72]
- * [RouterMiddleware][73]
+ * [CallbackMiddleware][70]
+ * [ExceptionMiddleware][71]
+ * [LazyMiddleware][72]
+ * [MiddlewareDispatcher][73]
+ * [RouterMiddleware][74]
 
 ### RequestHandler
 
@@ -247,10 +248,11 @@ Dominik Zogg 2019
 
 [40]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 
-[70]: doc/Middleware/ExceptionMiddleware.md
-[71]: doc/Middleware/LazyMiddleware.md
-[72]: doc/Middleware/MiddlewareDispatcher.md
-[73]: doc/Middleware/RouterMiddleware.md
+[70]: doc/Middleware/CallbackMiddleware.md
+[71]: doc/Middleware/ExceptionMiddleware.md
+[72]: doc/Middleware/LazyMiddleware.md
+[73]: doc/Middleware/MiddlewareDispatcher.md
+[74]: doc/Middleware/RouterMiddleware.md
 
 [80]: doc/RequestHandler/CallbackRequestHandler.md
 [81]: doc/RequestHandler/LazyRequestHandler.md
