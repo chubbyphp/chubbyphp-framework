@@ -86,19 +86,19 @@ set_error_handler([ErrorHandler::class, 'handle']);
 
 $responseFactory = new ResponseFactory();
 
-$route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-    function (ServerRequestInterface $request) use ($responseFactory) {
-        $name = $request->getAttribute('name');
-        $response = $responseFactory->createResponse();
-        $response->getBody()->write(sprintf('Hello, %s', $name));
-
-        return $response;
-    }
-))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
-
 $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
-    new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
+    new RouterMiddleware(new AuraRouter([
+        Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+            function (ServerRequestInterface $request) use ($responseFactory) {
+                $name = $request->getAttribute('name');
+                $response = $responseFactory->createResponse();
+                $response->getBody()->write(sprintf('Hello, %s', $name));
+
+                return $response;
+            }
+        ))->pathOptions(['tokens' => ['name' => '[a-z]+']])
+    ]), $responseFactory),
 ]);
 
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
@@ -135,19 +135,19 @@ set_error_handler([ErrorHandler::class, 'handle']);
 
 $responseFactory = new ResponseFactory();
 
-$route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-    function (ServerRequestInterface $request) use ($responseFactory) {
-        $name = $request->getAttribute('name');
-        $response = $responseFactory->createResponse();
-        $response->getBody()->write(sprintf('Hello, %s', $name));
-
-        return $response;
-    }
-));
-
 $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
-    new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
+    new RouterMiddleware(new FastRouteRouter([
+        Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+            function (ServerRequestInterface $request) use ($responseFactory) {
+                $name = $request->getAttribute('name');
+                $response = $responseFactory->createResponse();
+                $response->getBody()->write(sprintf('Hello, %s', $name));
+
+                return $response;
+            }
+        ))
+    ]), $responseFactory),
 ]);
 
 $app->send($app->handle(ServerRequestFactory::fromGlobals()));
