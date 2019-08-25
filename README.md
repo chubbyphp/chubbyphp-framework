@@ -22,6 +22,8 @@ the best combination of flexibility and simplicity by using standards.
  * [HTTP Handlers (15)][8]
  * [HTTP Factories (17)][9]
 
+![Application workflow](doc/Resources/workflow.png?raw=true "Application workflow")
+
 ## Requirements
 
  * php: ^7.2
