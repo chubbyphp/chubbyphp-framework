@@ -228,7 +228,8 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
  * [ExceptionMiddleware][71]
  * [LazyMiddleware][72]
  * [MiddlewareDispatcher][73]
- * [RouterMiddleware][74]
+ * [NewRelicRouteMiddleware][74]
+ * [RouterMiddleware][75]
 
 ### RequestHandler
 
@@ -321,7 +322,8 @@ Dominik Zogg 2019
 [71]: doc/Middleware/ExceptionMiddleware.md
 [72]: doc/Middleware/LazyMiddleware.md
 [73]: doc/Middleware/MiddlewareDispatcher.md
-[74]: doc/Middleware/RouterMiddleware.md
+[74]: doc/Middleware/NewRelicRouteMiddleware.md
+[75]: doc/Middleware/RouterMiddleware.md
 
 [80]: doc/RequestHandler/CallbackRequestHandler.md
 [81]: doc/RequestHandler/LazyRequestHandler.md
