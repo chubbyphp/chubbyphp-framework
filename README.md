@@ -48,7 +48,7 @@ Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be 
 
  * [guzzlehttp/psr7][32]: ^1.4.2 (with [http-interop/http-factory-guzzle][33]: ^1.0)
  * [nyholm/psr7][34]: ^1.0
- * [slim/psr7][35]: ^0.4
+ * [slim/psr7][35]: ^0.5
  * [zendframework/zend-diactoros][36]: ^2.0
 
 ## Installation
