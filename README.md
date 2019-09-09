@@ -49,7 +49,8 @@ Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be 
  * [guzzlehttp/psr7][32]: ^1.4.2 (with [http-interop/http-factory-guzzle][33]: ^1.0)
  * [nyholm/psr7][34]: ^1.0
  * [slim/psr7][35]: ^0.5
- * [zendframework/zend-diactoros][36]: ^2.0
+ * [sunrise/http-message][36]: ^1.0 (with [sunrise/http-factory][37]: ^1.0)
+ * [zendframework/zend-diactoros][38]: ^2.0
 
 ## Installation
 
@@ -314,7 +315,9 @@ Dominik Zogg 2019
 [33]: https://packagist.org/packages/http-interop/http-factory-guzzle
 [34]: https://packagist.org/packages/nyholm/psr7
 [35]: https://packagist.org/packages/slim/psr7
-[36]: https://packagist.org/packages/zendframework/zend-diactoros
+[36]: https://packagist.org/packages/sunrise/http-message
+[37]: https://packagist.org/packages/sunrise/http-factory
+[38]: https://packagist.org/packages/zendframework/zend-diactoros
 
 [40]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 
