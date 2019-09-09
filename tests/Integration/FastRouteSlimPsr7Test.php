@@ -16,7 +16,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
-use Slim\Psr7\Factory\UriFactory;
 
 /**
  * @coversNothing
@@ -46,7 +45,7 @@ final class FastRouteSlimPsr7Test extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            (new UriFactory())->createUri('/hello/test'),
+            '/hello/test'
         );
 
         $response = $app->handle($request);
@@ -76,7 +75,7 @@ final class FastRouteSlimPsr7Test extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            (new UriFactory())->createUri('/hello'),
+            '/hello'
         );
 
         $response = $app->handle($request);
@@ -109,7 +108,7 @@ final class FastRouteSlimPsr7Test extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::POST,
-            (new UriFactory())->createUri('/hello/test'),
+            '/hello/test'
         );
 
         $response = $app->handle($request);
@@ -138,7 +137,7 @@ final class FastRouteSlimPsr7Test extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            (new UriFactory())->createUri('/hello/test'),
+            '/hello/test'
         );
 
         $response = $app->handle($request);
@@ -170,7 +169,7 @@ final class FastRouteSlimPsr7Test extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            (new UriFactory())->createUri('/hello/test'),
+            '/hello/test'
         );
 
         $app->handle($request);
@@ -186,7 +185,7 @@ final class FastRouteSlimPsr7Test extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            (new UriFactory())->createUri('/hello/test'),
+            '/hello/test'
         );
 
         $response = $app->handle($request);
@@ -214,7 +213,7 @@ final class FastRouteSlimPsr7Test extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            (new UriFactory())->createUri('/hello/test'),
+            '/hello/test'
         );
 
         $app->handle($request);

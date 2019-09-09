@@ -45,7 +45,7 @@ final class FastRouteZendDiactorosTest extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test',
+            '/hello/test'
         );
 
         $response = $app->handle($request);
@@ -75,7 +75,7 @@ final class FastRouteZendDiactorosTest extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello',
+            '/hello'
         );
 
         $response = $app->handle($request);
@@ -108,7 +108,7 @@ final class FastRouteZendDiactorosTest extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::POST,
-            '/hello/test',
+            '/hello/test'
         );
 
         $response = $app->handle($request);
@@ -137,7 +137,7 @@ final class FastRouteZendDiactorosTest extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test',
+            '/hello/test'
         );
 
         $response = $app->handle($request);
@@ -169,7 +169,7 @@ final class FastRouteZendDiactorosTest extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test',
+            '/hello/test'
         );
 
         $app->handle($request);
@@ -185,7 +185,7 @@ final class FastRouteZendDiactorosTest extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test',
+            '/hello/test'
         );
 
         $response = $app->handle($request);
@@ -213,7 +213,7 @@ final class FastRouteZendDiactorosTest extends TestCase
 
         $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test',
+            '/hello/test'
         );
 
         $app->handle($request);
