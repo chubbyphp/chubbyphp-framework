@@ -12,8 +12,8 @@ use Chubbyphp\Framework\Router\AuraRouter;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterException;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Nyholm\Psr7\ServerRequest;
+use Nyholm\Psr7\Factory\Psr17Factory as ResponseFactory;
+use Nyholm\Psr7\Factory\Psr17Factory as ServerRequestFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -26,12 +26,12 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 {
     public function testOk(): void
     {
-        $psr17Factory = new Psr17Factory();
+        $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($psr17Factory) {
+            function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
-                $response = $psr17Factory->createResponse();
+                $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
 
                 return $response;
@@ -39,13 +39,13 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
-            new ExceptionMiddleware($psr17Factory, true),
-            new RouterMiddleware(new AuraRouter([$route]), $psr17Factory),
+            new ExceptionMiddleware($responseFactory, true),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -56,12 +56,12 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 
     public function testTestNotFound(): void
     {
-        $psr17Factory = new Psr17Factory();
+        $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($psr17Factory) {
+            function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
-                $response = $psr17Factory->createResponse();
+                $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
 
                 return $response;
@@ -69,13 +69,13 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
-            new ExceptionMiddleware($psr17Factory, true),
-            new RouterMiddleware(new AuraRouter([$route]), $psr17Factory),
+            new ExceptionMiddleware($responseFactory, true),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello'
+            '/hello',
         );
 
         $response = $app->handle($request);
@@ -89,12 +89,12 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 
     public function testMethodNotAllowed(): void
     {
-        $psr17Factory = new Psr17Factory();
+        $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($psr17Factory) {
+            function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
-                $response = $psr17Factory->createResponse();
+                $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
 
                 return $response;
@@ -102,13 +102,13 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
-            new ExceptionMiddleware($psr17Factory, true),
-            new RouterMiddleware(new AuraRouter([$route]), $psr17Factory),
+            new ExceptionMiddleware($responseFactory, true),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::POST,
-            '/hello/test'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -122,7 +122,7 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 
     public function testException(): void
     {
-        $psr17Factory = new Psr17Factory();
+        $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
             function (): void {
@@ -131,13 +131,13 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
-            new ExceptionMiddleware($psr17Factory, true),
-            new RouterMiddleware(new AuraRouter([$route]), $psr17Factory),
+            new ExceptionMiddleware($responseFactory, true),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -155,7 +155,7 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Something went wrong');
 
-        $psr17Factory = new Psr17Factory();
+        $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
             function (): void {
@@ -164,12 +164,12 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
-            new RouterMiddleware(new AuraRouter([$route]), $psr17Factory),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $app->handle($request);
@@ -177,15 +177,15 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 
     public function testMissingRouterMiddleware(): void
     {
-        $psr17Factory = new Psr17Factory();
+        $responseFactory = new ResponseFactory();
 
         $app = new Application([
-            new ExceptionMiddleware($psr17Factory, true),
+            new ExceptionMiddleware($responseFactory, true),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -211,9 +211,9 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 
         $app = new Application([]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $app->handle($request);

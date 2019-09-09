@@ -15,10 +15,8 @@ use Chubbyphp\Framework\Router\RouterException;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\ResponseFactory;
-use Slim\Psr7\Factory\StreamFactory;
+use Slim\Psr7\Factory\ServerRequestFactory;
 use Slim\Psr7\Factory\UriFactory;
-use Slim\Psr7\Headers;
-use Slim\Psr7\Request;
 
 /**
  * @coversNothing
@@ -46,13 +44,9 @@ final class AuraRouterSlimPsr7Test extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new Request(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
             (new UriFactory())->createUri('/hello/test'),
-            new Headers(),
-            [],
-            [],
-            (new StreamFactory())->createStreamFromFile('php://memory')
         );
 
         $response = $app->handle($request);
@@ -80,13 +74,9 @@ final class AuraRouterSlimPsr7Test extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new Request(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
             (new UriFactory())->createUri('/hello'),
-            new Headers(),
-            [],
-            [],
-            (new StreamFactory())->createStreamFromFile('php://memory')
         );
 
         $response = $app->handle($request);
@@ -117,13 +107,9 @@ final class AuraRouterSlimPsr7Test extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new Request(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::POST,
             (new UriFactory())->createUri('/hello/test'),
-            new Headers(),
-            [],
-            [],
-            (new StreamFactory())->createStreamFromFile('php://memory')
         );
 
         $response = $app->handle($request);
@@ -150,13 +136,9 @@ final class AuraRouterSlimPsr7Test extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new Request(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
             (new UriFactory())->createUri('/hello/test'),
-            new Headers(),
-            [],
-            [],
-            (new StreamFactory())->createStreamFromFile('php://memory')
         );
 
         $response = $app->handle($request);
@@ -186,13 +168,9 @@ final class AuraRouterSlimPsr7Test extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new Request(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
             (new UriFactory())->createUri('/hello/test'),
-            new Headers(),
-            [],
-            [],
-            (new StreamFactory())->createStreamFromFile('php://memory')
         );
 
         $app->handle($request);
@@ -206,13 +184,9 @@ final class AuraRouterSlimPsr7Test extends TestCase
             new ExceptionMiddleware($responseFactory, true),
         ]);
 
-        $request = new Request(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
             (new UriFactory())->createUri('/hello/test'),
-            new Headers(),
-            [],
-            [],
-            (new StreamFactory())->createStreamFromFile('php://memory')
         );
 
         $response = $app->handle($request);
@@ -238,13 +212,9 @@ final class AuraRouterSlimPsr7Test extends TestCase
 
         $app = new Application([]);
 
-        $request = new Request(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
             (new UriFactory())->createUri('/hello/test'),
-            new Headers(),
-            [],
-            [],
-            (new StreamFactory())->createStreamFromFile('php://memory')
         );
 
         $app->handle($request);

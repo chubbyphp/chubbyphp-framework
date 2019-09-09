@@ -12,8 +12,8 @@ use Chubbyphp\Framework\Router\FastRouteRouter;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterException;
-use GuzzleHttp\Psr7\ServerRequest;
 use Http\Factory\Guzzle\ResponseFactory;
+use Http\Factory\Guzzle\ServerRequestFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -43,9 +43,9 @@ final class FastRouteGuzzlehttpPsr7Test extends TestCase
             new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -73,9 +73,9 @@ final class FastRouteGuzzlehttpPsr7Test extends TestCase
             new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello'
+            '/hello',
         );
 
         $response = $app->handle($request);
@@ -106,9 +106,9 @@ final class FastRouteGuzzlehttpPsr7Test extends TestCase
             new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::POST,
-            '/hello/test'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -135,9 +135,9 @@ final class FastRouteGuzzlehttpPsr7Test extends TestCase
             new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -167,9 +167,9 @@ final class FastRouteGuzzlehttpPsr7Test extends TestCase
             new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $app->handle($request);
@@ -183,9 +183,9 @@ final class FastRouteGuzzlehttpPsr7Test extends TestCase
             new ExceptionMiddleware($responseFactory, true),
         ]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -211,9 +211,9 @@ final class FastRouteGuzzlehttpPsr7Test extends TestCase
 
         $app = new Application([]);
 
-        $request = new ServerRequest(
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            '/hello/test'
+            '/hello/test',
         );
 
         $app->handle($request);

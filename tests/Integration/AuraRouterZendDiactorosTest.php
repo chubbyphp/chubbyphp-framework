@@ -15,7 +15,7 @@ use Chubbyphp\Framework\Router\RouterException;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\ResponseFactory;
-use Zend\Diactoros\ServerRequest;
+use Zend\Diactoros\ServerRequestFactory;
 
 /**
  * @coversNothing
@@ -43,12 +43,9 @@ final class AuraRouterZendDiactorosTest extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
-            [],
-            [],
-            '/hello/test',
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            'php://memory'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -76,12 +73,9 @@ final class AuraRouterZendDiactorosTest extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
-            [],
-            [],
-            '/hello',
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            'php://memory'
+            '/hello',
         );
 
         $response = $app->handle($request);
@@ -112,12 +106,9 @@ final class AuraRouterZendDiactorosTest extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
-            [],
-            [],
-            '/hello/test',
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::POST,
-            'php://memory'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -144,12 +135,9 @@ final class AuraRouterZendDiactorosTest extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
-            [],
-            [],
-            '/hello/test',
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            'php://memory'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -179,12 +167,9 @@ final class AuraRouterZendDiactorosTest extends TestCase
             new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
-        $request = new ServerRequest(
-            [],
-            [],
-            '/hello/test',
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            'php://memory'
+            '/hello/test',
         );
 
         $app->handle($request);
@@ -198,12 +183,9 @@ final class AuraRouterZendDiactorosTest extends TestCase
             new ExceptionMiddleware($responseFactory, true),
         ]);
 
-        $request = new ServerRequest(
-            [],
-            [],
-            '/hello/test',
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            'php://memory'
+            '/hello/test',
         );
 
         $response = $app->handle($request);
@@ -229,12 +211,9 @@ final class AuraRouterZendDiactorosTest extends TestCase
 
         $app = new Application([]);
 
-        $request = new ServerRequest(
-            [],
-            [],
-            '/hello/test',
+        $request = (new ServerRequestFactory())->createServerRequest(
             RouteInterface::GET,
-            'php://memory'
+            '/hello/test',
         );
 
         $app->handle($request);
