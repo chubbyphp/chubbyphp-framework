@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Integration;
+namespace Chubbyphp\Tests\Framework\Integration\AuraRouter;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
 use Chubbyphp\Framework\Middleware\RouterMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\FastRouteRouter;
+use Chubbyphp\Framework\Router\AuraRouter;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterException;
+use Http\Factory\Guzzle\ResponseFactory;
+use Http\Factory\Guzzle\ServerRequestFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\ResponseFactory;
-use Zend\Diactoros\ServerRequestFactory;
 
 /**
  * @coversNothing
  *
  * @internal
  */
-final class FastRouteZendDiactorosTest extends TestCase
+final class AuraRouterGuzzlehttpPsr7Test extends TestCase
 {
     public function testOk(): void
     {
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
@@ -36,11 +36,11 @@ final class FastRouteZendDiactorosTest extends TestCase
 
                 return $response;
             }
-        ));
+        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
             new ExceptionMiddleware($responseFactory, true),
-            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(
@@ -58,7 +58,7 @@ final class FastRouteZendDiactorosTest extends TestCase
     {
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
@@ -66,11 +66,11 @@ final class FastRouteZendDiactorosTest extends TestCase
 
                 return $response;
             }
-        ));
+        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
             new ExceptionMiddleware($responseFactory, true),
-            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(
@@ -91,7 +91,7 @@ final class FastRouteZendDiactorosTest extends TestCase
     {
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
@@ -99,11 +99,11 @@ final class FastRouteZendDiactorosTest extends TestCase
 
                 return $response;
             }
-        ));
+        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
             new ExceptionMiddleware($responseFactory, true),
-            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(
@@ -124,15 +124,15 @@ final class FastRouteZendDiactorosTest extends TestCase
     {
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
             function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
-        ));
+        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
             new ExceptionMiddleware($responseFactory, true),
-            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(
@@ -157,14 +157,14 @@ final class FastRouteZendDiactorosTest extends TestCase
 
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
             function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
-        ));
+        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
 
         $app = new Application([
-            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
+            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(

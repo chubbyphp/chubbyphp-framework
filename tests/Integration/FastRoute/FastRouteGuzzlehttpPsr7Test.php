@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Integration;
+namespace Chubbyphp\Tests\Framework\Integration\FastRoute;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
 use Chubbyphp\Framework\Middleware\RouterMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\AuraRouter;
+use Chubbyphp\Framework\Router\FastRouteRouter;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterException;
-use Nyholm\Psr7\Factory\Psr17Factory as ResponseFactory;
-use Nyholm\Psr7\Factory\Psr17Factory as ServerRequestFactory;
+use Http\Factory\Guzzle\ResponseFactory;
+use Http\Factory\Guzzle\ServerRequestFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -22,13 +22,13 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @internal
  */
-final class AuraRouterNyholmPsr7Test extends TestCase
+final class FastRouteGuzzlehttpPsr7Test extends TestCase
 {
     public function testOk(): void
     {
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
@@ -36,11 +36,11 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 
                 return $response;
             }
-        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
+        ));
 
         $app = new Application([
             new ExceptionMiddleware($responseFactory, true),
-            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
+            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(
@@ -58,7 +58,7 @@ final class AuraRouterNyholmPsr7Test extends TestCase
     {
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
@@ -66,11 +66,11 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 
                 return $response;
             }
-        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
+        ));
 
         $app = new Application([
             new ExceptionMiddleware($responseFactory, true),
-            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
+            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(
@@ -91,7 +91,7 @@ final class AuraRouterNyholmPsr7Test extends TestCase
     {
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
@@ -99,11 +99,11 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 
                 return $response;
             }
-        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
+        ));
 
         $app = new Application([
             new ExceptionMiddleware($responseFactory, true),
-            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
+            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(
@@ -124,15 +124,15 @@ final class AuraRouterNyholmPsr7Test extends TestCase
     {
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
             function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
-        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
+        ));
 
         $app = new Application([
             new ExceptionMiddleware($responseFactory, true),
-            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
+            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(
@@ -157,14 +157,14 @@ final class AuraRouterNyholmPsr7Test extends TestCase
 
         $responseFactory = new ResponseFactory();
 
-        $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+        $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
             function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
-        ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);
+        ));
 
         $app = new Application([
-            new RouterMiddleware(new AuraRouter([$route]), $responseFactory),
+            new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
         ]);
 
         $request = (new ServerRequestFactory())->createServerRequest(

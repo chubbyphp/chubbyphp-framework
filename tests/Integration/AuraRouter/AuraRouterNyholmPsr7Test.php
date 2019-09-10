@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Integration;
+namespace Chubbyphp\Tests\Framework\Integration\AuraRouter;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
@@ -12,17 +12,17 @@ use Chubbyphp\Framework\Router\AuraRouter;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterException;
+use Nyholm\Psr7\Factory\Psr17Factory as ResponseFactory;
+use Nyholm\Psr7\Factory\Psr17Factory as ServerRequestFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Sunrise\Http\Message\ResponseFactory;
-use Sunrise\Http\ServerRequest\ServerRequestFactory;
 
 /**
  * @coversNothing
  *
  * @internal
  */
-final class AuraRouterSunrisePhpTest extends TestCase
+final class AuraRouterNyholmPsr7Test extends TestCase
 {
     public function testOk(): void
     {
