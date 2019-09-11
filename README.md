@@ -254,6 +254,10 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
  * [chubbyphp/chubbyphp-framework-skeleton][200]
  * [chubbyphp/petstore][201]
 
+## Swoole
+
+ * [chubbyphp/chubbyphp-swoole-request-handler][210]
+
 ## Migration
 
 Replace the code from the first block with the code of the second ones.
@@ -339,5 +343,7 @@ Dominik Zogg 2019
 [100]: doc/Webserver/Builtin.md
 [101]: doc/Webserver/Nginx.md
 
-[200]:https://packagist.org/packages/chubbyphp/chubbyphp-framework-skeleton
-[201]:https://packagist.org/packages/chubbyphp/petstore
+[200]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-skeleton
+[201]: https://packagist.org/packages/chubbyphp/petstore
+
+[210]: https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler
