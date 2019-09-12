@@ -79,6 +79,7 @@ namespace Chubbyphp\Tests\Framework\Unit\Middleware
     use Chubbyphp\Framework\Middleware\TestExtesionLoaded;
     use Chubbyphp\Framework\Middleware\TestNewRelicNameTransaction;
     use Chubbyphp\Framework\Router\RouteInterface;
+    use Chubbyphp\Framework\Router\RouterException;
     use Chubbyphp\Mock\Call;
     use Chubbyphp\Mock\MockByCallsTrait;
     use PHPUnit\Framework\MockObject\MockObject;
@@ -141,6 +142,35 @@ namespace Chubbyphp\Tests\Framework\Unit\Middleware
             $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
                 Call::create('handle')->with($request)->willReturn($response),
             ]);
+
+            $middleware = new NewRelicRouteMiddleware();
+
+            self::assertSame($response, $middleware->process($request, $handler));
+
+            self::assertSame(['route_name'], TestNewRelicNameTransaction::all());
+        }
+
+        public function testWithNewRelicExtensionAndMissingRoute(): void
+        {
+            $this->expectException(RouterException::class);
+            $this->expectExceptionMessage(
+                'Request attribute "route" missing or wrong type "NULL",'
+                    .' please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware'
+            );
+
+            TestExtesionLoaded::add('newrelic');
+            TestNewRelicNameTransaction::reset();
+
+            /** @var ServerRequestInterface|MockObject $request */
+            $request = $this->getMockByCalls(ServerRequestInterface::class, [
+                Call::create('getAttribute')->with('route', null)->willReturn(null),
+            ]);
+
+            /** @var ResponseInterface|MockObject $response */
+            $response = $this->getMockByCalls(ResponseInterface::class);
+
+            /** @var RequestHandlerInterface|MockObject $handler */
+            $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
             $middleware = new NewRelicRouteMiddleware();
 

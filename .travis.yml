@@ -18,6 +18,8 @@ matrix:
     - php: 7.4snapshot
 
 before_script:
+  - git clone https://github.com/nikic/php-ast.git && cd php-ast && phpize && ./configure && make && make install && cd .. && rm -Rf php-ast
+  - echo 'extension=ast.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/ast.ini
   - echo 'Europe/Zurich' | sudo tee /etc/timezone
   - echo 'date.timezone = "Europe/Zurich"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - composer self-update -q
@@ -29,9 +31,9 @@ script:
   - vendor/bin/phpunit --coverage-text --verbose
   - vendor/bin/infection --threads=$(nproc) --min-msi=100 --min-covered-msi=100 --verbose
   - vendor/bin/phpstan analyse
+  - vendor/bin/phan --config-file phan.php
   - vendor/bin/phploc src --verbose
   - vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation
   - if [ -z "$dependencies" ]; then vendor/bin/phpinsights analyse --no-interaction --min-quality=98; fi;
   - if [ "$dependencies" = "highest" ]; then vendor/bin/phpinsights analyse --no-interaction --min-quality=98; fi;
   - if [ "$dependencies" = "lowest" ]; then vendor/bin/phpinsights analyse --no-interaction --min-quality=98 --disable-security-check; fi;
-
