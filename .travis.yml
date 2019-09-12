@@ -34,6 +34,6 @@ script:
   - vendor/bin/phan --config-file phan.php
   - vendor/bin/phploc src --verbose
   - vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation
-  - if [ -z "$dependencies" ]; then vendor/bin/phpinsights analyse --no-interaction --min-quality=98; fi;
-  - if [ "$dependencies" = "highest" ]; then vendor/bin/phpinsights analyse --no-interaction --min-quality=98; fi;
-  - if [ "$dependencies" = "lowest" ]; then vendor/bin/phpinsights analyse --no-interaction --min-quality=98 --disable-security-check; fi;
+  - if [ -z "$dependencies" ]; then vendor/bin/phpinsights analyse --no-interaction --min-quality=97; fi;
+  - if [ "$dependencies" = "highest" ]; then vendor/bin/phpinsights analyse --no-interaction --min-quality=97; fi;
+  - if [ "$dependencies" = "lowest" ]; then vendor/bin/phpinsights analyse --no-interaction --min-quality=97 --disable-security-check; fi;
