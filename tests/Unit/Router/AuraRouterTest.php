@@ -32,6 +32,7 @@ final class AuraRouterTest extends TestCase
         $uri = $this->getMockByCalls(UriInterface::class, [
             Call::create('getPath')->with()->willReturn('/api/pets'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
+            Call::create('getPath')->with()->willReturn('/api/pets'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
@@ -39,10 +40,21 @@ final class AuraRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 
-        /** @var RouteInterface|MockObject $route */
-        $route = $this->getMockByCalls(RouteInterface::class, [
+        /** @var RouteInterface|MockObject $route1 */
+        $route1 = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('pet_create'),
+            Call::create('getPathOptions')->with()->willReturn([]),
+            Call::create('getName')->with()->willReturn('pet_create'),
+            Call::create('getPath')->with()->willReturn('/api/pets'),
+            Call::create('getMethod')->with()->willReturn('POST'),
+        ]);
+
+        /** @var RouteInterface|MockObject $route2 */
+        $route2 = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPathOptions')->with()->willReturn([]),
             Call::create('getName')->with()->willReturn('pet_list'),
@@ -51,9 +63,9 @@ final class AuraRouterTest extends TestCase
             Call::create('withAttributes')->with([])->willReturnSelf(),
         ]);
 
-        $router = new AuraRouter([$route]);
+        $router = new AuraRouter([$route1, $route2]);
 
-        self::assertSame($route, $router->match($request));
+        self::assertSame($route2, $router->match($request));
     }
 
     public function testMatchNotFound(): void

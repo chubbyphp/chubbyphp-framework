@@ -38,19 +38,19 @@ final class FastRouteRouterTest extends TestCase
 
         /** @var RouteInterface|MockObject $route1 */
         $route1 = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('pet_create'),
+            Call::create('getMethod')->with()->willReturn('POST'),
+            Call::create('getPath')->with()->willReturn('/api/pets'),
+            Call::create('getName')->with()->willReturn('pet_create'),
+        ]);
+
+        /** @var RouteInterface|MockObject $route2 */
+        $route2 = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('withAttributes')->with([])->willReturnSelf(),
-        ]);
-
-        /** @var RouteInterface|MockObject $route2 */
-        $route2 = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getName')->with()->willReturn('pet_read'),
-            Call::create('getMethod')->with()->willReturn('GET'),
-            Call::create('getPath')->with()->willReturn('/api/pets/{id}'),
-            Call::create('getName')->with()->willReturn('pet_read'),
         ]);
 
         $cacheFile = tempnam(sys_get_temp_dir(), 'fast-route-').'.php';
@@ -61,7 +61,7 @@ final class FastRouteRouterTest extends TestCase
 
         self::assertFileExists($cacheFile);
 
-        self::assertSame($route1, $router->match($request));
+        self::assertSame($route2, $router->match($request));
 
         unlink($cacheFile);
     }
