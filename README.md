@@ -42,7 +42,7 @@ the best combination of flexibility and simplicity by using standards.
 Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be used.
 
  * [aura/router][30]: ^3.1
- * [nikic/fast-route][31]: ^1.3
+ * [nikic/fast-route][31]: ^1.0|^0.6
 
 ### PSR 7 / PSR 17
 
