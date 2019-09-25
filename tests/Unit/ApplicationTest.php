@@ -77,6 +77,55 @@ namespace Chubbyphp\Tests\Framework\Unit
     {
         use MockByCallsTrait;
 
+        public function testInvoke(): void
+        {
+            /** @var MiddlewareInterface|MockObject $routeIndependMiddleware */
+            $routeIndependMiddleware = $this->getMockByCalls(MiddlewareInterface::class);
+
+            /** @var MiddlewareInterface|MockObject $middleware */
+            $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
+            /** @var RequestHandlerInterface|MockObject $handler */
+            $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+            /** @var RouteInterface|MockObject $route */
+            $route = $this->getMockByCalls(RouteInterface::class, [
+                Call::create('getMiddlewares')->with()->willReturn([$middleware]),
+                Call::create('getRequestHandler')->with()->willReturn($handler),
+            ]);
+
+            /** @var ServerRequestInterface|MockObject $request */
+            $request = $this->getMockByCalls(ServerRequestInterface::class, [
+                Call::create('getAttribute')->with('route', null)->willReturn($route),
+            ]);
+
+            /** @var ResponseInterface|MockObject $response */
+            $response = $this->getMockByCalls(ResponseInterface::class);
+
+            /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
+            $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
+                Call::create('dispatch')
+                    ->willReturnCallback(
+                        function (
+                            array $middlewares,
+                            CallbackRequestHandler $requestHandler,
+                            ServerRequestInterface $request
+                        ) use ($routeIndependMiddleware) {
+                            self::assertSame([$routeIndependMiddleware], $middlewares);
+
+                            return $requestHandler->handle($request);
+                        }
+                    ),
+                Call::create('dispatch')->with([$middleware], $handler, $request)->willReturn($response),
+            ]);
+
+            $application = new Application([
+                $routeIndependMiddleware,
+            ], $middlewareDispatcher);
+
+            self::assertSame($response, $application($request));
+        }
+
         public function testHandle(): void
         {
             /** @var MiddlewareInterface|MockObject $routeIndependMiddleware */

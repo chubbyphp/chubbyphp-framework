@@ -42,6 +42,11 @@ final class Application implements RequestHandlerInterface
         }
     }
 
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->handle($request);
+    }
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return $this->middlewareDispatcher->dispatch(
