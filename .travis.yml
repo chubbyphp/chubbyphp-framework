@@ -28,8 +28,8 @@ before_script:
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest -n; fi;
 
 script:
-  - vendor/bin/phpunit --coverage-text --verbose
-  - vendor/bin/infection --threads=$(nproc) --min-msi=100 --min-covered-msi=100 --verbose
+  - phpdbg -qrr vendor/bin/phpunit --coverage-text --verbose
+  - phpdbg -qrr vendor/bin/infection --threads=$(nproc) --min-msi=100 --min-covered-msi=100 --verbose
   - vendor/bin/phpstan analyse
   - vendor/bin/phan --config-file phan.php
   - vendor/bin/phploc src --verbose
