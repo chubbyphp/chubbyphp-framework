@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use NunoMaduro\PhpInsights\Domain\Insights\CyclomaticComplexityIsHigh;
+use NunoMaduro\PhpInsights\Domain\Sniffs\ForbiddenSetterSniff;
 use ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff;
 use ObjectCalisthenics\Sniffs\Metrics\MaxNestingLevelSniff;
 use ObjectCalisthenics\Sniffs\Metrics\MethodPerClassLimitSniff;
+use PHP_CodeSniffer\Standards\Generic\Sniffs\Arrays\ArrayIndentSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UselessOverridingMethodSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff;
@@ -23,8 +25,10 @@ return [
     'exclude' => [],
     'add' => [],
     'remove' => [
+        ArrayIndentSniff::class,
         AssignmentInConditionSniff::class,
         DisallowYodaComparisonSniff::class,
+        ForbiddenSetterSniff::class,
         SpaceAfterNotSniff::class,
         SuperfluousAbstractClassNamingSniff::class,
         SuperfluousExceptionNamingSniff::class,

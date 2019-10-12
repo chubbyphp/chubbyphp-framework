@@ -37,11 +37,12 @@
         "guzzlehttp/psr7": "^1.4.2",
         "http-interop/http-factory-guzzle": "^1.0",
         "infection/infection": "^0.14.1",
+        "mavimo/phpstan-junit": "^0.2.3",
         "nikic/fast-route": "^1.0|^0.6",
         "nunomaduro/phpinsights": "^1.9",
         "nyholm/psr7": "^1.0",
-        "phan/phan": "^2.2.12",
         "phploc/phploc": "^5.0",
+        "phpstan/extension-installer": "^1.0.1",
         "phpstan/phpstan": "^0.11.16",
         "phpunit/phpunit": "^8.3.5",
         "slim/psr7": "^0.5",
@@ -61,5 +62,26 @@
         "branch-alias": {
             "dev-master": "2.3-dev"
         }
+    },
+    "scripts": {
+        "fix:cs": "mkdir -p build && vendor/bin/php-cs-fixer fix --cache-file=build/phpcs.cache",
+        "test:lint": "mkdir -p build && find src tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
+        "test:unit": "phpdbg -qrr vendor/bin/phpunit --testsuite=Unit --coverage-text --coverage-html=build/phpunit/coverage-html --coverage-xml=build/phpunit/coverage-xml --log-junit=build/phpunit/phpunit.junit.xml --cache-result-file=build/phpunit/phpunit.result.cache",
+        "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-result-file=build/phpunit/phpunit.result.cache",
+        "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
+        "test:static-analysis": "mkdir -p build && bash -c 'vendor/bin/phpstan analyse src --no-progress --level=7 --error-format=junit | tee build/phpstan.junit.xml; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
+        "test:loc": "mkdir -p build && vendor/bin/phploc src --verbose | tee build/phploc.log",
+        "test:cs": "mkdir -p build && vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
+        "test:insights": "mkdir -p build && bash -c 'vendor/bin/phpinsights analyse -v --no-interaction --min-quality=98 --disable-security-check | tee build/phpinsights.log; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
+        "test": [
+            "@test:lint",
+            "@test:unit",
+            "@test:integration",
+            "@test:infection",
+            "@test:static-analysis",
+            "@test:loc",
+            "@test:cs",
+            "@test:insights"
+        ]
     }
 }

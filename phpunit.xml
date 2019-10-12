@@ -10,8 +10,11 @@
          stopOnFailure="false"
         >
     <testsuites>
-        <testsuite name="chubbyphp framework">
-            <directory>./tests</directory>
+        <testsuite name="Integration">
+            <directory>./tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Unit">
+            <directory>./tests/Unit</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -19,7 +22,4 @@
             <directory>./src</directory>
         </whitelist>
     </filter>
-    <logging>
-        <log type="coverage-html" target="phpunit/coverage" />
-    </logging>
 </phpunit>

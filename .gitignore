@@ -1,11 +1,6 @@
 .DS_Store
 .idea/
-.php_cs.cache
-.phpunit.result.cache
 .vscode/
 build/
 composer.lock
-composer.symlink
-infectionlog.txt
-phpunit
 vendor/
