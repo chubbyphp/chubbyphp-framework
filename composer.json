@@ -80,9 +80,9 @@
         "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
         "test:insights": "mkdir -p build && bash -c 'vendor/bin/phpinsights analyse -v --no-interaction --min-quality=98 --disable-security-check | tee build/phpinsights.log; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
         "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-result-file=build/phpunit/phpunit.result.cache",
-        "test:lint": "mkdir -p build && find app tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
-        "test:loc": "mkdir -p build && vendor/bin/phploc app --verbose | tee build/phploc.log",
-        "test:static-analysis": "mkdir -p build && bash -c 'vendor/bin/phpstan analyse app --no-progress --level=7 --error-format=junit | tee build/phpstan.junit.xml; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
+        "test:lint": "mkdir -p build && find src tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
+        "test:loc": "mkdir -p build && vendor/bin/phploc src --verbose | tee build/phploc.log",
+        "test:static-analysis": "mkdir -p build && bash -c 'vendor/bin/phpstan analyse src --no-progress --level=7 --error-format=junit | tee build/phpstan.junit.xml; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
         "test:unit": "phpdbg -qrr vendor/bin/phpunit --testsuite=Unit --coverage-text --coverage-clover=build/phpunit/phpunit.clover.xml --coverage-html=build/phpunit/coverage-html --coverage-xml=build/phpunit/coverage-xml --log-junit=build/phpunit/phpunit.junit.xml --cache-result-file=build/phpunit/phpunit.result.cache"
     }
 }
