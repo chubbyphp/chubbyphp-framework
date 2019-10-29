@@ -14,6 +14,79 @@ use PHPUnit\Framework\TestCase;
  */
 final class ErrorHandlerTest extends TestCase
 {
+    public function testRestoreErrorHandlerWithinConstruct(): void
+    {
+        $hasError = false;
+
+        set_error_handler(function () use (&$hasError): void {
+            $hasError = true;
+        });
+
+        new ErrorHandler();
+
+        trigger_error('test', E_USER_WARNING);
+
+        self::assertTrue($hasError);
+    }
+
+    public function testHandleWithoutPreviousErrorHandler(): void
+    {
+        $file = __FILE__;
+        $line = __LINE__;
+
+        set_error_handler(null);
+
+        $errorHandler = new ErrorHandler();
+
+        try {
+            $errorHandler->errorToException(E_USER_WARNING, 'test', $file, $line);
+
+            self::fail('Should throw a ErrorException');
+        } catch (\ErrorException $e) {
+            restore_error_handler();
+
+            self::assertSame('test', $e->getMessage());
+            self::assertSame(0, $e->getCode());
+            self::assertSame(E_USER_WARNING, $e->getSeverity());
+            self::assertSame($file, $e->getFile());
+            self::assertSame($line, $e->getLine());
+
+            return;
+        }
+    }
+
+    public function testErrorToException(): void
+    {
+        $file = __FILE__;
+        $line = __LINE__;
+
+        $hasError = false;
+
+        set_error_handler(function () use (&$hasError): void {
+            $hasError = true;
+        });
+
+        $errorHandler = new ErrorHandler();
+
+        try {
+            $errorHandler->errorToException(E_USER_WARNING, 'test', $file, $line);
+
+            self::fail('Should throw a ErrorException');
+        } catch (\ErrorException $e) {
+            restore_error_handler();
+
+            self::assertSame('test', $e->getMessage());
+            self::assertSame(0, $e->getCode());
+            self::assertSame(E_USER_WARNING, $e->getSeverity());
+            self::assertSame($file, $e->getFile());
+            self::assertSame($line, $e->getLine());
+
+            self::assertTrue($hasError);
+
+            return;
+        }
+    }
+
     public function testHandle(): void
     {
         $file = __FILE__;
@@ -50,7 +123,7 @@ final class ErrorHandlerTest extends TestCase
     {
         error_clear_last();
 
-        set_error_handler([ErrorHandler::class, 'handle']);
+        set_error_handler([new ErrorHandler(), 'errorToException']);
 
         try {
             trigger_error('test', E_USER_WARNING);
@@ -77,7 +150,7 @@ final class ErrorHandlerTest extends TestCase
     {
         error_clear_last();
 
-        set_error_handler([ErrorHandler::class, 'handle']);
+        set_error_handler([new ErrorHandler(), 'errorToException']);
 
         @trigger_error('test', E_USER_WARNING);
 
@@ -99,7 +172,7 @@ final class ErrorHandlerTest extends TestCase
 
         error_clear_last();
 
-        set_error_handler([ErrorHandler::class, 'handle']);
+        set_error_handler([new ErrorHandler(), 'errorToException']);
 
         trigger_error('test', E_USER_WARNING);
 
@@ -123,7 +196,7 @@ final class ErrorHandlerTest extends TestCase
 
         error_clear_last();
 
-        set_error_handler([ErrorHandler::class, 'handle']);
+        set_error_handler([new ErrorHandler(), 'errorToException']);
 
         try {
             trigger_error('test', E_USER_WARNING);

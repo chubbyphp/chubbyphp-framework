@@ -11,6 +11,7 @@ use PHP_CodeSniffer\Standards\Generic\Sniffs\Arrays\ArrayIndentSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UselessOverridingMethodSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff;
+use PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\NoSilencedErrorsSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Strings\UnnecessaryStringConcatSniff;
 use SlevomatCodingStandard\Sniffs\Classes\SuperfluousAbstractClassNamingSniff;
 use SlevomatCodingStandard\Sniffs\Classes\SuperfluousExceptionNamingSniff;
@@ -29,6 +30,7 @@ return [
         AssignmentInConditionSniff::class,
         DisallowYodaComparisonSniff::class,
         ForbiddenSetterSniff::class,
+        NoSilencedErrorsSniff::class,
         SpaceAfterNotSniff::class,
         SuperfluousAbstractClassNamingSniff::class,
         SuperfluousExceptionNamingSniff::class,
