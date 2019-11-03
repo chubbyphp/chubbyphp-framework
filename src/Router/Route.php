@@ -98,8 +98,6 @@ final class Route implements RouteInterface
 
     /**
      * @param array<string, string> $pathOptions
-     *
-     * @return self
      */
     public function pathOptions(array $pathOptions): self
     {
@@ -110,8 +108,6 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     *
-     * @return self
      */
     public function middlewares(array $middlewares): self
     {
@@ -167,8 +163,6 @@ final class Route implements RouteInterface
 
     /**
      * @param array<string, string> $attributes
-     *
-     * @return RouteInterface
      */
     public function withAttributes(array $attributes): RouteInterface
     {

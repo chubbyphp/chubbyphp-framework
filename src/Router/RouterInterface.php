@@ -11,14 +11,10 @@ interface RouterInterface
     public function match(ServerRequestInterface $request): RouteInterface;
 
     /**
-     * @param ServerRequestInterface $request
-     * @param string                 $name
-     * @param array<string, string>  $attributes
-     * @param array<string, mixed>   $queryParams
+     * @param array<string, string> $attributes
+     * @param array<string, mixed>  $queryParams
      *
      * @throws RouterException
-     *
-     * @return string
      */
     public function generateUrl(
         ServerRequestInterface $request,
@@ -28,13 +24,10 @@ interface RouterInterface
     ): string;
 
     /**
-     * @param string                $name
      * @param array<string, string> $attributes
      * @param array<string, mixed>  $queryParams
      *
      * @throws RouterException
-     *
-     * @return string
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string;
 }

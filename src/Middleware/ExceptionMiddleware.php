@@ -112,8 +112,6 @@ EOT;
     }
 
     /**
-     * @param \Throwable $exception
-     *
      * @return array<int, array<string, mixed>>
      */
     private function toExceptionArray(\Throwable $exception): array
@@ -135,8 +133,6 @@ EOT;
 
     /**
      * @param array<array<string, string>> $exceptionsData
-     *
-     * @return string
      */
     private function addDebugToBody(array $exceptionsData): string
     {

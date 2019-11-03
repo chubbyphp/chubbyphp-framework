@@ -11,17 +11,11 @@ namespace Chubbyphp\Framework\Middleware
          */
         private static $extensions = [];
 
-        /**
-         * @param string $name
-         */
         public static function add(string $name): void
         {
             self::$extensions[] = $name;
         }
 
-        /**
-         * @return bool
-         */
         public static function isLoaded(string $name): bool
         {
             return in_array($name, self::$extensions, true);
@@ -45,9 +39,6 @@ namespace Chubbyphp\Framework\Middleware
          */
         private static $actions = [];
 
-        /**
-         * @param string $action
-         */
         public static function add(string $action): void
         {
             self::$actions[] = $action;

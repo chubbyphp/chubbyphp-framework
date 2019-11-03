@@ -27,8 +27,7 @@ final class Application implements RequestHandlerInterface
     private $middlewareDispatcher;
 
     /**
-     * @param array<MiddlewareInterface>         $middlewares
-     * @param MiddlewareDispatcherInterface|null $middlewareDispatcher
+     * @param array<MiddlewareInterface> $middlewares
      */
     public function __construct(
         array $middlewares,

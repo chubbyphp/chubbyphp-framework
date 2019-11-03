@@ -34,8 +34,6 @@ final class FastRouteRouter implements RouterInterface
 
     /**
      * @param array<RouteInterface> $routes
-     * @param string|null           $cacheFile
-     * @param string                $basePath
      */
     public function __construct(array $routes, ?string $cacheFile = null, string $basePath = '')
     {
@@ -71,14 +69,10 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param string                 $name
-     * @param array<string, string>  $attributes
-     * @param array<string, mixed>   $queryParams
+     * @param array<string, string> $attributes
+     * @param array<string, mixed>  $queryParams
      *
      * @throws RouterException
-     *
-     * @return string
      */
     public function generateUrl(
         ServerRequestInterface $request,
@@ -93,13 +87,10 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param string                $name
      * @param array<string, string> $attributes
      * @param array<string, mixed>  $queryParams
      *
      * @throws RouterException
-     *
-     * @return string
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
@@ -144,9 +135,6 @@ final class FastRouteRouter implements RouterInterface
 
     /**
      * @param array<RouteInterface> $routes
-     * @param string|null           $cacheFile
-     *
-     * @return Dispatcher
      */
     private function getDispatcher(array $routes, ?string $cacheFile = null): Dispatcher
     {
@@ -166,8 +154,6 @@ final class FastRouteRouter implements RouterInterface
 
     /**
      * @param array<RouteInterface> $routes
-     *
-     * @return RouteCollector
      */
     private function getRouteCollector(array $routes): RouteCollector
     {
@@ -191,8 +177,6 @@ final class FastRouteRouter implements RouterInterface
     /**
      * @param array<int, array<int, array|string>> $routePartSets
      * @param array<string>                        $attributes
-     *
-     * @return int
      */
     private function getRouteIndex(array $routePartSets, array $attributes): int
     {

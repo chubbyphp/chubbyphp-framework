@@ -13,10 +13,6 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
 {
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param RequestHandlerInterface    $handler
-     * @param ServerRequestInterface     $request
-     *
-     * @return ResponseInterface
      */
     public function dispatch(
         array $middlewares,

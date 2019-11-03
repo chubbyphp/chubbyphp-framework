@@ -35,7 +35,6 @@ final class AuraRouter implements RouterInterface
 
     /**
      * @param array<RouteInterface> $routes
-     * @param string                $basePath
      */
     public function __construct(array $routes, string $basePath = '')
     {
@@ -71,14 +70,10 @@ final class AuraRouter implements RouterInterface
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param string                 $name
-     * @param array<string, string>  $attributes
-     * @param array<string, mixed>   $queryParams
+     * @param array<string, string> $attributes
+     * @param array<string, mixed>  $queryParams
      *
      * @throws RouterException
-     *
-     * @return string
      */
     public function generateUrl(
         ServerRequestInterface $request,
@@ -93,13 +88,10 @@ final class AuraRouter implements RouterInterface
     }
 
     /**
-     * @param string                $name
      * @param array<string, string> $attributes
      * @param array<string, mixed>  $queryParams
      *
      * @throws RouterException
-     *
-     * @return string
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
@@ -133,8 +125,6 @@ final class AuraRouter implements RouterInterface
 
     /**
      * @param array<RouteInterface> $routes
-     *
-     * @return RouterContainer
      */
     private function getRouterContainer(array $routes): RouterContainer
     {
