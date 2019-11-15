@@ -24,12 +24,18 @@ final class SunriseRouter implements RouterInterface
     private $router;
 
     /**
+     * @var string
+     */
+    private $basePath;
+
+    /**
      * @param array<RouteInterface> $routes
      */
-    public function __construct(array $routes)
+    public function __construct(array $routes, string $basePath = '')
     {
         $this->routes = $this->getRoutesByName($routes);
         $this->router = $this->createRouter($routes);
+        $this->basePath = $basePath;
     }
 
     public function match(ServerRequestInterface $request): RouteInterface

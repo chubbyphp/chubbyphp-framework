@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Framework\Integration\FastRoute;
+namespace Chubbyphp\Tests\Framework\Integration;
 
+use Bitty\Http\ResponseFactory as BittyResponseFactory;
+use Bitty\Http\ServerRequestFactory as BittyServerRequestFactory;
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
 use Chubbyphp\Framework\Middleware\RouterMiddleware;
@@ -12,22 +14,65 @@ use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterException;
 use Chubbyphp\Framework\Router\SunriseRouter;
+use Http\Factory\Guzzle\ResponseFactory as GuzzleResponseFactory;
+use Http\Factory\Guzzle\ServerRequestFactory as GuzzleServerRequestFactory;
+use Nyholm\Psr7\Factory\Psr17Factory as NyholmResponseFactory;
+use Nyholm\Psr7\Factory\Psr17Factory as NyholmServerRequestFactory;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Sunrise\Http\Message\ResponseFactory;
-use Sunrise\Http\ServerRequest\ServerRequestFactory;
+use Slim\Psr7\Factory\ResponseFactory as SlimResponseFactory;
+use Slim\Psr7\Factory\ServerRequestFactory as SlimServerRequestFactory;
+use Sunrise\Http\Message\ResponseFactory as SunriseResponseFactory;
+use Sunrise\Http\ServerRequest\ServerRequestFactory as SunriseServerRequestFactory;
+use Zend\Diactoros\ResponseFactory as ZendResponseFactory;
+use Zend\Diactoros\ServerRequestFactory as ZendServerRequestFactory;
 
 /**
  * @coversNothing
  *
  * @internal
  */
-final class SunriseRouterSunrisePhpTest extends TestCase
+final class SunriseRouterTest extends TestCase
 {
-    public function testOk(): void
+    public function providePsr7Implementations(): array
     {
-        $responseFactory = new ResponseFactory();
+        return [
+            'bitty' => [
+                'responseFactory' => new BittyResponseFactory(),
+                'serverRequestFactory' => new BittyServerRequestFactory(),
+            ],
+            'guzzle' => [
+                'responseFactory' => new GuzzleResponseFactory(),
+                'serverRequestFactory' => new GuzzleServerRequestFactory(),
+            ],
+            'nyholm' => [
+                'responseFactory' => new NyholmResponseFactory(),
+                'serverRequestFactory' => new NyholmServerRequestFactory(),
+            ],
+            'slim' => [
+                'responseFactory' => new SlimResponseFactory(),
+                'serverRequestFactory' => new SlimServerRequestFactory(),
+            ],
+            'sunrise' => [
+                'responseFactory' => new SunriseResponseFactory(),
+                'serverRequestFactory' => new SunriseServerRequestFactory(),
+            ],
+            'zend' => [
+                'responseFactory' => new ZendResponseFactory(),
+                'serverRequestFactory' => new ZendServerRequestFactory(),
+            ],
+        ];
+    }
 
+    /**
+     * @dataProvider providePsr7Implementations
+     */
+    public function testOk(
+        ResponseFactoryInterface $responseFactory,
+        ServerRequestFactoryInterface $serverRequestFactory
+    ): void {
         $route = Route::get('/hello/{name<[a-z]+>}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
@@ -43,7 +88,7 @@ final class SunriseRouterSunrisePhpTest extends TestCase
             new RouterMiddleware(new SunriseRouter([$route]), $responseFactory),
         ]);
 
-        $request = (new ServerRequestFactory())->createServerRequest(
+        $request = $serverRequestFactory->createServerRequest(
             RouteInterface::GET,
             '/hello/test'
         );
@@ -54,10 +99,13 @@ final class SunriseRouterSunrisePhpTest extends TestCase
         self::assertSame('Hello, test', (string) $response->getBody());
     }
 
-    public function testTestNotFound(): void
-    {
-        $responseFactory = new ResponseFactory();
-
+    /**
+     * @dataProvider providePsr7Implementations
+     */
+    public function testTestNotFound(
+        ResponseFactoryInterface $responseFactory,
+        ServerRequestFactoryInterface $serverRequestFactory
+    ): void {
         $route = Route::get('/hello/{name<[a-z]+>}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
@@ -73,7 +121,7 @@ final class SunriseRouterSunrisePhpTest extends TestCase
             new RouterMiddleware(new SunriseRouter([$route]), $responseFactory),
         ]);
 
-        $request = (new ServerRequestFactory())->createServerRequest(
+        $request = $serverRequestFactory->createServerRequest(
             RouteInterface::GET,
             '/hello'
         );
@@ -87,10 +135,13 @@ final class SunriseRouterSunrisePhpTest extends TestCase
         );
     }
 
-    public function testMethodNotAllowed(): void
-    {
-        $responseFactory = new ResponseFactory();
-
+    /**
+     * @dataProvider providePsr7Implementations
+     */
+    public function testMethodNotAllowed(
+        ResponseFactoryInterface $responseFactory,
+        ServerRequestFactoryInterface $serverRequestFactory
+    ): void {
         $route = Route::get('/hello/{name<[a-z]+>}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
@@ -106,7 +157,7 @@ final class SunriseRouterSunrisePhpTest extends TestCase
             new RouterMiddleware(new SunriseRouter([$route]), $responseFactory),
         ]);
 
-        $request = (new ServerRequestFactory())->createServerRequest(
+        $request = $serverRequestFactory->createServerRequest(
             RouteInterface::POST,
             '/hello/test'
         );
@@ -120,10 +171,13 @@ final class SunriseRouterSunrisePhpTest extends TestCase
         );
     }
 
-    public function testException(): void
-    {
-        $responseFactory = new ResponseFactory();
-
+    /**
+     * @dataProvider providePsr7Implementations
+     */
+    public function testException(
+        ResponseFactoryInterface $responseFactory,
+        ServerRequestFactoryInterface $serverRequestFactory
+    ): void {
         $route = Route::get('/hello/{name<[a-z]+>}', 'hello', new CallbackRequestHandler(
             function (): void {
                 throw new \RuntimeException('Something went wrong');
@@ -135,7 +189,7 @@ final class SunriseRouterSunrisePhpTest extends TestCase
             new RouterMiddleware(new SunriseRouter([$route]), $responseFactory),
         ]);
 
-        $request = (new ServerRequestFactory())->createServerRequest(
+        $request = $serverRequestFactory->createServerRequest(
             RouteInterface::GET,
             '/hello/test'
         );
@@ -150,12 +204,15 @@ final class SunriseRouterSunrisePhpTest extends TestCase
         self::assertStringContainsString('Something went wrong', $body);
     }
 
-    public function testExceptionWithoutExceptionMiddleware(): void
-    {
+    /**
+     * @dataProvider providePsr7Implementations
+     */
+    public function testExceptionWithoutExceptionMiddleware(
+        ResponseFactoryInterface $responseFactory,
+        ServerRequestFactoryInterface $serverRequestFactory
+    ): void {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Something went wrong');
-
-        $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name<[a-z]+>}', 'hello', new CallbackRequestHandler(
             function (): void {
@@ -167,7 +224,7 @@ final class SunriseRouterSunrisePhpTest extends TestCase
             new RouterMiddleware(new SunriseRouter([$route]), $responseFactory),
         ]);
 
-        $request = (new ServerRequestFactory())->createServerRequest(
+        $request = $serverRequestFactory->createServerRequest(
             RouteInterface::GET,
             '/hello/test'
         );
@@ -175,15 +232,18 @@ final class SunriseRouterSunrisePhpTest extends TestCase
         $app->handle($request);
     }
 
-    public function testMissingRouterMiddleware(): void
-    {
-        $responseFactory = new ResponseFactory();
-
+    /**
+     * @dataProvider providePsr7Implementations
+     */
+    public function testMissingRouterMiddleware(
+        ResponseFactoryInterface $responseFactory,
+        ServerRequestFactoryInterface $serverRequestFactory
+    ): void {
         $app = new Application([
             new ExceptionMiddleware($responseFactory, true),
         ]);
 
-        $request = (new ServerRequestFactory())->createServerRequest(
+        $request = $serverRequestFactory->createServerRequest(
             RouteInterface::GET,
             '/hello/test'
         );
@@ -201,8 +261,13 @@ final class SunriseRouterSunrisePhpTest extends TestCase
         );
     }
 
-    public function testMissingRouterMiddlewareWithoutExceptionMiddleware(): void
-    {
+    /**
+     * @dataProvider providePsr7Implementations
+     */
+    public function testMissingRouterMiddlewareWithoutExceptionMiddleware(
+        ResponseFactoryInterface $responseFactory,
+        ServerRequestFactoryInterface $serverRequestFactory
+    ): void {
         $this->expectException(RouterException::class);
         $this->expectExceptionMessage(
             'Request attribute "route" missing or wrong type "NULL"'
@@ -211,11 +276,25 @@ final class SunriseRouterSunrisePhpTest extends TestCase
 
         $app = new Application([]);
 
-        $request = (new ServerRequestFactory())->createServerRequest(
+        $request = $serverRequestFactory->createServerRequest(
             RouteInterface::GET,
             '/hello/test'
         );
 
         $app->handle($request);
+    }
+
+    public function testGeneratePath(): void
+    {
+        $route = Route::get('/hello/{name<[a-z]+>}', 'hello', new CallbackRequestHandler(
+            function (): void {}
+        ));
+
+        $router = new SunriseRouter([$route]);
+
+        self::assertSame(
+            '/hello/world?key=value',
+            $router->generatePath('hello', ['name' => 'world'], ['key' => 'value'])
+        );
     }
 }
