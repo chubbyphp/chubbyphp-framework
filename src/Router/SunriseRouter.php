@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-use Psr\Http\Message\ResponseInterface;
+use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Sunrise\Http\Router\Exception\MethodNotAllowedException;
 use Sunrise\Http\Router\Exception\RouteNotFoundException;
 use Sunrise\Http\Router\Router;
@@ -120,12 +119,7 @@ final class SunriseRouter implements RouterInterface
                 $route->getName(),
                 $route->getPath(),
                 [$route->getMethod()],
-                new class() implements RequestHandlerInterface {
-                    public function handle(ServerRequestInterface $request): ResponseInterface
-                    {
-                        throw new \LogicException('You should never get to this point');
-                    }
-                },
+                new CallbackRequestHandler(function (): void {}),
                 [],
                 $route->getAttributes()
             );
