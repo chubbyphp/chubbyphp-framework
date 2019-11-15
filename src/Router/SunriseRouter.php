@@ -78,7 +78,13 @@ final class SunriseRouter implements RouterInterface
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
-        return '/'; // todo implement
+        $path = $this->router->getRoute($name)->buildPath($attributes, false);
+
+        if ([] === $queryParams) {
+            return $this->basePath.$path;
+        }
+
+        return $this->basePath.$path.'?'.http_build_query($queryParams);
     }
 
     /**
