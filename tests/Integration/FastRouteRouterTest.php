@@ -34,7 +34,7 @@ use Zend\Diactoros\ServerRequestFactory as ZendServerRequestFactory;
  *
  * @internal
  */
-final class FastRouteTest extends TestCase
+final class FastRouteRouterTest extends TestCase
 {
     public function providePsr7Implementations(): array
     {
