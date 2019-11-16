@@ -12,7 +12,6 @@ use Chubbyphp\Framework\Middleware\RouterMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
-use Chubbyphp\Framework\Router\RouterException;
 use Chubbyphp\Framework\Router\SunriseRouter;
 use Http\Factory\Guzzle\ResponseFactory as GuzzleResponseFactory;
 use Http\Factory\Guzzle\ServerRequestFactory as GuzzleServerRequestFactory;
@@ -223,58 +222,6 @@ final class SunriseRouterTest extends TestCase
         $app = new Application([
             new RouterMiddleware(new SunriseRouter([$route]), $responseFactory),
         ]);
-
-        $request = $serverRequestFactory->createServerRequest(
-            RouteInterface::GET,
-            '/hello/test'
-        );
-
-        $app->handle($request);
-    }
-
-    /**
-     * @dataProvider providePsr7Implementations
-     */
-    public function testMissingRouterMiddleware(
-        ResponseFactoryInterface $responseFactory,
-        ServerRequestFactoryInterface $serverRequestFactory
-    ): void {
-        $app = new Application([
-            new ExceptionMiddleware($responseFactory, true),
-        ]);
-
-        $request = $serverRequestFactory->createServerRequest(
-            RouteInterface::GET,
-            '/hello/test'
-        );
-
-        $response = $app->handle($request);
-
-        self::assertSame(500, $response->getStatusCode());
-
-        $body = (string) $response->getBody();
-
-        self::assertStringContainsString(
-            'Request attribute "route" missing or wrong type "NULL"'
-                .', please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware',
-            $body
-        );
-    }
-
-    /**
-     * @dataProvider providePsr7Implementations
-     */
-    public function testMissingRouterMiddlewareWithoutExceptionMiddleware(
-        ResponseFactoryInterface $responseFactory,
-        ServerRequestFactoryInterface $serverRequestFactory
-    ): void {
-        $this->expectException(RouterException::class);
-        $this->expectExceptionMessage(
-            'Request attribute "route" missing or wrong type "NULL"'
-                .', please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware'
-        );
-
-        $app = new Application([]);
 
         $request = $serverRequestFactory->createServerRequest(
             RouteInterface::GET,
