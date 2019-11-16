@@ -100,8 +100,7 @@ final class AuraRouterTest extends TestCase
         ]);
 
         $router = new AuraRouter([$route]);
-
-        self::assertSame($route, $router->match($request));
+        $router->match($request);
     }
 
     public function testMatchMethodNotAllowed(): void
@@ -137,8 +136,7 @@ final class AuraRouterTest extends TestCase
         ]);
 
         $router = new AuraRouter([$route]);
-
-        self::assertSame($route, $router->match($request));
+        $router->match($request);
     }
 
     public function testMatchWithTokensNotMatch(): void
@@ -173,8 +171,7 @@ final class AuraRouterTest extends TestCase
         ]);
 
         $router = new AuraRouter([$route]);
-
-        self::assertSame($route, $router->match($request));
+        $router->match($request);
     }
 
     public function testMatchWithTokensMatch(): void
@@ -302,8 +299,7 @@ final class AuraRouterTest extends TestCase
         ]);
 
         $router = new AuraRouter([$route]);
-
-        self::assertSame($route, $router->match($request));
+        $router->match($request);
     }
 
     public function testMatchWithSecureMatch(): void
@@ -368,8 +364,7 @@ final class AuraRouterTest extends TestCase
         ]);
 
         $router = new AuraRouter([$route]);
-
-        self::assertSame($route, $router->match($request));
+        $router->match($request);
     }
 
     public function testMatchWithSpecialMatch(): void
@@ -441,8 +436,7 @@ final class AuraRouterTest extends TestCase
         ]);
 
         $router = new AuraRouter([$route]);
-
-        self::assertSame($route, $router->match($request));
+        $router->match($request);
     }
 
     public function testMatchWithWildcardMatch(): void

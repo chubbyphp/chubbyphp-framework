@@ -96,8 +96,7 @@ final class FastRouteRouterTest extends TestCase
         ]);
 
         $router = new FastRouteRouter([$route]);
-
-        self::assertSame($route, $router->match($request));
+        $router->match($request);
     }
 
     public function testMatchMethodNotAllowed(): void
@@ -129,8 +128,7 @@ final class FastRouteRouterTest extends TestCase
         ]);
 
         $router = new FastRouteRouter([$route]);
-
-        self::assertSame($route, $router->match($request));
+        $router->match($request);
     }
 
     public function testGenerateUri(): void
