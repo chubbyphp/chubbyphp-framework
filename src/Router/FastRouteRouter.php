@@ -100,16 +100,7 @@ final class FastRouteRouter implements RouterInterface
 
         $routeIndex = $this->getRouteIndex($routePartSets, $attributes);
 
-        $pathParts = [];
-        foreach ($routePartSets[$routeIndex] as $routePart) {
-            if (is_array($routePart)) {
-                $pathParts[] = $attributes[$routePart[0]] ?? '{'.$routePart[0].'}';
-            } else {
-                $pathParts[] = $routePart;
-            }
-        }
-
-        $path = implode('', $pathParts);
+        $path = $this->generatePathFromAttributes($name, $routePartSets, $attributes, $routeIndex);
 
         if ([] === $queryParams) {
             return $this->basePath.$path;
@@ -194,5 +185,29 @@ final class FastRouteRouter implements RouterInterface
         }
 
         return $routeIndex;
+    }
+
+    /**
+     * @param array<int, array<int, array|string>> $routePartSets
+     * @param array<string>                        $attributes
+     *
+     * @return string
+     */
+    private function generatePathFromAttributes(string $name, array $routePartSets, array $attributes, int $routeIndex)
+    {
+        $pathParts = [];
+        foreach ($routePartSets[$routeIndex] as $routePart) {
+            if (is_array($routePart)) {
+                if (!isset($attributes[$routePart[0]])) {
+                    throw RouterException::createForPathGenerationMissingAttribute($name, $routePart[0]);
+                }
+
+                $pathParts[] = $attributes[$routePart[0]];
+            } else {
+                $pathParts[] = $routePart;
+            }
+        }
+
+        return implode('', $pathParts);
     }
 }
