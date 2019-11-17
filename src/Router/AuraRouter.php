@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-use Aura\Router\Exception\RouteNotFound;
 use Aura\Router\Generator;
 use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
