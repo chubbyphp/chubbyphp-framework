@@ -95,17 +95,17 @@ final class AuraRouter implements RouterInterface
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
-        try {
-            $path = $this->generator->generate($name, $attributes);
-
-            if ([] === $queryParams) {
-                return $this->basePath.$path;
-            }
-
-            return $this->basePath.$path.'?'.http_build_query($queryParams);
-        } catch (RouteNotFound $exception) {
+        if (!isset($this->routes[$name])) {
             throw RouterException::createForMissingRoute($name);
         }
+
+        $path = $this->generator->generate($name, $attributes);
+
+        if ([] === $queryParams) {
+            return $this->basePath.$path;
+        }
+
+        return $this->basePath.$path.'?'.http_build_query($queryParams);
     }
 
     /**
