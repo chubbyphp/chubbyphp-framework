@@ -251,6 +251,79 @@ final class SunriseRouterTest extends TestCase
         );
     }
 
+    public function testGenerateUriWithBasePath(): void
+    {
+        /** @var UriInterface|MockObject $uri */
+        $uri = $this->getMockByCalls(UriInterface::class, [
+            Call::create('getScheme')->with()->willReturn('https'),
+            Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
+            Call::create('getScheme')->with()->willReturn('https'),
+            Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
+            Call::create('getScheme')->with()->willReturn('https'),
+            Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
+            Call::create('getScheme')->with()->willReturn('https'),
+            Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
+            // Call::create('getScheme')->with()->willReturn('https'),
+            // Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
+        ]);
+
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getUri')->with()->willReturn($uri),
+            // Call::create('getUri')->with()->willReturn($uri),
+        ]);
+
+        /** @var RouteInterface|MockObject $route */
+        $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getPath')->with()->willReturn('/user/{id<\d+>}(/{name})'),
+            Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getAttributes')->with()->willReturn([]),
+        ]);
+
+        $router = new SunriseRouter([$route], '/path/to/directory');
+
+        // self::assertSame(
+        //     'https://user:password@localhost/path/to/directory/user/{id}',
+        //     $router->generateUrl($request, 'user')
+        // );
+        self::assertSame(
+            'https://user:password@localhost/path/to/directory/user/1',
+            $router->generateUrl($request, 'user', ['id' => 1])
+        );
+        self::assertSame(
+            'https://user:password@localhost/path/to/directory/user/1?key=value',
+            $router->generateUrl($request, 'user', ['id' => 1], ['key' => 'value'])
+        );
+        self::assertSame(
+            'https://user:password@localhost/path/to/directory/user/1/sample',
+            $router->generateUrl($request, 'user', ['id' => 1, 'name' => 'sample'])
+        );
+        self::assertSame(
+            'https://user:password@localhost/path/to/directory/user/1/sample?key1=value1&key2=value2',
+            $router->generateUrl(
+                $request,
+                'user',
+                ['id' => 1, 'name' => 'sample'],
+                ['key1' => 'value1', 'key2' => 'value2']
+            )
+        );
+    }
+
+    public function testGeneratePathWithMissingRoute(): void
+    {
+        $this->expectException(RouterException::class);
+        $this->expectExceptionMessage('Missing route: "user"');
+        $this->expectExceptionCode(1);
+
+        $router = new SunriseRouter([]);
+        $router->generatePath('user', ['id' => 1]);
+    }
+
     public function testGeneratePath(): void
     {
         /** @var RouteInterface|MockObject $route */

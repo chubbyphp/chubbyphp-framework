@@ -83,6 +83,10 @@ final class SunriseRouter implements RouterInterface
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
+        if (!isset($this->routes[$name])) {
+            throw RouterException::createForMissingRoute($name);
+        }
+
         $path = $this->router->getRoute($name)->buildPath($attributes, false);
 
         if ([] === $queryParams) {
