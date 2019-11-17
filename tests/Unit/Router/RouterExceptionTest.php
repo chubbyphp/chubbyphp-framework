@@ -74,4 +74,15 @@ final class RouterExceptionTest extends TestCase
         );
         self::assertSame(2, $exception->getCode());
     }
+
+    public function testCreateForPathGenerationMissingAttribute(): void
+    {
+        $exception = RouterException::createForPathGenerationMissingAttribute('name', 'attribute');
+
+        self::assertSame(
+            'Missing attribute "attribute" while path generation for route: "name"',
+            $exception->getMessage()
+        );
+        self::assertSame(3, $exception->getCode());
+    }
 }

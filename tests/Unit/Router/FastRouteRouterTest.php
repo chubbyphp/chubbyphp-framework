@@ -205,13 +205,10 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
             Call::create('getScheme')->with()->willReturn('https'),
             Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
-            Call::create('getScheme')->with()->willReturn('https'),
-            Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
@@ -228,15 +225,10 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
-            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
         $router = new FastRouteRouter([$route]);
 
-        self::assertSame(
-            'https://user:password@localhost/user/{id}',
-            $router->generateUrl($request, 'user')
-        );
         self::assertSame(
             'https://user:password@localhost/user/1',
             $router->generateUrl($request, 'user', ['id' => 1])
@@ -260,12 +252,36 @@ final class FastRouteRouterTest extends TestCase
         );
     }
 
+    public function testGenerateUriWithMissingAttribute(): void
+    {
+        $this->expectException(RouterException::class);
+        $this->expectExceptionMessage('Missing attribute "id" while path generation for route: "user"');
+
+        /** @var UriInterface|MockObject $uri */
+        $uri = $this->getMockByCalls(UriInterface::class);
+
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
+        ]);
+
+        /** @var RouteInterface|MockObject $route */
+        $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+        ]);
+
+        $router = new FastRouteRouter([$route]);
+        $router->generateUrl($request, 'user');
+    }
+
     public function testGenerateUriWithBasePath(): void
     {
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
-            Call::create('getScheme')->with()->willReturn('https'),
-            Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
             Call::create('getScheme')->with()->willReturn('https'),
             Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
             Call::create('getScheme')->with()->willReturn('https'),
@@ -282,7 +298,6 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
-            Call::create('getUri')->with()->willReturn($uri),
         ]);
 
         /** @var RouteInterface|MockObject $route */
@@ -295,15 +310,10 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
-            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
         $router = new FastRouteRouter([$route], null, '/path/to/directory');
 
-        self::assertSame(
-            'https://user:password@localhost/path/to/directory/user/{id}',
-            $router->generateUrl($request, 'user')
-        );
         self::assertSame(
             'https://user:password@localhost/path/to/directory/user/1',
             $router->generateUrl($request, 'user', ['id' => 1])
@@ -349,12 +359,10 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
-            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
         $router = new FastRouteRouter([$route]);
 
-        self::assertSame('/user/{id}', $router->generatePath('user'));
         self::assertSame('/user/1', $router->generatePath('user', ['id' => 1]));
         self::assertSame('/user/1?key=value', $router->generatePath('user', ['id' => 1], ['key' => 'value']));
         self::assertSame('/user/1/sample', $router->generatePath('user', ['id' => 1, 'name' => 'sample']));
@@ -366,6 +374,24 @@ final class FastRouteRouterTest extends TestCase
                 ['key1' => 'value1', 'key2' => 'value2']
             )
         );
+    }
+
+    public function testGeneratePathWithMissingAttribute(): void
+    {
+        $this->expectException(RouterException::class);
+        $this->expectExceptionMessage('Missing attribute "id" while path generation for route: "user"');
+
+        /** @var RouteInterface|MockObject $route */
+        $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+        ]);
+
+        $router = new FastRouteRouter([$route]);
+        $router->generatePath('user');
     }
 
     public function testGeneratePathWithBasePath(): void
@@ -380,12 +406,10 @@ final class FastRouteRouterTest extends TestCase
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
             Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
-            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
         ]);
 
         $router = new FastRouteRouter([$route], null, '/path/to/directory');
 
-        self::assertSame('/path/to/directory/user/{id}', $router->generatePath('user'));
         self::assertSame('/path/to/directory/user/1', $router->generatePath('user', ['id' => 1]));
         self::assertSame(
             '/path/to/directory/user/1?key=value',

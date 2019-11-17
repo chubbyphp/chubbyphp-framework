@@ -70,6 +70,11 @@ final class RouterException extends \RuntimeException
         ), 2);
     }
 
+    public static function createForPathGenerationMissingAttribute(string $name, string $attribute): self
+    {
+        return new self(sprintf('Missing attribute "%s" while path generation for route: "%s"', $attribute, $name), 3);
+    }
+
     public function getType(): string
     {
         return $this->type;
