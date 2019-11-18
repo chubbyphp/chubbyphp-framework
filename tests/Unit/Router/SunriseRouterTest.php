@@ -263,8 +263,6 @@ final class SunriseRouterTest extends TestCase
             Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
             Call::create('getScheme')->with()->willReturn('https'),
             Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
-            // Call::create('getScheme')->with()->willReturn('https'),
-            // Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
@@ -273,7 +271,6 @@ final class SunriseRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
-            // Call::create('getUri')->with()->willReturn($uri),
         ]);
 
         /** @var RouteInterface|MockObject $route */
@@ -287,10 +284,6 @@ final class SunriseRouterTest extends TestCase
 
         $router = new SunriseRouter([$route], '/path/to/directory');
 
-        // self::assertSame(
-        //     'https://user:password@localhost/path/to/directory/user/{id}',
-        //     $router->generateUrl($request, 'user')
-        // );
         self::assertSame(
             'https://user:password@localhost/path/to/directory/user/1',
             $router->generateUrl($request, 'user', ['id' => 1])
@@ -337,7 +330,6 @@ final class SunriseRouterTest extends TestCase
 
         $router = new SunriseRouter([$route]);
 
-        //self::assertSame('/user/{id}', $router->generatePath('user'));
         self::assertSame('/user/1', $router->generatePath('user', ['id' => 1]));
         self::assertSame('/user/1?key=value', $router->generatePath('user', ['id' => 1], ['key' => 'value']));
         self::assertSame('/user/1/sample', $router->generatePath('user', ['id' => 1, 'name' => 'sample']));
@@ -364,7 +356,6 @@ final class SunriseRouterTest extends TestCase
 
         $router = new SunriseRouter([$route], '/path/to/directory');
 
-        //self::assertSame('/path/to/directory/user/{id}', $router->generatePath('user'));
         self::assertSame('/path/to/directory/user/1', $router->generatePath('user', ['id' => 1]));
         self::assertSame(
             '/path/to/directory/user/1?key=value',
