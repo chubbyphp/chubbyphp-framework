@@ -15,7 +15,6 @@ matrix:
     - php: 7.4snapshot
 
 before_script:
-  - rm ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - echo 'extension=apcu.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/apcu.ini
   - echo 'Europe/Zurich' | sudo tee /etc/timezone
   - echo 'date.timezone = "Europe/Zurich"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
