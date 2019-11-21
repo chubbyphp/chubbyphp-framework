@@ -198,11 +198,25 @@ final class FastRouteRouter implements RouterInterface
         $pathParts = [];
         foreach ($routePartSets[$routeIndex] as $routePart) {
             if (is_array($routePart)) {
-                if (!isset($attributes[$routePart[0]])) {
-                    throw RouterException::createForPathGenerationMissingAttribute($name, $routePart[0]);
+                $attribute = $routePart[0];
+
+                if (!isset($attributes[$attribute])) {
+                    throw RouterException::createForPathGenerationMissingAttribute($name, $attribute);
                 }
 
-                $pathParts[] = $attributes[$routePart[0]];
+                $value = (string) $attributes[$attribute];
+                $pattern = '!^'.$routePart[1].'$!';
+
+                if (1 !== preg_match($pattern, $value)) {
+                    throw RouterException::createForPathGenerationNotMatchingAttribute(
+                        $name,
+                        $attribute,
+                        $value,
+                        $pattern
+                    );
+                }
+
+                $pathParts[] = $value;
             } else {
                 $pathParts[] = $routePart;
             }
