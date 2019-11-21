@@ -42,7 +42,7 @@
         "nikic/fast-route": "^1.0|^0.6",
         "nunomaduro/phpinsights": "^1.10.3",
         "nyholm/psr7": "^1.0",
-        "php-coveralls/php-coveralls": "^2.1",
+        "php-coveralls/php-coveralls": "^2.2",
         "phploc/phploc": "^5.0",
         "phpstan/extension-installer": "^1.0.3",
         "phpstan/phpstan": "^0.11.19",
