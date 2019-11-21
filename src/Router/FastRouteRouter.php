@@ -213,8 +213,8 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param array<int, array|string> $routePart
-     * @param array<string>            $attributes
+     * @param array<int, string> $routePart
+     * @param array<string>      $attributes
      */
     private function getAttributeValue(string $name, array $routePart, array $attributes): string
     {
