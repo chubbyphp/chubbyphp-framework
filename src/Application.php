@@ -7,8 +7,8 @@ namespace Chubbyphp\Framework;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
+use Chubbyphp\Framework\Router\Exceptions\MissingRouteAttributeOnRequestException;
 use Chubbyphp\Framework\Router\RouteInterface;
-use Chubbyphp\Framework\Router\RouterException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -54,7 +54,7 @@ final class Application implements RequestHandlerInterface
                 $route = $request->getAttribute('route');
 
                 if (!$route instanceof RouteInterface) {
-                    throw RouterException::createForMissingRouteAttribute($route);
+                    throw MissingRouteAttributeOnRequestException::create($route);
                 }
 
                 return $this->middlewareDispatcher->dispatch(

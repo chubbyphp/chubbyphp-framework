@@ -19,9 +19,9 @@ final class RouterExceptionTest extends TestCase
         $this->expectException(\Error::class);
         $this->expectExceptionMessage(
             sprintf(
-                'Call to private %s::__construct() from context \'%s\'',
+                'Call to protected %s::__construct() from context \'%s\'',
                 RouterException::class,
-                RouterExceptionTest::class
+                self::class
             )
         );
 
