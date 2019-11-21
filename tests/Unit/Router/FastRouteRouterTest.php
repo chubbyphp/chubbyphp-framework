@@ -256,6 +256,7 @@ final class FastRouteRouterTest extends TestCase
     {
         $this->expectException(RouterException::class);
         $this->expectExceptionMessage('Missing attribute "id" while path generation for route: "user"');
+        $this->expectExceptionCode(3);
 
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class);
@@ -276,6 +277,36 @@ final class FastRouteRouterTest extends TestCase
 
         $router = new FastRouteRouter([$route]);
         $router->generateUrl($request, 'user');
+    }
+
+    public function testGenerateUriWithNotMatchingAttribute(): void
+    {
+        $this->expectException(RouterException::class);
+        $this->expectExceptionMessage(
+            'Not matching value "a3bce0ca-2b7c-4fc6-8dad-ecdcc6907791" with pattern "!^\d+$!" on attribute "id" while'
+            .' path generation for route: "user"'
+        );
+        $this->expectExceptionCode(4);
+
+        /** @var UriInterface|MockObject $uri */
+        $uri = $this->getMockByCalls(UriInterface::class);
+
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
+        ]);
+
+        /** @var RouteInterface|MockObject $route */
+        $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getPath')->with()->willReturn('/user/{id:\d+}[/{name}]'),
+        ]);
+
+        $router = new FastRouteRouter([$route]);
+        $router->generateUrl($request, 'user', ['id' => 'a3bce0ca-2b7c-4fc6-8dad-ecdcc6907791']);
     }
 
     public function testGenerateUriWithBasePath(): void

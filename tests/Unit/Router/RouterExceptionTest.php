@@ -85,4 +85,15 @@ final class RouterExceptionTest extends TestCase
         );
         self::assertSame(3, $exception->getCode());
     }
+
+    public function testCreateForPathGenerationNotMatchingAttribute(): void
+    {
+        $exception = RouterException::createForPathGenerationNotMatchingAttribute('name', 'attribute', 'test', '\d+');
+
+        self::assertSame(
+            'Not matching value "test" with pattern "\d+" on attribute "attribute" while path generation for route: "name"',
+            $exception->getMessage()
+        );
+        self::assertSame(4, $exception->getCode());
+    }
 }

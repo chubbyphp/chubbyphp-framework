@@ -75,6 +75,24 @@ final class RouterException extends \RuntimeException
         return new self(sprintf('Missing attribute "%s" while path generation for route: "%s"', $attribute, $name), 3);
     }
 
+    public static function createForPathGenerationNotMatchingAttribute(
+        string $name,
+        string $attribute,
+        string $value,
+        string $pattern
+    ): self {
+        return new self(
+            sprintf(
+                'Not matching value "%s" with pattern "%s" on attribute "%s" while path generation for route: "%s"',
+                $value,
+                $pattern,
+                $attribute,
+                $name
+            ),
+            4
+        );
+    }
+
     public function getType(): string
     {
         return $this->type;
