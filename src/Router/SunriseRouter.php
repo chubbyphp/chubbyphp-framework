@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Chubbyphp\Framework\Router;
 
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
+use Chubbyphp\Framework\Router\Exceptions\MethodNotAllowedException;
+use Chubbyphp\Framework\Router\Exceptions\MissingAttributeForPathGenerationException;
+use Chubbyphp\Framework\Router\Exceptions\NotFoundException;
+use Chubbyphp\Framework\Router\Exceptions\NotMatchingValueForPathGenerationException;
 use Psr\Http\Message\ServerRequestInterface;
-use Sunrise\Http\Router\Exception\InvalidAttributeValueException;
-use Sunrise\Http\Router\Exception\MethodNotAllowedException;
-use Sunrise\Http\Router\Exception\MissingAttributeValueException;
-use Sunrise\Http\Router\Exception\RouteNotFoundException;
+use Sunrise\Http\Router\Exception\InvalidAttributeValueException as SunriseInvalidAttributeValueException;
+use Sunrise\Http\Router\Exception\MethodNotAllowedException as SunriseMethodNotAllowedException;
+use Sunrise\Http\Router\Exception\MissingAttributeValueException as SunriseMissingAttributeValueException;
+use Sunrise\Http\Router\Exception\RouteNotFoundException as SunriseRouteNotFoundException;
 use Sunrise\Http\Router\Router;
 
 final class SunriseRouter implements RouterInterface
@@ -48,13 +52,13 @@ final class SunriseRouter implements RouterInterface
             $route = $this->routes[$sunriseRoute->getName()];
 
             return $route->withAttributes($sunriseRoute->getAttributes());
-        } catch (RouteNotFoundException $exception) {
-            throw RouterException::createForNotFound($request->getRequestTarget());
-        } catch (MethodNotAllowedException $exception) {
-            throw RouterException::createForMethodNotAllowed(
+        } catch (SunriseRouteNotFoundException $exception) {
+            throw NotFoundException::create($request->getRequestTarget());
+        } catch (SunriseMethodNotAllowedException $exception) {
+            throw MethodNotAllowedException::create(
+                $request->getRequestTarget(),
                 $request->getMethod(),
                 $exception->getAllowedMethods(),
-                $request->getRequestTarget()
             );
         }
     }
@@ -91,10 +95,10 @@ final class SunriseRouter implements RouterInterface
 
         try {
             $path = $this->router->generateUri($name, $attributes, true);
-        } catch (MissingAttributeValueException $exception) {
-            throw RouterException::createForPathGenerationMissingAttribute($name, 'attribute');
-        } catch (InvalidAttributeValueException $exception) {
-            throw RouterException::createForPathGenerationNotMatchingAttribute($name, 'attribute', 'value', 'pattern');
+        } catch (SunriseMissingAttributeValueException $exception) {
+            throw MissingAttributeForPathGenerationException::create($name, 'attribute');
+        } catch (SunriseInvalidAttributeValueException $exception) {
+            throw NotMatchingValueForPathGenerationException::create($name, 'attribute', 'value', 'pattern');
         }
 
         if ([] === $queryParams) {

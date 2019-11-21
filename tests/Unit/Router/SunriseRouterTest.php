@@ -108,8 +108,8 @@ final class SunriseRouterTest extends TestCase
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getMethod')->with()->willReturn('POST'),
-            Call::create('getMethod')->with()->willReturn('POST'),
             Call::create('getRequestTarget')->with()->willReturn('/api/pets?offset=1&limit=20'),
+            Call::create('getMethod')->with()->willReturn('POST'),
         ]);
 
         /** @var RouteInterface|MockObject $route */
