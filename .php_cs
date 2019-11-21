@@ -17,7 +17,6 @@ return PhpCsFixer\Config::create()
         'array_syntax' => ['syntax' => 'short'],
         'declare_strict_types' => true,
         'dir_constant' => true,
-        'final_class' => true,
         'is_null' => true,
         'linebreak_after_opening_tag' => true,
         'list_syntax' => true,

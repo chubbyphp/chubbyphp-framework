@@ -8,6 +8,9 @@ use Aura\Router\Generator;
 use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
 use Aura\Router\Rule\Allows;
+use Chubbyphp\Framework\Router\Exceptions\MethodNotAllowedException;
+use Chubbyphp\Framework\Router\Exceptions\MissingRouteByNameException;
+use Chubbyphp\Framework\Router\Exceptions\NotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class AuraRouter implements RouterInterface
@@ -52,13 +55,13 @@ final class AuraRouter implements RouterInterface
             $failedAuraRoute = $this->matcher->getFailedRoute();
             switch ($failedAuraRoute->failedRule) {
                 case Allows::class:
-                    throw RouterException::createForMethodNotAllowed(
+                    throw MethodNotAllowedException::create(
+                        $request->getRequestTarget(),
                         $request->getMethod(),
-                        $failedAuraRoute->allows,
-                        $request->getRequestTarget()
+                        $failedAuraRoute->allows
                     );
                 default:
-                    throw RouterException::createForNotFound($request->getRequestTarget());
+                    throw NotFoundException::create($request->getRequestTarget());
             }
         }
 
@@ -95,7 +98,7 @@ final class AuraRouter implements RouterInterface
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
         if (!isset($this->routes[$name])) {
-            throw RouterException::createForMissingRoute($name);
+            throw MissingRouteByNameException::create($name);
         }
 
         $path = $this->generator->generate($name, $attributes);

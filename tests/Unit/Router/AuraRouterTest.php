@@ -122,8 +122,8 @@ final class AuraRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('POST'),
-            Call::create('getMethod')->with()->willReturn('POST'),
             Call::create('getRequestTarget')->with()->willReturn('/api/pets?offset=1&limit=20'),
+            Call::create('getMethod')->with()->willReturn('POST'),
         ]);
 
         /** @var RouteInterface|MockObject $route */

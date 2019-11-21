@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
+use Chubbyphp\Framework\Router\Exceptions\MethodNotAllowedException;
+use Chubbyphp\Framework\Router\Exceptions\MissingAttributeForPathGenerationException;
+use Chubbyphp\Framework\Router\Exceptions\MissingRouteByNameException;
+use Chubbyphp\Framework\Router\Exceptions\NotFoundException;
+use Chubbyphp\Framework\Router\Exceptions\NotMatchingValueForPathGenerationException;
 use FastRoute\DataGenerator\GroupCountBased as DataGenerator;
 use FastRoute\Dispatcher\GroupCountBased as Dispatcher;
 use FastRoute\RouteCollector;
@@ -51,14 +56,14 @@ final class FastRouteRouter implements RouterInterface
         $routeInfo = $this->dispatcher->dispatch($method, $path);
 
         if (Dispatcher::NOT_FOUND === $routeInfo[0]) {
-            throw RouterException::createForNotFound($request->getRequestTarget());
+            throw NotFoundException::create($request->getRequestTarget());
         }
 
         if (Dispatcher::METHOD_NOT_ALLOWED === $routeInfo[0]) {
-            throw RouterException::createForMethodNotAllowed(
+            throw MethodNotAllowedException::create(
+                $request->getRequestTarget(),
                 $method,
-                $routeInfo[1],
-                $request->getRequestTarget()
+                $routeInfo[1]
             );
         }
 
@@ -159,7 +164,7 @@ final class FastRouteRouter implements RouterInterface
     private function getRoute(string $name): RouteInterface
     {
         if (!isset($this->routes[$name])) {
-            throw RouterException::createForMissingRoute($name);
+            throw MissingRouteByNameException::create($name);
         }
 
         return $this->routes[$name];
@@ -198,30 +203,39 @@ final class FastRouteRouter implements RouterInterface
         $pathParts = [];
         foreach ($routePartSets[$routeIndex] as $routePart) {
             if (is_array($routePart)) {
-                $attribute = $routePart[0];
-
-                if (!isset($attributes[$attribute])) {
-                    throw RouterException::createForPathGenerationMissingAttribute($name, $attribute);
-                }
-
-                $value = (string) $attributes[$attribute];
-                $pattern = '!^'.$routePart[1].'$!';
-
-                if (1 !== preg_match($pattern, $value)) {
-                    throw RouterException::createForPathGenerationNotMatchingAttribute(
-                        $name,
-                        $attribute,
-                        $value,
-                        $pattern
-                    );
-                }
-
-                $pathParts[] = $value;
+                $pathParts[] = $this->getAttributeValue($name, $routePart, $attributes);
             } else {
                 $pathParts[] = $routePart;
             }
         }
 
         return implode('', $pathParts);
+    }
+
+    /**
+     * @param array<int, array|string> $routePart
+     * @param array<string>            $attributes
+     */
+    private function getAttributeValue(string $name, array $routePart, array $attributes): string
+    {
+        $attribute = $routePart[0];
+
+        if (!isset($attributes[$attribute])) {
+            throw MissingAttributeForPathGenerationException::create($name, $attribute);
+        }
+
+        $value = (string) $attributes[$attribute];
+        $pattern = '!^'.$routePart[1].'$!';
+
+        if (1 !== preg_match($pattern, $value)) {
+            throw NotMatchingValueForPathGenerationException::create(
+                $name,
+                $attribute,
+                $value,
+                $pattern
+            );
+        }
+
+        return $value;
     }
 }

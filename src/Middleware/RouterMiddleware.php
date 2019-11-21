@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Middleware;
 
-use Chubbyphp\Framework\Router\RouterException;
+use Chubbyphp\Framework\Router\Exceptions\RouterExceptionInterface;
 use Chubbyphp\Framework\Router\RouterInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -84,7 +84,7 @@ EOT;
     {
         try {
             $route = $this->router->match($request);
-        } catch (RouterException $routerException) {
+        } catch (RouterExceptionInterface $routerException) {
             return $this->routeExceptionResponse($routerException);
         }
 
@@ -97,7 +97,7 @@ EOT;
         return $handler->handle($request);
     }
 
-    private function routeExceptionResponse(RouterException $routerException): ResponseInterface
+    private function routeExceptionResponse(RouterExceptionInterface $routerException): ResponseInterface
     {
         $this->logger->info('Route exception', [
             'title' => $routerException->getTitle(),
