@@ -203,30 +203,39 @@ final class FastRouteRouter implements RouterInterface
         $pathParts = [];
         foreach ($routePartSets[$routeIndex] as $routePart) {
             if (is_array($routePart)) {
-                $attribute = $routePart[0];
-
-                if (!isset($attributes[$attribute])) {
-                    throw MissingAttributeForPathGenerationException::create($name, $attribute);
-                }
-
-                $value = (string) $attributes[$attribute];
-                $pattern = '!^'.$routePart[1].'$!';
-
-                if (1 !== preg_match($pattern, $value)) {
-                    throw NotMatchingValueForPathGenerationException::create(
-                        $name,
-                        $attribute,
-                        $value,
-                        $pattern
-                    );
-                }
-
-                $pathParts[] = $value;
+                $pathParts[] = $this->getAttributeValue($name, $routePart, $attributes);
             } else {
                 $pathParts[] = $routePart;
             }
         }
 
         return implode('', $pathParts);
+    }
+
+    /**
+     * @param array<int, string> $routePart
+     * @param array<string>      $attributes
+     */
+    private function getAttributeValue(string $name, array $routePart, array $attributes): string
+    {
+        $attribute = $routePart[0];
+
+        if (!isset($attributes[$attribute])) {
+            throw MissingAttributeForPathGenerationException::create($name, $attribute);
+        }
+
+        $value = (string) $attributes[$attribute];
+        $pattern = '!^'.$routePart[1].'$!';
+
+        if (1 !== preg_match($pattern, $value)) {
+            throw NotMatchingValueForPathGenerationException::create(
+                $name,
+                $attribute,
+                $value,
+                $pattern
+            );
+        }
+
+        return $value;
     }
 }
