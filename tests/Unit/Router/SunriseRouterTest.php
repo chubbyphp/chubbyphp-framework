@@ -200,8 +200,6 @@ final class SunriseRouterTest extends TestCase
             Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
             Call::create('getScheme')->with()->willReturn('https'),
             Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
-            // Call::create('getScheme')->with()->willReturn('https'),
-            // Call::create('getAuthority')->with()->willReturn('user:password@localhost'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
@@ -210,7 +208,6 @@ final class SunriseRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
-            // Call::create('getUri')->with()->willReturn($uri),
         ]);
 
         /** @var RouteInterface|MockObject $route */
@@ -224,10 +221,6 @@ final class SunriseRouterTest extends TestCase
 
         $router = new SunriseRouter([$route]);
 
-        // self::assertSame(
-        //     'https://user:password@localhost/user/{id}',
-        //     $router->generateUrl($request, 'user')
-        // );
         self::assertSame(
             'https://user:password@localhost/user/1',
             $router->generateUrl($request, 'user', ['id' => 1])
@@ -249,6 +242,63 @@ final class SunriseRouterTest extends TestCase
                 ['key1' => 'value1', 'key2' => 'value2']
             )
         );
+    }
+
+    public function testGenerateUriWithMissingAttribute(): void
+    {
+        $this->expectException(RouterException::class);
+        $this->expectExceptionMessage('Missing attribute "id" while path generation for route: "user"');
+        $this->expectExceptionCode(3);
+
+        /** @var UriInterface|MockObject $uri */
+        $uri = $this->getMockByCalls(UriInterface::class);
+
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
+        ]);
+
+        /** @var RouteInterface|MockObject $route */
+        $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getPath')->with()->willReturn('/user/{id<\d+>}(/{name})'),
+            Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getAttributes')->with()->willReturn([]),
+        ]);
+
+        $router = new SunriseRouter([$route]);
+        $router->generateUrl($request, 'user');
+    }
+
+    public function testGenerateUriWithNotMatchingAttribute(): void
+    {
+        $this->expectException(RouterException::class);
+        $this->expectExceptionMessage(
+            'Not matching value "a3bce0ca-2b7c-4fc6-8dad-ecdcc6907791" with pattern "!^\d+$!" on attribute "id" while'
+            .' path generation for route: "user"'
+        );
+        $this->expectExceptionCode(4);
+
+        /** @var UriInterface|MockObject $uri */
+        $uri = $this->getMockByCalls(UriInterface::class);
+
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
+        ]);
+
+        /** @var RouteInterface|MockObject $route */
+        $route = $this->getMockByCalls(RouteInterface::class, [
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getName')->with()->willReturn('user'),
+            Call::create('getPath')->with()->willReturn('/user/{id<\d+>}(/{name})'),
+            Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getAttributes')->with()->willReturn([]),
+        ]);
+
+        $router = new SunriseRouter([$route]);
+        $router->generateUrl($request, 'user', ['id' => 'a3bce0ca-2b7c-4fc6-8dad-ecdcc6907791']);
     }
 
     public function testGenerateUriWithBasePath(): void

@@ -6,7 +6,9 @@ namespace Chubbyphp\Framework\Router;
 
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Psr\Http\Message\ServerRequestInterface;
+use Sunrise\Http\Router\Exception\InvalidAttributeValueException;
 use Sunrise\Http\Router\Exception\MethodNotAllowedException;
+use Sunrise\Http\Router\Exception\MissingAttributeValueException;
 use Sunrise\Http\Router\Exception\RouteNotFoundException;
 use Sunrise\Http\Router\Router;
 
@@ -87,7 +89,13 @@ final class SunriseRouter implements RouterInterface
             throw RouterException::createForMissingRoute($name);
         }
 
-        $path = $this->router->getRoute($name)->buildPath($attributes, false);
+        try {
+            $path = $this->router->generateUri($name, $attributes, true);
+        } catch (MissingAttributeValueException $exception) {
+            throw RouterException::createForPathGenerationMissingAttribute($name, 'attribute');
+        } catch (InvalidAttributeValueException $exception) {
+            throw RouterException::createForPathGenerationNotMatchingAttribute($name, 'attribute', 'value', 'pattern');
+        }
 
         if ([] === $queryParams) {
             return $this->basePath.$path;
