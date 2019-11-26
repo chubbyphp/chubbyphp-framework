@@ -14,6 +14,7 @@ use Sunrise\Http\Router\Exception\InvalidAttributeValueException as SunriseInval
 use Sunrise\Http\Router\Exception\MethodNotAllowedException as SunriseMethodNotAllowedException;
 use Sunrise\Http\Router\Exception\MissingAttributeValueException as SunriseMissingAttributeValueException;
 use Sunrise\Http\Router\Exception\RouteNotFoundException as SunriseRouteNotFoundException;
+use Sunrise\Http\Router\RouteFactory;
 use Sunrise\Http\Router\Router;
 
 final class SunriseRouter implements RouterInterface
@@ -128,17 +129,18 @@ final class SunriseRouter implements RouterInterface
      */
     private function createRouter(array $routes): Router
     {
+        $routeFactory = new RouteFactory();
         $router = new Router();
 
         foreach ($routes as $route) {
-            $router->route(
+            $router->addRoute($routeFactory->createRoute(
                 $route->getName(),
                 $route->getPath(),
                 [$route->getMethod()],
                 new CallbackRequestHandler(function (): void {}),
                 [],
                 $route->getAttributes()
-            );
+            ));
         }
 
         return $router;
