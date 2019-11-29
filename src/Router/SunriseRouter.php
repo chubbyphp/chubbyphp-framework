@@ -59,7 +59,7 @@ final class SunriseRouter implements RouterInterface
             throw MethodNotAllowedException::create(
                 $request->getRequestTarget(),
                 $request->getMethod(),
-                $exception->getAllowedMethods(),
+                $exception->getAllowedMethods()
             );
         }
     }
@@ -97,9 +97,17 @@ final class SunriseRouter implements RouterInterface
         try {
             $path = $this->router->generateUri($name, $attributes, true);
         } catch (SunriseMissingAttributeValueException $exception) {
-            throw MissingAttributeForPathGenerationException::create($name, 'attribute');
+            $match = $exception->fromContext('match');
+            throw MissingAttributeForPathGenerationException::create($name, $match['name']);
         } catch (SunriseInvalidAttributeValueException $exception) {
-            throw NotMatchingValueForPathGenerationException::create($name, 'attribute', 'value', 'pattern');
+            $match = $exception->fromContext('match');
+            $value = $exception->fromContext('value');
+            throw NotMatchingValueForPathGenerationException::create(
+                $name,
+                $match['name'],
+                $value,
+                $match['pattern']
+            );
         }
 
         if ([] === $queryParams) {
@@ -137,7 +145,8 @@ final class SunriseRouter implements RouterInterface
                 $route->getName(),
                 $route->getPath(),
                 [$route->getMethod()],
-                new CallbackRequestHandler(function (): void {}),
+                new CallbackRequestHandler(static function (): void {
+                }),
                 [],
                 $route->getAttributes()
             ));

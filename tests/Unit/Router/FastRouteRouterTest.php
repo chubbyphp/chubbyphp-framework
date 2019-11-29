@@ -283,7 +283,7 @@ final class FastRouteRouterTest extends TestCase
     {
         $this->expectException(RouterException::class);
         $this->expectExceptionMessage(
-            'Not matching value "a3bce0ca-2b7c-4fc6-8dad-ecdcc6907791" with pattern "!^\d+$!" on attribute "id" while'
+            'Not matching value "a3bce0ca-2b7c-4fc6-8dad-ecdcc6907791" with pattern "\d+" on attribute "id" while'
             .' path generation for route: "user"'
         );
         $this->expectExceptionCode(4);

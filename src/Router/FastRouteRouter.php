@@ -232,7 +232,7 @@ final class FastRouteRouter implements RouterInterface
                 $name,
                 $attribute,
                 $value,
-                $pattern
+                $routePart[1]
             );
         }
 
