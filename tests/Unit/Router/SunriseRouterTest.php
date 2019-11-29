@@ -13,6 +13,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Sunrise\Router\Route;
 
 /**
@@ -37,30 +39,45 @@ final class SunriseRouterTest extends TestCase
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getMethod')->with()->willReturn('GET'),
         ]);
+
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
 
         /** @var RouteInterface|MockObject $route1 */
         $route1 = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_create'),
-            Call::create('getName')->with()->willReturn('pet_create'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
             Call::create('getMethod')->with()->willReturn('POST'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 
         /** @var RouteInterface|MockObject $route2 */
         $route2 = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
-            Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
-            Call::create('withAttributes')->with([])->willReturnSelf(),
         ]);
 
         $router = new SunriseRouter([$route1, $route2]);
 
-        self::assertSame($route2, $router->match($request));
+        $matchedRoute = $router->match($request);
+
+        self::assertSame('pet_list', $matchedRoute->getName());
+        self::assertSame('/api/pets', $matchedRoute->getPath());
+        self::assertSame('GET', $matchedRoute->getMethod());
+        self::assertSame($requestHandler, $matchedRoute->getRequestHandler());
+        self::assertSame([$middleware], $matchedRoute->getMiddlewares());
+        self::assertSame([], $matchedRoute->getAttributes());
     }
 
     public function testMatchNotFound(): void
@@ -84,12 +101,19 @@ final class SunriseRouterTest extends TestCase
             Call::create('getRequestTarget')->with()->willReturn('/'),
         ]);
 
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
-            Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 
@@ -112,12 +136,19 @@ final class SunriseRouterTest extends TestCase
             Call::create('getMethod')->with()->willReturn('POST'),
         ]);
 
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
-            Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 
@@ -147,12 +178,19 @@ final class SunriseRouterTest extends TestCase
             Call::create('getRequestTarget')->with()->willReturn('/api/pets/1'),
         ]);
 
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_read'),
-            Call::create('getName')->with()->willReturn('pet_read'),
             Call::create('getPath')->with()->willReturn('/api/pets/{id<'.self::UUID_PATTERN.'>}'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 
@@ -171,21 +209,35 @@ final class SunriseRouterTest extends TestCase
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getUri')->with()->willReturn($uri),
+            Call::create('getMethod')->with()->willReturn('GET'),
         ]);
+
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_read'),
-            Call::create('getName')->with()->willReturn('pet_read'),
             Call::create('getPath')->with()->willReturn('/api/pets/{id<'.self::UUID_PATTERN.'>}'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
-            Call::create('withAttributes')->with(['id' => '8b72750c-5306-416c-bba7-5b41f1c44791'])->willReturnSelf(),
         ]);
 
         $router = new SunriseRouter([$route]);
 
-        self::assertSame($route, $router->match($request));
+        $matchedRoute = $router->match($request);
+
+        self::assertSame('pet_read', $matchedRoute->getName());
+        self::assertSame('/api/pets/{id<'.self::UUID_PATTERN.'>}', $matchedRoute->getPath());
+        self::assertSame('GET', $matchedRoute->getMethod());
+        self::assertSame($requestHandler, $matchedRoute->getRequestHandler());
+        self::assertSame([$middleware], $matchedRoute->getMiddlewares());
+        self::assertSame(['id' => '8b72750c-5306-416c-bba7-5b41f1c44791'], $matchedRoute->getAttributes());
     }
 
     public function testGenerateUri(): void
@@ -210,12 +262,19 @@ final class SunriseRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
         ]);
 
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id<\d+>}(/{name})'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 
@@ -258,12 +317,19 @@ final class SunriseRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
         ]);
 
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id<\d+>}(/{name})'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 
@@ -288,12 +354,19 @@ final class SunriseRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
         ]);
 
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id<\d+>}(/{name})'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 
@@ -323,12 +396,19 @@ final class SunriseRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
         ]);
 
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id<\d+>}(/{name})'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 
@@ -369,12 +449,19 @@ final class SunriseRouterTest extends TestCase
 
     public function testGeneratePath(): void
     {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id<\d+>}(/{name})'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 
@@ -395,12 +482,19 @@ final class SunriseRouterTest extends TestCase
 
     public function testGeneratePathWithBasePath(): void
     {
+        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id<\d+>}(/{name})'),
             Call::create('getMethod')->with()->willReturn('GET'),
+            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getAttributes')->with()->willReturn([]),
         ]);
 

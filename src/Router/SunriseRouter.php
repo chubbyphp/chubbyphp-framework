@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\Exceptions\MethodNotAllowedException;
 use Chubbyphp\Framework\Router\Exceptions\MissingAttributeForPathGenerationException;
 use Chubbyphp\Framework\Router\Exceptions\NotFoundException;
@@ -20,11 +19,6 @@ use Sunrise\Http\Router\Router;
 final class SunriseRouter implements RouterInterface
 {
     /**
-     * @var array<RouteInterface>
-     */
-    private $routes = [];
-
-    /**
      * @var Router
      */
     private $router;
@@ -39,7 +33,6 @@ final class SunriseRouter implements RouterInterface
      */
     public function __construct(array $routes, string $basePath = '')
     {
-        $this->routes = $this->getRoutesByName($routes);
         $this->router = $this->createRouter($routes);
         $this->basePath = $basePath;
     }
@@ -49,10 +42,12 @@ final class SunriseRouter implements RouterInterface
         try {
             $sunriseRoute = $this->router->match($request);
 
-            /** @var RouteInterface $route */
-            $route = $this->routes[$sunriseRoute->getName()];
-
-            return $route->withAttributes($sunriseRoute->getAttributes());
+            return Route::create(
+                $request->getMethod(),
+                $sunriseRoute->getPath(),
+                $sunriseRoute->getName(),
+                $sunriseRoute->getRequestHandler()
+            )->middlewares($sunriseRoute->getMiddlewares())->withAttributes($sunriseRoute->getAttributes());
         } catch (SunriseRouteNotFoundException $exception) {
             throw NotFoundException::create($request->getRequestTarget());
         } catch (SunriseMethodNotAllowedException $exception) {
@@ -90,12 +85,10 @@ final class SunriseRouter implements RouterInterface
      */
     public function generatePath(string $name, array $attributes = [], array $queryParams = []): string
     {
-        if (!isset($this->routes[$name])) {
-            throw RouterException::createForMissingRoute($name);
-        }
-
         try {
             $path = $this->router->generateUri($name, $attributes, true);
+        } catch (SunriseRouteNotFoundException $exception) {
+            throw RouterException::createForMissingRoute($name);
         } catch (SunriseMissingAttributeValueException $exception) {
             $match = $exception->fromContext('match');
             throw MissingAttributeForPathGenerationException::create($name, $match['name']);
@@ -119,21 +112,6 @@ final class SunriseRouter implements RouterInterface
 
     /**
      * @param array<RouteInterface> $routes
-     *
-     * @return array<RouteInterface>
-     */
-    private function getRoutesByName(array $routes): array
-    {
-        $routesByName = [];
-        foreach ($routes as $route) {
-            $routesByName[$route->getName()] = $route;
-        }
-
-        return $routesByName;
-    }
-
-    /**
-     * @param array<RouteInterface> $routes
      */
     private function createRouter(array $routes): Router
     {
@@ -145,9 +123,8 @@ final class SunriseRouter implements RouterInterface
                 $route->getName(),
                 $route->getPath(),
                 [$route->getMethod()],
-                new CallbackRequestHandler(static function (): void {
-                }),
-                [],
+                $route->getRequestHandler(),
+                $route->getMiddlewares(),
                 $route->getAttributes()
             ));
         }
