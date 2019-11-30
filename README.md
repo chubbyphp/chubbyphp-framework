@@ -9,7 +9,7 @@
 
 ## Description
 
-A minimal middleware based micro framework using [PHP Framework Interop Group - PSR][1], with the goal is to achive
+A minimal middleware based micro framework using [PHP Framework Interop Group - PSR][1], where the goal is to achieve
 the best combination of flexibility and simplicity by using standards.
 
  * [Basic Coding Standard (1)][2]
