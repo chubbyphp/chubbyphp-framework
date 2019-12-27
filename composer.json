@@ -49,6 +49,7 @@
         "phpunit/phpunit": "^8.4.3",
         "slim/psr7": "^0.5",
         "sunrise/http-factory": "^1.0.4",
+        "sunrise/http-router": "^2.0",
         "zendframework/zend-diactoros": "^2.0"
     },
     "autoload": {
@@ -62,7 +63,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.5-dev"
+            "dev-master": "2.6-dev"
         }
     },
     "scripts": {

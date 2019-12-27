@@ -42,26 +42,27 @@ Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be 
 
  * [aura/router][30]: ^3.1
  * [nikic/fast-route][31]: ^1.0|^0.6
+ * [sunrise/http-router][32]: ^2.0
 
 ### PSR 7 / PSR 17
 
- * [bittyphp/http][32]: ^2.0
- * [guzzlehttp/psr7][33]: ^1.4.2 (with [http-interop/http-factory-guzzle][34]: ^1.0)
- * [nyholm/psr7][35]: ^1.0
- * [slim/psr7][36]: ^0.5
- * [sunrise/http-message][37]: ^1.0 (with [sunrise/http-factory][38]: ^1.0)
- * [zendframework/zend-diactoros][39]: ^2.0
+ * [bittyphp/http][40]: ^2.0
+ * [guzzlehttp/psr7][41]: ^1.4.2 (with [http-interop/http-factory-guzzle][42]: ^1.0)
+ * [nyholm/psr7][43]: ^1.0
+ * [slim/psr7][44]: ^0.5
+ * [sunrise/http-message][45]: ^1.0 (with [sunrise/http-factory][46]: ^1.0)
+ * [zendframework/zend-diactoros][47]: ^2.0
 
 ## Installation
 
-Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][40].
+Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
 ## Usage
 
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.5" \
+composer require chubbyphp/chubbyphp-framework "^2.6" \
     aura/router "^3.1" zendframework/zend-diactoros "^2.0"
 ```
 
@@ -110,7 +111,7 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.5" \
+composer require chubbyphp/chubbyphp-framework "^2.6" \
     nikic/fast-route "^1.3" zendframework/zend-diactoros "^2.0"
 ```
 
@@ -142,6 +143,55 @@ $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
     new RouterMiddleware(new FastRouteRouter([
         Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+            function (ServerRequestInterface $request) use ($responseFactory) {
+                $name = $request->getAttribute('name');
+                $response = $responseFactory->createResponse();
+                $response->getBody()->write(sprintf('Hello, %s', $name));
+
+                return $response;
+            }
+        ))
+    ]), $responseFactory),
+]);
+
+$app->send($app->handle(ServerRequestFactory::fromGlobals()));
+```
+
+### SunriseRouter
+
+```bash
+composer require chubbyphp/chubbyphp-framework "^2.6" \
+    sunrise/http-router "^2.0" zendframework/zend-diactoros "^2.0"
+```
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\ErrorHandler;
+use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
+use Chubbyphp\Framework\Middleware\RouterMiddleware;
+use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
+use Chubbyphp\Framework\Router\SunriseRouter;
+use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\ResponseFactory;
+use Zend\Diactoros\ServerRequestFactory;
+
+$loader = require __DIR__.'/vendor/autoload.php';
+
+set_error_handler([new ErrorHandler(), 'errorToException']);
+
+$responseFactory = new ResponseFactory();
+
+$app = new Application([
+    new ExceptionMiddleware($responseFactory, true),
+    new RouterMiddleware(new SunriseRouter([
+        Route::get('/hello/name<[a-z]+>}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
@@ -241,8 +291,9 @@ $app->send($app->handle(ServerRequestFactory::fromGlobals()));
 
  * [AuraRouter][90]
  * [FastRouteRouter][91]
- * [Group][92]
- * [Route][93]
+ * [SunriseRouter][92]
+ * [Group][93]
+ * [Route][94]
 
 ## Webserver
 
@@ -372,17 +423,18 @@ Dominik Zogg 2019
 
 [30]: https://packagist.org/packages/aura/router
 [31]: https://packagist.org/packages/nikic/fast-route
+[32]: https://packagist.org/packages/sunrise/http-router
 
-[32]: https://packagist.org/packages/bittyphp/http
-[33]: https://packagist.org/packages/guzzlehttp/psr7
-[34]: https://packagist.org/packages/http-interop/http-factory-guzzle
-[35]: https://packagist.org/packages/nyholm/psr7
-[36]: https://packagist.org/packages/slim/psr7
-[37]: https://packagist.org/packages/sunrise/http-message
-[38]: https://packagist.org/packages/sunrise/http-factory
-[39]: https://packagist.org/packages/zendframework/zend-diactoros
+[40]: https://packagist.org/packages/bittyphp/http
+[41]: https://packagist.org/packages/guzzlehttp/psr7
+[42]: https://packagist.org/packages/http-interop/http-factory-guzzle
+[43]: https://packagist.org/packages/nyholm/psr7
+[44]: https://packagist.org/packages/slim/psr7
+[45]: https://packagist.org/packages/sunrise/http-message
+[46]: https://packagist.org/packages/sunrise/http-factory
+[47]: https://packagist.org/packages/zendframework/zend-diactoros
 
-[40]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
+[60]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 
 [70]: doc/Middleware/CallbackMiddleware.md
 [71]: doc/Middleware/ExceptionMiddleware.md
@@ -396,8 +448,9 @@ Dominik Zogg 2019
 
 [90]: doc/Router/AuraRouter.md
 [91]: doc/Router/FastRouteRouter.md
-[92]: doc/Router/Group.md
-[93]: doc/Router/Route.md
+[92]: doc/Router/SunriseRouter.md
+[93]: doc/Router/Group.md
+[94]: doc/Router/Route.md
 
 [100]: doc/Webserver/Builtin.md
 [101]: doc/Webserver/Nginx.md

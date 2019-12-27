@@ -19,7 +19,7 @@ return PhpCsFixer\Config::create()
         'dir_constant' => true,
         'is_null' => true,
         'linebreak_after_opening_tag' => true,
-        'list_syntax' => true,
+        'list_syntax' => ['syntax' => 'short'],
         'method_chaining_indentation' => false,
         'no_php4_constructor' => true,
         'ordered_interfaces' => true,
