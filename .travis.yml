@@ -8,9 +8,9 @@ matrix:
     - php: 7.3
       env: dependencies=lowest
     - php: 7.3
-    - php: 7.4snapshot
+    - php: 7.4
       env: dependencies=lowest
-    - php: 7.4snapshot
+    - php: 7.4
 
 before_script:
   - echo 'extension=apcu.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/apcu.ini
@@ -23,4 +23,6 @@ before_script:
 
 script:
   - composer test
-  - vendor/bin/php-coveralls --coverage_clover=build/phpunit/phpunit.clover.xml --json_path=build/coveralls.json -v
+
+after_success:
+  - travis_retry php vendor/bin/php-coveralls --coverage_clover=build/phpunit/phpunit.clover.xml --json_path=build/coveralls.json -v
