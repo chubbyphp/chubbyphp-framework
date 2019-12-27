@@ -191,7 +191,7 @@ $responseFactory = new ResponseFactory();
 $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
     new RouterMiddleware(new SunriseRouter([
-        Route::get('/hello/name<[a-z]+>}', 'hello', new CallbackRequestHandler(
+        Route::get('/hello/{name<[a-z]+>}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
