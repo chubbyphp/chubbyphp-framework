@@ -51,7 +51,7 @@ Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be 
  * [nyholm/psr7][43]: ^1.0
  * [slim/psr7][44]: ^0.5
  * [sunrise/http-message][45]: ^1.0 (with [sunrise/http-factory][46]: ^1.0)
- * [zendframework/zend-diactoros][47]: ^2.0
+ * [laminas/laminas-diactoros][47]: ^2.0
 
 ## Installation
 
@@ -429,7 +429,7 @@ Dominik Zogg 2019
 [44]: https://packagist.org/packages/slim/psr7
 [45]: https://packagist.org/packages/sunrise/http-message
 [46]: https://packagist.org/packages/sunrise/http-factory
-[47]: https://packagist.org/packages/zendframework/zend-diactoros
+[47]: https://packagist.org/packages/laminas/laminas-diactoros
 
 [60]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 

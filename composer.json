@@ -38,6 +38,7 @@
         "guzzlehttp/psr7": "^1.4.2",
         "http-interop/http-factory-guzzle": "^1.0",
         "infection/infection": "^0.15",
+        "laminas/laminas-diactoros": "^2.0",
         "mavimo/phpstan-junit": "^0.3",
         "nikic/fast-route": "^1.0|^0.6",
         "nunomaduro/phpinsights": "^1.11.1",
@@ -49,8 +50,7 @@
         "phpunit/phpunit": "^8.5.1",
         "slim/psr7": "^0.5",
         "sunrise/http-factory": "^1.0.4",
-        "sunrise/http-router": "^2.0",
-        "zendframework/zend-diactoros": "^2.0"
+        "sunrise/http-router": "^2.0"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\Framework\\": "src/" }

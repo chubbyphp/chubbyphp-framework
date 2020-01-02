@@ -15,6 +15,8 @@ use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Http\Factory\Guzzle\ResponseFactory as GuzzleResponseFactory;
 use Http\Factory\Guzzle\ServerRequestFactory as GuzzleServerRequestFactory;
+use Laminas\Diactoros\ResponseFactory as LaminasResponseFactory;
+use Laminas\Diactoros\ServerRequestFactory as LaminasServerRequestFactory;
 use Nyholm\Psr7\Factory\Psr17Factory as NyholmResponseFactory;
 use Nyholm\Psr7\Factory\Psr17Factory as NyholmServerRequestFactory;
 use PHPUnit\Framework\TestCase;
@@ -25,8 +27,6 @@ use Slim\Psr7\Factory\ResponseFactory as SlimResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory as SlimServerRequestFactory;
 use Sunrise\Http\Message\ResponseFactory as SunriseResponseFactory;
 use Sunrise\Http\ServerRequest\ServerRequestFactory as SunriseServerRequestFactory;
-use Zend\Diactoros\ResponseFactory as ZendResponseFactory;
-use Zend\Diactoros\ServerRequestFactory as ZendServerRequestFactory;
 
 /**
  * @coversNothing
@@ -59,8 +59,8 @@ final class AuraRouterTest extends TestCase
                 'serverRequestFactory' => new SunriseServerRequestFactory(),
             ],
             'zend' => [
-                'responseFactory' => new ZendResponseFactory(),
-                'serverRequestFactory' => new ZendServerRequestFactory(),
+                'responseFactory' => new LaminasResponseFactory(),
+                'serverRequestFactory' => new LaminasServerRequestFactory(),
             ],
         ];
     }
