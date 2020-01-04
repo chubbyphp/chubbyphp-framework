@@ -395,7 +395,7 @@ $app = new Application([
 
 ## Copyright
 
-Dominik Zogg 2019
+Dominik Zogg 2020
 
 [1]: https://www.php-fig.org/psr/
 
