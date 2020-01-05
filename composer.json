@@ -48,7 +48,7 @@
         "phpstan/extension-installer": "^1.0.3",
         "phpstan/phpstan": "^0.12.3",
         "phpunit/phpunit": "^8.5.1",
-        "slim/psr7": "^0.5",
+        "slim/psr7": "^0.5|^1.0",
         "sunrise/http-factory": "^1.0.4",
         "sunrise/http-router": "^2.0"
     },

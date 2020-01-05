@@ -49,7 +49,7 @@ Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be 
  * [bittyphp/http][40]: ^2.0
  * [guzzlehttp/psr7][41]: ^1.4.2 (with [http-interop/http-factory-guzzle][42]: ^1.0)
  * [nyholm/psr7][43]: ^1.0
- * [slim/psr7][44]: ^0.5
+ * [slim/psr7][44]: ^0.5|^1.0
  * [sunrise/http-message][45]: ^1.0 (with [sunrise/http-factory][46]: ^1.0)
  * [laminas/laminas-diactoros][47]: ^2.0
 
