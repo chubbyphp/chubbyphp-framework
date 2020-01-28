@@ -12,7 +12,7 @@ use Chubbyphp\Framework\Router\Exceptions\NotFoundException;
 use Chubbyphp\Framework\Router\Exceptions\NotMatchingValueForPathGenerationException;
 
 /**
- * @deprecated
+ * @deprecated 3.0
  */
 class RouterException extends \RuntimeException
 {
