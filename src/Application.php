@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework;
 
+use Chubbyphp\Framework\Emitter\Emitter;
+use Chubbyphp\Framework\Emitter\EmitterInterface;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
@@ -27,18 +29,25 @@ final class Application implements RequestHandlerInterface
     private $middlewareDispatcher;
 
     /**
+     * @var EmitterInterface
+     */
+    private $emitter;
+
+    /**
      * @param array<MiddlewareInterface> $middlewares
      */
     public function __construct(
         array $middlewares,
-        ?MiddlewareDispatcherInterface $middlewareDispatcher = null
+        ?MiddlewareDispatcherInterface $middlewareDispatcher = null,
+        ?EmitterInterface $emitter = null
     ) {
-        $this->middlewareDispatcher = $middlewareDispatcher ?? new MiddlewareDispatcher();
-
         $this->middlewares = [];
         foreach ($middlewares as $middleware) {
             $this->addMiddleware($middleware);
         }
+
+        $this->middlewareDispatcher = $middlewareDispatcher ?? new MiddlewareDispatcher();
+        $this->emitter = $emitter ?? new Emitter();
     }
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
@@ -67,32 +76,19 @@ final class Application implements RequestHandlerInterface
         );
     }
 
+    public function emit(ResponseInterface $response): void
+    {
+        $this->emitter->emit($response);
+    }
+
+    /**
+     * @deprecated 3.0
+     */
     public function send(ResponseInterface $response): void
     {
-        $statusCode = $response->getStatusCode();
+        @trigger_error('Use emit instead', E_USER_DEPRECATED);
 
-        header(sprintf(
-            'HTTP/%s %s %s',
-            $response->getProtocolVersion(),
-            $statusCode,
-            $response->getReasonPhrase()
-        ), true, $statusCode);
-
-        foreach ($response->getHeaders() as $name => $values) {
-            foreach ($values as $value) {
-                header(sprintf('%s: %s', $name, $value), false);
-            }
-        }
-
-        $body = $response->getBody();
-
-        if ($body->isSeekable()) {
-            $body->rewind();
-        }
-
-        while (!$body->eof()) {
-            echo $body->read(256);
-        }
+        $this->emit($response);
     }
 
     private function addMiddleware(MiddlewareInterface $middleware): void

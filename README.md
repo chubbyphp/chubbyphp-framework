@@ -62,7 +62,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.6" aura/router "^3.1" slim/psr7 "^0.6"
+composer require chubbyphp/chubbyphp-framework "^2.7" aura/router "^3.1" slim/psr7 "^1.0"
 ```
 
 ```php
@@ -104,13 +104,13 @@ $app = new Application([
     ]), $responseFactory),
 ]);
 
-$app->send($app->handle((new ServerRequestFactory())->createFromGlobals()));
+$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ```
 
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.6" nikic/fast-route "^1.3" slim/psr7 "^0.6"
+composer require chubbyphp/chubbyphp-framework "^2.7" nikic/fast-route "^1.3" slim/psr7 "^1.0"
 ```
 
 ```php
@@ -152,13 +152,13 @@ $app = new Application([
     ]), $responseFactory),
 ]);
 
-$app->send($app->handle((new ServerRequestFactory())->createFromGlobals()));
+$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ```
 
 ### SunriseRouter
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.6" sunrise/http-router "^2.0" slim/psr7 "^0.6"
+composer require chubbyphp/chubbyphp-framework "^2.7" sunrise/http-router "^2.1" slim/psr7 "^1.0"
 ```
 
 ```php
@@ -200,7 +200,7 @@ $app = new Application([
     ]), $responseFactory),
 ]);
 
-$app->send($app->handle((new ServerRequestFactory())->createFromGlobals()));
+$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ```
 
 #### Advanved example with Middleware before and after routing
@@ -267,8 +267,12 @@ $app = new Application([
     }),
 ]);
 
-$app->send($app->handle((new ServerRequestFactory())->createFromGlobals()));
+$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ```
+
+### Emitter
+
+ * [Emitter][65]
 
 ### Middleware
 
@@ -432,6 +436,8 @@ Dominik Zogg 2020
 [47]: https://packagist.org/packages/laminas/laminas-diactoros
 
 [60]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
+
+[65]: doc/Emitter/Emitter.md
 
 [70]: doc/Middleware/CallbackMiddleware.md
 [71]: doc/Middleware/ExceptionMiddleware.md
