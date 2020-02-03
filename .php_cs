@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $finder = PhpCsFixer\Finder::create()
     ->files()
     ->name('*.php')
@@ -7,32 +9,15 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/tests')
 ;
 
+/** @var array $config */
+$config = require __DIR__ . '/vendor/chubbyphp/chubbyphp-dev-helper/phpcs.php';
+
+unset ($config['rules']['final_class']);
+
 return PhpCsFixer\Config::create()
-    ->setIndent("    ")
-    ->setLineEnding("\n")
-    ->setRules([
-        '@DoctrineAnnotation' => true,
-        '@PhpCsFixer' => true,
-        '@Symfony' => true,
-        'array_syntax' => ['syntax' => 'short'],
-        'declare_strict_types' => true,
-        'dir_constant' => true,
-        'is_null' => true,
-        'linebreak_after_opening_tag' => true,
-        'list_syntax' => ['syntax' => 'short'],
-        'method_chaining_indentation' => false,
-        'no_php4_constructor' => true,
-        'ordered_interfaces' => true,
-        'php_unit_dedicate_assert_internal_type' => true,
-        'php_unit_dedicate_assert' => true,
-        'php_unit_expectation' => true,
-        'php_unit_mock' => true,
-        'php_unit_namespaced' => true,
-        'php_unit_no_expectation_annotation' => true,
-        'single_line_throw' => false,
-        'ternary_to_null_coalescing' => true,
-        'void_return' => true,
-    ])
-    ->setRiskyAllowed(true)
+    ->setIndent($config['indent'])
+    ->setLineEnding($config['lineEnding'])
+    ->setRules($config['rules'])
+    ->setRiskyAllowed($config['riskyAllowed'])
     ->setFinder($finder)
 ;
