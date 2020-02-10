@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class FastRouteRouter implements RouterInterface
 {
     /**
-     * @var array<RouteInterface>
+     * @var array<string, RouteInterface>
      */
     private $routes;
 
@@ -115,9 +115,9 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param array<RouteInterface> $routes
+     * @param array<int, RouteInterface> $routes
      *
-     * @return array<RouteInterface>
+     * @return array<string, RouteInterface>
      */
     private function getRoutesByName(array $routes): array
     {
@@ -130,7 +130,7 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param array<RouteInterface> $routes
+     * @param array<int, RouteInterface> $routes
      */
     private function getDispatcher(array $routes, ?string $cacheFile = null): Dispatcher
     {
@@ -149,7 +149,7 @@ final class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param array<RouteInterface> $routes
+     * @param array<int, RouteInterface> $routes
      */
     private function getRouteCollector(array $routes): RouteCollector
     {

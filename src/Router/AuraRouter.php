@@ -16,7 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class AuraRouter implements RouterInterface
 {
     /**
-     * @var array<RouteInterface>
+     * @var array<string, RouteInterface>
      */
     private $routes = [];
 
@@ -36,7 +36,7 @@ final class AuraRouter implements RouterInterface
     private $basePath;
 
     /**
-     * @param array<RouteInterface> $routes
+     * @param array<int, RouteInterface> $routes
      */
     public function __construct(array $routes, string $basePath = '')
     {
@@ -111,9 +111,9 @@ final class AuraRouter implements RouterInterface
     }
 
     /**
-     * @param array<RouteInterface> $routes
+     * @param array<int, RouteInterface> $routes
      *
-     * @return array<RouteInterface>
+     * @return array<string, RouteInterface>
      */
     private function getRoutesByName(array $routes): array
     {
@@ -126,7 +126,7 @@ final class AuraRouter implements RouterInterface
     }
 
     /**
-     * @param array<RouteInterface> $routes
+     * @param array<int, RouteInterface> $routes
      */
     private function getRouterContainer(array $routes): RouterContainer
     {

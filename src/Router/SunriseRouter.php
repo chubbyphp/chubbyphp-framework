@@ -30,7 +30,7 @@ final class SunriseRouter implements RouterInterface
     private $basePath;
 
     /**
-     * @param array<RouteInterface> $routes
+     * @param array<int, RouteInterface> $routes
      */
     public function __construct(array $routes, string $basePath = '')
     {
