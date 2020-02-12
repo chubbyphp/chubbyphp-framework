@@ -164,7 +164,9 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_read'),
-            Call::create('getPathOptions')->with()->willReturn(['tokens' => ['id' => self::UUID_PATTERN]]),
+            Call::create('getPathOptions')->with()->willReturn([
+                AuraRouter::PATH_TOKENS => ['id' => self::UUID_PATTERN],
+            ]),
             Call::create('getName')->with()->willReturn('pet_read'),
             Call::create('getPath')->with()->willReturn('/api/pets/{id}'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -192,7 +194,9 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_read'),
-            Call::create('getPathOptions')->with()->willReturn(['tokens' => ['id' => self::UUID_PATTERN]]),
+            Call::create('getPathOptions')->with()->willReturn([
+                AuraRouter::PATH_TOKENS => ['id' => self::UUID_PATTERN],
+            ]),
             Call::create('getName')->with()->willReturn('pet_read'),
             Call::create('getPath')->with()->willReturn('/api/pets/{id}'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -223,7 +227,10 @@ final class AuraRouterTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPathOptions')->with()
-                ->willReturn(['tokens' => ['format' => '(\.[^/]+)?'], 'defaults' => ['format' => '.html']]),
+                ->willReturn([
+                    AuraRouter::PATH_TOKENS => ['format' => '(\.[^/]+)?'],
+                    AuraRouter::PATH_DEFAULTS => ['format' => '.html'],
+                ]),
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPath')->with()->willReturn('/api/pets{format}'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -255,7 +262,7 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('index'),
-            Call::create('getPathOptions')->with()->willReturn(['host' => 'test.development']),
+            Call::create('getPathOptions')->with()->willReturn([AuraRouter::PATH_HOST => 'test.development']),
             Call::create('getName')->with()->willReturn('index'),
             Call::create('getPath')->with()->willReturn('/'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -292,7 +299,7 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('index'),
-            Call::create('getPathOptions')->with()->willReturn(['host' => 'test.development']),
+            Call::create('getPathOptions')->with()->willReturn([AuraRouter::PATH_HOST => 'test.development']),
             Call::create('getName')->with()->willReturn('index'),
             Call::create('getPath')->with()->willReturn('/'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -321,7 +328,7 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('index'),
-            Call::create('getPathOptions')->with()->willReturn(['secure' => true]),
+            Call::create('getPathOptions')->with()->willReturn([AuraRouter::PATH_SECURE => true]),
             Call::create('getName')->with()->willReturn('index'),
             Call::create('getPath')->with()->willReturn('/'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -357,7 +364,7 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('index'),
-            Call::create('getPathOptions')->with()->willReturn(['secure' => true]),
+            Call::create('getPathOptions')->with()->willReturn([AuraRouter::PATH_SECURE => true]),
             Call::create('getName')->with()->willReturn('index'),
             Call::create('getPath')->with()->willReturn('/'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -386,7 +393,7 @@ final class AuraRouterTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('index'),
             Call::create('getPathOptions')->with()
-                ->willReturn(['special' => function (ServerRequestInterface $request, Route $route) {
+                ->willReturn([AuraRouter::PATH_SPECIAL => function (ServerRequestInterface $request, Route $route) {
                     return true;
                 }]),
             Call::create('getName')->with()->willReturn('index'),
@@ -427,7 +434,7 @@ final class AuraRouterTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('index'),
             Call::create('getPathOptions')->with()
-                ->willReturn(['special' => function (ServerRequestInterface $request, Route $route) {
+                ->willReturn([AuraRouter::PATH_SPECIAL => function (ServerRequestInterface $request, Route $route) {
                     return false;
                 }]),
             Call::create('getName')->with()->willReturn('index'),
@@ -457,7 +464,7 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('index'),
-            Call::create('getPathOptions')->with()->willReturn(['wildcard' => 'parts']),
+            Call::create('getPathOptions')->with()->willReturn([AuraRouter::PATH_WILDCARD => 'parts']),
             Call::create('getName')->with()->willReturn('index'),
             Call::create('getPath')->with()->willReturn('/'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -497,7 +504,9 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getPathOptions')->with()->willReturn(['tokens' => ['id' => '\d+', 'name' => '[a-z]+']]),
+            Call::create('getPathOptions')->with()->willReturn([
+                AuraRouter::PATH_TOKENS => ['id' => '\d+', 'name' => '[a-z]+'],
+            ]),
             Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id}{/name}'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -560,7 +569,9 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getPathOptions')->with()->willReturn(['tokens' => ['id' => '\d+', 'name' => '[a-z]+']]),
+            Call::create('getPathOptions')->with()->willReturn([
+                AuraRouter::PATH_TOKENS => ['id' => '\d+', 'name' => '[a-z]+'],
+            ]),
             Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id}{/name}'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -610,7 +621,9 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getPathOptions')->with()->willReturn(['tokens' => ['id' => '\d+', 'name' => '[a-z]+']]),
+            Call::create('getPathOptions')->with()->willReturn([
+                AuraRouter::PATH_TOKENS => ['id' => '\d+', 'name' => '[a-z]+'],
+            ]),
             Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id}{/name}'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -637,7 +650,9 @@ final class AuraRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('user'),
-            Call::create('getPathOptions')->with()->willReturn(['tokens' => ['id' => '\d+', 'name' => '[a-z]+']]),
+            Call::create('getPathOptions')->with()->willReturn([
+                AuraRouter::PATH_TOKENS => ['id' => '\d+', 'name' => '[a-z]+'],
+            ]),
             Call::create('getName')->with()->willReturn('user'),
             Call::create('getPath')->with()->willReturn('/user/{id}{/name}'),
             Call::create('getMethod')->with()->willReturn('GET'),

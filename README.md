@@ -100,7 +100,7 @@ $app = new Application([
 
                 return $response;
             }
-        ))->pathOptions(['tokens' => ['name' => '[a-z]+']])
+        ))->pathOptions([AuraRouter::PATH_TOKENS => ['name' => '[a-z]+']])
     ]), $responseFactory),
 ]);
 

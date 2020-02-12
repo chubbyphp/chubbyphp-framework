@@ -15,6 +15,13 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class AuraRouter implements RouterInterface
 {
+    public const PATH_DEFAULTS = 'defaults';
+    public const PATH_HOST = 'host';
+    public const PATH_SECURE = 'secure';
+    public const PATH_SPECIAL = 'special';
+    public const PATH_TOKENS = 'tokens';
+    public const PATH_WILDCARD = 'wildcard';
+
     /**
      * @var array<string, RouteInterface>
      */
@@ -140,12 +147,12 @@ final class AuraRouter implements RouterInterface
             $auraRoute = $map->route($route->getName(), $route->getPath());
             $auraRoute->allows($route->getMethod());
 
-            $auraRoute->defaults($options['defaults'] ?? []);
-            $auraRoute->host($options['host'] ?? null);
-            $auraRoute->secure($options['secure'] ?? null);
-            $auraRoute->special($options['special'] ?? null);
-            $auraRoute->tokens($options['tokens'] ?? []);
-            $auraRoute->wildcard($options['wildcard'] ?? null);
+            $auraRoute->defaults($options[self::PATH_DEFAULTS] ?? []);
+            $auraRoute->host($options[self::PATH_HOST] ?? null);
+            $auraRoute->secure($options[self::PATH_SECURE] ?? null);
+            $auraRoute->special($options[self::PATH_SPECIAL] ?? null);
+            $auraRoute->tokens($options[self::PATH_TOKENS] ?? []);
+            $auraRoute->wildcard($options[self::PATH_WILDCARD] ?? null);
         }
 
         return $routerContainer;
