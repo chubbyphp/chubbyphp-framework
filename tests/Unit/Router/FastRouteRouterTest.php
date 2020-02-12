@@ -55,7 +55,7 @@ final class FastRouteRouterTest extends TestCase
             Call::create('withAttributes')->with([])->willReturnSelf(),
         ]);
 
-        $cacheFile = tempnam(sys_get_temp_dir(), 'fast-route-').'.php';
+        $cacheFile = sys_get_temp_dir().'/fast-route-'.uniqid().uniqid().'.php';
 
         self::assertFileNotExists($cacheFile);
 
