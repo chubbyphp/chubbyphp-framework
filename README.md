@@ -43,6 +43,7 @@ Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be 
  * [aura/router][30]: ^3.1
  * [nikic/fast-route][31]: ^1.0|^0.6
  * [sunrise/http-router][32]: ^2.0
+ * [symfony/routing][33]: ^4.3|^5.0
 
 ### PSR 7 / PSR 17
 
@@ -197,6 +198,54 @@ $app = new Application([
                 return $response;
             }
         ))
+    ]), $responseFactory),
+]);
+
+$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
+```
+
+### Symfony Routing
+
+```bash
+composer require chubbyphp/chubbyphp-framework "^2.7" symfony/routing "^5.0" slim/psr7 "^1.0"
+```
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\ErrorHandler;
+use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
+use Chubbyphp\Framework\Middleware\RouterMiddleware;
+use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
+use Chubbyphp\Framework\Router\SymfonyRouter;
+use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Psr7\Factory\ResponseFactory;
+use Slim\Psr7\Factory\ServerRequestFactory;
+
+$loader = require __DIR__.'/vendor/autoload.php';
+
+set_error_handler([new ErrorHandler(), 'errorToException']);
+
+$responseFactory = new ResponseFactory();
+
+$app = new Application([
+    new ExceptionMiddleware($responseFactory, true),
+    new RouterMiddleware(new SymfonyRouter([
+        Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
+            function (ServerRequestInterface $request) use ($responseFactory) {
+                $name = $request->getAttribute('name');
+                $response = $responseFactory->createResponse();
+                $response->getBody()->write(sprintf('Hello, %s', $name));
+
+                return $response;
+            }
+        ))->pathOptions([SymfonyRouter::PATH_REQUIREMENTS => ['name' => '[a-z]+']])
     ]), $responseFactory),
 ]);
 
@@ -425,6 +474,7 @@ Dominik Zogg 2020
 [30]: https://packagist.org/packages/aura/router
 [31]: https://packagist.org/packages/nikic/fast-route
 [32]: https://packagist.org/packages/sunrise/http-router
+[33]: https://packagist.org/packages/symfony/routing
 
 [40]: https://packagist.org/packages/bittyphp/http
 [41]: https://packagist.org/packages/guzzlehttp/psr7
