@@ -252,7 +252,7 @@ $app = new Application([
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ```
 
-#### Advanved example with Middleware before and after routing
+#### Advanced example with Middleware before and after routing
 
 This is an example of middleware(s) before and after the routing was done.
 
