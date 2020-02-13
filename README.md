@@ -63,7 +63,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.7" aura/router "^3.1" slim/psr7 "^1.0"
+composer require chubbyphp/chubbyphp-framework "^2.8" aura/router "^3.1" slim/psr7 "^1.0"
 ```
 
 ```php
@@ -111,7 +111,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.7" nikic/fast-route "^1.3" slim/psr7 "^1.0"
+composer require chubbyphp/chubbyphp-framework "^2.8" nikic/fast-route "^1.3" slim/psr7 "^1.0"
 ```
 
 ```php
@@ -159,7 +159,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ### SunriseRouter
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.7" sunrise/http-router "^2.1" slim/psr7 "^1.0"
+composer require chubbyphp/chubbyphp-framework "^2.8" sunrise/http-router "^2.1" slim/psr7 "^1.0"
 ```
 
 ```php
@@ -207,7 +207,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ### Symfony Routing
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.7" symfony/routing "^5.0" slim/psr7 "^1.0"
+composer require chubbyphp/chubbyphp-framework "^2.8" symfony/routing "^5.0" slim/psr7 "^1.0"
 ```
 
 ```php
