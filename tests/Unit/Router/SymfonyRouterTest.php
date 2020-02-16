@@ -95,7 +95,7 @@ final class SymfonyRouterTest extends TestCase
             Call::create('getPort')->with()->willReturn(443),
             Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/'),
-            Call::create('getQuery')->with()->willReturn('?key=value'),
+            Call::create('getQuery')->with()->willReturn(''),
             Call::create('getPath')->with()->willReturn('/'),
         ]);
 
@@ -134,7 +134,7 @@ final class SymfonyRouterTest extends TestCase
             Call::create('getPort')->with()->willReturn(443),
             Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
-            Call::create('getQuery')->with()->willReturn('?key=value'),
+            Call::create('getQuery')->with()->willReturn('?offset=1&limit=20'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
         ]);
 
@@ -169,7 +169,7 @@ final class SymfonyRouterTest extends TestCase
             Call::create('getPort')->with()->willReturn(443),
             Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/api/pets/8b72750c-5306-416c-bba7-5b41f1c44791'),
-            Call::create('getQuery')->with()->willReturn('?key=value'),
+            Call::create('getQuery')->with()->willReturn(''),
             Call::create('getPath')->with()->willReturn('/api/pets/8b72750c-5306-416c-bba7-5b41f1c44791'),
         ]);
 
@@ -183,7 +183,9 @@ final class SymfonyRouterTest extends TestCase
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_read'),
-            Call::create('getPathOptions')->with()->willReturn([SymfonyRouter::PATH_REQUIREMENTS => ['id' => self::UUID_PATTERN]]),
+            Call::create('getPathOptions')->with()->willReturn([
+                SymfonyRouter::PATH_REQUIREMENTS => ['id' => self::UUID_PATTERN],
+            ]),
             Call::create('getName')->with()->willReturn('pet_read'),
             Call::create('getPath')->with()->willReturn('/api/pets/{id}'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -210,7 +212,7 @@ final class SymfonyRouterTest extends TestCase
             Call::create('getPort')->with()->willReturn(443),
             Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/api/pets/1'),
-            Call::create('getQuery')->with()->willReturn('?key=value'),
+            Call::create('getQuery')->with()->willReturn(''),
             Call::create('getPath')->with()->willReturn('/api/pets/1'),
         ]);
 
@@ -243,7 +245,7 @@ final class SymfonyRouterTest extends TestCase
             Call::create('getPort')->with()->willReturn(443),
             Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
-            Call::create('getQuery')->with()->willReturn('?key=value'),
+            Call::create('getQuery')->with()->willReturn(''),
             Call::create('getPath')->with()->willReturn('/api/pets'),
         ]);
 
@@ -275,7 +277,7 @@ final class SymfonyRouterTest extends TestCase
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(
-            'The page "/" you are looking for could not be found.'
+            'The page "/api/pets" you are looking for could not be found.'
                 .' Check the address bar to ensure your URL is spelled correctly.'
         );
         $this->expectExceptionCode(404);
@@ -286,7 +288,7 @@ final class SymfonyRouterTest extends TestCase
             Call::create('getPort')->with()->willReturn(443),
             Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
-            Call::create('getQuery')->with()->willReturn('?key=value'),
+            Call::create('getQuery')->with()->willReturn(''),
             Call::create('getPath')->with()->willReturn('/api/pets'),
         ]);
 
@@ -295,7 +297,7 @@ final class SymfonyRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getUri')->with()->willReturn($uri),
-            Call::create('getRequestTarget')->with()->willReturn('/'),
+            Call::create('getRequestTarget')->with()->willReturn('/api/pets'),
         ]);
 
         /** @var RouteInterface|MockObject $route */
@@ -353,7 +355,7 @@ final class SymfonyRouterTest extends TestCase
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(
-            'The page "/" you are looking for could not be found.'
+            'The page "/api/pets?key=value" you are looking for could not be found.'
                 .' Check the address bar to ensure your URL is spelled correctly.'
         );
         $this->expectExceptionCode(404);
@@ -373,7 +375,7 @@ final class SymfonyRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getUri')->with()->willReturn($uri),
-            Call::create('getRequestTarget')->with()->willReturn('/'),
+            Call::create('getRequestTarget')->with()->willReturn('/api/pets?key=value'),
         ]);
 
         /** @var RouteInterface|MockObject $route */
@@ -414,7 +416,7 @@ final class SymfonyRouterTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPathOptions')->with()->willReturn([
-                SymfonyRouter::PATH_CONDITION => "context.getHost() === 'localhost'",
+                SymfonyRouter::PATH_CONDITION => "context.getQueryString() matches '/key=/'",
             ]),
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
@@ -431,7 +433,7 @@ final class SymfonyRouterTest extends TestCase
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(
-            'The page "/" you are looking for could not be found.'
+            'The page "/api/pets?key=value" you are looking for could not be found.'
                 .' Check the address bar to ensure your URL is spelled correctly.'
         );
         $this->expectExceptionCode(404);
@@ -451,14 +453,14 @@ final class SymfonyRouterTest extends TestCase
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getUri')->with()->willReturn($uri),
-            Call::create('getRequestTarget')->with()->willReturn('/'),
+            Call::create('getRequestTarget')->with()->willReturn('/api/pets?key=value'),
         ]);
 
         /** @var RouteInterface|MockObject $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPathOptions')->with()->willReturn([
-                SymfonyRouter::PATH_CONDITION => "context.getHost() !== 'localhost'",
+                SymfonyRouter::PATH_CONDITION => "context.getQueryString() matches '/key1=/'",
             ]),
             Call::create('getName')->with()->willReturn('pet_list'),
             Call::create('getPath')->with()->willReturn('/api/pets'),

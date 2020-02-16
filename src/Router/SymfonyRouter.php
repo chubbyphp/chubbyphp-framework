@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Exception\MissingMandatoryParametersException as S
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as SymfonyResourceNotFoundException;
 use Symfony\Component\Routing\Generator\CompiledUrlGenerator;
 use Symfony\Component\Routing\Generator\Dumper\CompiledUrlGeneratorDumper;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
 use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
@@ -142,7 +141,7 @@ final class SymfonyRouter implements RouterInterface
             return $this->urlGenerator->generate(
                 $name,
                 array_merge($attributes, $queryParams),
-                null !== $request ? UrlGenerator::ABSOLUTE_URL : UrlGenerator::ABSOLUTE_PATH
+                null !== $request ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH
             );
         } catch (SymfonyMissingMandatoryParametersException $exception) {
             throw MissingAttributeForPathGenerationException::create($name, $exception->getMessage());
