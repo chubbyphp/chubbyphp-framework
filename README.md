@@ -23,6 +23,8 @@ the best combination of flexibility and simplicity by using standards.
 
 ![Application workflow](doc/Resources/workflow.png?raw=true "Application workflow")
 
+[Framework Benchmark][10]
+
 ## Requirements
 
  * php: ^7.2
@@ -460,6 +462,8 @@ Dominik Zogg 2020
 [7]: https://www.php-fig.org/psr/psr-11
 [8]: https://www.php-fig.org/psr/psr-15
 [9]: https://www.php-fig.org/psr/psr-17
+
+[10]: https://github.com/the-benchmarker/web-frameworks#results
 
 [15]: https://travis-ci.org/chubbyphp/chubbyphp-framework
 
