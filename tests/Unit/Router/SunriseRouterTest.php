@@ -15,7 +15,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Sunrise\Router\Route;
 
 /**
  * @covers \Chubbyphp\Framework\Router\SunriseRouter
