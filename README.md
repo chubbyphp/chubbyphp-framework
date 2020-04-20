@@ -44,7 +44,7 @@ Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be 
 
  * [aura/router][30]: ^3.1
  * [nikic/fast-route][31]: ^1.0|^0.6
- * [sunrise/http-router][32]: ^2.0
+ * [sunrise/http-router][32]: ^2.4
  * [symfony/routing][33]: ^4.3|^5.0
 
 ### PSR 7 / PSR 17
@@ -161,7 +161,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ### SunriseRouter
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.8" sunrise/http-router "^2.1" slim/psr7 "^1.0"
+composer require chubbyphp/chubbyphp-framework "^2.8" sunrise/http-router "^2.4" slim/psr7 "^1.0"
 ```
 
 ```php
