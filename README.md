@@ -9,8 +9,8 @@
 
 ## Description
 
-A minimal middleware based micro framework using [PHP Framework Interop Group - PSR][1], where the goal is to achieve
-the best combination of flexibility and simplicity by using standards.
+A based [PSR-15][8] microframework that also sets maximum flexibility with minimum complexity and easy replaceability of the individual components, but also of the framework.
+Although performance was not a focus, it's currently the [fastest PSR-15 based framework (php-fpm)][1] on the market.
 
  * [Basic Coding Standard (1)][2]
  * [Coding Style Guide (2)][3]
@@ -22,8 +22,6 @@ the best combination of flexibility and simplicity by using standards.
  * [HTTP Factories (17)][9]
 
 ![Application workflow](doc/Resources/workflow.png?raw=true "Application workflow")
-
-[Framework Benchmark][10]
 
 ## Requirements
 
@@ -452,7 +450,7 @@ $app = new Application([
 
 Dominik Zogg 2020
 
-[1]: https://www.php-fig.org/psr/
+[1]: https://github.com/the-benchmarker/web-frameworks#results
 
 [2]: https://www.php-fig.org/psr/psr-1
 [3]: https://www.php-fig.org/psr/psr-2
@@ -462,8 +460,6 @@ Dominik Zogg 2020
 [7]: https://www.php-fig.org/psr/psr-11
 [8]: https://www.php-fig.org/psr/psr-15
 [9]: https://www.php-fig.org/psr/psr-17
-
-[10]: https://github.com/the-benchmarker/web-frameworks#results
 
 [15]: https://travis-ci.org/chubbyphp/chubbyphp-framework
 

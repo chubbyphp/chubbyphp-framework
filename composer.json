@@ -1,6 +1,6 @@
 {
     "name": "chubbyphp/chubbyphp-framework",
-    "description": "A minimal Framework using PSR 3, PSR 7, PSR 11, PSR 15 and PSR 17.",
+    "description": "A based PSR-15 microframework that also sets maximum flexibility with minimum complexity and easy replaceability of the individual components, but also of the framework. Although performance was not a focus, it's currently the fastest PSR-15 based framework (php-fpm) on the market.",
     "keywords": [
         "chubbyphp",
         "framework",
