@@ -81,16 +81,6 @@ final class Application implements RequestHandlerInterface
         $this->emitter->emit($response);
     }
 
-    /**
-     * @deprecated 3.0
-     */
-    public function send(ResponseInterface $response): void
-    {
-        @trigger_error('Use emit instead', E_USER_DEPRECATED);
-
-        $this->emit($response);
-    }
-
     private function addMiddleware(MiddlewareInterface $middleware): void
     {
         $this->middlewares[] = $middleware;

@@ -181,28 +181,4 @@ final class ApplicationTest extends TestCase
         $application = new Application([], null, $emitter);
         $application->emit($response);
     }
-
-    public function testSend(): void
-    {
-        /** @var ResponseInterface|MockObject $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
-
-        /** @var EmitterInterface|MockObject $emitter */
-        $emitter = $this->getMockByCalls(EmitterInterface::class, [
-            Call::create('emit')->with($response),
-        ]);
-
-        $application = new Application([], null, $emitter);
-
-        error_clear_last();
-
-        $application->send($response);
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('Use emit instead', $error['message']);
-    }
 }

@@ -40,10 +40,10 @@ Although performance was not a focus, it's currently the [fastest PSR-15 based f
 
 Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be used.
 
- * [aura/router][30]: ^3.1
- * [nikic/fast-route][31]: ^1.0|^0.6
- * [sunrise/http-router][32]: ^2.4
- * [symfony/routing][33]: ^4.3|^5.0
+ * [chubbyphp/chubbyphp-framework-router-aura][30]: ^1.0
+ * [chubbyphp/chubbyphp-framework-router-fastroute][31]: ^1.0
+ * [chubbyphp/chubbyphp-framework-router-sunrise][32]: ^1.0
+ * [chubbyphp/chubbyphp-framework-router-symfony][33]: ^1.0
 
 ### PSR 7 / PSR 17
 
@@ -58,61 +58,51 @@ Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be 
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
-## Usage
-
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.8" aura/router "^3.1" slim/psr7 "^1.0"
+composer require chubbyphp/chubbyphp-framework "^3.0" \
+    chubbyphp/chubbyphp-framework-router-aura "^1.0" \
+    slim/psr7 "^1.0"
 ```
 
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\ErrorHandler;
-use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Chubbyphp\Framework\Middleware\RouterMiddleware;
-use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\AuraRouter;
-use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Psr7\Factory\ResponseFactory;
-use Slim\Psr7\Factory\ServerRequestFactory;
-
-$loader = require __DIR__.'/vendor/autoload.php';
-
-set_error_handler([new ErrorHandler(), 'errorToException']);
-
-$responseFactory = new ResponseFactory();
-
-$app = new Application([
-    new ExceptionMiddleware($responseFactory, true),
-    new RouterMiddleware(new AuraRouter([
-        Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
-                $name = $request->getAttribute('name');
-                $response = $responseFactory->createResponse();
-                $response->getBody()->write(sprintf('Hello, %s', $name));
-
-                return $response;
-            }
-        ))->pathOptions([AuraRouter::PATH_TOKENS => ['name' => '[a-z]+']])
-    ]), $responseFactory),
-]);
-
-$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
-```
+[Example][220]
 
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^2.8" nikic/fast-route "^1.3" slim/psr7 "^1.0"
+composer require chubbyphp/chubbyphp-framework "^3.0" \
+    chubbyphp/chubbyphp-framework-router-fastroute "^1.0" \
+    slim/psr7 "^1.0"
 ```
+
+[Example][221]
+
+### SunriseRouter
+
+```bash
+composer require chubbyphp/chubbyphp-framework "^3.0" \
+    chubbyphp/chubbyphp-framework-router-sunrise "^1.0" \
+    slim/psr7 "^1.0"
+```
+
+[Example][222]
+
+### Symfony Routing
+
+```bash
+composer require chubbyphp/chubbyphp-framework "^3.0" \
+    chubbyphp/chubbyphp-framework-router-symfony "^1.0" \
+    slim/psr7 "^1.0"
+```
+
+[Example][223]
+
+## Usage
+
+### Fastroute
+
+#### Basic
 
 ```php
 <?php
@@ -126,7 +116,7 @@ use Chubbyphp\Framework\ErrorHandler;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
 use Chubbyphp\Framework\Middleware\RouterMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\FastRouteRouter;
+use Chubbyphp\Framework\Router\FastRoute\Router;
 use Chubbyphp\Framework\Router\Route;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\ResponseFactory;
@@ -140,7 +130,7 @@ $responseFactory = new ResponseFactory();
 
 $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
-    new RouterMiddleware(new FastRouteRouter([
+    new RouterMiddleware(new Router([
         Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
             function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
@@ -156,108 +146,11 @@ $app = new Application([
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ```
 
-### SunriseRouter
-
-```bash
-composer require chubbyphp/chubbyphp-framework "^2.8" sunrise/http-router "^2.4" slim/psr7 "^1.0"
-```
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\ErrorHandler;
-use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Chubbyphp\Framework\Middleware\RouterMiddleware;
-use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\SunriseRouter;
-use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Psr7\Factory\ResponseFactory;
-use Slim\Psr7\Factory\ServerRequestFactory;
-
-$loader = require __DIR__.'/vendor/autoload.php';
-
-set_error_handler([new ErrorHandler(), 'errorToException']);
-
-$responseFactory = new ResponseFactory();
-
-$app = new Application([
-    new ExceptionMiddleware($responseFactory, true),
-    new RouterMiddleware(new SunriseRouter([
-        Route::get('/hello/{name<[a-z]+>}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
-                $name = $request->getAttribute('name');
-                $response = $responseFactory->createResponse();
-                $response->getBody()->write(sprintf('Hello, %s', $name));
-
-                return $response;
-            }
-        ))
-    ]), $responseFactory),
-]);
-
-$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
-```
-
-### Symfony Routing
-
-```bash
-composer require chubbyphp/chubbyphp-framework "^2.8" symfony/routing "^5.0" slim/psr7 "^1.0"
-```
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\ErrorHandler;
-use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Chubbyphp\Framework\Middleware\RouterMiddleware;
-use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\SymfonyRouter;
-use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Psr7\Factory\ResponseFactory;
-use Slim\Psr7\Factory\ServerRequestFactory;
-
-$loader = require __DIR__.'/vendor/autoload.php';
-
-set_error_handler([new ErrorHandler(), 'errorToException']);
-
-$responseFactory = new ResponseFactory();
-
-$app = new Application([
-    new ExceptionMiddleware($responseFactory, true),
-    new RouterMiddleware(new SymfonyRouter([
-        Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
-                $name = $request->getAttribute('name');
-                $response = $responseFactory->createResponse();
-                $response->getBody()->write(sprintf('Hello, %s', $name));
-
-                return $response;
-            }
-        ))->pathOptions([SymfonyRouter::PATH_REQUIREMENTS => ['name' => '[a-z]+']])
-    ]), $responseFactory),
-]);
-
-$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
-```
-
-#### Advanced example with Middleware before and after routing
+#### Advanced
 
 This is an example of middleware(s) before and after the routing was done.
 
-If you need to be able to continue without finding a route, I recommend writing a RouterMiddleware that will pass either
-the route or the RouteException and at the end another middleware that will convert the RouteException to a http response.
+If you need to be able to continue without finding a route, I recommend writing a RouterMiddleware that will pass either the route or the RouteException and at the end another middleware that will convert the RouteException to a http response.
 
 ```php
 <?php
@@ -272,7 +165,7 @@ use Chubbyphp\Framework\Middleware\CallbackMiddleware;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
 use Chubbyphp\Framework\Middleware\RouterMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\FastRouteRouter;
+use Chubbyphp\Framework\Router\FastRoute\Router;
 use Chubbyphp\Framework\Router\Route;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -291,7 +184,7 @@ $app = new Application([
         return $handler->handle($request);
     }),
     new RouterMiddleware(
-        new FastRouteRouter([
+        new Router([
             Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
                 function (ServerRequestInterface $request) use ($responseFactory) {
                     $name = $request->getAttribute('name');
@@ -339,11 +232,8 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 ### Router
 
- * [AuraRouter][90]
- * [FastRouteRouter][91]
- * [SunriseRouter][92]
- * [Group][93]
- * [Route][94]
+ * [Group][90]
+ * [Route][91]
 
 ## Webserver
 
@@ -419,6 +309,30 @@ while ($req = $psr7->acceptRequest()) {
 
 ## Migration
 
+### From 2.x to 3.x
+
+#### Aura.Router
+
+Run the new installation guide and replace
+`Chubbyphp\Framework\Router\AuraRouter` with `Chubbyphp\Framework\Router\Aura\Router`.
+
+#### FastRoute
+
+Run the new installation guide and replace
+`Chubbyphp\Framework\Router\FastRouteRouter` with `Chubbyphp\Framework\Router\FastRoute\Router`.
+
+#### SunriseRouter
+
+Run the new installation guide and replace
+ `Chubbyphp\Framework\Router\SunriseRouter` with `Chubbyphp\Framework\Router\Sunrise\Router`.
+
+#### Symfony Routing
+
+Run the new installation guide and replace
+`Chubbyphp\Framework\Router\SymfonyRouter` with `Chubbyphp\Framework\Router\Symfony\Router`.
+
+### From 1.x to 2.x
+
 Replace the code from the first block with the code of the second ones.
 
 ```php
@@ -471,10 +385,10 @@ Dominik Zogg 2020
 [25]: https://packagist.org/packages/psr/http-server-middleware
 [26]: https://packagist.org/packages/psr/log
 
-[30]: https://packagist.org/packages/aura/router
-[31]: https://packagist.org/packages/nikic/fast-route
-[32]: https://packagist.org/packages/sunrise/http-router
-[33]: https://packagist.org/packages/symfony/routing
+[30]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-router-aura
+[31]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-router-fastroute
+[32]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-router-sunrise
+[33]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-router-symfony
 
 [40]: https://packagist.org/packages/bittyphp/http
 [41]: https://packagist.org/packages/guzzlehttp/psr7
@@ -499,11 +413,8 @@ Dominik Zogg 2020
 [80]: doc/RequestHandler/CallbackRequestHandler.md
 [81]: doc/RequestHandler/LazyRequestHandler.md
 
-[90]: doc/Router/AuraRouter.md
-[91]: doc/Router/FastRouteRouter.md
-[92]: doc/Router/SunriseRouter.md
-[93]: doc/Router/Group.md
-[94]: doc/Router/Route.md
+[90]: doc/Router/Group.md
+[91]: doc/Router/Route.md
 
 [100]: doc/Webserver/Builtin.md
 [101]: doc/Webserver/Nginx.md
@@ -512,3 +423,8 @@ Dominik Zogg 2020
 [201]: https://packagist.org/packages/chubbyphp/petstore
 
 [210]: https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler
+
+[220]: https://github.com/chubbyphp/chubbyphp-framework-router-aura#usage
+[221]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
+[222]: https://github.com/chubbyphp/chubbyphp-framework-router-sunrise#usage
+[223]: https://github.com/chubbyphp/chubbyphp-framework-router-symfony#usage
