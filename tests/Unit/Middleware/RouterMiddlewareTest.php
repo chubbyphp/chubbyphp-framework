@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Unit\Middleware;
 
 use Chubbyphp\Framework\Middleware\RouterMiddleware;
+use Chubbyphp\Framework\Router\Exceptions\NotFoundException;
 use Chubbyphp\Framework\Router\RouteInterface;
-use Chubbyphp\Framework\Router\RouterException;
 use Chubbyphp\Framework\Router\RouterInterface;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
@@ -67,7 +67,7 @@ final class RouterMiddlewareTest extends TestCase
 
     public function testProcessMissingRouteWithoutLogger(): void
     {
-        $routerException = RouterException::createForNotFound('/');
+        $routerException = NotFoundException::create('/');
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -142,7 +142,7 @@ EOT;
 
     public function testProcessMissingRouteWithLogger(): void
     {
-        $routerException = RouterException::createForNotFound('/');
+        $routerException = NotFoundException::create('/');
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
