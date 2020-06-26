@@ -313,23 +313,23 @@ while ($req = $psr7->acceptRequest()) {
 
 #### Aura.Router
 
-Run the new installation guide and replace
-`Chubbyphp\Framework\Router\AuraRouter` with `Chubbyphp\Framework\Router\Aura\Router`.
+1. Run the new installation guide
+2. Replace `Chubbyphp\Framework\Router\AuraRouter` with `Chubbyphp\Framework\Router\Aura\Router`.
 
 #### FastRoute
 
-Run the new installation guide and replace
-`Chubbyphp\Framework\Router\FastRouteRouter` with `Chubbyphp\Framework\Router\FastRoute\Router`.
+1. Run the new installation guide
+2. Replace `Chubbyphp\Framework\Router\FastRouteRouter` with `Chubbyphp\Framework\Router\FastRoute\Router`.
 
 #### SunriseRouter
 
-Run the new installation guide and replace
- `Chubbyphp\Framework\Router\SunriseRouter` with `Chubbyphp\Framework\Router\Sunrise\Router`.
+1. Run the new installation guide
+2. Replace `Chubbyphp\Framework\Router\SunriseRouter` with `Chubbyphp\Framework\Router\Sunrise\Router`.
 
 #### Symfony Routing
 
-Run the new installation guide and replace
-`Chubbyphp\Framework\Router\SymfonyRouter` with `Chubbyphp\Framework\Router\Symfony\Router`.
+1. Run the new installation guide
+2. Replace `Chubbyphp\Framework\Router\SymfonyRouter` with `Chubbyphp\Framework\Router\Symfony\Router`.
 
 ### From 1.x to 2.x
 
