@@ -25,4 +25,4 @@ script:
   - composer test
 
 after_success:
-  - travis_retry php vendor/bin/php-coveralls --coverage_clover=build/phpunit/phpunit.clover.xml --json_path=build/coveralls.json -v
+  - travis_retry php vendor/bin/php-coveralls --coverage_clover=build/phpunit/clover.xml --json_path=build/coveralls.json -v
