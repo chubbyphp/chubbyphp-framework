@@ -313,22 +313,22 @@ while ($req = $psr7->acceptRequest()) {
 
 #### Aura.Router
 
-1. Run the new installation guide
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.0" chubbyphp/chubbyphp-framework-router-aura`
 2. Replace `Chubbyphp\Framework\Router\AuraRouter` with `Chubbyphp\Framework\Router\Aura\Router`.
 
 #### FastRoute
 
-1. Run the new installation guide
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.0" chubbyphp/chubbyphp-framework-router-fastroute`
 2. Replace `Chubbyphp\Framework\Router\FastRouteRouter` with `Chubbyphp\Framework\Router\FastRoute\Router`.
 
 #### SunriseRouter
 
-1. Run the new installation guide
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.0" chubbyphp/chubbyphp-framework-router-sunrise`
 2. Replace `Chubbyphp\Framework\Router\SunriseRouter` with `Chubbyphp\Framework\Router\Sunrise\Router`.
 
 #### Symfony Routing
 
-1. Run the new installation guide
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.0" chubbyphp/chubbyphp-framework-router-symfony`
 2. Replace `Chubbyphp\Framework\Router\SymfonyRouter` with `Chubbyphp\Framework\Router\Symfony\Router`.
 
 ### From 1.x to 2.x
