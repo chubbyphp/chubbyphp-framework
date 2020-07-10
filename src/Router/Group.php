@@ -14,71 +14,51 @@ final class Group implements GroupInterface
     private $path;
 
     /**
-     * @var array<string, mixed>
-     */
-    private $pathOptions = [];
-
-    /**
      * @var array<MiddlewareInterface>
      */
     private $middlewares = [];
 
     /**
-     * @var array<GroupInterface>|array<RouteInterface>
+     * @var array<GroupInterface|RouteInterface>
      */
     private $children = [];
 
-    private function __construct(string $path)
+    /**
+     * @var array<string, mixed>
+     */
+    private $pathOptions = [];
+
+    /**
+     * @param array<GroupInterface|RouteInterface> $children
+     * @param array<MiddlewareInterface>           $middlewares
+     * @param array<string, mixed>                 $pathOptions
+     */
+    private function __construct(string $path, array $children = [], array $middlewares = [], array $pathOptions = [])
     {
         $this->path = $path;
-    }
-
-    public static function create(string $path): self
-    {
-        return new self($path);
-    }
-
-    /**
-     * @param array<string, mixed> $pathOptions
-     */
-    public function pathOptions(array $pathOptions): self
-    {
         $this->pathOptions = $pathOptions;
 
-        return $this;
+        foreach ($children as $child) {
+            $this->addChild($child);
+        }
+
+        foreach ($middlewares as $middleware) {
+            $this->addMiddleware($middleware);
+        }
     }
 
     /**
-     * @param array<MiddlewareInterface> $middlewares
+     * @param array<GroupInterface|RouteInterface> $children
+     * @param array<MiddlewareInterface>           $middlewares
+     * @param array<string, mixed>                 $pathOptions
      */
-    public function middlewares(array $middlewares): self
-    {
-        foreach ($middlewares as $middleware) {
-            $this->middleware($middleware);
-        }
-
-        return $this;
-    }
-
-    public function middleware(MiddlewareInterface $middleware): self
-    {
-        $this->middlewares[] = $middleware;
-
-        return $this;
-    }
-
-    public function group(Group $group): self
-    {
-        $this->children[] = $group;
-
-        return $this;
-    }
-
-    public function route(RouteInterface $route): self
-    {
-        $this->children[] = $route;
-
-        return $this;
+    public static function create(
+        string $path,
+        array $children = [],
+        array $middlewares = [],
+        array $pathOptions = []
+    ): self {
+        return new self($path, $children, $middlewares, $pathOptions);
     }
 
     /**
@@ -100,16 +80,110 @@ final class Group implements GroupInterface
         return $routes;
     }
 
+    /**
+     * @param array<string, mixed> $pathOptions
+     */
+    public function pathOptions(array $pathOptions): self
+    {
+        @trigger_error(
+            sprintf('Use "$pathOptions" parameter instead of instead of "%s()"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
+        $this->pathOptions = $pathOptions;
+
+        return $this;
+    }
+
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     */
+    public function middlewares(array $middlewares): self
+    {
+        @trigger_error(
+            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
+        foreach ($middlewares as $middleware) {
+            $this->addMiddleware($middleware);
+        }
+
+        return $this;
+    }
+
+    public function middleware(MiddlewareInterface $middleware): self
+    {
+        @trigger_error(
+            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
+        $this->middlewares[] = $middleware;
+
+        return $this;
+    }
+
+    public function group(Group $group): self
+    {
+        @trigger_error(
+            sprintf('Use "$children" parameter instead of instead of "%s()"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
+        $this->children[] = $group;
+
+        return $this;
+    }
+
+    public function route(RouteInterface $route): self
+    {
+        @trigger_error(
+            sprintf('Use "$children" parameter instead of instead of "%s()"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
+        $this->children[] = $route;
+
+        return $this;
+    }
+
+    /**
+     * @param GroupInterface|RouteInterface|mixed $child
+     */
+    private function addChild($child): void
+    {
+        if ($child instanceof GroupInterface || $child instanceof RouteInterface) {
+            $this->children[] = $child;
+
+            return;
+        }
+
+        throw new \TypeError(
+            sprintf(
+                '%s::addChild() expects parameter 1 to be %s|%s, %s given',
+                self::class,
+                GroupInterface::class,
+                RouteInterface::class,
+                is_object($child) ? get_class($child) : gettype($child)
+            )
+        );
+    }
+
+    private function addMiddleware(MiddlewareInterface $middleware): void
+    {
+        $this->middlewares[] = $middleware;
+    }
+
     private function createRoute(RouteInterface $route): RouteInterface
     {
         return Route::create(
             $route->getMethod(),
             $this->path.$route->getPath(),
             $route->getName(),
-            $route->getRequestHandler()
-        )
-            ->pathOptions(array_merge_recursive($this->pathOptions, $route->getPathOptions()))
-            ->middlewares(array_merge($this->middlewares, $route->getMiddlewares()))
-        ;
+            $route->getRequestHandler(),
+            array_merge($this->middlewares, $route->getMiddlewares()),
+            array_merge_recursive($this->pathOptions, $route->getPathOptions())
+        );
     }
 }

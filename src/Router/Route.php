@@ -37,92 +37,146 @@ final class Route implements RouteInterface
     /**
      * @var RequestHandlerInterface
      */
-    private $handler;
+    private $requestHandler;
 
     /**
      * @var array<string, string>
      */
     private $attributes = [];
 
-    private function __construct(string $method, string $path, string $name, RequestHandlerInterface $handler)
-    {
-        $this->method = $method;
-        $this->path = $path;
-        $this->name = $name;
-        $this->handler = $handler;
-    }
-
-    public static function create(
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     * @param array<string, mixed>      $pathOptions
+     */
+    private function __construct(
         string $method,
         string $path,
         string $name,
-        RequestHandlerInterface $handler
-    ): self {
-        return new self($method, $path, $name, $handler);
-    }
-
-    public static function delete(string $path, string $name, RequestHandlerInterface $handler): self
-    {
-        return new self(RouteInterface::DELETE, $path, $name, $handler);
-    }
-
-    public static function get(string $path, string $name, RequestHandlerInterface $handler): self
-    {
-        return new self(RouteInterface::GET, $path, $name, $handler);
-    }
-
-    public static function head(string $path, string $name, RequestHandlerInterface $handler): self
-    {
-        return new self(RouteInterface::HEAD, $path, $name, $handler);
-    }
-
-    public static function options(string $path, string $name, RequestHandlerInterface $handler): self
-    {
-        return new self(RouteInterface::OPTIONS, $path, $name, $handler);
-    }
-
-    public static function patch(string $path, string $name, RequestHandlerInterface $handler): self
-    {
-        return new self(RouteInterface::PATCH, $path, $name, $handler);
-    }
-
-    public static function post(string $path, string $name, RequestHandlerInterface $handler): self
-    {
-        return new self(RouteInterface::POST, $path, $name, $handler);
-    }
-
-    public static function put(string $path, string $name, RequestHandlerInterface $handler): self
-    {
-        return new self(RouteInterface::PUT, $path, $name, $handler);
-    }
-
-    /**
-     * @param array<string, string> $pathOptions
-     */
-    public function pathOptions(array $pathOptions): self
-    {
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = [],
+        array $pathOptions = []
+    ) {
+        $this->method = $method;
+        $this->path = $path;
+        $this->name = $name;
+        $this->requestHandler = $requestHandler;
+        foreach ($middlewares as $middleware) {
+            $this->addMiddleware($middleware);
+        }
         $this->pathOptions = $pathOptions;
-
-        return $this;
     }
 
     /**
      * @param array<MiddlewareInterface> $middlewares
+     * @param array<string, mixed>      $pathOptions
      */
-    public function middlewares(array $middlewares): self
-    {
-        foreach ($middlewares as $middleware) {
-            $this->middleware($middleware);
-        }
-
-        return $this;
+    public static function create(
+        string $method,
+        string $path,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = [],
+        array $pathOptions = []
+    ): self {
+        return new self($method, $path, $name, $requestHandler, $middlewares, $pathOptions);
     }
 
-    public function middleware(MiddlewareInterface $middleware): self
-    {
-        $this->middlewares[] = $middleware;
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     * @param array<string, mixed>      $pathOptions
+     */
+    public static function delete(
+        string $path,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = [],
+        array $pathOptions = []
+    ): self {
+        return new self(RouteInterface::DELETE, $path, $name, $requestHandler, $middlewares, $pathOptions);
+    }
 
-        return $this;
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     * @param array<string, mixed>      $pathOptions
+     */
+    public static function get(
+        string $path,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = [],
+        array $pathOptions = []
+    ): self {
+        return new self(RouteInterface::GET, $path, $name, $requestHandler, $middlewares, $pathOptions);
+    }
+
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     * @param array<string, mixed>      $pathOptions
+     */
+    public static function head(
+        string $path,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = [],
+        array $pathOptions = []
+    ): self {
+        return new self(RouteInterface::HEAD, $path, $name, $requestHandler, $middlewares, $pathOptions);
+    }
+
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     * @param array<string, mixed>      $pathOptions
+     */
+    public static function options(
+        string $path,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = [],
+        array $pathOptions = []
+    ): self {
+        return new self(RouteInterface::OPTIONS, $path, $name, $requestHandler, $middlewares, $pathOptions);
+    }
+
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     * @param array<string, mixed>      $pathOptions
+     */
+    public static function patch(
+        string $path,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = [],
+        array $pathOptions = []
+    ): self {
+        return new self(RouteInterface::PATCH, $path, $name, $requestHandler, $middlewares, $pathOptions);
+    }
+
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     * @param array<string, mixed>      $pathOptions
+     */
+    public static function post(
+        string $path,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = [],
+        array $pathOptions = []
+    ): self {
+        return new self(RouteInterface::POST, $path, $name, $requestHandler, $middlewares, $pathOptions);
+    }
+
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     * @param array<string, mixed>      $pathOptions
+     */
+    public static function put(
+        string $path,
+        string $name,
+        RequestHandlerInterface $requestHandler,
+        array $middlewares = [],
+        array $pathOptions = []
+    ): self {
+        return new self(RouteInterface::PUT, $path, $name, $requestHandler, $middlewares, $pathOptions);
     }
 
     public function getName(): string
@@ -158,7 +212,7 @@ final class Route implements RouteInterface
 
     public function getRequestHandler(): RequestHandlerInterface
     {
-        return $this->handler;
+        return $this->requestHandler;
     }
 
     /**
@@ -178,5 +232,54 @@ final class Route implements RouteInterface
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param array<string, mixed> $pathOptions
+     */
+    public function pathOptions(array $pathOptions): self
+    {
+        @trigger_error(
+            sprintf('Use "$pathOptions" parameter instead of instead of "%s()"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
+        $this->pathOptions = $pathOptions;
+
+        return $this;
+    }
+
+    /**
+     * @param array<MiddlewareInterface> $middlewares
+     */
+    public function middlewares(array $middlewares): self
+    {
+        @trigger_error(
+            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
+        foreach ($middlewares as $middleware) {
+            $this->addMiddleware($middleware);
+        }
+
+        return $this;
+    }
+
+    public function middleware(MiddlewareInterface $middleware): self
+    {
+        @trigger_error(
+            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
+        $this->middlewares[] = $middleware;
+
+        return $this;
+    }
+
+    private function addMiddleware(MiddlewareInterface $middleware): void
+    {
+        $this->middlewares[] = $middleware;
     }
 }
