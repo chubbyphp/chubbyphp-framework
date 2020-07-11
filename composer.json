@@ -32,15 +32,22 @@
         "psr/log": "^1.1.2"
     },
     "require-dev": {
+        "bittyphp/http": "^2.0",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
         "chubbyphp/chubbyphp-mock": "^1.4.5",
+        "guzzlehttp/psr7": "^1.4.2",
+        "http-interop/http-factory-guzzle": "^1.0",
         "infection/infection": "^0.15.3|^0.16.3",
+        "laminas/laminas-diactoros": "^2.0",
         "mavimo/phpstan-junit": "^0.3",
+        "nyholm/psr7": "^1.0",
         "php-coveralls/php-coveralls": "^2.2",
         "phploc/phploc": "^5.0|^6.0.2",
         "phpstan/extension-installer": "^1.0.4",
         "phpstan/phpstan": "^0.12.27",
-        "phpunit/phpunit": "^8.5.5|^9.2.2"
+        "phpunit/phpunit": "^8.5.5|^9.2.2",
+        "slim/psr7": "^0.5|^1.0",
+        "sunrise/http-factory": "^1.0.4"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\Framework\\": "src/" }

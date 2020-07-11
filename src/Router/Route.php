@@ -46,7 +46,7 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param array<string, mixed>      $pathOptions
+     * @param array<string, mixed>       $pathOptions
      */
     private function __construct(
         string $method,
@@ -68,7 +68,7 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param array<string, mixed>      $pathOptions
+     * @param array<string, mixed>       $pathOptions
      */
     public static function create(
         string $method,
@@ -83,7 +83,7 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param array<string, mixed>      $pathOptions
+     * @param array<string, mixed>       $pathOptions
      */
     public static function delete(
         string $path,
@@ -97,7 +97,7 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param array<string, mixed>      $pathOptions
+     * @param array<string, mixed>       $pathOptions
      */
     public static function get(
         string $path,
@@ -111,7 +111,7 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param array<string, mixed>      $pathOptions
+     * @param array<string, mixed>       $pathOptions
      */
     public static function head(
         string $path,
@@ -125,7 +125,7 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param array<string, mixed>      $pathOptions
+     * @param array<string, mixed>       $pathOptions
      */
     public static function options(
         string $path,
@@ -139,7 +139,7 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param array<string, mixed>      $pathOptions
+     * @param array<string, mixed>       $pathOptions
      */
     public static function patch(
         string $path,
@@ -153,7 +153,7 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param array<string, mixed>      $pathOptions
+     * @param array<string, mixed>       $pathOptions
      */
     public static function post(
         string $path,
@@ -167,7 +167,7 @@ final class Route implements RouteInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     * @param array<string, mixed>      $pathOptions
+     * @param array<string, mixed>       $pathOptions
      */
     public static function put(
         string $path,
