@@ -8,12 +8,23 @@
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Server\MidlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /** @var RequestHandlerInterface $handler */
 $handler = ...;
 
-$route = Route::create(Route::GET, '/api/pets', 'pet_list', $handler);
+/** @var MidlewareInterface $middleware */
+$middleware = ...;
+
+$route = Route::create(
+    Route::GET,
+    '/{id}',
+    'list',
+    $handler,
+    [$middleware],
+    ['requirements' => ['id' => '\d+']]
+);
 ```
 
 ### delete
@@ -22,12 +33,16 @@ $route = Route::create(Route::GET, '/api/pets', 'pet_list', $handler);
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Server\MidlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /** @var RequestHandlerInterface $handler */
 $handler = ...;
 
-$route = Route::delete('/api/pets/{id}', 'pet_delete', $handler);
+/** @var MidlewareInterface $middleware */
+$middleware = ...;
+
+$route = Route::delete('/{id}', 'delete', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
 
 ### get
@@ -36,12 +51,16 @@ $route = Route::delete('/api/pets/{id}', 'pet_delete', $handler);
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Server\MidlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /** @var RequestHandlerInterface $handler */
 $handler = ...;
 
-$route = Route::get('/api/pets/{id}', 'pet_read', $handler);
+/** @var MidlewareInterface $middleware */
+$middleware = ...;
+
+$route = Route::get('/{id}', 'read', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
 
 ### head
@@ -50,12 +69,16 @@ $route = Route::get('/api/pets/{id}', 'pet_read', $handler);
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Server\MidlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /** @var RequestHandlerInterface $handler */
 $handler = ...;
 
-$route = Route::head('/api/pets/{id}', 'pet_read_header', $handler);
+/** @var MidlewareInterface $middleware */
+$middleware = ...;
+
+$route = Route::head('/{id}', 'head', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
 
 ### options
@@ -64,12 +87,16 @@ $route = Route::head('/api/pets/{id}', 'pet_read_header', $handler);
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Server\MidlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /** @var RequestHandlerInterface $handler */
 $handler = ...;
 
-$route = Route::options('/api/pets/{id}', 'pet_options', $handler);
+/** @var MidlewareInterface $middleware */
+$middleware = ...;
+
+$route = Route::options('/{id}', 'options', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
 
 ### patch
@@ -78,12 +105,16 @@ $route = Route::options('/api/pets/{id}', 'pet_options', $handler);
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Server\MidlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /** @var RequestHandlerInterface $handler */
 $handler = ...;
 
-$route = Route::patch('/api/pets/{id}', 'pet_update', $handler);
+/** @var MidlewareInterface $middleware */
+$middleware = ...;
+
+$route = Route::patch('/{id}', 'patch', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
 
 ### post
@@ -92,12 +123,16 @@ $route = Route::patch('/api/pets/{id}', 'pet_update', $handler);
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Server\MidlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /** @var RequestHandlerInterface $handler */
 $handler = ...;
 
-$route = Route::post('/api/pets/{id}', 'pet_create', $handler);
+/** @var MidlewareInterface $middleware */
+$middleware = ...;
+
+$route = Route::post('/{id}', 'post', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
 
 ### put
@@ -106,59 +141,16 @@ $route = Route::post('/api/pets/{id}', 'pet_create', $handler);
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Server\MidlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /** @var RequestHandlerInterface $handler */
 $handler = ...;
 
-$route = Route::put('/api/pets/{id}', 'pet_replace', $handler);
-```
-
-### pathOptions
-
-```php
-<?php
-
-use Chubbyphp\Framework\Router\Route;
-
-/** @var Route $route */
-$route = ...;
-
-$route->pathOptions([]);
-```
-
-### middlewares
-
-```php
-<?php
-
-use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MiddlewareInterface;
-
-/** @var MiddlewareInterface $middleware */
+/** @var MidlewareInterface $middleware */
 $middleware = ...;
 
-/** @var Route $route */
-$route = ...;
-
-$route->middlewares([$middleware]);
-```
-
-### middleware
-
-```php
-<?php
-
-use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MiddlewareInterface;
-
-/** @var MiddlewareInterface $middleware */
-$middleware = ...;
-
-/** @var Route $route */
-$route = ...;
-
-$route->middleware($middleware);
+$route = Route::put('/{id}', 'put', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
 
 ### getName
@@ -257,7 +249,7 @@ use Chubbyphp\Framework\Router\Route;
 /** @var Route $route */
 $route = ...;
 
-$route->withAttributes(['id' => 'afe339cb-d099-4091-9ad6-38c46d6578fe']);
+$route = $route->withAttributes(['id' => 'afe339cb-d099-4091-9ad6-38c46d6578fe']);
 ```
 
 ### getAttributes
@@ -272,17 +264,4 @@ $route = ...;
 
 /** @var array $attributes */
 $attributes = $route->getAttributes();
-```
-
-### __toString
-
-```php
-<?php
-
-use Chubbyphp\Framework\Router\Route;
-
-/** @var Route $route */
-$route = ...;
-
-(string) $route;
 ```

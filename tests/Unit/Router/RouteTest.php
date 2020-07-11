@@ -26,9 +26,9 @@ final class RouteTest extends TestCase
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::create(RouteInterface::GET, '/{id}', 'element_read', $handler);
+        $route = Route::create(RouteInterface::GET, '/{id}', 'read', $handler);
 
-        self::assertSame('element_read', $route->getName());
+        self::assertSame('read', $route->getName());
         self::assertSame(RouteInterface::GET, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
@@ -48,13 +48,16 @@ final class RouteTest extends TestCase
         /** @var MiddlewareInterface|MockObject $middleware2 */
         $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        $route = Route::create(RouteInterface::GET, '/{id}', 'element_read', $handler)
-            ->pathOptions(['tokens' => ['id' => '\d+']])
-            ->middlewares([$middleware1])
-            ->middleware($middleware2)
-        ;
+        $route = Route::create(
+            RouteInterface::GET,
+            '/{id}',
+            'read',
+            $handler,
+            [$middleware1, $middleware2],
+            ['tokens' => ['id' => '\d+']]
+        );
 
-        self::assertSame('element_read', $route->getName());
+        self::assertSame('read', $route->getName());
         self::assertSame(RouteInterface::GET, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
@@ -63,14 +66,14 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testDelete(): void
+    public function testDeleteMinimal(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::delete('/{id}', 'element_delete', $handler);
+        $route = Route::delete('/{id}', 'delete', $handler);
 
-        self::assertSame('element_delete', $route->getName());
+        self::assertSame('delete', $route->getName());
         self::assertSame(RouteInterface::DELETE, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
@@ -79,14 +82,36 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testGet(): void
+    public function testDeleteMaximal(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::get('/{id}', 'element_read', $handler);
+        /** @var MiddlewareInterface|MockObject $middleware1 */
+        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        self::assertSame('element_read', $route->getName());
+        /** @var MiddlewareInterface|MockObject $middleware2 */
+        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        $route = Route::delete('/{id}', 'delete', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
+
+        self::assertSame('delete', $route->getName());
+        self::assertSame(RouteInterface::DELETE, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
+        self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
+        self::assertSame($handler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+    }
+
+    public function testGetMinimal(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::get('/{id}', 'read', $handler);
+
+        self::assertSame('read', $route->getName());
         self::assertSame(RouteInterface::GET, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
@@ -95,14 +120,36 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testHead(): void
+    public function testGetMaximal(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::head('/{id}', 'element_read_header', $handler);
+        /** @var MiddlewareInterface|MockObject $middleware1 */
+        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        self::assertSame('element_read_header', $route->getName());
+        /** @var MiddlewareInterface|MockObject $middleware2 */
+        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        $route = Route::get('/{id}', 'get', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
+
+        self::assertSame('get', $route->getName());
+        self::assertSame(RouteInterface::GET, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
+        self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
+        self::assertSame($handler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+    }
+
+    public function testHeadMinimal(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::head('/{id}', 'read_header', $handler);
+
+        self::assertSame('read_header', $route->getName());
         self::assertSame(RouteInterface::HEAD, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
@@ -111,14 +158,36 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testOptions(): void
+    public function testHeadMaximal(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::options('/{id}', 'element_options', $handler);
+        /** @var MiddlewareInterface|MockObject $middleware1 */
+        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        self::assertSame('element_options', $route->getName());
+        /** @var MiddlewareInterface|MockObject $middleware2 */
+        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        $route = Route::head('/{id}', 'head', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
+
+        self::assertSame('head', $route->getName());
+        self::assertSame(RouteInterface::HEAD, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
+        self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
+        self::assertSame($handler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+    }
+
+    public function testOptionsMinimal(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::options('/{id}', 'options', $handler);
+
+        self::assertSame('options', $route->getName());
         self::assertSame(RouteInterface::OPTIONS, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
@@ -127,14 +196,36 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testPatch(): void
+    public function testOptionsMaximal(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::patch('/{id}', 'element_update', $handler);
+        /** @var MiddlewareInterface|MockObject $middleware1 */
+        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        self::assertSame('element_update', $route->getName());
+        /** @var MiddlewareInterface|MockObject $middleware2 */
+        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        $route = Route::options('/{id}', 'options', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
+
+        self::assertSame('options', $route->getName());
+        self::assertSame(RouteInterface::OPTIONS, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
+        self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
+        self::assertSame($handler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+    }
+
+    public function testPatchMinimal(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::patch('/{id}', 'update', $handler);
+
+        self::assertSame('update', $route->getName());
         self::assertSame(RouteInterface::PATCH, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
@@ -143,14 +234,36 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testPost(): void
+    public function testPatchMaximal(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::post('/{id}', 'element_create', $handler);
+        /** @var MiddlewareInterface|MockObject $middleware1 */
+        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        self::assertSame('element_create', $route->getName());
+        /** @var MiddlewareInterface|MockObject $middleware2 */
+        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        $route = Route::patch('/{id}', 'patch', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
+
+        self::assertSame('patch', $route->getName());
+        self::assertSame(RouteInterface::PATCH, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
+        self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
+        self::assertSame($handler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+    }
+
+    public function testPostMinimal(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::post('/{id}', 'create', $handler);
+
+        self::assertSame('create', $route->getName());
         self::assertSame(RouteInterface::POST, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
@@ -159,18 +272,62 @@ final class RouteTest extends TestCase
         self::assertSame([], $route->getAttributes());
     }
 
-    public function testPut(): void
+    public function testPostMaximal(): void
     {
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::put('/{id}', 'element_replace', $handler);
+        /** @var MiddlewareInterface|MockObject $middleware1 */
+        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        self::assertSame('element_replace', $route->getName());
+        /** @var MiddlewareInterface|MockObject $middleware2 */
+        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        $route = Route::post('/{id}', 'post', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
+
+        self::assertSame('post', $route->getName());
+        self::assertSame(RouteInterface::POST, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
+        self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
+        self::assertSame($handler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+    }
+
+    public function testPutMinimal(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        $route = Route::put('/{id}', 'replace', $handler);
+
+        self::assertSame('replace', $route->getName());
         self::assertSame(RouteInterface::PUT, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
         self::assertSame([], $route->getMiddlewares());
+        self::assertSame($handler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+    }
+
+    public function testPutMaximal(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware1 */
+        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware2 */
+        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        $route = Route::put('/{id}', 'put', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
+
+        self::assertSame('put', $route->getName());
+        self::assertSame(RouteInterface::PUT, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
+        self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
         self::assertSame($handler, $route->getRequestHandler());
         self::assertSame([], $route->getAttributes());
     }
@@ -180,12 +337,115 @@ final class RouteTest extends TestCase
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::create(RouteInterface::GET, '/{id}', 'element_read', $handler);
+        $route = Route::create(RouteInterface::GET, '/{id}', 'read', $handler);
 
         $routeClone = $route->withAttributes(['id' => 5]);
 
         self::assertNotSame($route, $routeClone);
 
         self::assertSame(['id' => 5], $routeClone->getAttributes());
+    }
+
+    public function testMaximalDeprecated(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware1 */
+        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware2 */
+        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
+
+        $route = Route::create(
+            RouteInterface::GET,
+            '/{id}',
+            'read',
+            $handler
+        )
+            ->middlewares([$middleware1])
+            ->middleware($middleware2)
+            ->pathOptions(['tokens' => ['id' => '\d+']])
+        ;
+
+        self::assertSame('read', $route->getName());
+        self::assertSame(RouteInterface::GET, $route->getMethod());
+        self::assertSame('/{id}', $route->getPath());
+        self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
+        self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
+        self::assertSame($handler, $route->getRequestHandler());
+        self::assertSame([], $route->getAttributes());
+    }
+
+    public function testWithDeprecatedPathOptionsMethod(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        error_clear_last();
+
+        Route::create(RouteInterface::GET, '/{id}', 'read', $handler)
+            ->pathOptions(['tokens' => ['id' => '\d+']])
+        ;
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(
+            'Use "$pathOptions" parameter instead of instead of "Chubbyphp\Framework\Router\Route::pathOptions()"',
+            $error['message']
+        );
+    }
+
+    public function testWithDeprecatedMiddlewaresMethod(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
+        error_clear_last();
+
+        Route::create(RouteInterface::GET, '/{id}', 'read', $handler)
+            ->middlewares([$middleware])
+        ;
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(
+            'Use "$middlewares" parameter instead of instead of "Chubbyphp\Framework\Router\Route::middlewares()"',
+            $error['message']
+        );
+    }
+
+    public function testWithDeprecatedMiddlewareMethod(): void
+    {
+        /** @var RequestHandlerInterface|MockObject $handler */
+        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+
+        /** @var MiddlewareInterface|MockObject $middleware */
+        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+
+        error_clear_last();
+
+        Route::create(RouteInterface::GET, '/{id}', 'read', $handler)
+            ->middleware($middleware)
+        ;
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(
+            'Use "$middlewares" parameter instead of instead of "Chubbyphp\Framework\Router\Route::middleware()"',
+            $error['message']
+        );
     }
 }
