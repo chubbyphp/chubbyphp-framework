@@ -346,9 +346,21 @@ Group::create('/{id}')
 
 ```php
 Group::create('/{id}', [
-    Route::get('/{slug}', 'element_read', $handler, [$middleware2], ['tokens' => ['slug' => '[a-z]+']]),
+    Route::get(
+        '/{slug}',
+        'element_read',
+        $handler,
+        [$middleware2],
+        ['tokens' => ['slug' => '[a-z]+']]
+    ),
     Group::create('/{slug}', [
-        Route::get('/{key}', 'another_route', $handler, [$middleware3], ['tokens' => ['key' => '[a-z]+']]),
+        Route::get(
+            '/{key}',
+            'another_route',
+            $handler,
+            [$middleware3],
+            ['tokens' => ['key' => '[a-z]+']]
+        ),
     ], [$middleware2], ['tokens' => ['slug' => '[a-z]+']]),
     Route::get(
         '/{slug}/{key}/{subKey}',
