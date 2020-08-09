@@ -307,6 +307,10 @@ while ($req = $psr7->acceptRequest()) {
 
  * [chubbyphp/chubbyphp-swoole-request-handler][210]
 
+### Workerman
+
+ * [chubbyphp/chubbyphp-workerman-request-handler][211]
+
 ## Migration
 
 ### From 3.x to 4.x
@@ -486,6 +490,7 @@ Dominik Zogg 2020
 [201]: https://packagist.org/packages/chubbyphp/petstore
 
 [210]: https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler
+[211]: https://packagist.org/packages/chubbyphp/chubbyphp-workerman-request-handler
 
 [220]: https://github.com/chubbyphp/chubbyphp-framework-router-aura#usage
 [221]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
