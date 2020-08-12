@@ -17,13 +17,7 @@ final class MissingAttributeForPathGenerationExceptionTest extends TestCase
     public function testConstruct(): void
     {
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage(
-            sprintf(
-                'Call to private %s::__construct() from context \'%s\'',
-                MissingAttributeForPathGenerationException::class,
-                self::class
-            )
-        );
+        $this->expectExceptionMessage('Call to private');
 
         new MissingAttributeForPathGenerationException('test', 0);
     }

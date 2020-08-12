@@ -17,13 +17,7 @@ final class NotFoundExceptionTest extends TestCase
     public function testConstruct(): void
     {
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage(
-            sprintf(
-                'Call to private %s::__construct() from context \'%s\'',
-                NotFoundException::class,
-                self::class
-            )
-        );
+        $this->expectExceptionMessage('Call to private');
 
         new NotFoundException('test', 0);
     }
