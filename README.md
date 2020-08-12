@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/chubbyphp/chubbyphp-framework/badge.svg?branch=master)](https://coveralls.io/github/chubbyphp/chubbyphp-framework?branch=master)
 [![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-framework/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
 [![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-framework/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
+[![Daily Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-framework/d/daily)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
 [![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-framework/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
 [![Latest Unstable Version](https://poser.pugx.org/chubbyphp/chubbyphp-framework/v/unstable)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
 
