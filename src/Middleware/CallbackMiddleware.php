@@ -23,8 +23,6 @@ final class CallbackMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $callback = $this->callback;
-
-        return $callback($request, $handler);
+        return ($this->callback)($request, $handler);
     }
 }

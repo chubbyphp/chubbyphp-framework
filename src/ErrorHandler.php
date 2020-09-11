@@ -37,8 +37,8 @@ final class ErrorHandler
         string $file = __FILE__,
         int $line = __LINE__
     ): bool {
-        if (null !== $errorHandler = $this->errorHandler) {
-            @$errorHandler($severity, $message, $file, $line);
+        if (null !== $this->errorHandler) {
+            @($this->errorHandler)($severity, $message, $file, $line);
         }
 
         return self::handle($severity, $message, $file, $line);

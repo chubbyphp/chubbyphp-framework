@@ -22,8 +22,6 @@ final class CallbackRequestHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $callback = $this->callback;
-
-        return $callback($request);
+        return ($this->callback)($request);
     }
 }
