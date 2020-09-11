@@ -7,6 +7,18 @@
 [![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-framework/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
 [![Daily Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-framework/d/daily)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
 
+[![bugs](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=bugs)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![code_smells](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=code_smells)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![coverage](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=coverage)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![duplicated_lines_density](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![ncloc](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=ncloc)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![sqale_rating](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![alert_status](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=alert_status)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![reliability_rating](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![security_rating](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=security_rating)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![sqale_index](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=sqale_index)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+[![vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-framework&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-framework)
+
 ## Description
 
 A based [PSR-15][8] microframework that also sets maximum flexibility with minimum complexity and easy replaceability of the individual components, but also of the framework.
