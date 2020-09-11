@@ -6,6 +6,9 @@ addons:
   sonarcloud:
     organization: "chubbyphp"
 
+git:
+  depth: false
+
 matrix:
   include:
     - php: 7.2
