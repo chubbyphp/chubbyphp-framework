@@ -2,6 +2,10 @@ dist: bionic
 
 language: php
 
+addons:
+  sonarcloud:
+    organization: "chubbyphp"
+
 matrix:
   include:
     - php: 7.2
@@ -32,3 +36,4 @@ script:
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls --coverage_clover=build/phpunit/clover.xml --json_path=build/coveralls.json -v
+  - sonar-scanner
