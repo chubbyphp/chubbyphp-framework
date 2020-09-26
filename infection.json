@@ -6,7 +6,10 @@
     },
     "timeout": 10,
     "logs": {
-        "text": "build/phpinfection.log"
+        "text": "build/phpinfection.log",
+        "badge": {
+            "branch": "master"
+        }
     },
     "mutators": {
         "@default": true
