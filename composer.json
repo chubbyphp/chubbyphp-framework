@@ -39,7 +39,6 @@
         "http-interop/http-factory-guzzle": "^1.0",
         "infection/infection": "^0.15.3|^0.16.3",
         "laminas/laminas-diactoros": "^2.0",
-        "mavimo/phpstan-junit": "^0.3",
         "nyholm/psr7": "^1.0",
         "php-coveralls/php-coveralls": "^2.2",
         "phploc/phploc": "^5.0|^6.0.2",
