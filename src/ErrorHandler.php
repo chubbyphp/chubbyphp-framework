@@ -7,7 +7,7 @@ namespace Chubbyphp\Framework;
 final class ErrorHandler
 {
     /**
-     * @var callable|null
+     * @var mixed
      */
     private $errorHandler;
 
@@ -37,7 +37,7 @@ final class ErrorHandler
         string $file = __FILE__,
         int $line = __LINE__
     ): bool {
-        if (null !== $this->errorHandler) {
+        if (is_callable($this->errorHandler)) {
             @($this->errorHandler)($severity, $message, $file, $line);
         }
 

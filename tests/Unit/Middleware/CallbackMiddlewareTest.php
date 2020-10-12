@@ -36,7 +36,7 @@ final class CallbackMiddlewareTest extends TestCase
         ]);
 
         $callbackMiddleware = new CallbackMiddleware(
-            function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($response) {
+            function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
                 return $handler->handle($request);
             }
         );

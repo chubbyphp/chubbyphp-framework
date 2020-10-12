@@ -38,7 +38,7 @@ Although performance was not a focus, it's currently the [fastest PSR-15 based f
 
 ## Requirements
 
- * php: ^7.2
+ * php: ^7.2|^8.0
  * [psr/container][20]: ^1.0
  * [psr/http-factory][21]: ^1.0.1
  * [psr/http-message-implementation][22]: ^1.0
