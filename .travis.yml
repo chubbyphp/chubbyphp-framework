@@ -31,7 +31,6 @@ before_script:
   - echo 'Europe/Zurich' | sudo tee /etc/timezone
   - echo 'date.timezone = "Europe/Zurich"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - composer self-update -q
-  - composer global require hirak/prestissimo
   - composer update $composerargs -n
 
 script:

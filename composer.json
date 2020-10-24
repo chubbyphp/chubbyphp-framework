@@ -50,6 +50,7 @@
         "sunrise/http-factory": "^1.0.4"
     },
     "conflict": {
+        "composer/composer": "<1.10.16",
         "ocramius/package-versions": ">=1.10"
     },
     "autoload": {
