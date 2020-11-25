@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Framework\Router\Exceptions;
 
 use Chubbyphp\Framework\Router\RouterException;
+use Fig\Http\Message\StatusCodeInterface as StatusCode;
 
 final class MethodNotAllowedException extends RouterException implements RouterExceptionInterface
 {
@@ -33,7 +34,7 @@ final class MethodNotAllowedException extends RouterException implements RouterE
             $method,
             $path,
             implode('", "', $methods)
-        ), 405);
+        ), StatusCode::STATUS_METHOD_NOT_ALLOWED);
         $self->type = 'https://tools.ietf.org/html/rfc7231#section-6.5.5';
         $self->title = 'Method not allowed';
 

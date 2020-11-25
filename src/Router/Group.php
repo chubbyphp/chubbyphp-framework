@@ -81,6 +81,8 @@ final class Group implements GroupInterface
     }
 
     /**
+     * @deprecated
+     *
      * @param array<string, mixed> $pathOptions
      */
     public function pathOptions(array $pathOptions): self
@@ -96,6 +98,8 @@ final class Group implements GroupInterface
     }
 
     /**
+     * @deprecated
+     *
      * @param array<MiddlewareInterface> $middlewares
      */
     public function middlewares(array $middlewares): self
@@ -112,6 +116,9 @@ final class Group implements GroupInterface
         return $this;
     }
 
+    /**
+     * @deprecated
+     */
     public function middleware(MiddlewareInterface $middleware): self
     {
         @trigger_error(
@@ -124,6 +131,9 @@ final class Group implements GroupInterface
         return $this;
     }
 
+    /**
+     * @deprecated
+     */
     public function group(Group $group): self
     {
         @trigger_error(
@@ -136,6 +146,9 @@ final class Group implements GroupInterface
         return $this;
     }
 
+    /**
+     * @deprecated
+     */
     public function route(RouteInterface $route): self
     {
         @trigger_error(

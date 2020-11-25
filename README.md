@@ -73,7 +73,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.1" \
+composer require chubbyphp/chubbyphp-framework "^3.2" \
     chubbyphp/chubbyphp-framework-router-aura "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -83,7 +83,7 @@ composer require chubbyphp/chubbyphp-framework "^3.1" \
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.1" \
+composer require chubbyphp/chubbyphp-framework "^3.2" \
     chubbyphp/chubbyphp-framework-router-fastroute "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -93,7 +93,7 @@ composer require chubbyphp/chubbyphp-framework "^3.1" \
 ### SunriseRouter
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.1" \
+composer require chubbyphp/chubbyphp-framework "^3.2" \
     chubbyphp/chubbyphp-framework-router-sunrise "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -103,7 +103,7 @@ composer require chubbyphp/chubbyphp-framework "^3.1" \
 ### Symfony Routing
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.1" \
+composer require chubbyphp/chubbyphp-framework "^3.2" \
     chubbyphp/chubbyphp-framework-router-symfony "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -392,22 +392,22 @@ Group::create('/{id}', [
 
 #### Aura.Router
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.1" chubbyphp/chubbyphp-framework-router-aura`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.2" chubbyphp/chubbyphp-framework-router-aura`
 2. Replace `Chubbyphp\Framework\Router\AuraRouter` with `Chubbyphp\Framework\Router\Aura\Router`.
 
 #### FastRoute
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.1" chubbyphp/chubbyphp-framework-router-fastroute`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.2" chubbyphp/chubbyphp-framework-router-fastroute`
 2. Replace `Chubbyphp\Framework\Router\FastRouteRouter` with `Chubbyphp\Framework\Router\FastRoute\Router`.
 
 #### SunriseRouter
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.1" chubbyphp/chubbyphp-framework-router-sunrise`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.2" chubbyphp/chubbyphp-framework-router-sunrise`
 2. Replace `Chubbyphp\Framework\Router\SunriseRouter` with `Chubbyphp\Framework\Router\Sunrise\Router`.
 
 #### Symfony Routing
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.1" chubbyphp/chubbyphp-framework-router-symfony`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.2" chubbyphp/chubbyphp-framework-router-symfony`
 2. Replace `Chubbyphp\Framework\Router\SymfonyRouter` with `Chubbyphp\Framework\Router\Symfony\Router`.
 
 ### From 1.x to 2.x

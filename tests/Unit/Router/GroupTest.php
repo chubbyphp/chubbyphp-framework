@@ -8,6 +8,7 @@ use Chubbyphp\Framework\Router\Group;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\MockByCallsTrait;
+use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Server\MiddlewareInterface;
@@ -76,7 +77,7 @@ final class GroupTest extends TestCase
         $route1 = $routes[0];
 
         self::assertSame('element_read', $route1->getName());
-        self::assertSame(RouteInterface::GET, $route1->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route1->getMethod());
         self::assertSame('/{id}/{slug}', $route1->getPath());
         self::assertSame(['tokens' => ['id' => '\d+', 'slug' => '[a-z]+']], $route1->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route1->getMiddlewares());
@@ -86,7 +87,7 @@ final class GroupTest extends TestCase
         $route2 = $routes[1];
 
         self::assertSame('another_route', $route2->getName());
-        self::assertSame(RouteInterface::GET, $route2->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route2->getMethod());
         self::assertSame('/{id}/{slug}/{key}', $route2->getPath());
         self::assertSame(
             ['tokens' => ['id' => '\d+', 'slug' => '[a-z]+', 'key' => '[a-z]+']],
@@ -99,7 +100,7 @@ final class GroupTest extends TestCase
         $route3 = $routes[2];
 
         self::assertSame('yet_another_route', $route3->getName());
-        self::assertSame(RouteInterface::GET, $route3->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route3->getMethod());
         self::assertSame('/{id}/{slug}/{key}/{subKey}', $route3->getPath());
         self::assertSame(
             ['tokens' => ['id' => '\d+', 'slug' => '[a-z]+', 'key' => '[a-z]+', 'subKey' => '[a-z]+']],
@@ -152,7 +153,7 @@ final class GroupTest extends TestCase
         $route1 = $routes[0];
 
         self::assertSame('element_read', $route1->getName());
-        self::assertSame(RouteInterface::GET, $route1->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route1->getMethod());
         self::assertSame('/{id}/{slug}', $route1->getPath());
         self::assertSame(['tokens' => ['id' => '\d+', 'slug' => '[a-z]+']], $route1->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route1->getMiddlewares());
@@ -162,7 +163,7 @@ final class GroupTest extends TestCase
         $route2 = $routes[1];
 
         self::assertSame('another_route', $route2->getName());
-        self::assertSame(RouteInterface::GET, $route2->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route2->getMethod());
         self::assertSame('/{id}/{slug}/{key}', $route2->getPath());
         self::assertSame(
             ['tokens' => ['id' => '\d+', 'slug' => '[a-z]+', 'key' => '[a-z]+']],
@@ -175,7 +176,7 @@ final class GroupTest extends TestCase
         $route3 = $routes[2];
 
         self::assertSame('yet_another_route', $route3->getName());
-        self::assertSame(RouteInterface::GET, $route3->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route3->getMethod());
         self::assertSame('/{id}/{slug}/{key}/{subKey}', $route3->getPath());
         self::assertSame(
             ['tokens' => ['id' => '\d+', 'slug' => '[a-z]+', 'key' => '[a-z]+', 'subKey' => '[a-z]+']],

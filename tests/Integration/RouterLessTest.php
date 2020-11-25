@@ -8,8 +8,8 @@ use Bitty\Http\ResponseFactory as BittyResponseFactory;
 use Bitty\Http\ServerRequestFactory as BittyServerRequestFactory;
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterException;
+use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use Http\Factory\Guzzle\ResponseFactory as GuzzleResponseFactory;
 use Http\Factory\Guzzle\ServerRequestFactory as GuzzleServerRequestFactory;
 use Laminas\Diactoros\ResponseFactory as LaminasResponseFactory;
@@ -72,10 +72,7 @@ final class RouterLessTest extends TestCase
             new ExceptionMiddleware($responseFactory, true),
         ]);
 
-        $request = $serverRequestFactory->createServerRequest(
-            RouteInterface::GET,
-            '/hello/test'
-        );
+        $request = $serverRequestFactory->createServerRequest(RequestMethod::METHOD_GET, '/hello/test');
 
         $response = $app->handle($request);
 
@@ -105,10 +102,7 @@ final class RouterLessTest extends TestCase
 
         $app = new Application([]);
 
-        $request = $serverRequestFactory->createServerRequest(
-            RouteInterface::GET,
-            '/hello/test'
-        );
+        $request = $serverRequestFactory->createServerRequest(RequestMethod::METHOD_GET, '/hello/test');
 
         $app->handle($request);
     }

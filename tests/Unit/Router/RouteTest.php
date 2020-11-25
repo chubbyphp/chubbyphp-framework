@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Unit\Router;
 
 use Chubbyphp\Framework\Router\Route;
-use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\MockByCallsTrait;
+use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Server\MiddlewareInterface;
@@ -26,10 +26,10 @@ final class RouteTest extends TestCase
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::create(RouteInterface::GET, '/{id}', 'read', $handler);
+        $route = Route::create(RequestMethod::METHOD_GET, '/{id}', 'read', $handler);
 
         self::assertSame('read', $route->getName());
-        self::assertSame(RouteInterface::GET, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
         self::assertSame([], $route->getMiddlewares());
@@ -49,7 +49,7 @@ final class RouteTest extends TestCase
         $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
 
         $route = Route::create(
-            RouteInterface::GET,
+            RequestMethod::METHOD_GET,
             '/{id}',
             'read',
             $handler,
@@ -58,7 +58,7 @@ final class RouteTest extends TestCase
         );
 
         self::assertSame('read', $route->getName());
-        self::assertSame(RouteInterface::GET, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
@@ -74,7 +74,7 @@ final class RouteTest extends TestCase
         $route = Route::delete('/{id}', 'delete', $handler);
 
         self::assertSame('delete', $route->getName());
-        self::assertSame(RouteInterface::DELETE, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_DELETE, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
         self::assertSame([], $route->getMiddlewares());
@@ -96,7 +96,7 @@ final class RouteTest extends TestCase
         $route = Route::delete('/{id}', 'delete', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
 
         self::assertSame('delete', $route->getName());
-        self::assertSame(RouteInterface::DELETE, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_DELETE, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
@@ -112,7 +112,7 @@ final class RouteTest extends TestCase
         $route = Route::get('/{id}', 'read', $handler);
 
         self::assertSame('read', $route->getName());
-        self::assertSame(RouteInterface::GET, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
         self::assertSame([], $route->getMiddlewares());
@@ -134,7 +134,7 @@ final class RouteTest extends TestCase
         $route = Route::get('/{id}', 'get', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
 
         self::assertSame('get', $route->getName());
-        self::assertSame(RouteInterface::GET, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
@@ -150,7 +150,7 @@ final class RouteTest extends TestCase
         $route = Route::head('/{id}', 'read_header', $handler);
 
         self::assertSame('read_header', $route->getName());
-        self::assertSame(RouteInterface::HEAD, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_HEAD, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
         self::assertSame([], $route->getMiddlewares());
@@ -172,7 +172,7 @@ final class RouteTest extends TestCase
         $route = Route::head('/{id}', 'head', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
 
         self::assertSame('head', $route->getName());
-        self::assertSame(RouteInterface::HEAD, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_HEAD, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
@@ -188,7 +188,7 @@ final class RouteTest extends TestCase
         $route = Route::options('/{id}', 'options', $handler);
 
         self::assertSame('options', $route->getName());
-        self::assertSame(RouteInterface::OPTIONS, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_OPTIONS, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
         self::assertSame([], $route->getMiddlewares());
@@ -210,7 +210,7 @@ final class RouteTest extends TestCase
         $route = Route::options('/{id}', 'options', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
 
         self::assertSame('options', $route->getName());
-        self::assertSame(RouteInterface::OPTIONS, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_OPTIONS, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
@@ -226,7 +226,7 @@ final class RouteTest extends TestCase
         $route = Route::patch('/{id}', 'update', $handler);
 
         self::assertSame('update', $route->getName());
-        self::assertSame(RouteInterface::PATCH, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_PATCH, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
         self::assertSame([], $route->getMiddlewares());
@@ -248,7 +248,7 @@ final class RouteTest extends TestCase
         $route = Route::patch('/{id}', 'patch', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
 
         self::assertSame('patch', $route->getName());
-        self::assertSame(RouteInterface::PATCH, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_PATCH, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
@@ -264,7 +264,7 @@ final class RouteTest extends TestCase
         $route = Route::post('/{id}', 'create', $handler);
 
         self::assertSame('create', $route->getName());
-        self::assertSame(RouteInterface::POST, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_POST, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
         self::assertSame([], $route->getMiddlewares());
@@ -286,7 +286,7 @@ final class RouteTest extends TestCase
         $route = Route::post('/{id}', 'post', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
 
         self::assertSame('post', $route->getName());
-        self::assertSame(RouteInterface::POST, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_POST, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
@@ -302,7 +302,7 @@ final class RouteTest extends TestCase
         $route = Route::put('/{id}', 'replace', $handler);
 
         self::assertSame('replace', $route->getName());
-        self::assertSame(RouteInterface::PUT, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_PUT, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame([], $route->getPathOptions());
         self::assertSame([], $route->getMiddlewares());
@@ -324,7 +324,7 @@ final class RouteTest extends TestCase
         $route = Route::put('/{id}', 'put', $handler, [$middleware1, $middleware2], ['tokens' => ['id' => '\d+']]);
 
         self::assertSame('put', $route->getName());
-        self::assertSame(RouteInterface::PUT, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_PUT, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
@@ -337,7 +337,7 @@ final class RouteTest extends TestCase
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        $route = Route::create(RouteInterface::GET, '/{id}', 'read', $handler);
+        $route = Route::create(RequestMethod::METHOD_GET, '/{id}', 'read', $handler);
 
         $routeClone = $route->withAttributes(['id' => 5]);
 
@@ -358,7 +358,7 @@ final class RouteTest extends TestCase
         $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
 
         $route = Route::create(
-            RouteInterface::GET,
+            RequestMethod::METHOD_GET,
             '/{id}',
             'read',
             $handler
@@ -369,7 +369,7 @@ final class RouteTest extends TestCase
         ;
 
         self::assertSame('read', $route->getName());
-        self::assertSame(RouteInterface::GET, $route->getMethod());
+        self::assertSame(RequestMethod::METHOD_GET, $route->getMethod());
         self::assertSame('/{id}', $route->getPath());
         self::assertSame(['tokens' => ['id' => '\d+']], $route->getPathOptions());
         self::assertSame([$middleware1, $middleware2], $route->getMiddlewares());
@@ -384,7 +384,7 @@ final class RouteTest extends TestCase
 
         error_clear_last();
 
-        Route::create(RouteInterface::GET, '/{id}', 'read', $handler)
+        Route::create(RequestMethod::METHOD_GET, '/{id}', 'read', $handler)
             ->pathOptions(['tokens' => ['id' => '\d+']])
         ;
 
@@ -409,7 +409,7 @@ final class RouteTest extends TestCase
 
         error_clear_last();
 
-        Route::create(RouteInterface::GET, '/{id}', 'read', $handler)
+        Route::create(RequestMethod::METHOD_GET, '/{id}', 'read', $handler)
             ->middlewares([$middleware])
         ;
 
@@ -434,7 +434,7 @@ final class RouteTest extends TestCase
 
         error_clear_last();
 
-        Route::create(RouteInterface::GET, '/{id}', 'read', $handler)
+        Route::create(RequestMethod::METHOD_GET, '/{id}', 'read', $handler)
             ->middleware($middleware)
         ;
 

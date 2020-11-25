@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
+use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -92,7 +93,7 @@ final class Route implements RouteInterface
         array $middlewares = [],
         array $pathOptions = []
     ): self {
-        return new self(RouteInterface::DELETE, $path, $name, $requestHandler, $middlewares, $pathOptions);
+        return new self(RequestMethod::METHOD_DELETE, $path, $name, $requestHandler, $middlewares, $pathOptions);
     }
 
     /**
@@ -106,7 +107,7 @@ final class Route implements RouteInterface
         array $middlewares = [],
         array $pathOptions = []
     ): self {
-        return new self(RouteInterface::GET, $path, $name, $requestHandler, $middlewares, $pathOptions);
+        return new self(RequestMethod::METHOD_GET, $path, $name, $requestHandler, $middlewares, $pathOptions);
     }
 
     /**
@@ -120,7 +121,7 @@ final class Route implements RouteInterface
         array $middlewares = [],
         array $pathOptions = []
     ): self {
-        return new self(RouteInterface::HEAD, $path, $name, $requestHandler, $middlewares, $pathOptions);
+        return new self(RequestMethod::METHOD_HEAD, $path, $name, $requestHandler, $middlewares, $pathOptions);
     }
 
     /**
@@ -134,7 +135,7 @@ final class Route implements RouteInterface
         array $middlewares = [],
         array $pathOptions = []
     ): self {
-        return new self(RouteInterface::OPTIONS, $path, $name, $requestHandler, $middlewares, $pathOptions);
+        return new self(RequestMethod::METHOD_OPTIONS, $path, $name, $requestHandler, $middlewares, $pathOptions);
     }
 
     /**
@@ -148,7 +149,7 @@ final class Route implements RouteInterface
         array $middlewares = [],
         array $pathOptions = []
     ): self {
-        return new self(RouteInterface::PATCH, $path, $name, $requestHandler, $middlewares, $pathOptions);
+        return new self(RequestMethod::METHOD_PATCH, $path, $name, $requestHandler, $middlewares, $pathOptions);
     }
 
     /**
@@ -162,7 +163,7 @@ final class Route implements RouteInterface
         array $middlewares = [],
         array $pathOptions = []
     ): self {
-        return new self(RouteInterface::POST, $path, $name, $requestHandler, $middlewares, $pathOptions);
+        return new self(RequestMethod::METHOD_POST, $path, $name, $requestHandler, $middlewares, $pathOptions);
     }
 
     /**
@@ -176,7 +177,7 @@ final class Route implements RouteInterface
         array $middlewares = [],
         array $pathOptions = []
     ): self {
-        return new self(RouteInterface::PUT, $path, $name, $requestHandler, $middlewares, $pathOptions);
+        return new self(RequestMethod::METHOD_PUT, $path, $name, $requestHandler, $middlewares, $pathOptions);
     }
 
     public function getName(): string
@@ -235,6 +236,8 @@ final class Route implements RouteInterface
     }
 
     /**
+     * @deprecated
+     *
      * @param array<string, mixed> $pathOptions
      */
     public function pathOptions(array $pathOptions): self
@@ -250,6 +253,8 @@ final class Route implements RouteInterface
     }
 
     /**
+     * @deprecated
+     *
      * @param array<MiddlewareInterface> $middlewares
      */
     public function middlewares(array $middlewares): self
@@ -266,6 +271,9 @@ final class Route implements RouteInterface
         return $this;
     }
 
+    /**
+     * @deprecated
+     */
     public function middleware(MiddlewareInterface $middleware): self
     {
         @trigger_error(
