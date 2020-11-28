@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework;
 
+/**
+ * @deprecated
+ */
 final class ErrorHandler
 {
     /**

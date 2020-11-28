@@ -124,7 +124,6 @@ declare(strict_types=1);
 namespace App;
 
 use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\ErrorHandler;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
 use Chubbyphp\Framework\Middleware\RouterMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
@@ -135,8 +134,6 @@ use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
 $loader = require __DIR__.'/vendor/autoload.php';
-
-set_error_handler([new ErrorHandler(), 'errorToException']);
 
 $responseFactory = new ResponseFactory();
 
@@ -172,7 +169,6 @@ declare(strict_types=1);
 namespace App;
 
 use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\ErrorHandler;
 use Chubbyphp\Framework\Middleware\CallbackMiddleware;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
 use Chubbyphp\Framework\Middleware\RouterMiddleware;
@@ -185,8 +181,6 @@ use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
 $loader = require __DIR__.'/vendor/autoload.php';
-
-set_error_handler([new ErrorHandler(), 'errorToException']);
 
 $responseFactory = new ResponseFactory();
 
@@ -332,7 +326,6 @@ while ($req = $psr7->acceptRequest()) {
 Removed the following methods on group: `group`, `route`, `middlewares`, `middleware`, `pathOptions`, use additional parameters.
 Removed the following methods on route: `middlewares`, `middleware`, `pathOptions`, use additional parameters.
 
-
 ##### from
 
 ```php
@@ -387,6 +380,12 @@ Group::create('/{id}', [
     ),
 ], [$middleware1], ['tokens' => ['id' => '\d+']]);
 ```
+
+#### ErrorHandler
+
+ErrorHandler will be removed (convert php error to exception), cause it forces exceptions
+in libraries `trigger_error` is used without silence it. See: https://github.com/lcobucci/jwt/issues/563
+If you don't mind i suggest to copy the code from 3.x to your project, adapt the namespace and use your implementation.
 
 ### From 2.x to 3.x
 
