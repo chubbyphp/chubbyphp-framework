@@ -51,8 +51,7 @@
         "sunrise/http-factory": "^1.0.4"
     },
     "conflict": {
-        "composer/composer": "<1.10.16",
-        "ocramius/package-versions": ">=1.10"
+        "composer/composer": "<1.10.16"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\Framework\\": "src/" }
