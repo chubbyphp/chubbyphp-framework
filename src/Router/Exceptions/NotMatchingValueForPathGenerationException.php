@@ -8,25 +8,13 @@ use Chubbyphp\Framework\Router\RouterException;
 
 final class NotMatchingValueForPathGenerationException extends RouterException
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var string
-     */
-    private $attribute;
+    private string $attribute;
 
-    /**
-     * @var string
-     */
-    private $value;
+    private string $value;
 
-    /**
-     * @var string
-     */
-    private $pattern;
+    private string $pattern;
 
     private function __construct(string $message, int $code, ?\Throwable $previous = null)
     {

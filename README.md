@@ -37,7 +37,7 @@ Although performance was not a focus, it's currently one of the [fastest PSR-15 
 
 ## Requirements
 
- * php: ^7.2|^8.0
+ * php: ^7.4|^8.0
  * [psr/container][20]: ^1.0
  * [psr/http-factory][21]: ^1.0.1
  * [psr/http-message-implementation][22]: ^1.0
@@ -73,7 +73,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.2" \
+composer require chubbyphp/chubbyphp-framework "^3.3" \
     chubbyphp/chubbyphp-framework-router-aura "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -83,7 +83,7 @@ composer require chubbyphp/chubbyphp-framework "^3.2" \
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.2" \
+composer require chubbyphp/chubbyphp-framework "^3.3" \
     chubbyphp/chubbyphp-framework-router-fastroute "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -93,7 +93,7 @@ composer require chubbyphp/chubbyphp-framework "^3.2" \
 ### SunriseRouter
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.2" \
+composer require chubbyphp/chubbyphp-framework "^3.3" \
     chubbyphp/chubbyphp-framework-router-sunrise "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -103,7 +103,7 @@ composer require chubbyphp/chubbyphp-framework "^3.2" \
 ### Symfony Routing
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.2" \
+composer require chubbyphp/chubbyphp-framework "^3.3" \
     chubbyphp/chubbyphp-framework-router-symfony "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -391,22 +391,22 @@ If you don't mind i suggest to copy the code from 3.x to your project, adapt the
 
 #### Aura.Router
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.2" chubbyphp/chubbyphp-framework-router-aura`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.3" chubbyphp/chubbyphp-framework-router-aura`
 2. Replace `Chubbyphp\Framework\Router\AuraRouter` with `Chubbyphp\Framework\Router\Aura\Router`.
 
 #### FastRoute
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.2" chubbyphp/chubbyphp-framework-router-fastroute`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.3" chubbyphp/chubbyphp-framework-router-fastroute`
 2. Replace `Chubbyphp\Framework\Router\FastRouteRouter` with `Chubbyphp\Framework\Router\FastRoute\Router`.
 
 #### SunriseRouter
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.2" chubbyphp/chubbyphp-framework-router-sunrise`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.3" chubbyphp/chubbyphp-framework-router-sunrise`
 2. Replace `Chubbyphp\Framework\Router\SunriseRouter` with `Chubbyphp\Framework\Router\Sunrise\Router`.
 
 #### Symfony Routing
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.2" chubbyphp/chubbyphp-framework-router-symfony`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.3" chubbyphp/chubbyphp-framework-router-symfony`
 2. Replace `Chubbyphp\Framework\Router\SymfonyRouter` with `Chubbyphp\Framework\Router\Symfony\Router`.
 
 ### From 1.x to 2.x

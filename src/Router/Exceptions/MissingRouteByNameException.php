@@ -8,10 +8,7 @@ use Chubbyphp\Framework\Router\RouterException;
 
 final class MissingRouteByNameException extends RouterException
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
     private function __construct(string $message, int $code, ?\Throwable $previous = null)
     {
