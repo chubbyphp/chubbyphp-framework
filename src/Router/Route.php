@@ -235,57 +235,6 @@ final class Route implements RouteInterface
         return $this->attributes;
     }
 
-    /**
-     * @deprecated
-     *
-     * @param array<string, mixed> $pathOptions
-     */
-    public function pathOptions(array $pathOptions): self
-    {
-        @trigger_error(
-            sprintf('Use "$pathOptions" parameter instead of instead of "%s()"', __METHOD__),
-            E_USER_DEPRECATED
-        );
-
-        $this->pathOptions = $pathOptions;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated
-     *
-     * @param array<MiddlewareInterface> $middlewares
-     */
-    public function middlewares(array $middlewares): self
-    {
-        @trigger_error(
-            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
-            E_USER_DEPRECATED
-        );
-
-        foreach ($middlewares as $middleware) {
-            $this->addMiddleware($middleware);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function middleware(MiddlewareInterface $middleware): self
-    {
-        @trigger_error(
-            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
-            E_USER_DEPRECATED
-        );
-
-        $this->middlewares[] = $middleware;
-
-        return $this;
-    }
-
     private function addMiddleware(MiddlewareInterface $middleware): void
     {
         $this->middlewares[] = $middleware;

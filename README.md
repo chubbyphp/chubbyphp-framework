@@ -73,7 +73,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.2" \
+composer require chubbyphp/chubbyphp-framework "^4.0" \
     chubbyphp/chubbyphp-framework-router-aura "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -83,7 +83,7 @@ composer require chubbyphp/chubbyphp-framework "^3.2" \
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.2" \
+composer require chubbyphp/chubbyphp-framework "^4.0" \
     chubbyphp/chubbyphp-framework-router-fastroute "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -93,7 +93,7 @@ composer require chubbyphp/chubbyphp-framework "^3.2" \
 ### SunriseRouter
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.2" \
+composer require chubbyphp/chubbyphp-framework "^4.0" \
     chubbyphp/chubbyphp-framework-router-sunrise "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -103,7 +103,7 @@ composer require chubbyphp/chubbyphp-framework "^3.2" \
 ### Symfony Routing
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.2" \
+composer require chubbyphp/chubbyphp-framework "^4.0" \
     chubbyphp/chubbyphp-framework-router-symfony "^1.0" \
     slim/psr7 "^1.0"
 ```
