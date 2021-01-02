@@ -8,25 +8,22 @@ use Psr\Http\Server\MiddlewareInterface;
 
 final class Group implements GroupInterface
 {
-    /**
-     * @var string
-     */
-    private $path;
+    private string $path;
 
     /**
      * @var array<MiddlewareInterface>
      */
-    private $middlewares = [];
+    private array $middlewares = [];
 
     /**
      * @var array<GroupInterface|RouteInterface>
      */
-    private $children = [];
+    private array $children = [];
 
     /**
      * @var array<string, mixed>
      */
-    private $pathOptions = [];
+    private array $pathOptions = [];
 
     /**
      * @param array<GroupInterface|RouteInterface> $children

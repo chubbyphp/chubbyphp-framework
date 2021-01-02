@@ -36,9 +36,7 @@ final class CallbackMiddlewareTest extends TestCase
         ]);
 
         $callbackMiddleware = new CallbackMiddleware(
-            function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
-                return $handler->handle($request);
-            }
+            fn (ServerRequestInterface $request, RequestHandlerInterface $handler) => $handler->handle($request)
         );
 
         self::assertSame($response, $callbackMiddleware->process($request, $handler));

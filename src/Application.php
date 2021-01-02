@@ -21,17 +21,11 @@ final class Application implements RequestHandlerInterface
     /**
      * @var array<MiddlewareInterface>
      */
-    private $middlewares;
+    private array $middlewares;
 
-    /**
-     * @var MiddlewareDispatcherInterface
-     */
-    private $middlewareDispatcher;
+    private MiddlewareDispatcherInterface $middlewareDispatcher;
 
-    /**
-     * @var EmitterInterface
-     */
-    private $emitter;
+    private EmitterInterface $emitter;
 
     /**
      * @param array<MiddlewareInterface> $middlewares

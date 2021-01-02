@@ -11,15 +11,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class LazyRequestHandler implements RequestHandlerInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @var string
-     */
-    private $id;
+    private string $id;
 
     public function __construct(ContainerInterface $container, string $id)
     {

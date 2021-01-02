@@ -9,15 +9,9 @@ use Fig\Http\Message\StatusCodeInterface as StatusCode;
 
 final class NotFoundException extends RouterException implements RouterExceptionInterface
 {
-    /**
-     * @var string
-     */
-    private $type;
+    private string $type;
 
-    /**
-     * @var string
-     */
-    private $title;
+    private string $title;
 
     private function __construct(string $message, int $code, ?\Throwable $previous = null)
     {
