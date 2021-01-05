@@ -10,40 +10,28 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class Route implements RouteInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var string
-     */
-    private $method;
+    private string $method;
 
-    /**
-     * @var string
-     */
-    private $path;
+    private string $path;
 
     /**
      * @var array<string, mixed>
      */
-    private $pathOptions = [];
+    private array $pathOptions = [];
 
     /**
      * @var array<MiddlewareInterface>
      */
-    private $middlewares = [];
+    private array $middlewares = [];
 
-    /**
-     * @var RequestHandlerInterface
-     */
-    private $requestHandler;
+    private RequestHandlerInterface $requestHandler;
 
     /**
      * @var array<string, string>
      */
-    private $attributes = [];
+    private array $attributes = [];
 
     /**
      * @param array<MiddlewareInterface> $middlewares

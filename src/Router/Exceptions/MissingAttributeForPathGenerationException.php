@@ -8,15 +8,9 @@ use Chubbyphp\Framework\Router\RouterException;
 
 final class MissingAttributeForPathGenerationException extends RouterException
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var string
-     */
-    private $attribute;
+    private string $attribute;
 
     private function __construct(string $message, int $code, ?\Throwable $previous = null)
     {

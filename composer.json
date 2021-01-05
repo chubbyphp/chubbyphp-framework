@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": "^7.2|^8.0",
+        "php": "^7.4|^8.0",
         "fig/http-message-util": "^1.1.5",
         "psr/container": "^1.0",
         "psr/http-factory": "^1.0.1",
@@ -35,17 +35,17 @@
     "require-dev": {
         "bittyphp/http": "^2.0",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^1.5.1",
+        "chubbyphp/chubbyphp-mock": "^1.6",
         "guzzlehttp/psr7": "^1.4.2",
         "http-interop/http-factory-guzzle": "^1.0",
-        "infection/infection": "^0.15.3|^0.18.2|^0.20.2",
+        "infection/infection": "^0.20.2",
         "laminas/laminas-diactoros": "^2.0",
         "nyholm/psr7": "^1.0",
         "php-coveralls/php-coveralls": "^2.4.3",
-        "phploc/phploc": "^5.0|^6.0.2",
+        "phploc/phploc": "^6.0.2",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12.64",
-        "phpunit/phpunit": "^8.5.13|^9.5",
+        "phpunit/phpunit": "^9.5",
         "slim/psr7": "^0.5|^1.0",
         "sunrise/http-factory": "^1.0.4"
     },
@@ -72,12 +72,10 @@
             "@test:infection",
             "@test:static-analysis",
             "@test:loc",
-            "@test:cs",
-            "@test:insights"
+            "@test:cs"
         ],
         "test:cs": "mkdir -p build && PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
         "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
-        "test:insights": "mkdir -p build && bash -c 'vendor/bin/phpinsights analyse -v --no-interaction --min-quality=97 --disable-security-check | tee build/phpinsights.log; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
         "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-result-file=build/phpunit/result.cache",
         "test:lint": "mkdir -p build && find src tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
         "test:loc": "mkdir -p build && vendor/bin/phploc src --verbose | tee build/phploc.log",
