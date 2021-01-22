@@ -40,7 +40,8 @@ final class MiddlewareRequestHandlerTest extends TestCase
         $middleware = $this->getMockByCalls(MiddlewareInterface::class, [
             Call::create('process')
             ->with($request, $handler)
-            ->willReturnCallback(fn (ServerRequestInterface $request, RequestHandlerInterface $handler) => $handler->handle($request)),
+            ->willReturnCallback(
+                static fn (ServerRequestInterface $request, RequestHandlerInterface $handler) => $handler->handle($request)),
         ]);
 
         $middlewareRequestHandler = new MiddlewareRequestHandler($middleware, $handler);

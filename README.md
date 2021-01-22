@@ -73,7 +73,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 ### Aura.Router
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.3" \
+composer require chubbyphp/chubbyphp-framework "^3.4" \
     chubbyphp/chubbyphp-framework-router-aura "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -83,7 +83,7 @@ composer require chubbyphp/chubbyphp-framework "^3.3" \
 ### FastRoute
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.3" \
+composer require chubbyphp/chubbyphp-framework "^3.4" \
     chubbyphp/chubbyphp-framework-router-fastroute "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -93,7 +93,7 @@ composer require chubbyphp/chubbyphp-framework "^3.3" \
 ### SunriseRouter
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.3" \
+composer require chubbyphp/chubbyphp-framework "^3.4" \
     chubbyphp/chubbyphp-framework-router-sunrise "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -103,7 +103,7 @@ composer require chubbyphp/chubbyphp-framework "^3.3" \
 ### Symfony Routing
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.3" \
+composer require chubbyphp/chubbyphp-framework "^3.4" \
     chubbyphp/chubbyphp-framework-router-symfony "^1.0" \
     slim/psr7 "^1.0"
 ```
@@ -141,7 +141,7 @@ $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
     new RouterMiddleware(new Router([
         Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -186,13 +186,13 @@ $responseFactory = new ResponseFactory();
 
 $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
-    new CallbackMiddleware(function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
-        return $handler->handle($request);
-    }),
+    new CallbackMiddleware(
+        static fn (ServerRequestInterface $request, RequestHandlerInterface $handler) => $handler->handle($request)
+    ),
     new RouterMiddleware(
         new Router([
             Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-                function (ServerRequestInterface $request) use ($responseFactory) {
+                static function (ServerRequestInterface $request) use ($responseFactory) {
                     $name = $request->getAttribute('name');
                     $response = $responseFactory->createResponse();
                     $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -203,7 +203,7 @@ $app = new Application([
         ]),
         $responseFactory
     ),
-    new CallbackMiddleware(function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
+    new CallbackMiddleware(static function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
         /** @var Route $route */
         $route = $request->getAttribute('route');
 
@@ -230,11 +230,15 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
  * [MiddlewareDispatcher][73]
  * [NewRelicRouteMiddleware][74]
  * [RouterMiddleware][75]
+ * [SlimCallbackMiddleware][76]
+ * [SlimLazyMiddleware][77]
 
 ### RequestHandler
 
  * [CallbackRequestHandler][80]
  * [LazyRequestHandler][81]
+ * [SlimCallbackRequestHandler][82]
+ * [SlimLazyRequestHandler][83]
 
 ### Router
 
@@ -391,22 +395,22 @@ If you don't mind i suggest to copy the code from 3.x to your project, adapt the
 
 #### Aura.Router
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.3" chubbyphp/chubbyphp-framework-router-aura`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.4" chubbyphp/chubbyphp-framework-router-aura`
 2. Replace `Chubbyphp\Framework\Router\AuraRouter` with `Chubbyphp\Framework\Router\Aura\Router`.
 
 #### FastRoute
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.3" chubbyphp/chubbyphp-framework-router-fastroute`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.4" chubbyphp/chubbyphp-framework-router-fastroute`
 2. Replace `Chubbyphp\Framework\Router\FastRouteRouter` with `Chubbyphp\Framework\Router\FastRoute\Router`.
 
 #### SunriseRouter
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.3" chubbyphp/chubbyphp-framework-router-sunrise`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.4" chubbyphp/chubbyphp-framework-router-sunrise`
 2. Replace `Chubbyphp\Framework\Router\SunriseRouter` with `Chubbyphp\Framework\Router\Sunrise\Router`.
 
 #### Symfony Routing
 
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.3" chubbyphp/chubbyphp-framework-router-symfony`
+1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.4" chubbyphp/chubbyphp-framework-router-symfony`
 2. Replace `Chubbyphp\Framework\Router\SymfonyRouter` with `Chubbyphp\Framework\Router\Symfony\Router`.
 
 ### From 1.x to 2.x
@@ -487,9 +491,13 @@ Dominik Zogg 2020
 [73]: doc/Middleware/MiddlewareDispatcher.md
 [74]: doc/Middleware/NewRelicRouteMiddleware.md
 [75]: doc/Middleware/RouterMiddleware.md
+[76]: doc/Middleware/SlimCallbackMiddleware.md
+[77]: doc/Middleware/SlimLazyMiddleware.md
 
 [80]: doc/RequestHandler/CallbackRequestHandler.md
 [81]: doc/RequestHandler/LazyRequestHandler.md
+[82]: doc/RequestHandler/SlimCallbackRequestHandler.md
+[83]: doc/RequestHandler/SlimLazyRequestHandler.md
 
 [90]: doc/Router/Group.md
 [91]: doc/Router/Route.md

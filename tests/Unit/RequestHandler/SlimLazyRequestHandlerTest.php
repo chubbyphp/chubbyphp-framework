@@ -4,44 +4,49 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Unit\RequestHandler;
 
-use Chubbyphp\Framework\RequestHandler\LazyRequestHandler;
+use Chubbyphp\Framework\RequestHandler\SlimLazyRequestHandler;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * @covers \Chubbyphp\Framework\RequestHandler\LazyRequestHandler
+ * @covers \Chubbyphp\Framework\RequestHandler\SlimLazyRequestHandler
  *
  * @internal
  */
-final class LazyRequestHandlerTest extends TestCase
+final class SlimLazyRequestHandlerTest extends TestCase
 {
     use MockByCallsTrait;
 
     public function testHandle(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
-
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $requestHander */
-        $requestHander = $this->getMockByCalls(RequestHandlerInterface::class, [
-            Call::create('handle')->with($request)->willReturn($response),
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getAttribute')->with('response', null)->willReturn(null),
+            Call::create('getAttributes')->with()->willReturn(['key1' => 'value1', 'key2' => 'value2']),
         ]);
+
+        $requestHander = static fn (ServerRequestInterface $req, ResponseInterface $res, array $args) => $res;
 
         /** @var ContainerInterface|MockObject $container */
         $container = $this->getMockByCalls(ContainerInterface::class, [
             Call::create('get')->with('serviceName')->willReturn($requestHander),
         ]);
 
-        $requestHandler = new LazyRequestHandler($container, 'serviceName');
+        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
+            Call::create('createResponse')->with(200, '')->willReturn($response),
+        ]);
+
+        $requestHandler = new SlimLazyRequestHandler($container, 'serviceName', $responseFactory);
 
         self::assertSame($response, $requestHandler->handle($request));
     }
@@ -50,8 +55,8 @@ final class LazyRequestHandlerTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage(
-            'Chubbyphp\Framework\RequestHandler\LazyRequestHandler::handle() expects service with id "serviceName"'
-                .' to be Psr\Http\Server\RequestHandlerInterface, stdClass given'
+            'Chubbyphp\Framework\RequestHandler\SlimLazyRequestHandler::handle() expects service with id "serviceName"'
+                .' to be callable, stdClass given'
         );
 
         /** @var ServerRequestInterface|MockObject $request */
@@ -64,7 +69,10 @@ final class LazyRequestHandlerTest extends TestCase
             Call::create('get')->with('serviceName')->willReturn($requestHander),
         ]);
 
-        $requestHandler = new LazyRequestHandler($container, 'serviceName');
+        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
+
+        $requestHandler = new SlimLazyRequestHandler($container, 'serviceName', $responseFactory);
         $requestHandler->handle($request);
     }
 
@@ -72,8 +80,8 @@ final class LazyRequestHandlerTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage(
-            'Chubbyphp\Framework\RequestHandler\LazyRequestHandler::handle() expects service with id "serviceName"'
-                .' to be Psr\Http\Server\RequestHandlerInterface, string given'
+            'Chubbyphp\Framework\RequestHandler\SlimLazyRequestHandler::handle() expects service with id "serviceName"'
+                .' to be callable, string given'
         );
 
         /** @var ServerRequestInterface|MockObject $request */
@@ -86,7 +94,10 @@ final class LazyRequestHandlerTest extends TestCase
             Call::create('get')->with('serviceName')->willReturn($requestHander),
         ]);
 
-        $requestHandler = new LazyRequestHandler($container, 'serviceName');
+        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
+
+        $requestHandler = new SlimLazyRequestHandler($container, 'serviceName', $responseFactory);
         $requestHandler->handle($request);
     }
 }

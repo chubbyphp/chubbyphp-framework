@@ -57,12 +57,9 @@ final class RouterMiddlewareTest extends TestCase
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
 
-        /** @var LoggerInterface|MockObject $logger */
-        $logger = $this->getMockByCalls(LoggerInterface::class);
+        $middleware = new RouterMiddleware($router, $responseFactory);
 
-        $lazyMiddleware = new RouterMiddleware($router, $responseFactory);
-
-        self::assertSame($response, $lazyMiddleware->process($request, $handler));
+        self::assertSame($response, $middleware->process($request, $handler));
     }
 
     public function testProcessMissingRouteWithoutLogger(): void
@@ -135,9 +132,9 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $lazyMiddleware = new RouterMiddleware($router, $responseFactory);
+        $middleware = new RouterMiddleware($router, $responseFactory);
 
-        self::assertSame($response, $lazyMiddleware->process($request, $handler));
+        self::assertSame($response, $middleware->process($request, $handler));
     }
 
     public function testProcessMissingRouteWithLogger(): void
@@ -219,8 +216,8 @@ EOT;
             ]),
         ]);
 
-        $lazyMiddleware = new RouterMiddleware($router, $responseFactory, $logger);
+        $middleware = new RouterMiddleware($router, $responseFactory, $logger);
 
-        self::assertSame($response, $lazyMiddleware->process($request, $handler));
+        self::assertSame($response, $middleware->process($request, $handler));
     }
 }

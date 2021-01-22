@@ -17,9 +17,7 @@ $request = ...;
 /** @var ResponseInterface $response */
 $response = ...;
 
-$callbackHandler = new CallbackRequestHandler(function (ServerRequestInterface $request) use ($response) {
-    return $response;
-});
+$callbackHandler = new CallbackRequestHandler(static fn (ServerRequestInterface $request) => $response);
 
 /** @var ResponseInterface $response */
 $response = $callbackHandler->handle($request);

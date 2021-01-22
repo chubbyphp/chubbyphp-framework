@@ -18,7 +18,7 @@ final class ErrorHandlerTest extends TestCase
     {
         $hasError = false;
 
-        set_error_handler(function () use (&$hasError): void {
+        set_error_handler(static function () use (&$hasError): void {
             $hasError = true;
         });
 
@@ -62,7 +62,7 @@ final class ErrorHandlerTest extends TestCase
 
         $hasError = false;
 
-        set_error_handler(function () use (&$hasError): void {
+        set_error_handler(static function () use (&$hasError): void {
             $hasError = true;
         });
 
