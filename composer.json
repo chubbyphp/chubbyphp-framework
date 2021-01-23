@@ -42,7 +42,7 @@
         "laminas/laminas-diactoros": "^2.0",
         "nyholm/psr7": "^1.0",
         "php-coveralls/php-coveralls": "^2.4.3",
-        "phploc/phploc": "^6.0.2",
+        "phploc/phploc": "^7.0.2",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12.64",
         "phpunit/phpunit": "^9.5",
