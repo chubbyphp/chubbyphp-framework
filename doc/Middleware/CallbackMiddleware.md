@@ -10,6 +10,7 @@
 use Chubbyphp\Framework\Middleware\CallbackMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /** @var ServerRequestInterface $request */
 $request = ...;
@@ -21,9 +22,7 @@ $response = ...;
 $handler = ...;
 
 $callbackMiddleware = new CallbackMiddleware(
-    function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
-        return $handler->handle($request);
-    }
+    static fn (ServerRequestInterface $request, RequestHandlerInterface $handler) => $handler->handle($request)
 );
 
 /** @var ResponseInterface $response */

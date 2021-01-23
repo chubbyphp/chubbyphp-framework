@@ -35,10 +35,10 @@ final class CallbackMiddlewareTest extends TestCase
             Call::create('handle')->with($request)->willReturn($response),
         ]);
 
-        $callbackMiddleware = new CallbackMiddleware(
-            fn (ServerRequestInterface $request, RequestHandlerInterface $handler) => $handler->handle($request)
+        $middleware = new CallbackMiddleware(
+            static fn (ServerRequestInterface $request, RequestHandlerInterface $handler) => $handler->handle($request)
         );
 
-        self::assertSame($response, $callbackMiddleware->process($request, $handler));
+        self::assertSame($response, $middleware->process($request, $handler));
     }
 }

@@ -64,7 +64,7 @@ final class MiddlewareDispatcherTest extends TestCase
             Call::create('process')
                 ->with($request, new ArgumentInstanceOf(MiddlewareRequestHandler::class))
                 ->willReturnCallback(
-                    function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
+                    static function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
                         $request->withAttribute('middleware', 1);
 
                         return $handler->handle($request);
@@ -77,7 +77,7 @@ final class MiddlewareDispatcherTest extends TestCase
             Call::create('process')
                 ->with($request, $handler)
                 ->willReturnCallback(
-                    function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
+                    static function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
                         $request->withAttribute('middleware', 2);
 
                         return $handler->handle($request);
@@ -108,19 +108,12 @@ final class MiddlewareDispatcherTest extends TestCase
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var ResponseInterface|MockObject $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
-
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $middleware = new \stdClass();
 
         $middlewareDispatcher = new MiddlewareDispatcher();
-
-        self::assertSame(
-            $response,
-            $middlewareDispatcher->dispatch([$middleware], $handler, $request)
-        );
+        $middlewareDispatcher->dispatch([$middleware], $handler, $request);
     }
 }
