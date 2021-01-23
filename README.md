@@ -114,7 +114,7 @@ composer require chubbyphp/chubbyphp-framework "^3.4" \
 
 ### Fastroute
 
-#### Basic
+#### PSR15
 
 ```php
 <?php
@@ -142,12 +142,52 @@ $app = new Application([
     new RouterMiddleware(new Router([
         Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
             static function (ServerRequestInterface $request) use ($responseFactory) {
-                $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
-                $response->getBody()->write(sprintf('Hello, %s', $name));
+                $response->getBody()->write(sprintf('Hello, %s', $request->getAttribute('name')));
 
                 return $response;
             }
+        ))
+    ]), $responseFactory),
+]);
+
+$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
+```
+
+#### Slim
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\Framework\Application;
+use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
+use Chubbyphp\Framework\Middleware\RouterMiddleware;
+use Chubbyphp\Framework\RequestHandler\SlimCallbackRequestHandler;
+use Chubbyphp\Framework\Router\FastRoute\Router;
+use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Psr7\Factory\ResponseFactory;
+use Slim\Psr7\Factory\ServerRequestFactory;
+
+$loader = require __DIR__.'/vendor/autoload.php';
+
+$responseFactory = new ResponseFactory();
+
+$app = new Application([
+    new ExceptionMiddleware($responseFactory, true),
+    new RouterMiddleware(new Router([
+        Route::get('/hello/{name:[a-z]+}', 'hello', new SlimCallbackRequestHandler(
+            static function (ServerRequestInterface $req, ResponseInterface $res, array $args) {
+                $res->getBody()->write(sprintf('Hello, %s', $args['name']));
+
+                return $res;
+            },
+            $responseFactory
         ))
     ]), $responseFactory),
 ]);
