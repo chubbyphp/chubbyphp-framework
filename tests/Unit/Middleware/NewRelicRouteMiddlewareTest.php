@@ -157,17 +157,11 @@ namespace Chubbyphp\Tests\Framework\Unit\Middleware
                 Call::create('getAttribute')->with('route', null)->willReturn(null),
             ]);
 
-            /** @var ResponseInterface|MockObject $response */
-            $response = $this->getMockByCalls(ResponseInterface::class);
-
             /** @var RequestHandlerInterface|MockObject $handler */
             $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
             $middleware = new NewRelicRouteMiddleware();
-
-            self::assertSame($response, $middleware->process($request, $handler));
-
-            self::assertSame(['route_name'], TestNewRelicNameTransaction::all());
+            $middleware->process($request, $handler);
         }
     }
 }

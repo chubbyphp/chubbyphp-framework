@@ -57,7 +57,7 @@ final class ApplicationTest extends TestCase
         $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
             Call::create('dispatch')
                 ->willReturnCallback(
-                    function (
+                    static function (
                         array $middlewares,
                         CallbackRequestHandler $requestHandler,
                         ServerRequestInterface $request
@@ -106,7 +106,7 @@ final class ApplicationTest extends TestCase
         $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
             Call::create('dispatch')
                 ->willReturnCallback(
-                    function (
+                    static function (
                         array $middlewares,
                         CallbackRequestHandler $requestHandler,
                         ServerRequestInterface $request
@@ -149,7 +149,7 @@ final class ApplicationTest extends TestCase
         $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
             Call::create('dispatch')
                 ->willReturnCallback(
-                    function (
+                    static function (
                         array $middlewares,
                         CallbackRequestHandler $requestHandler,
                         ServerRequestInterface $request
