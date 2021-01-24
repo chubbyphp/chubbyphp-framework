@@ -74,17 +74,17 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 
 ```bash
 composer require chubbyphp/chubbyphp-framework "^3.4" \
-    chubbyphp/chubbyphp-framework-router-aura "^1.0" \
+    chubbyphp/chubbyphp-framework-router-aura "^1.2" \
     slim/psr7 "^1.0"
 ```
 
 [Example][210]
 
-### FastRoute
+### FastRoute (recommended)
 
 ```bash
 composer require chubbyphp/chubbyphp-framework "^3.4" \
-    chubbyphp/chubbyphp-framework-router-fastroute "^1.0" \
+    chubbyphp/chubbyphp-framework-router-fastroute "^1.1" \
     slim/psr7 "^1.0"
 ```
 
@@ -94,7 +94,7 @@ composer require chubbyphp/chubbyphp-framework "^3.4" \
 
 ```bash
 composer require chubbyphp/chubbyphp-framework "^3.4" \
-    chubbyphp/chubbyphp-framework-router-sunrise "^1.0" \
+    chubbyphp/chubbyphp-framework-router-sunrise "^1.1" \
     slim/psr7 "^1.0"
 ```
 
@@ -104,13 +104,15 @@ composer require chubbyphp/chubbyphp-framework "^3.4" \
 
 ```bash
 composer require chubbyphp/chubbyphp-framework "^3.4" \
-    chubbyphp/chubbyphp-framework-router-symfony "^1.0" \
+    chubbyphp/chubbyphp-framework-router-symfony "^1.2" \
     slim/psr7 "^1.0"
 ```
 
 [Example][213]
 
 ## Usage
+
+### Fastroute
 
 ```php
 <?php
