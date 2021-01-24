@@ -63,7 +63,8 @@ $app = new Application([
                 $response->getBody()->write("Hello, $name");
 
                 return $response;
-            }
+            },
+            $responseFactory
         ))
     ]), $responseFactory),
 ]);
