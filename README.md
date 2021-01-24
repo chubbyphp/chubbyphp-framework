@@ -112,10 +112,6 @@ composer require chubbyphp/chubbyphp-framework "^4.0" \
 
 ## Usage
 
-### Fastroute
-
-#### PSR15
-
 ```php
 <?php
 
@@ -149,70 +145,6 @@ $app = new Application([
             }
         ))
     ]), $responseFactory),
-]);
-
-$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
-```
-
-
-#### Advanced
-
-This is an example of middleware(s) before and after the routing was done.
-
-If you need to be able to continue without finding a route, I recommend writing a RouterMiddleware that will pass either the route or the RouteException and at the end another middleware that will convert the RouteException to a http response.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\Middleware\CallbackMiddleware;
-use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Chubbyphp\Framework\Middleware\RouterMiddleware;
-use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\FastRoute\Router;
-use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Psr7\Factory\ResponseFactory;
-use Slim\Psr7\Factory\ServerRequestFactory;
-
-require __DIR__.'/vendor/autoload.php';
-
-$responseFactory = new ResponseFactory();
-
-$app = new Application([
-    new ExceptionMiddleware($responseFactory, true),
-    new CallbackMiddleware(
-        static fn (ServerRequestInterface $request, RequestHandlerInterface $handler) => $handler->handle($request)
-    ),
-    new RouterMiddleware(
-        new Router([
-            Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-                static function (ServerRequestInterface $request) use ($responseFactory) {
-                    $name = $request->getAttribute('name');
-                    $response = $responseFactory->createResponse();
-                    $response->getBody()->write(sprintf('Hello, %s', $name));
-
-                    return $response;
-                }
-            ))
-        ]),
-        $responseFactory
-    ),
-    new CallbackMiddleware(static function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
-        /** @var Route $route */
-        $route = $request->getAttribute('route');
-
-        if ('hello' === $route->getName()) {
-            $request = $request->withAttribute('name', 'world');
-        }
-
-        return $handler->handle($request);
-    }),
 ]);
 
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
