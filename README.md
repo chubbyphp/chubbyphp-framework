@@ -133,7 +133,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
-$loader = require __DIR__.'/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
 $responseFactory = new ResponseFactory();
 
@@ -154,46 +154,6 @@ $app = new Application([
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ```
 
-#### Slim
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Chubbyphp\Framework\Middleware\RouterMiddleware;
-use Chubbyphp\Framework\RequestHandler\SlimCallbackRequestHandler;
-use Chubbyphp\Framework\Router\FastRoute\Router;
-use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Psr7\Factory\ResponseFactory;
-use Slim\Psr7\Factory\ServerRequestFactory;
-
-$loader = require __DIR__.'/vendor/autoload.php';
-
-$responseFactory = new ResponseFactory();
-
-$app = new Application([
-    new ExceptionMiddleware($responseFactory, true),
-    new RouterMiddleware(new Router([
-        Route::get('/hello/{name:[a-z]+}', 'hello', new SlimCallbackRequestHandler(
-            static function (ServerRequestInterface $req, ResponseInterface $res, array $args) {
-                $res->getBody()->write(sprintf('Hello, %s', $args['name']));
-
-                return $res;
-            },
-            $responseFactory
-        ))
-    ]), $responseFactory),
-]);
-
-$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
-```
 
 #### Advanced
 
@@ -220,7 +180,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
-$loader = require __DIR__.'/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
 $responseFactory = new ResponseFactory();
 
@@ -304,6 +264,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
  * [3.x to 4.x][222]
  * [2.x to 3.x][221]
  * [1.x to 2.x][220]
+ * [Slim to Chubbyphp][229]
 
 ## Copyright
 
@@ -383,3 +344,4 @@ Dominik Zogg 2020
 [220]: doc/Migration/1.x-2.x.md
 [221]: doc/Migration/2.x-3.x.md
 [222]: doc/Migration/3.x-4.x.md
+[229]: doc/Migration/Slim-Chubbyphp.md
