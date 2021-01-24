@@ -70,49 +70,13 @@ Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be 
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
-### Aura.Router
-
-```bash
-composer require chubbyphp/chubbyphp-framework "^4.0" \
-    chubbyphp/chubbyphp-framework-router-aura "^1.2" \
-    slim/psr7 "^1.0"
-```
-
-[Example][210]
-
-### FastRoute (recommended)
-
 ```bash
 composer require chubbyphp/chubbyphp-framework "^4.0" \
     chubbyphp/chubbyphp-framework-router-fastroute "^1.1" \
-    slim/psr7 "^1.0"
+    slim/psr7 "^1.3"
 ```
-
-[Example][211]
-
-### SunriseRouter
-
-```bash
-composer require chubbyphp/chubbyphp-framework "^4.0" \
-    chubbyphp/chubbyphp-framework-router-sunrise "^1.1" \
-    slim/psr7 "^1.0"
-```
-
-[Example][212]
-
-### Symfony Routing
-
-```bash
-composer require chubbyphp/chubbyphp-framework "^4.0" \
-    chubbyphp/chubbyphp-framework-router-symfony "^1.2" \
-    slim/psr7 "^1.0"
-```
-
-[Example][213]
 
 ## Usage
-
-### Fastroute
 
 ```php
 <?php
@@ -195,10 +159,10 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 ## Migration
 
- * [3.x to 4.x][222]
- * [2.x to 3.x][221]
- * [1.x to 2.x][220]
- * [Slim to Chubbyphp][229]
+ * [3.x to 4.x][212]
+ * [2.x to 3.x][211]
+ * [1.x to 2.x][210]
+ * [Slim to Chubbyphp][219]
 
 ## Copyright
 
@@ -225,10 +189,10 @@ Dominik Zogg 2020
 [25]: https://packagist.org/packages/psr/http-server-middleware
 [26]: https://packagist.org/packages/psr/log
 
-[30]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-router-aura
-[31]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-router-fastroute
-[32]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-router-sunrise
-[33]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-router-symfony
+[30]: https://github.com/chubbyphp/chubbyphp-framework-router-aura#usage
+[31]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
+[32]: https://github.com/chubbyphp/chubbyphp-framework-router-sunrise#usage
+[33]: https://github.com/chubbyphp/chubbyphp-framework-router-symfony#usage
 
 [40]: https://packagist.org/packages/bittyphp/http
 [41]: https://packagist.org/packages/guzzlehttp/psr7
@@ -270,12 +234,7 @@ Dominik Zogg 2020
 [200]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-skeleton
 [201]: https://packagist.org/packages/chubbyphp/petstore
 
-[210]: https://github.com/chubbyphp/chubbyphp-framework-router-aura#usage
-[211]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
-[212]: https://github.com/chubbyphp/chubbyphp-framework-router-sunrise#usage
-[213]: https://github.com/chubbyphp/chubbyphp-framework-router-symfony#usage
-
-[220]: doc/Migration/1.x-2.x.md
-[221]: doc/Migration/2.x-3.x.md
-[222]: doc/Migration/3.x-4.x.md
-[229]: doc/Migration/Slim-Chubbyphp.md
+[210]: doc/Migration/1.x-2.x.md
+[211]: doc/Migration/2.x-3.x.md
+[212]: doc/Migration/3.x-4.x.md
+[219]: doc/Migration/Slim-Chubbyphp.md
