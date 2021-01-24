@@ -78,7 +78,7 @@ composer require chubbyphp/chubbyphp-framework "^4.0" \
     slim/psr7 "^1.0"
 ```
 
-[Example][220]
+[Example][210]
 
 ### FastRoute
 
@@ -88,7 +88,7 @@ composer require chubbyphp/chubbyphp-framework "^4.0" \
     slim/psr7 "^1.0"
 ```
 
-[Example][221]
+[Example][211]
 
 ### SunriseRouter
 
@@ -98,7 +98,7 @@ composer require chubbyphp/chubbyphp-framework "^4.0" \
     slim/psr7 "^1.0"
 ```
 
-[Example][222]
+[Example][212]
 
 ### Symfony Routing
 
@@ -108,7 +108,7 @@ composer require chubbyphp/chubbyphp-framework "^4.0" \
     slim/psr7 "^1.0"
 ```
 
-[Example][223]
+[Example][213]
 
 ## Usage
 
@@ -285,202 +285,25 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
  * [Group][90]
  * [Route][91]
 
-## Webserver
+## Server
 
  * [Builtin (development only)][100]
  * [Nginx][101]
+ * [ReactPHP][102]
+ * [Roadrunner][103]
+ * [Swoole][104]
+ * [Workerman][105]
 
 ## Skeleton
 
  * [chubbyphp/chubbyphp-framework-skeleton][200]
  * [chubbyphp/petstore][201]
 
-## Application Server
-
-### ReactPHP
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-use Chubbyphp\Framework\Application;
-use React\EventLoop\Factory;
-use React\Http\Server;
-use React\Socket\Server as Socket;
-
-/** @var Application $app*/
-$app = ...;
-
-$loop = Factory::create();
-
-$socket = new Socket(8080, $loop);
-
-$server = new Server($app);
-$server->listen($socket);
-
-$loop->run();
-```
-
-### Roadrunner
-
-```php
-<?php
-
-namespace App;
-
-use Chubbyphp\Framework\Application;
-use Spiral\Goridge\StreamRelay;
-use Spiral\RoadRunner\Worker;
-use Spiral\RoadRunner\PSR7Client;
-
-ini_set('display_errors', 'stderr');
-
-/** @var Application $app */
-$app = ...;
-
-$worker = new Worker(new StreamRelay(STDIN, STDOUT));
-$psr7 = new PSR7Client($worker);
-
-while ($req = $psr7->acceptRequest()) {
-    try {
-        $psr7->respond($app->handle($req));
-    } catch (\Throwable $e) {
-        $psr7->getWorker()->error((string)$e);
-    }
-}
-```
-
-### Swoole
-
- * [chubbyphp/chubbyphp-swoole-request-handler][210]
-
-### Workerman
-
- * [chubbyphp/chubbyphp-workerman-request-handler][211]
-
 ## Migration
 
-### From 3.x to 4.x
-
-#### Routing
-
-Removed the following methods on group: `group`, `route`, `middlewares`, `middleware`, `pathOptions`, use additional parameters.
-Removed the following methods on route: `middlewares`, `middleware`, `pathOptions`, use additional parameters.
-
-##### from
-
-```php
-Group::create('/{id}')
-    ->pathOptions(['tokens' => ['id' => '\d+']])
-    ->middleware($middleware1)
-    ->route(Route::get('/{slug}', 'element_read', $handler)
-        ->pathOptions(['tokens' => ['slug' => '[a-z]+']])
-        ->middleware($middleware2)
-    )
-    ->group(Group::create('/{slug}')
-        ->pathOptions(['tokens' => ['slug' => '[a-z]+']])
-        ->middlewares([$middleware2])
-        ->route(Route::get('/{key}', 'another_route', $handler)
-            ->pathOptions(['tokens' => ['key' => '[a-z]+']])
-            ->middleware($middleware3)
-        )
-    )
-    ->route(Route::get('/{slug}/{key}/{subKey}', 'yet_another_route', $handler)
-        ->pathOptions(['tokens' => ['slug' => '[a-z]+', 'key' => '[a-z]+', 'subKey' => '[a-z]+']])
-        ->middleware($middleware2)
-    )
-;
-```
-
-##### to
-
-```php
-Group::create('/{id}', [
-    Route::get(
-        '/{slug}',
-        'element_read',
-        $handler,
-        [$middleware2],
-        ['tokens' => ['slug' => '[a-z]+']]
-    ),
-    Group::create('/{slug}', [
-        Route::get(
-            '/{key}',
-            'another_route',
-            $handler,
-            [$middleware3],
-            ['tokens' => ['key' => '[a-z]+']]
-        ),
-    ], [$middleware2], ['tokens' => ['slug' => '[a-z]+']]),
-    Route::get(
-        '/{slug}/{key}/{subKey}',
-        'yet_another_route',
-        $handler,
-        [$middleware2],
-        ['tokens' => ['slug' => '[a-z]+', 'key' => '[a-z]+', 'subKey' => '[a-z]+']]
-    ),
-], [$middleware1], ['tokens' => ['id' => '\d+']]);
-```
-
-#### ErrorHandler
-
-ErrorHandler will be removed (convert php error to exception), cause it forces exceptions
-in libraries `trigger_error` is used without silence it. See: https://github.com/lcobucci/jwt/issues/563
-If you don't mind i suggest to copy the code from 3.x to your project, adapt the namespace and use your implementation.
-
-### From 2.x to 3.x
-
-#### Aura.Router
-
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.4" chubbyphp/chubbyphp-framework-router-aura`
-2. Replace `Chubbyphp\Framework\Router\AuraRouter` with `Chubbyphp\Framework\Router\Aura\Router`.
-
-#### FastRoute
-
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.4" chubbyphp/chubbyphp-framework-router-fastroute`
-2. Replace `Chubbyphp\Framework\Router\FastRouteRouter` with `Chubbyphp\Framework\Router\FastRoute\Router`.
-
-#### SunriseRouter
-
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.4" chubbyphp/chubbyphp-framework-router-sunrise`
-2. Replace `Chubbyphp\Framework\Router\SunriseRouter` with `Chubbyphp\Framework\Router\Sunrise\Router`.
-
-#### Symfony Routing
-
-1. Upgrade: `composer require chubbyphp/chubbyphp-framework "^3.4" chubbyphp/chubbyphp-framework-router-symfony`
-2. Replace `Chubbyphp\Framework\Router\SymfonyRouter` with `Chubbyphp\Framework\Router\Symfony\Router`.
-
-### From 1.x to 2.x
-
-Replace the code from the first block with the code of the second ones.
-
-```php
-use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\ExceptionHandler;
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
-use Chubbyphp\Framework\Router\FastRouteRouter;
-
-$app = new Application(
-    new FastRouteRouter([$route]),
-    new MiddlewareDispatcher(),
-    new ExceptionHandler($responseFactory, true)
-);
-```
-
-```php
-use Chubbyphp\Framework\Application;
-use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Chubbyphp\Framework\Middleware\RouterMiddleware;
-use Chubbyphp\Framework\Router\FastRouteRouter;
-
-$app = new Application([
-    new ExceptionMiddleware($responseFactory, true),
-    new RouterMiddleware(new FastRouteRouter([$route]), $responseFactory),
-]);
-```
+ * [3.x to 4.x][222]
+ * [2.x to 3.x][221]
+ * [1.x to 2.x][220]
 
 ## Copyright
 
@@ -542,16 +365,21 @@ Dominik Zogg 2020
 [90]: doc/Router/Group.md
 [91]: doc/Router/Route.md
 
-[100]: doc/Webserver/Builtin.md
-[101]: doc/Webserver/Nginx.md
+[100]: doc/Server/Builtin.md
+[101]: doc/Server/Nginx.md
+[102]: doc/Server/ReactPHP.md
+[103]: doc/Server/Roadrunner.md
+[104]: https://github.com/chubbyphp/chubbyphp-swoole-request-handler#usage
+[105]: https://github.com/chubbyphp/chubbyphp-workerman-request-handler#usage
 
 [200]: https://packagist.org/packages/chubbyphp/chubbyphp-framework-skeleton
 [201]: https://packagist.org/packages/chubbyphp/petstore
 
-[210]: https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler
-[211]: https://packagist.org/packages/chubbyphp/chubbyphp-workerman-request-handler
+[210]: https://github.com/chubbyphp/chubbyphp-framework-router-aura#usage
+[211]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
+[212]: https://github.com/chubbyphp/chubbyphp-framework-router-sunrise#usage
+[213]: https://github.com/chubbyphp/chubbyphp-framework-router-symfony#usage
 
-[220]: https://github.com/chubbyphp/chubbyphp-framework-router-aura#usage
-[221]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
-[222]: https://github.com/chubbyphp/chubbyphp-framework-router-sunrise#usage
-[223]: https://github.com/chubbyphp/chubbyphp-framework-router-symfony#usage
+[220]: doc/Migration/1.x-2.x.md
+[221]: doc/Migration/2.x-3.x.md
+[222]: doc/Migration/3.x-4.x.md
