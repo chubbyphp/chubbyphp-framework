@@ -73,7 +73,7 @@ final class FastRouteRouterTest extends TestCase
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
         $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -106,7 +106,7 @@ final class FastRouteRouterTest extends TestCase
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
         $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -142,7 +142,7 @@ final class FastRouteRouterTest extends TestCase
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
         $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -178,7 +178,7 @@ final class FastRouteRouterTest extends TestCase
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
         $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-            function (): void {
+            static function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
         ));
@@ -214,7 +214,7 @@ final class FastRouteRouterTest extends TestCase
         $this->expectExceptionMessage('Something went wrong');
 
         $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-            function (): void {
+            static function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
         ));
@@ -234,7 +234,7 @@ final class FastRouteRouterTest extends TestCase
     public function testGeneratePath(): void
     {
         $route = Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
-            function (): void {}
+            static function (): void {}
         ));
 
         $router = new FastRouteRouter([$route]);

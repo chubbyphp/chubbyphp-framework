@@ -1,4 +1,7 @@
 parameters:
+    level: 7
+    paths:
+        - src
     ignoreErrors:
         -
             message: '#Undefined variable: \$routeIndex#'

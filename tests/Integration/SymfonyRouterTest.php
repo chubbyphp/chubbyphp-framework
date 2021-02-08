@@ -73,7 +73,7 @@ final class SymfonyRouterTest extends TestCase
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -106,7 +106,7 @@ final class SymfonyRouterTest extends TestCase
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -142,7 +142,7 @@ final class SymfonyRouterTest extends TestCase
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -178,7 +178,7 @@ final class SymfonyRouterTest extends TestCase
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (): void {
+            static function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
         ))->pathOptions(['requirements' => ['name' => '[a-z]+']]);
@@ -214,7 +214,7 @@ final class SymfonyRouterTest extends TestCase
         $this->expectExceptionMessage('Something went wrong');
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (): void {
+            static function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
         ))->pathOptions(['requirements' => ['name' => '[a-z]+']]);
@@ -234,7 +234,7 @@ final class SymfonyRouterTest extends TestCase
     public function testGeneratePath(): void
     {
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (): void {}
+            static function (): void {}
         ))->pathOptions(['requirements' => ['name' => '[a-z]+']]);
 
         $router = new SymfonyRouter([$route]);

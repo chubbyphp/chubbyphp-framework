@@ -393,7 +393,7 @@ final class AuraRouterTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('index'),
             Call::create('getPathOptions')->with()
-                ->willReturn([AuraRouter::PATH_SPECIAL => function (ServerRequestInterface $request, Route $route) {
+                ->willReturn([AuraRouter::PATH_SPECIAL => static function (ServerRequestInterface $request, Route $route) {
                     return true;
                 }]),
             Call::create('getName')->with()->willReturn('index'),
@@ -434,7 +434,7 @@ final class AuraRouterTest extends TestCase
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getName')->with()->willReturn('index'),
             Call::create('getPathOptions')->with()
-                ->willReturn([AuraRouter::PATH_SPECIAL => function (ServerRequestInterface $request, Route $route) {
+                ->willReturn([AuraRouter::PATH_SPECIAL => static function (ServerRequestInterface $request, Route $route) {
                     return false;
                 }]),
             Call::create('getName')->with()->willReturn('index'),

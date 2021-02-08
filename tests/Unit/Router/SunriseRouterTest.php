@@ -31,11 +31,13 @@ final class SunriseRouterTest extends TestCase
     {
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
+            Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getMethod')->with()->willReturn('GET'),
@@ -90,11 +92,13 @@ final class SunriseRouterTest extends TestCase
 
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
+            Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getRequestTarget')->with()->willReturn('/'),
@@ -130,11 +134,13 @@ final class SunriseRouterTest extends TestCase
 
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
+            Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/api/pets'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('POST'),
             Call::create('getRequestTarget')->with()->willReturn('/api/pets?offset=1&limit=20'),
@@ -173,11 +179,13 @@ final class SunriseRouterTest extends TestCase
 
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
+            Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/api/pets/1'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getRequestTarget')->with()->willReturn('/api/pets/1'),
@@ -207,11 +215,13 @@ final class SunriseRouterTest extends TestCase
     {
         /** @var UriInterface|MockObject $uri */
         $uri = $this->getMockByCalls(UriInterface::class, [
+            Call::create('getHost')->with()->willReturn('localhost'),
             Call::create('getPath')->with()->willReturn('/api/pets/8b72750c-5306-416c-bba7-5b41f1c44791'),
         ]);
 
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getUri')->with()->willReturn($uri),
             Call::create('getUri')->with()->willReturn($uri),
             Call::create('getMethod')->with()->willReturn('GET'),
             Call::create('getMethod')->with()->willReturn('GET'),

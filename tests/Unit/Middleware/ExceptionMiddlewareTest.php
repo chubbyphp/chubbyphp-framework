@@ -190,7 +190,7 @@ EOT;
         $logger = $this->getMockByCalls(LoggerInterface::class, [
             Call::create('error')->with(
                 'Exception',
-                new ArgumentCallback(function (array $context): void {
+                new ArgumentCallback(static function (array $context): void {
                     self::assertArrayHasKey('exceptions', $context);
                     $exceptions = $context['exceptions'];
                     self::assertCount(2, $exceptions);
@@ -231,7 +231,7 @@ EOT;
         /** @var StreamInterface|MockObject $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')
-                ->with(new ArgumentCallback(function (string $html): void {
+                ->with(new ArgumentCallback(static function (string $html): void {
                     self::assertStringContainsString(
                         '<p>A website error has occurred. Sorry for the temporary inconvenience.</p>',
                         $html
@@ -284,7 +284,7 @@ EOT;
         /** @var StreamInterface|MockObject $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')
-                ->with(new ArgumentCallback(function (string $html): void {
+                ->with(new ArgumentCallback(static function (string $html): void {
                     self::assertStringContainsString(
                         '<p>A website error has occurred. Sorry for the temporary inconvenience.</p>',
                         $html
@@ -326,7 +326,7 @@ EOT;
         $logger = $this->getMockByCalls(LoggerInterface::class, [
             Call::create('error')->with(
                 'Exception',
-                new ArgumentCallback(function (array $context): void {
+                new ArgumentCallback(static function (array $context): void {
                     self::assertArrayHasKey('exceptions', $context);
                     $exceptions = $context['exceptions'];
                     self::assertCount(2, $exceptions);

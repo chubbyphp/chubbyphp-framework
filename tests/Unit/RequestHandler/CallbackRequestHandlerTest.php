@@ -28,7 +28,7 @@ final class CallbackRequestHandlerTest extends TestCase
         /** @var ResponseInterface|MockObject $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        $callbackRequestHandler = new CallbackRequestHandler(function (ServerRequestInterface $request) use ($response) {
+        $callbackRequestHandler = new CallbackRequestHandler(static function (ServerRequestInterface $request) use ($response) {
             return $response;
         });
 

@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  php72-min:
+    name: PHP 7.2 (--prefer-lowest)
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: composer test
+        uses: docker://chubbyphp/ci-php72:latest
+        env:
+          COMPOSER_ARGS: "--prefer-lowest"
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+  php72:
+    name: PHP 7.2
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: composer test
+        uses: docker://chubbyphp/ci-php72:latest
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+  php73-min:
+    name: PHP 7.3 (--prefer-lowest)
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: composer test
+        uses: docker://chubbyphp/ci-php73:latest
+        env:
+          COMPOSER_ARGS: "--prefer-lowest"
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+  php73:
+    name: PHP 7.3
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: composer test
+        uses: docker://chubbyphp/ci-php73:latest
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+  php74-min:
+    name: PHP 7.4 (--prefer-lowest)
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: composer test
+        uses: docker://chubbyphp/ci-php74:latest
+        env:
+          COMPOSER_ARGS: "--prefer-lowest"
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+  php74:
+    name: PHP 7.4
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: composer test
+        uses: docker://chubbyphp/ci-php74:latest
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}

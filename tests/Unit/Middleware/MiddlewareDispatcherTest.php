@@ -64,7 +64,7 @@ final class MiddlewareDispatcherTest extends TestCase
             Call::create('process')
                 ->with($request, new ArgumentInstanceOf(MiddlewareRequestHandler::class))
                 ->willReturnCallback(
-                    function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
+                    static function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
                         $request->withAttribute('middleware', 1);
 
                         return $handler->handle($request);
@@ -77,7 +77,7 @@ final class MiddlewareDispatcherTest extends TestCase
             Call::create('process')
                 ->with($request, $handler)
                 ->willReturnCallback(
-                    function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
+                    static function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
                         $request->withAttribute('middleware', 2);
 
                         return $handler->handle($request);
