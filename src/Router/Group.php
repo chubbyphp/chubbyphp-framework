@@ -40,8 +40,6 @@ final class Group implements GroupInterface
 
     /**
      * @param array<string, mixed> $pathOptions
-     *
-     * @return self
      */
     public function pathOptions(array $pathOptions): self
     {
@@ -52,8 +50,6 @@ final class Group implements GroupInterface
 
     /**
      * @param array<MiddlewareInterface> $middlewares
-     *
-     * @return self
      */
     public function middlewares(array $middlewares): self
     {

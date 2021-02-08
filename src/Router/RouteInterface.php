@@ -37,8 +37,6 @@ interface RouteInterface
 
     /**
      * @param array<string, string> $attributes
-     *
-     * @return RouteInterface
      */
     public function withAttributes(array $attributes): RouteInterface;
 

@@ -36,10 +36,7 @@ final class Application implements RequestHandlerInterface
     private $middlewares;
 
     /**
-     * @param RouterInterface               $router
-     * @param MiddlewareDispatcherInterface $middlewareDispatcher
-     * @param ExceptionHandlerInterface     $exceptionHandler
-     * @param array<MiddlewareInterface>    $middlewares
+     * @param array<MiddlewareInterface> $middlewares
      */
     public function __construct(
         RouterInterface $router,

@@ -33,16 +33,17 @@
     "require-dev": {
         "aura/router": "^3.1",
         "chubbyphp/chubbyphp-mock": "^1.4",
-        "friendsofphp/php-cs-fixer": "^2.15.1",
+        "friendsofphp/php-cs-fixer": "^2.18.2",
         "guzzlehttp/psr7": "^1.4.2",
         "http-interop/http-factory-guzzle": "^1.0",
         "infection/infection": "^0.13.4",
         "nikic/fast-route": "^1.3",
         "nunomaduro/phpinsights": "^1.7",
         "nyholm/psr7": "^1.0",
-        "phploc/phploc": "^5.0",
-        "phpstan/phpstan": "^0.11.12",
-        "phpunit/phpunit": "^8.3.3",
+        "php-coveralls/php-coveralls": "^2.4.3",
+        "phploc/phploc": "^5.0|^6.0.2",
+        "phpstan/phpstan": "^0.11.20",
+        "phpunit/phpunit": "^8.5.14",
         "slim/psr7": "^0.5",
         "zendframework/zend-diactoros": "^2.0"
     },
@@ -56,5 +57,20 @@
         "branch-alias": {
             "dev-master": "1.2-dev"
         }
+    },
+    "scripts": {
+        "fix:cs": "mkdir -p build && vendor/bin/php-cs-fixer fix --cache-file=build/phpcs.cache",
+        "test": [
+            "@test:phpunit",
+            "@test:infection",
+            "@test:static-analysis",
+            "@test:loc",
+            "@test:cs"
+        ],
+        "test:cs": "mkdir -p build && vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
+        "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --min-covered-msi=100 --verbose",
+        "test:loc": "vendor/bin/phploc src --verbose",
+        "test:phpunit": "vendor/bin/phpunit --coverage-text --coverage-clover=build/phpunit/clover.xml --coverage-html=build/phpunit/coverage-html --coverage-xml=build/phpunit/coverage-xml --log-junit=build/phpunit/junit.xml --cache-result-file=build/phpunit/result.cache",
+        "test:static-analysis": "vendor/bin/phpstan analyse"
     }
 }

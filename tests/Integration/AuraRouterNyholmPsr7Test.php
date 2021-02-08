@@ -28,7 +28,7 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         $psr17Factory = new Psr17Factory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($psr17Factory) {
+            static function (ServerRequestInterface $request) use ($psr17Factory) {
                 $name = $request->getAttribute('name');
                 $response = $psr17Factory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -59,7 +59,7 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         $psr17Factory = new Psr17Factory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($psr17Factory) {
+            static function (ServerRequestInterface $request) use ($psr17Factory) {
                 $name = $request->getAttribute('name');
                 $response = $psr17Factory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -93,7 +93,7 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         $psr17Factory = new Psr17Factory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($psr17Factory) {
+            static function (ServerRequestInterface $request) use ($psr17Factory) {
                 $name = $request->getAttribute('name');
                 $response = $psr17Factory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -127,7 +127,7 @@ final class AuraRouterNyholmPsr7Test extends TestCase
         $psr17Factory = new Psr17Factory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (): void {
+            static function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
         ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);

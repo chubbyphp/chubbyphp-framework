@@ -28,7 +28,7 @@ final class AuraRouterZendDiactorosTest extends TestCase
         $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -62,7 +62,7 @@ final class AuraRouterZendDiactorosTest extends TestCase
         $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -99,7 +99,7 @@ final class AuraRouterZendDiactorosTest extends TestCase
         $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (ServerRequestInterface $request) use ($responseFactory) {
+            static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
                 $response = $responseFactory->createResponse();
                 $response->getBody()->write(sprintf('Hello, %s', $name));
@@ -136,7 +136,7 @@ final class AuraRouterZendDiactorosTest extends TestCase
         $responseFactory = new ResponseFactory();
 
         $route = Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
-            function (): void {
+            static function (): void {
                 throw new \RuntimeException('Something went wrong');
             }
         ))->pathOptions(['tokens' => ['name' => '[a-z]+']]);

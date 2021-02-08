@@ -12,9 +12,7 @@ namespace Chubbyphp\Framework
         private static $headers = [];
 
         /**
-         * @param string $header
-         * @param bool   $replace
-         * @param int    $http_response_code
+         * @param int $http_response_code
          */
         public static function add(string $header, bool $replace = true, int $http_response_code = null): void
         {
@@ -25,9 +23,6 @@ namespace Chubbyphp\Framework
             ];
         }
 
-        /**
-         * @return array
-         */
         public static function all(): array
         {
             return self::$headers;
@@ -40,9 +35,7 @@ namespace Chubbyphp\Framework
     }
 
     /**
-     * @param string $header
-     * @param bool   $replace
-     * @param int    $http_response_code
+     * @param int $http_response_code
      */
     function header(string $header, bool $replace = true, int $http_response_code = null): void
     {
@@ -163,7 +156,7 @@ namespace Chubbyphp\Tests\Framework\Unit
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
                 Call::create('dispatch')
                     ->willReturnCallback(
-                        function (
+                        static function (
                             array $middlewares,
                             CallbackRequestHandler $requestHandler,
                             ServerRequestInterface $request
@@ -243,7 +236,7 @@ namespace Chubbyphp\Tests\Framework\Unit
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
                 Call::create('dispatch')
                     ->willReturnCallback(
-                        function (
+                        static function (
                             array $middlewares,
                             CallbackRequestHandler $requestHandler,
                             ServerRequestInterface $request
@@ -360,7 +353,7 @@ namespace Chubbyphp\Tests\Framework\Unit
             $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
                 Call::create('dispatch')
                     ->willReturnCallback(
-                        function (
+                        static function (
                             array $middlewares,
                             CallbackRequestHandler $requestHandler,
                             ServerRequestInterface $request

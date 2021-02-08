@@ -7,8 +7,6 @@ namespace Chubbyphp\Framework;
 final class ExceptionHelper
 {
     /**
-     * @param \Throwable $exception
-     *
      * @return array<int, array<string, mixed>>
      */
     public static function toArray(\Throwable $exception): array

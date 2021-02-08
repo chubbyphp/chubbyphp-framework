@@ -35,11 +35,7 @@ final class RouterException extends \RuntimeException
     }
 
     /**
-     * @param string        $method
      * @param array<string> $methods
-     * @param string        $path
-     *
-     * @return self
      */
     public static function createForMethodNotAllowed(string $method, array $methods, string $path): self
     {

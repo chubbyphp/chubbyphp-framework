@@ -131,8 +131,6 @@ EOT;
 
     /**
      * @param array<array<string, string>> $exceptionsData
-     *
-     * @return string
      */
     private function addDebugToHtml(array $exceptionsData): string
     {
