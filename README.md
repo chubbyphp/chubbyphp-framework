@@ -38,7 +38,7 @@ It's currently one of the [fastest PSR-15 based framework (php-fpm)][1] on the m
 ## Requirements
 
  * php: ^7.4|^8.0
- * [psr/container][20]: ^1.0
+ * [psr/container][20]: ^1.0|^2.0
  * [psr/http-factory][21]: ^1.0.1
  * [psr/http-message-implementation][22]: ^1.0
  * [psr/http-message][23]: ^1.0.1
