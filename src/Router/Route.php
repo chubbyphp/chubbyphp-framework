@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
+use Chubbyphp\Framework\Debug;
+use Chubbyphp\Framework\DebugInterface;
 use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class Route implements RouteInterface
+final class Route implements DebugInterface, RouteInterface
 {
     private string $name;
 
@@ -272,6 +274,18 @@ final class Route implements RouteInterface
         $this->middlewares[] = $middleware;
 
         return $this;
+    }
+
+    public function debug(): array
+    {
+        return Debug::debug([
+            'name' => $this->name,
+            'method' => $this->method,
+            'path' => $this->path,
+            'pathOptions' => $this->pathOptions,
+            'middlewares' => $this->middlewares,
+            'requestHandler' => $this->requestHandler,
+        ]);
     }
 
     private function addMiddleware(MiddlewareInterface $middleware): void

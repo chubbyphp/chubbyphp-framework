@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\RequestHandler;
 
+use Chubbyphp\Framework\Debug;
+use Chubbyphp\Framework\DebugInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class LazyRequestHandler implements RequestHandlerInterface
+final class LazyRequestHandler implements DebugInterface, RequestHandlerInterface
 {
     private ContainerInterface $container;
 
@@ -37,5 +39,14 @@ final class LazyRequestHandler implements RequestHandlerInterface
         }
 
         return $requestHandler->handle($request);
+    }
+
+    public function debug(): array
+    {
+        return Debug::debug([
+            'class' => self::class,
+            'container' => $this->container,
+            'id' => $this->id,
+        ]);
     }
 }

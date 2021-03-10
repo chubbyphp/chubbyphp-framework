@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Middleware;
 
+use Chubbyphp\Framework\Debug;
+use Chubbyphp\Framework\DebugInterface;
 use Chubbyphp\Framework\Router\Exceptions\RouterExceptionInterface;
 use Chubbyphp\Framework\Router\RouterInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -14,7 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-final class RouterMiddleware implements MiddlewareInterface
+final class RouterMiddleware implements DebugInterface, MiddlewareInterface
 {
     private const HTML = <<<'EOT'
 <html>
@@ -86,6 +88,16 @@ EOT;
         }
 
         return $handler->handle($request);
+    }
+
+    public function debug(): array
+    {
+        return Debug::debug([
+            'class' => self::class,
+            'router' => $this->router,
+            'responseFactory' => $this->responseFactory,
+            'logger' => $this->logger,
+        ]);
     }
 
     private function routeExceptionResponse(RouterExceptionInterface $routerException): ResponseInterface

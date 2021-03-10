@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\RequestHandler;
 
+use Chubbyphp\Framework\Debug;
+use Chubbyphp\Framework\DebugInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class SlimCallbackRequestHandler implements RequestHandlerInterface
+final class SlimCallbackRequestHandler implements DebugInterface, RequestHandlerInterface
 {
     private const ATTRIBUTE_RESPONSE = 'response';
 
@@ -29,6 +31,15 @@ final class SlimCallbackRequestHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return ($this->slimCallable)($request, $this->getResponse($request), $request->getAttributes());
+    }
+
+    public function debug(): array
+    {
+        return Debug::debug([
+            'class' => self::class,
+            'slimCallable' => $this->slimCallable,
+            'responseFactory' => $this->responseFactory,
+        ]);
     }
 
     private function getResponse(ServerRequestInterface $request): ResponseInterface
