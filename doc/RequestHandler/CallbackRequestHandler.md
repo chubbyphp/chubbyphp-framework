@@ -8,17 +8,14 @@
 <?php
 
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Some\Psr7\Response;
+use Some\Psr7\ServerRequest;
 
-/** @var ServerRequestInterface $request */
-$request = ...;
-
-/** @var ResponseInterface $response */
-$response = ...;
+$request = new ServerRequest();
+$response = new Response();
 
 $callbackHandler = new CallbackRequestHandler(static fn (ServerRequestInterface $request) => $response);
 
-/** @var ResponseInterface $response */
 $response = $callbackHandler->handle($request);
 ```

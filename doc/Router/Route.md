@@ -8,14 +8,25 @@
 <?php
 
 use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MidlewareInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var MidlewareInterface $middleware */
-$middleware = ...;
+$middleware = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
 $route = Route::create(
     Route::GET,
@@ -33,14 +44,25 @@ $route = Route::create(
 <?php
 
 use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MidlewareInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var MidlewareInterface $middleware */
-$middleware = ...;
+$middleware = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
 $route = Route::delete('/{id}', 'delete', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
@@ -51,14 +73,25 @@ $route = Route::delete('/{id}', 'delete', $handler, [$middleware], ['requirement
 <?php
 
 use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MidlewareInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var MidlewareInterface $middleware */
-$middleware = ...;
+$middleware = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
 $route = Route::get('/{id}', 'read', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
@@ -69,14 +102,25 @@ $route = Route::get('/{id}', 'read', $handler, [$middleware], ['requirements' =>
 <?php
 
 use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MidlewareInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var MidlewareInterface $middleware */
-$middleware = ...;
+$middleware = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
 $route = Route::head('/{id}', 'head', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
@@ -87,14 +131,25 @@ $route = Route::head('/{id}', 'head', $handler, [$middleware], ['requirements' =
 <?php
 
 use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MidlewareInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var MidlewareInterface $middleware */
-$middleware = ...;
+$middleware = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
 $route = Route::options('/{id}', 'options', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
@@ -105,14 +160,25 @@ $route = Route::options('/{id}', 'options', $handler, [$middleware], ['requireme
 <?php
 
 use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MidlewareInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var MidlewareInterface $middleware */
-$middleware = ...;
+$middleware = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
 $route = Route::patch('/{id}', 'patch', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
@@ -123,14 +189,25 @@ $route = Route::patch('/{id}', 'patch', $handler, [$middleware], ['requirements'
 <?php
 
 use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MidlewareInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var MidlewareInterface $middleware */
-$middleware = ...;
+$middleware = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
 $route = Route::post('/{id}', 'post', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
@@ -141,14 +218,25 @@ $route = Route::post('/{id}', 'post', $handler, [$middleware], ['requirements' =
 <?php
 
 use Chubbyphp\Framework\Router\Route;
-use Psr\Http\Server\MidlewareInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var MidlewareInterface $middleware */
-$middleware = ...;
+$middleware = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
 $route = Route::put('/{id}', 'put', $handler, [$middleware], ['requirements' => ['id' => '\d+']]);
 ```
@@ -159,11 +247,20 @@ $route = Route::put('/{id}', 'put', $handler, [$middleware], ['requirements' => 
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var Route $route */
-$route = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var string $name */
+$route = Route::get('/', 'get', $handler);
+
 $name = $route->getName();
 ```
 
@@ -173,11 +270,20 @@ $name = $route->getName();
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var Route $route */
-$route = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var string $method */
+$route = Route::get('/', 'get', $handler);
+
 $method = $route->getMethod();
 ```
 
@@ -187,11 +293,20 @@ $method = $route->getMethod();
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var Route $route */
-$route = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var string $path */
+$route = Route::get('/', 'get', $handler);
+
 $path = $route->getPath();
 ```
 
@@ -201,11 +316,21 @@ $path = $route->getPath();
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var Route $route */
-$route = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var array $pathOptions */
+$route = Route::get('/', 'get', $handler);
+
+/** @var array<string, mixed> $pathOptions */
 $pathOptions = $route->getPathOptions();
 ```
 
@@ -215,10 +340,20 @@ $pathOptions = $route->getPathOptions();
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var Route $route */
-$route = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
+
+$route = Route::get('/', 'get', $handler);
 
 /** @var array<MiddlewareInterface> $middlewares */
 $middlewares = $route->getMiddlewares();
@@ -230,12 +365,20 @@ $middlewares = $route->getMiddlewares();
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var Route $route */
-$route = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var RequestHandlerInterface $handler */
+$route = Route::get('/', 'get', $handler);
+
 $handler = $route->getRequestHandler();
 ```
 
@@ -245,9 +388,19 @@ $handler = $route->getRequestHandler();
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var Route $route */
-$route = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
+
+$route = Route::get('/', 'get', $handler);
 
 $route = $route->withAttributes(['id' => 'afe339cb-d099-4091-9ad6-38c46d6578fe']);
 ```
@@ -258,10 +411,20 @@ $route = $route->withAttributes(['id' => 'afe339cb-d099-4091-9ad6-38c46d6578fe']
 <?php
 
 use Chubbyphp\Framework\Router\Route;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 
-/** @var Route $route */
-$route = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var array $attributes */
+$route = Route::get('/', 'get', $handler);
+
+/** @var array<string, string> $attributes */
 $attributes = $route->getAttributes();
 ```

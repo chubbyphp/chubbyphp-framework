@@ -8,10 +8,9 @@
 <?php
 
 use Chubbyphp\Framework\Emitter\Emitter;
-use Psr\Http\Message\ResponseInterface;
+use Some\Psr7\Response;
 
-/** @var ResponseInterface $response */
-$response = ...;
+$response = new Response();
 
 $emitter = new Emitter();
 $emitter->emit($response);

@@ -8,21 +8,19 @@
 <?php
 
 use Chubbyphp\Framework\RequestHandler\SlimCallbackRequestHandler;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Some\Psr7\ServerRequest;
+use Some\Psr7\ResponseFactory;
 
-/** @var ServerRequestInterface $request */
-$request = ...;
+$request = new ServerRequest();
 
-/** @var ResponseFactoryInterface $responseFactory */
-$responseFactory = ...;
+$responseFactory = new ResponseFactory();
 
 $callbackHandler = new SlimCallbackRequestHandler(
     static fn (ServerRequestInterface $req, ResponseInterface $res, array $args) => $res,
     $responseFactory
 );
 
-/** @var ResponseInterface $response */
 $response = $callbackHandler->handle($request);
 ```

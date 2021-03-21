@@ -8,26 +8,26 @@
 <?php
 
 use Chubbyphp\Framework\Middleware\SlimLazyMiddleware;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr11\Container;
+use Some\Psr7\ResponseFactory;
+use Some\Psr7\ServerRequest;
 
-/** @var ContainerInterface $container */
-$container = ...;
+$request = new ServerRequest();
 
-/** @var ResponseFactoryInterface $responseFactory */
-$responseFactory = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var ServerRequestInterface $request */
-$request = ...;
-
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$container = new Container();
+$responseFactory = new ResponseFactory();
 
 $lazyMiddleware = new SlimLazyMiddleware($container, 'middleware', $responseFactory);
 
-/** @var ResponseInterface $response */
 $response = $lazyMiddleware->process($request, $handler);
 ```

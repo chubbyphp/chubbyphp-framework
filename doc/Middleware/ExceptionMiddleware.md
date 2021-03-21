@@ -8,22 +8,25 @@
 <?php
 
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
+use Some\Psr7\ResponseFactory;
+use Some\Psr7\ServerRequest;
 
-/** @var ResponseFactoryInterface $responseFactory */
-$responseFactory = ...;
+$request = new ServerRequest();
 
-/** @var ServerRequestInterface $request */
-$request = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$responseFactory = new ResponseFactory();
 
 $exceptionMiddleware = new ExceptionMiddleware($responseFactory);
 
-/** @var ResponseInterface $response */
 $response = $exceptionMiddleware->process($request, $handler);
 ```

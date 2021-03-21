@@ -8,26 +8,26 @@
 <?php
 
 use Chubbyphp\Framework\Middleware\RouterMiddleware;
-use Chubbyphp\Framework\Router\RouterInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
+use Chubbyphp\Framework\Router\Some\Router;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\ServerRequest;
+use Some\Psr7\ResponseFactory;
 
-/** @var ResponseFactoryInterface $router */
-$router = ...;
+$request = new ServerRequest();
 
-/** @var ResponseFactoryInterface $responseFactory */
-$responseFactory = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var ServerRequestInterface $request */
-$request = ...;
-
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$router = new Router();
+$responseFactory = new ResponseFactory();
 
 $routerMiddleware = new RouterMiddleware($router, $responseFactory);
 
-/** @var ResponseInterface $response */
 $response = $routerMiddleware->process($request, $handler);
 ```
