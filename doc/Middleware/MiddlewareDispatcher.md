@@ -12,21 +12,32 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\ServerRequest;
 
-/** @var MiddlewareInterface $middleware1 */
-$middleware1 = ...;
+$request = new ServerRequest();
 
-/** @var MiddlewareInterface $middleware2 */
-$middleware2 = ...;
+$middleware1 = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$middleware2 = new class() implements MiddlewareInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request);
+    }
+};
 
-/** @var ServerRequestInterface $request */
-$request = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
 $middlewareDispatcher = new MiddlewareDispatcher();
 
-/** @var ResponseInterface $response */
 $response = $middlewareDispatcher->dispatch([$middleware1, $middleware2], $handler, $request);
 ```

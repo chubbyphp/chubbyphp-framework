@@ -13,15 +13,18 @@ use Chubbyphp\Framework\Middleware\NewRelicRouteMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\ServerRequest;
 
-/** @var ServerRequestInterface $request */
-$request = ...;
+$request = new ServerRequest();
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
 $newRelicRouteMiddleware = new NewRelicRouteMiddleware();
 
-/** @var ResponseInterface $response */
 $response = $newRelicRouteMiddleware->process($request, $handler);
 ```

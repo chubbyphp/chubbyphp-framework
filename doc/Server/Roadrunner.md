@@ -14,8 +14,7 @@ use Spiral\RoadRunner\PSR7Client;
 
 ini_set('display_errors', 'stderr');
 
-/** @var Application $app */
-$app = ...;
+$app = new Application();
 
 $worker = new Worker(new StreamRelay(STDIN, STDOUT));
 $psr7 = new PSR7Client($worker);

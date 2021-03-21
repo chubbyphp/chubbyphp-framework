@@ -8,25 +8,27 @@
 <?php
 
 use Chubbyphp\Framework\Middleware\SlimCallbackMiddleware;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\ServerRequest;
+use Some\Psr7\ResponseFactory;
 
-/** @var ServerRequestInterface $request */
-$request = ...;
+$request = new ServerRequest();
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var ResponseFactoryInterface $responseFactory */
-$responseFactory = ...;
+$responseFactory = new ResponseFactory();
 
 $callbackMiddleware = new SlimCallbackMiddleware(
     static fn (ServerRequestInterface $req, ResponseInterface $res, callable $next) => $next($req, $res),
     $responseFactory
 );
 
-/** @var ResponseInterface $response */
 $response = $callbackMiddleware->handle($request, $handler);
 ```

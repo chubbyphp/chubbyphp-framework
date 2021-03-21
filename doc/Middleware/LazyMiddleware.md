@@ -8,22 +8,25 @@
 <?php
 
 use Chubbyphp\Framework\Middleware\LazyMiddleware;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr11\Container;
+use Some\Psr7\Response;
+use Some\Psr7\ServerRequest;
 
-/** @var ContainerInterface $container */
-$container = ...;
+$request = new ServerRequest();
 
-/** @var ServerRequestInterface $request */
-$request = ...;
+$handler = new class() implements RequestHandlerInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new Response();
+    }
+};
 
-/** @var RequestHandlerInterface $handler */
-$handler = ...;
+$container = new Container();
 
 $lazyMiddleware = new LazyMiddleware($container, 'middleware');
 
-/** @var ResponseInterface $response */
 $response = $lazyMiddleware->process($request, $handler);
 ```
