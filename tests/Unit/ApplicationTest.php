@@ -131,7 +131,7 @@ final class ApplicationTest extends TestCase
         $this->expectException(RouterException::class);
         $this->expectExceptionMessage(
             'Request attribute "route" missing or wrong type "stdClass",'
-                .' please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware'
+                .' please add the "Chubbyphp\Framework\Middleware\UrlMatcherMiddleware" middleware'
         );
 
         /** @var MiddlewareInterface|MockObject $routeIndependMiddleware */

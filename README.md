@@ -87,10 +87,11 @@ namespace App;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Chubbyphp\Framework\Middleware\RouterMiddleware;
+use Chubbyphp\Framework\Middleware\UrlMatcherMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\FastRoute\Router;
+use Chubbyphp\Framework\Router\FastRoute\UrlMatcher;
 use Chubbyphp\Framework\Router\Route;
+use Chubbyphp\Framework\Router\Routes;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
@@ -101,7 +102,7 @@ $responseFactory = new ResponseFactory();
 
 $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
-    new RouterMiddleware(new Router([
+    new UrlMatcherMiddleware(new UrlMatcher(new Routes([
         Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
             static function (ServerRequestInterface $request) use ($responseFactory) {
                 $response = $responseFactory->createResponse();
@@ -110,7 +111,7 @@ $app = new Application([
                 return $response;
             }
         ))
-    ]), $responseFactory),
+    ])), $responseFactory),
 ]);
 
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
@@ -127,9 +128,9 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
  * [LazyMiddleware][72]
  * [MiddlewareDispatcher][73]
  * [NewRelicRouteMiddleware][74]
- * [RouterMiddleware][75]
- * [SlimCallbackMiddleware][76]
- * [SlimLazyMiddleware][77]
+ * [SlimCallbackMiddleware][75]
+ * [SlimLazyMiddleware][76]
+ * [UrlMatcherMiddleware][77]
 
 ### RequestHandler
 
@@ -212,9 +213,9 @@ Dominik Zogg 2021
 [72]: doc/Middleware/LazyMiddleware.md
 [73]: doc/Middleware/MiddlewareDispatcher.md
 [74]: doc/Middleware/NewRelicRouteMiddleware.md
-[75]: doc/Middleware/RouterMiddleware.md
-[76]: doc/Middleware/SlimCallbackMiddleware.md
-[77]: doc/Middleware/SlimLazyMiddleware.md
+[75]: doc/Middleware/SlimCallbackMiddleware.md
+[76]: doc/Middleware/SlimLazyMiddleware.md
+[77]: doc/Middleware/UrlMatcherMiddleware.md
 
 [80]: doc/RequestHandler/CallbackRequestHandler.md
 [81]: doc/RequestHandler/LazyRequestHandler.md

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Unit\Middleware;
 
-use Chubbyphp\Framework\Middleware\RouterMiddleware;
+use Chubbyphp\Framework\Middleware\UrlMatcherMiddleware;
 use Chubbyphp\Framework\Router\Exceptions\NotFoundException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterInterface;
@@ -20,36 +20,13 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * @covers \Chubbyphp\Framework\Middleware\RouterMiddleware
+ * @covers \Chubbyphp\Framework\Middleware\UrlMatcherMiddleware
  *
  * @internal
  */
-final class RouterMiddlewareTest extends TestCase
+final class UrlMatcherMiddlewareTest extends TestCase
 {
     use MockByCallsTrait;
-
-    public function testDeprecationWithinConstruct(): void
-    {
-        error_clear_last();
-
-        /** @var RouterInterface|MockObject $router */
-        $router = $this->getMockByCalls(RouterInterface::class);
-
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
-        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
-
-        new RouterMiddleware($router, $responseFactory);
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(
-            'Use Chubbyphp\Framework\Middleware\UrlMatcherMiddleware parameter instead of instead of "Chubbyphp\Framework\Middleware\RouterMiddleware"',
-            $error['message']
-        );
-    }
 
     public function testProcess(): void
     {
@@ -80,7 +57,7 @@ final class RouterMiddlewareTest extends TestCase
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
 
-        $middleware = new RouterMiddleware($router, $responseFactory);
+        $middleware = new UrlMatcherMiddleware($router, $responseFactory);
 
         self::assertSame($response, $middleware->process($request, $handler));
     }
@@ -155,7 +132,7 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $middleware = new RouterMiddleware($router, $responseFactory);
+        $middleware = new UrlMatcherMiddleware($router, $responseFactory);
 
         self::assertSame($response, $middleware->process($request, $handler));
     }
@@ -239,7 +216,7 @@ EOT;
             ]),
         ]);
 
-        $middleware = new RouterMiddleware($router, $responseFactory, $logger);
+        $middleware = new UrlMatcherMiddleware($router, $responseFactory, $logger);
 
         self::assertSame($response, $middleware->process($request, $handler));
     }

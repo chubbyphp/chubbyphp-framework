@@ -29,7 +29,7 @@ use Sunrise\Http\ServerRequest\ServerRequestFactory as SunriseServerRequestFacto
  *
  * @internal
  */
-final class RouterLessTest extends TestCase
+final class UrlMatcherLessTest extends TestCase
 {
     public function providePsr7Implementations(): array
     {
@@ -64,7 +64,7 @@ final class RouterLessTest extends TestCase
     /**
      * @dataProvider providePsr7Implementations
      */
-    public function testMissingRouterMiddleware(
+    public function testMissingUrlMatcherMiddleware(
         ResponseFactoryInterface $responseFactory,
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
@@ -82,7 +82,7 @@ final class RouterLessTest extends TestCase
 
         self::assertStringContainsString(
             'Request attribute "route" missing or wrong type "NULL"'
-                .', please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware',
+                .', please add the "Chubbyphp\Framework\Middleware\UrlMatcherMiddleware" middleware',
             $body
         );
     }
@@ -90,14 +90,14 @@ final class RouterLessTest extends TestCase
     /**
      * @dataProvider providePsr7Implementations
      */
-    public function testMissingRouterMiddlewareWithoutExceptionMiddleware(
+    public function testMissingUrlMatcherMiddlewareWithoutExceptionMiddleware(
         ResponseFactoryInterface $responseFactory,
         ServerRequestFactoryInterface $serverRequestFactory
     ): void {
         $this->expectException(RouterException::class);
         $this->expectExceptionMessage(
             'Request attribute "route" missing or wrong type "NULL"'
-                .', please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware'
+                .', please add the "Chubbyphp\Framework\Middleware\UrlMatcherMiddleware" middleware'
         );
 
         $app = new Application([]);
