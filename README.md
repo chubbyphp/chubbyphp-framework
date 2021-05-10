@@ -168,7 +168,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 Dominik Zogg 2021
 
-[1]: https://github.com/the-benchmarker/web-frameworks#results
+[1]: https://web-frameworks-benchmark.netlify.app/result
 
 [2]: https://www.php-fig.org/psr/psr-1
 [3]: https://www.php-fig.org/psr/psr-2
