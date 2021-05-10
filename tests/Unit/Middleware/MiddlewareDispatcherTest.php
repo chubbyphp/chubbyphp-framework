@@ -98,8 +98,9 @@ final class MiddlewareDispatcherTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage(
             sprintf(
-                '%s::dispatch() expects parameter 1 to be %s[], %s[] given',
+                '%s::dispatch() expects parameter 1 at index %d to be %s[], %s[] given',
                 MiddlewareDispatcher::class,
+                0,
                 MiddlewareInterface::class,
                 \stdClass::class
             )
