@@ -42,12 +42,13 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
      */
     private function validateMiddlewares(array $middlewares): void
     {
-        foreach ($middlewares as $middleware) {
+        foreach ($middlewares as $i => $middleware) {
             if (!$middleware instanceof MiddlewareInterface) {
                 throw new \TypeError(
                     sprintf(
-                        '%s::dispatch() expects parameter 1 to be %s[], %s[] given',
+                        '%s::dispatch() expects parameter 1 at index %d to be %s[], %s[] given',
                         self::class,
+                        $i,
                         MiddlewareInterface::class,
                         get_class($middleware)
                     )
