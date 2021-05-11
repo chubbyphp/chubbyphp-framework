@@ -8,9 +8,7 @@ use Chubbyphp\Framework\Emitter\Emitter;
 use Chubbyphp\Framework\Emitter\EmitterInterface;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
-use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Framework\Router\Exceptions\MissingRouteAttributeOnRequestException;
-use Chubbyphp\Framework\Router\RouteInterface;
+use Chubbyphp\Framework\RequestHandler\RouteRequestHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -25,6 +23,8 @@ final class Application implements RequestHandlerInterface
 
     private MiddlewareDispatcherInterface $middlewareDispatcher;
 
+    private RequestHandlerInterface $requestHandler;
+
     private EmitterInterface $emitter;
 
     /**
@@ -33,6 +33,7 @@ final class Application implements RequestHandlerInterface
     public function __construct(
         array $middlewares,
         ?MiddlewareDispatcherInterface $middlewareDispatcher = null,
+        ?RequestHandlerInterface $requestHandler = null,
         ?EmitterInterface $emitter = null
     ) {
         $this->middlewares = [];
@@ -41,6 +42,7 @@ final class Application implements RequestHandlerInterface
         }
 
         $this->middlewareDispatcher = $middlewareDispatcher ?? new MiddlewareDispatcher();
+        $this->requestHandler = $requestHandler ?? new RouteRequestHandler($this->middlewareDispatcher);
         $this->emitter = $emitter ?? new Emitter();
     }
 
@@ -53,19 +55,7 @@ final class Application implements RequestHandlerInterface
     {
         return $this->middlewareDispatcher->dispatch(
             $this->middlewares,
-            new CallbackRequestHandler(function (ServerRequestInterface $request) {
-                $route = $request->getAttribute('route');
-
-                if (!$route instanceof RouteInterface) {
-                    throw MissingRouteAttributeOnRequestException::create($route);
-                }
-
-                return $this->middlewareDispatcher->dispatch(
-                    $route->getMiddlewares(),
-                    $route->getRequestHandler(),
-                    $request
-                );
-            }),
+            $this->requestHandler,
             $request
         );
     }
