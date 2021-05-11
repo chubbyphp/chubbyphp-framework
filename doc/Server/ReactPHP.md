@@ -12,7 +12,7 @@ use React\EventLoop\Factory;
 use React\Http\Server;
 use React\Socket\Server as Socket;
 
-$app = new Application();
+$app = new Application([]);
 
 $loop = Factory::create();
 

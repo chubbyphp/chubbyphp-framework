@@ -36,7 +36,7 @@ final class DocumentationTest extends TestCase
             }
         }
 
-        self::assertSame(41, $phpBlockCount);
+        self::assertSame(42, $phpBlockCount);
     }
 
     private function getDocumentationFiles(string $path): array

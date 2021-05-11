@@ -136,8 +136,9 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
  * [CallbackRequestHandler][80]
  * [LazyRequestHandler][81]
- * [SlimCallbackRequestHandler][82]
- * [SlimLazyRequestHandler][83]
+ * [RouteRequestHandler][82]
+ * [SlimCallbackRequestHandler][83]
+ * [SlimLazyRequestHandler][84]
 
 ### Router
 
@@ -219,8 +220,9 @@ Dominik Zogg 2021
 
 [80]: doc/RequestHandler/CallbackRequestHandler.md
 [81]: doc/RequestHandler/LazyRequestHandler.md
-[82]: doc/RequestHandler/SlimCallbackRequestHandler.md
-[83]: doc/RequestHandler/SlimLazyRequestHandler.md
+[82]: doc/RequestHandler/RouteRequestHandler.md
+[83]: doc/RequestHandler/SlimCallbackRequestHandler.md
+[84]: doc/RequestHandler/SlimLazyRequestHandler.md
 
 [90]: doc/Router/Group.md
 [91]: doc/Router/Route.md
