@@ -72,8 +72,8 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 
 ```bash
 composer require chubbyphp/chubbyphp-framework "^4.0" \
-    chubbyphp/chubbyphp-framework-router-fastroute "^1.1" \
-    slim/psr7 "^1.3"
+    chubbyphp/chubbyphp-framework-router-fastroute "^1.2" \
+    slim/psr7 "^1.4"
 ```
 
 ## Usage
