@@ -124,7 +124,31 @@ final class ApplicationTest extends TestCase
             Call::create('emit')->with($response),
         ]);
 
+        $application = new Application([], null, null, $emitter);
+        $application->emit($response);
+    }
+
+    public function testEmitWithOldConstructSignature(): void
+    {
+        /** @var ResponseInterface|MockObject $response */
+        $response = $this->getMockByCalls(ResponseInterface::class);
+
+        /** @var EmitterInterface|MockObject $emitter */
+        $emitter = $this->getMockByCalls(EmitterInterface::class, [
+            Call::create('emit')->with($response),
+        ]);
+
+        error_clear_last();
+
         $application = new Application([], null, $emitter);
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('$emitter should be provided as 4 instead of 3 parameter', $error['message']);
+
         $application->emit($response);
     }
 }
