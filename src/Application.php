@@ -50,6 +50,8 @@ final class Application implements RequestHandlerInterface
         if ($requestHandler instanceof RequestHandlerInterface) {
             $this->requestHandler = $requestHandler;
         } elseif ($requestHandler instanceof EmitterInterface) {
+            @trigger_error('$emitter should be provided as 4 instead of 3 parameter', E_USER_DEPRECATED);
+
             $this->emitter = $requestHandler;
         }
 

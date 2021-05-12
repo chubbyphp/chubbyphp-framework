@@ -394,7 +394,7 @@ final class RouteTest extends TestCase
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
         self::assertSame(
-            'Use "$pathOptions" parameter instead of instead of "Chubbyphp\Framework\Router\Route::pathOptions()"',
+            'Use "$pathOptions" parameter instead of "Chubbyphp\Framework\Router\Route::pathOptions()"',
             $error['message']
         );
     }
@@ -419,7 +419,7 @@ final class RouteTest extends TestCase
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
         self::assertSame(
-            'Use "$middlewares" parameter instead of instead of "Chubbyphp\Framework\Router\Route::middlewares()"',
+            'Use "$middlewares" parameter instead of "Chubbyphp\Framework\Router\Route::middlewares()"',
             $error['message']
         );
     }
@@ -444,7 +444,7 @@ final class RouteTest extends TestCase
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
         self::assertSame(
-            'Use "$middlewares" parameter instead of instead of "Chubbyphp\Framework\Router\Route::middleware()"',
+            'Use "$middlewares" parameter instead of "Chubbyphp\Framework\Router\Route::middleware()"',
             $error['message']
         );
     }
