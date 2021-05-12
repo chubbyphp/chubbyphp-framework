@@ -30,7 +30,7 @@ final class MissingRouteAttributeOnRequestExceptionTest extends TestCase
 
         self::assertSame(
             'Request attribute "route" missing or wrong type "NULL", please add the'
-                .' "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware',
+                .' "Chubbyphp\Framework\Middleware\RouteMatcherMiddleware" middleware',
             $exception->getMessage()
         );
         self::assertSame(2, $exception->getCode());
@@ -44,7 +44,7 @@ final class MissingRouteAttributeOnRequestExceptionTest extends TestCase
 
         self::assertSame(
             'Request attribute "route" missing or wrong type "stdClass", please add the'
-                .' "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware',
+                .' "Chubbyphp\Framework\Middleware\RouteMatcherMiddleware" middleware',
             $exception->getMessage()
         );
         self::assertSame(2, $exception->getCode());
