@@ -146,7 +146,7 @@ namespace Chubbyphp\Tests\Framework\Unit\Middleware
             $this->expectException(RouterException::class);
             $this->expectExceptionMessage(
                 'Request attribute "route" missing or wrong type "NULL",'
-                    .' please add the "Chubbyphp\Framework\Middleware\RouterMiddleware" middleware'
+                    .' please add the "Chubbyphp\Framework\Middleware\RouteMatcherMiddleware" middleware'
             );
 
             TestExtesionLoaded::add('newrelic');
