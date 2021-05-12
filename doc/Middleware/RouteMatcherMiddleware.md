@@ -1,4 +1,4 @@
-# UrlMatcherMiddleware
+# RouteMatcherMiddleware
 
 ## Methods
 
@@ -7,8 +7,8 @@
 ```php
 <?php
 
-use Chubbyphp\Framework\Middleware\UrlMatcherMiddleware;
-use Chubbyphp\Framework\Router\Some\UrlMatcher;
+use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware;
+use Chubbyphp\Framework\Router\Some\RouteMatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -24,10 +24,10 @@ $handler = new class() implements RequestHandlerInterface {
     }
 };
 
-$urlMatcher = new UrlMatcher();
+$routeMatcher = new RouteMatcher();
 $responseFactory = new ResponseFactory();
 
-$urlMatcherMiddleware = new UrlMatcherMiddleware($urlMatcher, $responseFactory);
+$RouteMatcherMiddleware = new RouteMatcherMiddleware($routeMatcher, $responseFactory);
 
-$response = $urlMatcherMiddleware->process($request, $handler);
+$response = $RouteMatcherMiddleware->process($request, $handler);
 ```

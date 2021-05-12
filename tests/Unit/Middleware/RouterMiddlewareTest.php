@@ -46,7 +46,7 @@ final class RouterMiddlewareTest extends TestCase
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
         self::assertSame(
-            'Use Chubbyphp\Framework\Middleware\UrlMatcherMiddleware parameter instead of instead of "Chubbyphp\Framework\Middleware\RouterMiddleware"',
+            'Use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware parameter instead of instead of "Chubbyphp\Framework\Middleware\RouterMiddleware"',
             $error['message']
         );
     }

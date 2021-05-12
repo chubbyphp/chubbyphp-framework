@@ -6,7 +6,7 @@ namespace Chubbyphp\Framework\Router;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-interface UrlMatcherInterface
+interface RouteMatcherInterface
 {
     public function match(ServerRequestInterface $request): RouteInterface;
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Middleware;
 
-use Chubbyphp\Framework\Router\UrlMatcherInterface;
+use Chubbyphp\Framework\Router\RouteMatcherInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,23 +17,23 @@ use Psr\Log\LoggerInterface;
  */
 final class RouterMiddleware implements MiddlewareInterface
 {
-    private UrlMatcherMiddleware $urlMatcherMiddleware;
+    private RouteMatcherMiddleware $RouteMatcherMiddleware;
 
     public function __construct(
-        UrlMatcherInterface $urlMatcher,
+        RouteMatcherInterface $routeMatcher,
         ResponseFactoryInterface $responseFactory,
         ?LoggerInterface $logger = null
     ) {
         @trigger_error(
-            sprintf('Use %s parameter instead of instead of "%s"', UrlMatcherMiddleware::class, self::class),
+            sprintf('Use %s parameter instead of instead of "%s"', RouteMatcherMiddleware::class, self::class),
             E_USER_DEPRECATED
         );
 
-        $this->urlMatcherMiddleware = new UrlMatcherMiddleware($urlMatcher, $responseFactory, $logger);
+        $this->RouteMatcherMiddleware = new RouteMatcherMiddleware($routeMatcher, $responseFactory, $logger);
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        return $this->urlMatcherMiddleware->process($request, $handler);
+        return $this->RouteMatcherMiddleware->process($request, $handler);
     }
 }

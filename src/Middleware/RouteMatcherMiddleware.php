@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Framework\Middleware;
 
 use Chubbyphp\Framework\Router\Exceptions\RouterExceptionInterface;
-use Chubbyphp\Framework\Router\UrlMatcherInterface;
+use Chubbyphp\Framework\Router\RouteMatcherInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,7 +14,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-final class UrlMatcherMiddleware implements MiddlewareInterface
+final class RouteMatcherMiddleware implements MiddlewareInterface
 {
     private const HTML = <<<'EOT'
 <html>
@@ -55,18 +55,18 @@ final class UrlMatcherMiddleware implements MiddlewareInterface
 </html>
 EOT;
 
-    private UrlMatcherInterface $urlMatcher;
+    private RouteMatcherInterface $routeMatcher;
 
     private ResponseFactoryInterface $responseFactory;
 
     private LoggerInterface $logger;
 
     public function __construct(
-        UrlMatcherInterface $urlMatcher,
+        RouteMatcherInterface $routeMatcher,
         ResponseFactoryInterface $responseFactory,
         ?LoggerInterface $logger = null
     ) {
-        $this->urlMatcher = $urlMatcher;
+        $this->routeMatcher = $routeMatcher;
         $this->responseFactory = $responseFactory;
         $this->logger = $logger ?? new NullLogger();
     }
@@ -74,7 +74,7 @@ EOT;
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         try {
-            $route = $this->urlMatcher->match($request);
+            $route = $this->routeMatcher->match($request);
         } catch (RouterExceptionInterface $routerException) {
             return $this->routeExceptionResponse($routerException);
         }

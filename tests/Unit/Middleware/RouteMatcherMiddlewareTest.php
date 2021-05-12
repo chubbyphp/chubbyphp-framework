@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Unit\Middleware;
 
-use Chubbyphp\Framework\Middleware\UrlMatcherMiddleware;
+use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware;
 use Chubbyphp\Framework\Router\Exceptions\NotFoundException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouterInterface;
@@ -20,11 +20,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * @covers \Chubbyphp\Framework\Middleware\UrlMatcherMiddleware
+ * @covers \Chubbyphp\Framework\Middleware\RouteMatcherMiddleware
  *
  * @internal
  */
-final class UrlMatcherMiddlewareTest extends TestCase
+final class RouteMatcherMiddlewareTest extends TestCase
 {
     use MockByCallsTrait;
 
@@ -57,7 +57,7 @@ final class UrlMatcherMiddlewareTest extends TestCase
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
 
-        $middleware = new UrlMatcherMiddleware($router, $responseFactory);
+        $middleware = new RouteMatcherMiddleware($router, $responseFactory);
 
         self::assertSame($response, $middleware->process($request, $handler));
     }
@@ -132,7 +132,7 @@ EOT;
             Call::create('createResponse')->with(404, '')->willReturn($response),
         ]);
 
-        $middleware = new UrlMatcherMiddleware($router, $responseFactory);
+        $middleware = new RouteMatcherMiddleware($router, $responseFactory);
 
         self::assertSame($response, $middleware->process($request, $handler));
     }
@@ -216,7 +216,7 @@ EOT;
             ]),
         ]);
 
-        $middleware = new UrlMatcherMiddleware($router, $responseFactory, $logger);
+        $middleware = new RouteMatcherMiddleware($router, $responseFactory, $logger);
 
         self::assertSame($response, $middleware->process($request, $handler));
     }

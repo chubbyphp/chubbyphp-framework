@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Unit\RequestHandler;
 
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
-use Chubbyphp\Framework\Middleware\UrlMatcherMiddleware;
+use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware;
 use Chubbyphp\Framework\RequestHandler\RouteRequestHandler;
 use Chubbyphp\Framework\Router\Exceptions\MissingRouteAttributeOnRequestException;
 use Chubbyphp\Framework\Router\RouteInterface;
@@ -32,7 +32,7 @@ final class RouteRequestHandlerTest extends TestCase
         $this->expectException(MissingRouteAttributeOnRequestException::class);
         $this->expectExceptionMessage(sprintf(
             'Request attribute "route" missing or wrong type "NULL", please add the "%s" middleware',
-            UrlMatcherMiddleware::class
+            RouteMatcherMiddleware::class
         ));
 
         /** @var ServerRequestInterface|MockObject $request */
