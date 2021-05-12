@@ -7,7 +7,7 @@ namespace Chubbyphp\Tests\Framework\Unit\Middleware;
 use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware;
 use Chubbyphp\Framework\Router\Exceptions\NotFoundException;
 use Chubbyphp\Framework\Router\RouteInterface;
-use Chubbyphp\Framework\Router\RouterInterface;
+use Chubbyphp\Framework\Router\RouteMatcherInterface;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -49,8 +49,8 @@ final class RouteMatcherMiddlewareTest extends TestCase
             Call::create('handle')->with($request)->willReturn($response),
         ]);
 
-        /** @var RouterInterface|MockObject $router */
-        $router = $this->getMockByCalls(RouterInterface::class, [
+        /** @var RouteMatcherInterface|MockObject $router */
+        $router = $this->getMockByCalls(RouteMatcherInterface::class, [
             Call::create('match')->with($request)->willReturn($route),
         ]);
 
@@ -122,8 +122,8 @@ EOT;
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        /** @var RouterInterface|MockObject $router */
-        $router = $this->getMockByCalls(RouterInterface::class, [
+        /** @var RouteMatcherInterface|MockObject $router */
+        $router = $this->getMockByCalls(RouteMatcherInterface::class, [
             Call::create('match')->with($request)->willThrowException($routerException),
         ]);
 
@@ -197,8 +197,8 @@ EOT;
         /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        /** @var RouterInterface|MockObject $router */
-        $router = $this->getMockByCalls(RouterInterface::class, [
+        /** @var RouteMatcherInterface|MockObject $router */
+        $router = $this->getMockByCalls(RouteMatcherInterface::class, [
             Call::create('match')->with($request)->willThrowException($routerException),
         ]);
 
