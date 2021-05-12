@@ -231,7 +231,7 @@ final class Route implements RouteInterface
     public function pathOptions(array $pathOptions): self
     {
         @trigger_error(
-            sprintf('Use "$pathOptions" parameter instead of instead of "%s()"', __METHOD__),
+            sprintf('Use "$pathOptions" parameter instead of "%s()"', __METHOD__),
             E_USER_DEPRECATED
         );
 
@@ -248,7 +248,7 @@ final class Route implements RouteInterface
     public function middlewares(array $middlewares): self
     {
         @trigger_error(
-            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
+            sprintf('Use "$middlewares" parameter instead of "%s()"', __METHOD__),
             E_USER_DEPRECATED
         );
 
@@ -265,7 +265,7 @@ final class Route implements RouteInterface
     public function middleware(MiddlewareInterface $middleware): self
     {
         @trigger_error(
-            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
+            sprintf('Use "$middlewares" parameter instead of "%s()"', __METHOD__),
             E_USER_DEPRECATED
         );
 

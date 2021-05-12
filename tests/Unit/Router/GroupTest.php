@@ -198,7 +198,7 @@ final class GroupTest extends TestCase
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
         self::assertSame(
-            'Use "$pathOptions" parameter instead of instead of "Chubbyphp\Framework\Router\Group::pathOptions()"',
+            'Use "$pathOptions" parameter instead of "Chubbyphp\Framework\Router\Group::pathOptions()"',
             $error['message']
         );
     }
@@ -218,7 +218,7 @@ final class GroupTest extends TestCase
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
         self::assertSame(
-            'Use "$middlewares" parameter instead of instead of "Chubbyphp\Framework\Router\Group::middlewares()"',
+            'Use "$middlewares" parameter instead of "Chubbyphp\Framework\Router\Group::middlewares()"',
             $error['message']
         );
     }
@@ -238,7 +238,7 @@ final class GroupTest extends TestCase
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
         self::assertSame(
-            'Use "$middlewares" parameter instead of instead of "Chubbyphp\Framework\Router\Group::middleware()"',
+            'Use "$middlewares" parameter instead of "Chubbyphp\Framework\Router\Group::middleware()"',
             $error['message']
         );
     }

@@ -85,7 +85,7 @@ final class Group implements GroupInterface
     public function pathOptions(array $pathOptions): self
     {
         @trigger_error(
-            sprintf('Use "$pathOptions" parameter instead of instead of "%s()"', __METHOD__),
+            sprintf('Use "$pathOptions" parameter instead of "%s()"', __METHOD__),
             E_USER_DEPRECATED
         );
 
@@ -102,7 +102,7 @@ final class Group implements GroupInterface
     public function middlewares(array $middlewares): self
     {
         @trigger_error(
-            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
+            sprintf('Use "$middlewares" parameter instead of "%s()"', __METHOD__),
             E_USER_DEPRECATED
         );
 
@@ -119,7 +119,7 @@ final class Group implements GroupInterface
     public function middleware(MiddlewareInterface $middleware): self
     {
         @trigger_error(
-            sprintf('Use "$middlewares" parameter instead of instead of "%s()"', __METHOD__),
+            sprintf('Use "$middlewares" parameter instead of "%s()"', __METHOD__),
             E_USER_DEPRECATED
         );
 
@@ -134,7 +134,7 @@ final class Group implements GroupInterface
     public function group(Group $group): self
     {
         @trigger_error(
-            sprintf('Use "$children" parameter instead of instead of "%s()"', __METHOD__),
+            sprintf('Use "$children" parameter instead of "%s()"', __METHOD__),
             E_USER_DEPRECATED
         );
 
@@ -149,7 +149,7 @@ final class Group implements GroupInterface
     public function route(RouteInterface $route): self
     {
         @trigger_error(
-            sprintf('Use "$children" parameter instead of instead of "%s()"', __METHOD__),
+            sprintf('Use "$children" parameter instead of "%s()"', __METHOD__),
             E_USER_DEPRECATED
         );
 
