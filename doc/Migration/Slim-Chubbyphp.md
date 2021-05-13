@@ -67,7 +67,7 @@ $app = new Application([
             },
             $responseFactory
         ))
-    ]), $responseFactory),
+    ])), $responseFactory),
 ]);
 
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
