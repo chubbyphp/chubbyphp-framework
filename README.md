@@ -21,8 +21,7 @@
 
 ## Description
 
-A based [PSR-15][8] microframework that also sets maximum flexibility with minimum complexity and easy replaceability of the individual components, but also of the framework.
-It's currently one of the [fastest PSR-15 based framework (php-fpm)][1] on the market.
+A minimal, highly [performant][1] middleware [PSR-15][8] microframework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.
 
  * [Basic Coding Standard (1)][2]
  * [Coding Style Guide (2)][3]
