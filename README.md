@@ -50,12 +50,9 @@ It's currently one of the [fastest PSR-15 based framework (php-fpm)][1] on the m
 
 ### Router
 
-Any Router which implements `Chubbyphp\Framework\Router\RouterInterface` can be used.
+Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` can be used.
 
- * [chubbyphp/chubbyphp-framework-router-aura][30]: ^1.0
- * [chubbyphp/chubbyphp-framework-router-fastroute][31]: ^1.0
- * [chubbyphp/chubbyphp-framework-router-sunrise][32]: ^1.0
- * [chubbyphp/chubbyphp-framework-router-symfony][33]: ^1.0
+ * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^1.2
 
 ### PSR 7 / PSR 17
 
@@ -191,10 +188,7 @@ Dominik Zogg 2021
 [25]: https://packagist.org/packages/psr/http-server-middleware
 [26]: https://packagist.org/packages/psr/log
 
-[30]: https://github.com/chubbyphp/chubbyphp-framework-router-aura#usage
-[31]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
-[32]: https://github.com/chubbyphp/chubbyphp-framework-router-sunrise#usage
-[33]: https://github.com/chubbyphp/chubbyphp-framework-router-symfony#usage
+[30]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
 
 [40]: https://packagist.org/packages/bittyphp/http
 [41]: https://packagist.org/packages/guzzlehttp/psr7
