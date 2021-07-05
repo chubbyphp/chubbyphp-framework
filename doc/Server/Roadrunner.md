@@ -1,5 +1,19 @@
 # Roadrunner
 
+## .rr.yaml
+
+```yaml
+server:
+  command: "php worker.php"
+
+http:
+  address: 0.0.0.0:8080
+  pool:
+    num_workers: 4
+```
+
+## worker.php
+
 ```php
 <?php
 
