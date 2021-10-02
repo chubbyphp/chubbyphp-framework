@@ -23,7 +23,7 @@ final class RouteTest extends TestCase
 
     public function testMinimal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $route = Route::create(RequestMethod::METHOD_GET, '/{id}', 'read', $handler);
@@ -39,7 +39,7 @@ final class RouteTest extends TestCase
 
     public function testMaximal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware1 */
@@ -68,7 +68,7 @@ final class RouteTest extends TestCase
 
     public function testDeleteMinimal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $route = Route::delete('/{id}', 'delete', $handler);
@@ -84,7 +84,7 @@ final class RouteTest extends TestCase
 
     public function testDeleteMaximal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware1 */
@@ -106,7 +106,7 @@ final class RouteTest extends TestCase
 
     public function testGetMinimal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $route = Route::get('/{id}', 'read', $handler);
@@ -122,7 +122,7 @@ final class RouteTest extends TestCase
 
     public function testGetMaximal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware1 */
@@ -144,7 +144,7 @@ final class RouteTest extends TestCase
 
     public function testHeadMinimal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $route = Route::head('/{id}', 'read_header', $handler);
@@ -160,7 +160,7 @@ final class RouteTest extends TestCase
 
     public function testHeadMaximal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware1 */
@@ -182,7 +182,7 @@ final class RouteTest extends TestCase
 
     public function testOptionsMinimal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $route = Route::options('/{id}', 'options', $handler);
@@ -198,7 +198,7 @@ final class RouteTest extends TestCase
 
     public function testOptionsMaximal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware1 */
@@ -220,7 +220,7 @@ final class RouteTest extends TestCase
 
     public function testPatchMinimal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $route = Route::patch('/{id}', 'update', $handler);
@@ -236,7 +236,7 @@ final class RouteTest extends TestCase
 
     public function testPatchMaximal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware1 */
@@ -258,7 +258,7 @@ final class RouteTest extends TestCase
 
     public function testPostMinimal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $route = Route::post('/{id}', 'create', $handler);
@@ -274,7 +274,7 @@ final class RouteTest extends TestCase
 
     public function testPostMaximal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware1 */
@@ -296,7 +296,7 @@ final class RouteTest extends TestCase
 
     public function testPutMinimal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $route = Route::put('/{id}', 'replace', $handler);
@@ -312,7 +312,7 @@ final class RouteTest extends TestCase
 
     public function testPutMaximal(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware1 */
@@ -334,7 +334,7 @@ final class RouteTest extends TestCase
 
     public function testWithAttributes(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $route = Route::create(RequestMethod::METHOD_GET, '/{id}', 'read', $handler);
@@ -348,7 +348,7 @@ final class RouteTest extends TestCase
 
     public function testMaximalDeprecated(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware1 */
@@ -379,7 +379,7 @@ final class RouteTest extends TestCase
 
     public function testWithDeprecatedPathOptionsMethod(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         error_clear_last();
@@ -401,7 +401,7 @@ final class RouteTest extends TestCase
 
     public function testWithDeprecatedMiddlewaresMethod(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware */
@@ -426,7 +426,7 @@ final class RouteTest extends TestCase
 
     public function testWithDeprecatedMiddlewareMethod(): void
     {
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware */

@@ -24,7 +24,7 @@ final class DocumentationTest extends TestCase
                     ++$phpBlockCount;
                     token_get_all($phpBlock, TOKEN_PARSE);
                 } catch (\Error $e) {
-                    $this->fail(
+                    self::fail(
                         sprintf(
                             'Cannot parse the following code in file "%s", error "%s" : "%s"',
                             $documentationFile,

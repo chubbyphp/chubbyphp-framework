@@ -24,13 +24,13 @@ final class CallbackMiddlewareTest extends TestCase
 
     public function testHandle(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willReturn($response),
         ]);

@@ -40,7 +40,7 @@ final class ErrorHandler
         string $file = __FILE__,
         int $line = __LINE__
     ): bool {
-        if (is_callable($this->errorHandler)) {
+        if (\is_callable($this->errorHandler)) {
             @($this->errorHandler)($severity, $message, $file, $line);
         }
 

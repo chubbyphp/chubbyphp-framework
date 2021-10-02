@@ -25,10 +25,10 @@ final class SlimLazyRequestHandlerTest extends TestCase
 
     public function testHandle(): void
     {
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getAttribute')->with('response', null)->willReturn(null),
             Call::create('getAttributes')->with()->willReturn(['key1' => 'value1', 'key2' => 'value2']),
@@ -41,7 +41,7 @@ final class SlimLazyRequestHandlerTest extends TestCase
             Call::create('get')->with('serviceName')->willReturn($requestHander),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(200, '')->willReturn($response),
         ]);
@@ -59,7 +59,7 @@ final class SlimLazyRequestHandlerTest extends TestCase
                 .' to be callable, stdClass given'
         );
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $requestHander = new \stdClass();
@@ -69,7 +69,7 @@ final class SlimLazyRequestHandlerTest extends TestCase
             Call::create('get')->with('serviceName')->willReturn($requestHander),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
 
         $requestHandler = new SlimLazyRequestHandler($container, 'serviceName', $responseFactory);
@@ -84,7 +84,7 @@ final class SlimLazyRequestHandlerTest extends TestCase
                 .' to be callable, string given'
         );
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $requestHander = '';
@@ -94,7 +94,7 @@ final class SlimLazyRequestHandlerTest extends TestCase
             Call::create('get')->with('serviceName')->willReturn($requestHander),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
 
         $requestHandler = new SlimLazyRequestHandler($container, 'serviceName', $responseFactory);

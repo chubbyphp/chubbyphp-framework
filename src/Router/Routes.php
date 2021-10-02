@@ -20,6 +20,14 @@ final class Routes implements RoutesInterface
     }
 
     /**
+     * @return array<string, RouteInterface>
+     */
+    public function getRoutesByName(): array
+    {
+        return $this->routes;
+    }
+
+    /**
      * @param array<int, RouteInterface> $routes
      *
      * @return array<string, RouteInterface>
@@ -36,7 +44,7 @@ final class Routes implements RoutesInterface
                         self::class,
                         $i,
                         RouteInterface::class,
-                        get_class($route)
+                        \get_class($route)
                     )
                 );
             }
@@ -44,13 +52,5 @@ final class Routes implements RoutesInterface
         }
 
         return $routesByName;
-    }
-
-    /**
-     * @return array<string, RouteInterface>
-     */
-    public function getRoutesByName(): array
-    {
-        return $this->routes;
     }
 }

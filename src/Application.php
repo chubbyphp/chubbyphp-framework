@@ -29,7 +29,7 @@ final class Application implements RequestHandlerInterface
 
     /**
      * @param array<MiddlewareInterface>                    $middlewares
-     * @param RequestHandlerInterface|EmitterInterface|null $requestHandler
+     * @param null|EmitterInterface|RequestHandlerInterface $requestHandler
      */
     public function __construct(
         array $middlewares,

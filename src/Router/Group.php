@@ -131,7 +131,7 @@ final class Group implements GroupInterface
     /**
      * @deprecated
      */
-    public function group(Group $group): self
+    public function group(self $group): self
     {
         @trigger_error(
             sprintf('Use "$children" parameter instead of "%s()"', __METHOD__),
@@ -159,7 +159,7 @@ final class Group implements GroupInterface
     }
 
     /**
-     * @param GroupInterface|RouteInterface|mixed $child
+     * @param GroupInterface|mixed|RouteInterface $child
      */
     private function addChild($child): void
     {
@@ -175,7 +175,7 @@ final class Group implements GroupInterface
                 self::class,
                 GroupInterface::class,
                 RouteInterface::class,
-                is_object($child) ? get_class($child) : gettype($child)
+                \is_object($child) ? \get_class($child) : \gettype($child)
             )
         );
     }

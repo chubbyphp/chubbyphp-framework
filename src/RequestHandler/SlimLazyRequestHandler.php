@@ -28,14 +28,14 @@ final class SlimLazyRequestHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $requestHandler = $this->container->get($this->id);
-        if (!is_callable($requestHandler)) {
+        if (!\is_callable($requestHandler)) {
             throw new \TypeError(
                 sprintf(
                     '%s() expects service with id "%s" to be %s, %s given',
                     __METHOD__,
                     $this->id,
                     'callable',
-                    is_object($requestHandler) ? get_class($requestHandler) : gettype($requestHandler)
+                    \is_object($requestHandler) ? \get_class($requestHandler) : \gettype($requestHandler)
                 )
             );
         }

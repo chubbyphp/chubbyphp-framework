@@ -52,7 +52,7 @@ final class GroupTest extends TestCase
         /** @var MiddlewareInterface|MockObject $middleware3 */
         $middleware3 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $group = Group::create('/{id}', [
@@ -121,27 +121,31 @@ final class GroupTest extends TestCase
         /** @var MiddlewareInterface|MockObject $middleware3 */
         $middleware3 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $group = Group::create('/{id}')
             ->pathOptions(['tokens' => ['id' => '\d+']])
             ->middleware($middleware1)
-            ->route(Route::get('/{slug}', 'element_read', $handler)
-                ->pathOptions(['tokens' => ['slug' => '[a-z]+']])
-                ->middleware($middleware2)
+            ->route(
+                Route::get('/{slug}', 'element_read', $handler)
+                    ->pathOptions(['tokens' => ['slug' => '[a-z]+']])
+                    ->middleware($middleware2)
             )
-            ->group(Group::create('/{slug}')
-                ->pathOptions(['tokens' => ['slug' => '[a-z]+']])
-                ->middlewares([$middleware2])
-                ->route(Route::get('/{key}', 'another_route', $handler)
-                    ->pathOptions(['tokens' => ['key' => '[a-z]+']])
-                    ->middleware($middleware3)
-                )
+            ->group(
+                Group::create('/{slug}')
+                    ->pathOptions(['tokens' => ['slug' => '[a-z]+']])
+                    ->middlewares([$middleware2])
+                    ->route(
+                        Route::get('/{key}', 'another_route', $handler)
+                            ->pathOptions(['tokens' => ['key' => '[a-z]+']])
+                            ->middleware($middleware3)
+                    )
             )
-            ->route(Route::get('/{slug}/{key}/{subKey}', 'yet_another_route', $handler)
-                ->pathOptions(['tokens' => ['slug' => '[a-z]+', 'key' => '[a-z]+', 'subKey' => '[a-z]+']])
-                ->middleware($middleware2)
+            ->route(
+                Route::get('/{slug}/{key}/{subKey}', 'yet_another_route', $handler)
+                    ->pathOptions(['tokens' => ['slug' => '[a-z]+', 'key' => '[a-z]+', 'subKey' => '[a-z]+']])
+                    ->middleware($middleware2)
             )
         ;
 
