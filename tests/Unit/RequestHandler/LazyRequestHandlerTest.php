@@ -25,13 +25,13 @@ final class LazyRequestHandlerTest extends TestCase
 
     public function testHandle(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $requestHander */
+        /** @var MockObject|RequestHandlerInterface $requestHander */
         $requestHander = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willReturn($response),
         ]);
@@ -54,7 +54,7 @@ final class LazyRequestHandlerTest extends TestCase
                 .' to be Psr\Http\Server\RequestHandlerInterface, stdClass given'
         );
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $requestHander = new \stdClass();
@@ -76,7 +76,7 @@ final class LazyRequestHandlerTest extends TestCase
                 .' to be Psr\Http\Server\RequestHandlerInterface, string given'
         );
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $requestHander = '';

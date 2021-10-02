@@ -28,18 +28,18 @@ final class ExceptionMiddlewareTest extends TestCase
 
     public function testProcess(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willReturn($response),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
 
         $middleware = new ExceptionMiddleware($responseFactory);
@@ -51,65 +51,65 @@ final class ExceptionMiddlewareTest extends TestCase
     {
         $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $expectedBody = <<<'EOT'
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Application Error</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 30px;
-                font: 12px/1.5 Helvetica, Arial, Verdana, sans-serif;
-            }
+            <html>
+                <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                    <title>Application Error</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 30px;
+                            font: 12px/1.5 Helvetica, Arial, Verdana, sans-serif;
+                        }
 
-            h1 {
-                margin: 0;
-                font-size: 48px;
-                font-weight: normal;
-                line-height: 48px;
-            }
+                        h1 {
+                            margin: 0;
+                            font-size: 48px;
+                            font-weight: normal;
+                            line-height: 48px;
+                        }
 
-            .block {
-                margin-bottom: 20px;
-            }
+                        .block {
+                            margin-bottom: 20px;
+                        }
 
-            .key {
-                width: 100px;
-                display: inline-flex;
-            }
+                        .key {
+                            width: 100px;
+                            display: inline-flex;
+                        }
 
-            .value {
-                display: inline-flex;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Application Error</h1><p>A website error has occurred. Sorry for the temporary inconvenience.</p>
-    </body>
-</html>
-EOT;
+                        .value {
+                            display: inline-flex;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Application Error</h1><p>A website error has occurred. Sorry for the temporary inconvenience.</p>
+                </body>
+            </html>
+            EOT;
 
-        /** @var StreamInterface|MockObject $responseBody */
+        /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')->with($expectedBody),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
             Call::create('withHeader')->with('Content-Type', 'text/html')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willThrowException($exception),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
@@ -123,65 +123,65 @@ EOT;
     {
         $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $expectedBody = <<<'EOT'
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Application Error</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 30px;
-                font: 12px/1.5 Helvetica, Arial, Verdana, sans-serif;
-            }
+            <html>
+                <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                    <title>Application Error</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 30px;
+                            font: 12px/1.5 Helvetica, Arial, Verdana, sans-serif;
+                        }
 
-            h1 {
-                margin: 0;
-                font-size: 48px;
-                font-weight: normal;
-                line-height: 48px;
-            }
+                        h1 {
+                            margin: 0;
+                            font-size: 48px;
+                            font-weight: normal;
+                            line-height: 48px;
+                        }
 
-            .block {
-                margin-bottom: 20px;
-            }
+                        .block {
+                            margin-bottom: 20px;
+                        }
 
-            .key {
-                width: 100px;
-                display: inline-flex;
-            }
+                        .key {
+                            width: 100px;
+                            display: inline-flex;
+                        }
 
-            .value {
-                display: inline-flex;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Application Error</h1><p>A website error has occurred. Sorry for the temporary inconvenience.</p>
-    </body>
-</html>
-EOT;
+                        .value {
+                            display: inline-flex;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Application Error</h1><p>A website error has occurred. Sorry for the temporary inconvenience.</p>
+                </body>
+            </html>
+            EOT;
 
-        /** @var StreamInterface|MockObject $responseBody */
+        /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')->with($expectedBody),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
             Call::create('withHeader')->with('Content-Type', 'text/html')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willThrowException($exception),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
@@ -225,10 +225,10 @@ EOT;
     {
         $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var StreamInterface|MockObject $responseBody */
+        /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')
                 ->with(new ArgumentCallback(static function (string $html): void {
@@ -253,18 +253,18 @@ EOT;
                 })),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
             Call::create('withHeader')->with('Content-Type', 'text/html')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willThrowException($exception),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);
@@ -278,10 +278,10 @@ EOT;
     {
         $exception = new \RuntimeException('runtime exception', 418, new \LogicException('logic exception', 42));
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var StreamInterface|MockObject $responseBody */
+        /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')
                 ->with(new ArgumentCallback(static function (string $html): void {
@@ -306,18 +306,18 @@ EOT;
                 })),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
             Call::create('withHeader')->with('Content-Type', 'text/html')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willThrowException($exception),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(500, '')->willReturn($response),
         ]);

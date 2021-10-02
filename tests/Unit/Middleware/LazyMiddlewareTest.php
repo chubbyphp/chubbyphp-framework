@@ -26,13 +26,13 @@ final class LazyMiddlewareTest extends TestCase
 
     public function testProcess(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         /** @var MiddlewareInterface|MockObject $middleware */
@@ -58,10 +58,10 @@ final class LazyMiddlewareTest extends TestCase
                 .' to be Psr\Http\Server\MiddlewareInterface, stdClass given'
         );
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $middleware = new \stdClass();
@@ -83,10 +83,10 @@ final class LazyMiddlewareTest extends TestCase
                 .' to be Psr\Http\Server\MiddlewareInterface, string given'
         );
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $middleware = '';

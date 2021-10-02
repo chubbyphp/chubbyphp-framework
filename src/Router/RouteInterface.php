@@ -30,7 +30,7 @@ interface RouteInterface
     /**
      * @param array<string, string> $attributes
      */
-    public function withAttributes(array $attributes): RouteInterface;
+    public function withAttributes(array $attributes): self;
 
     /**
      * @return array<string, string>

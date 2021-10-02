@@ -31,7 +31,7 @@ final class LazyRequestHandler implements RequestHandlerInterface
                     __METHOD__,
                     $this->id,
                     RequestHandlerInterface::class,
-                    is_object($requestHandler) ? get_class($requestHandler) : gettype($requestHandler)
+                    \is_object($requestHandler) ? \get_class($requestHandler) : \gettype($requestHandler)
                 )
             );
         }

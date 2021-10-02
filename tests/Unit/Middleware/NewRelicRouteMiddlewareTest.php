@@ -9,7 +9,7 @@ namespace Chubbyphp\Framework\Middleware
         /**
          * @var array<int, string>
          */
-        private static $extensions = [];
+        private static array $extensions = [];
 
         public static function add(string $name): void
         {
@@ -18,7 +18,7 @@ namespace Chubbyphp\Framework\Middleware
 
         public static function isLoaded(string $name): bool
         {
-            return in_array($name, self::$extensions, true);
+            return \in_array($name, self::$extensions, true);
         }
 
         public static function reset(): void
@@ -37,7 +37,7 @@ namespace Chubbyphp\Framework\Middleware
         /**
          * @var array<string>
          */
-        private static $actions = [];
+        private static array $actions = [];
 
         public static function add(string $action): void
         {
@@ -93,13 +93,13 @@ namespace Chubbyphp\Tests\Framework\Unit\Middleware
             TestExtesionLoaded::reset();
             TestNewRelicNameTransaction::reset();
 
-            /** @var ServerRequestInterface|MockObject $request */
+            /** @var MockObject|ServerRequestInterface $request */
             $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-            /** @var ResponseInterface|MockObject $response */
+            /** @var MockObject|ResponseInterface $response */
             $response = $this->getMockByCalls(ResponseInterface::class);
 
-            /** @var RequestHandlerInterface|MockObject $handler */
+            /** @var MockObject|RequestHandlerInterface $handler */
             $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
                 Call::create('handle')->with($request)->willReturn($response),
             ]);
@@ -116,20 +116,20 @@ namespace Chubbyphp\Tests\Framework\Unit\Middleware
             TestExtesionLoaded::add('newrelic');
             TestNewRelicNameTransaction::reset();
 
-            /** @var RouteInterface|MockObject $route */
+            /** @var MockObject|RouteInterface $route */
             $route = $this->getMockByCalls(RouteInterface::class, [
                 Call::create('getName')->with()->willReturn('route_name'),
             ]);
 
-            /** @var ServerRequestInterface|MockObject $request */
+            /** @var MockObject|ServerRequestInterface $request */
             $request = $this->getMockByCalls(ServerRequestInterface::class, [
                 Call::create('getAttribute')->with('route', null)->willReturn($route),
             ]);
 
-            /** @var ResponseInterface|MockObject $response */
+            /** @var MockObject|ResponseInterface $response */
             $response = $this->getMockByCalls(ResponseInterface::class);
 
-            /** @var RequestHandlerInterface|MockObject $handler */
+            /** @var MockObject|RequestHandlerInterface $handler */
             $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
                 Call::create('handle')->with($request)->willReturn($response),
             ]);
@@ -152,12 +152,12 @@ namespace Chubbyphp\Tests\Framework\Unit\Middleware
             TestExtesionLoaded::add('newrelic');
             TestNewRelicNameTransaction::reset();
 
-            /** @var ServerRequestInterface|MockObject $request */
+            /** @var MockObject|ServerRequestInterface $request */
             $request = $this->getMockByCalls(ServerRequestInterface::class, [
                 Call::create('getAttribute')->with('route', null)->willReturn(null),
             ]);
 
-            /** @var RequestHandlerInterface|MockObject $handler */
+            /** @var MockObject|RequestHandlerInterface $handler */
             $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
             $middleware = new NewRelicRouteMiddleware();

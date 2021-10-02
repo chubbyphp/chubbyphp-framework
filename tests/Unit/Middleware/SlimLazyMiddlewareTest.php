@@ -26,16 +26,16 @@ final class SlimLazyMiddlewareTest extends TestCase
 
     public function testProcess(): void
     {
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getAttribute')->with('response', null)->willReturn(null),
             Call::create('withAttribute')->with('response', $response)->willReturnSelf(),
         ]);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willReturn($response),
         ]);
@@ -47,7 +47,7 @@ final class SlimLazyMiddlewareTest extends TestCase
             Call::create('get')->with('serviceName')->willReturn($middleware),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(200, '')->willReturn($response),
         ]);
@@ -65,10 +65,10 @@ final class SlimLazyMiddlewareTest extends TestCase
                 .' to be callable, stdClass given'
         );
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $middleware = new \stdClass();
@@ -78,7 +78,7 @@ final class SlimLazyMiddlewareTest extends TestCase
             Call::create('get')->with('serviceName')->willReturn($middleware),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
 
         $middleware = new SlimLazyMiddleware($container, 'serviceName', $responseFactory);
@@ -93,10 +93,10 @@ final class SlimLazyMiddlewareTest extends TestCase
                 .' to be callable, string given'
         );
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $middleware = '';
@@ -106,7 +106,7 @@ final class SlimLazyMiddlewareTest extends TestCase
             Call::create('get')->with('serviceName')->willReturn($middleware),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
 
         $middleware = new SlimLazyMiddleware($container, 'serviceName', $responseFactory);

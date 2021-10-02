@@ -38,7 +38,7 @@ final class SlimCallbackMiddleware implements MiddlewareInterface
 
     private function getResponse(ServerRequestInterface $request): ResponseInterface
     {
-        /** @var ResponseInterface|null $response */
+        /** @var null|ResponseInterface $response */
         $response = $request->getAttribute(self::ATTRIBUTE_RESPONSE);
 
         if (null !== $response) {

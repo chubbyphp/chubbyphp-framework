@@ -35,12 +35,12 @@ final class RouteRequestHandlerTest extends TestCase
             RouteMatcherMiddleware::class
         ));
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getAttribute')->with('route', null)->willReturn(null),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
@@ -56,21 +56,21 @@ final class RouteRequestHandlerTest extends TestCase
         /** @var MiddlewareInterface|MockObject $middleware */
         $middleware = $this->getMockByCalls(MiddlewareInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        /** @var MockObject|RequestHandlerInterface $requestHandler */
         $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        /** @var RouteInterface|MockObject $route */
+        /** @var MockObject|RouteInterface $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getRequestHandler')->with()->willReturn($requestHandler),
         ]);
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getAttribute')->with('route', null)->willReturn($route),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */

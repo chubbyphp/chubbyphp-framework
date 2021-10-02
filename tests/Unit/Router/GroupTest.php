@@ -52,7 +52,7 @@ final class GroupTest extends TestCase
         /** @var MiddlewareInterface|MockObject $middleware3 */
         $middleware3 = $this->getMockByCalls(MiddlewareInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
         $group = Group::create('/{id}', [

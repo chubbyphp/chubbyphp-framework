@@ -6,15 +6,12 @@ namespace Chubbyphp\Framework\Emitter
 {
     final class TestHeader
     {
-        /**
-         * @var array
-         */
-        private static $headers = [];
+        private static array $headers = [];
 
         /**
          * @param int $http_response_code
          */
-        public static function add(string $header, bool $replace = true, int $http_response_code = null): void
+        public static function add(string $header, bool $replace = true, ?int $http_response_code = null): void
         {
             self::$headers[] = [
                 'header' => $header,
@@ -37,7 +34,7 @@ namespace Chubbyphp\Framework\Emitter
     /**
      * @param int $http_response_code
      */
-    function header(string $header, bool $replace = true, int $http_response_code = null): void
+    function header(string $header, bool $replace = true, ?int $http_response_code = null): void
     {
         TestHeader::add($header, $replace, $http_response_code);
     }
@@ -65,7 +62,7 @@ namespace Chubbyphp\Tests\Framework\Unit\Emitter
 
         public function testEmit(): void
         {
-            /** @var StreamInterface|MockObject $responseBody */
+            /** @var MockObject|StreamInterface $responseBody */
             $responseBody = $this->getMockByCalls(StreamInterface::class, [
                 Call::create('isSeekable')->with()->willReturn(true),
                 Call::create('rewind')->with(),
@@ -74,7 +71,7 @@ namespace Chubbyphp\Tests\Framework\Unit\Emitter
                 Call::create('eof')->with()->willReturn(true),
             ]);
 
-            /** @var ResponseInterface|MockObject $response */
+            /** @var MockObject|ResponseInterface $response */
             $response = $this->getMockByCalls(ResponseInterface::class, [
                 Call::create('getStatusCode')->with()->willReturn(200),
                 Call::create('getProtocolVersion')->with()->willReturn('1.1'),

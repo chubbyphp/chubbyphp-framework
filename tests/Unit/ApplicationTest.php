@@ -34,21 +34,21 @@ final class ApplicationTest extends TestCase
         /** @var MiddlewareInterface|MockObject $middleware */
         $middleware = $this->getMockByCalls(MiddlewareInterface::class);
 
-        /** @var RequestHandlerInterface|MockObject $handler */
+        /** @var MockObject|RequestHandlerInterface $handler */
         $handler = $this->getMockByCalls(RequestHandlerInterface::class);
 
-        /** @var RouteInterface|MockObject $route */
+        /** @var MockObject|RouteInterface $route */
         $route = $this->getMockByCalls(RouteInterface::class, [
             Call::create('getMiddlewares')->with()->willReturn([$middleware]),
             Call::create('getRequestHandler')->with()->willReturn($handler),
         ]);
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getAttribute')->with('route', null)->willReturn($route),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
@@ -80,10 +80,10 @@ final class ApplicationTest extends TestCase
         /** @var MiddlewareInterface|MockObject $routeIndependMiddleware */
         $routeIndependMiddleware = $this->getMockByCalls(MiddlewareInterface::class);
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
@@ -102,7 +102,7 @@ final class ApplicationTest extends TestCase
                 ),
         ]);
 
-        /** @var RequestHandlerInterface|MockObject $requestHandler */
+        /** @var MockObject|RequestHandlerInterface $requestHandler */
         $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willReturn($response),
         ]);
@@ -116,7 +116,7 @@ final class ApplicationTest extends TestCase
 
     public function testEmit(): void
     {
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         /** @var EmitterInterface|MockObject $emitter */

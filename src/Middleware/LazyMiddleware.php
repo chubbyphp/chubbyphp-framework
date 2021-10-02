@@ -32,7 +32,7 @@ final class LazyMiddleware implements MiddlewareInterface
                     __METHOD__,
                     $this->id,
                     MiddlewareInterface::class,
-                    is_object($middleware) ? get_class($middleware) : gettype($middleware)
+                    \is_object($middleware) ? \get_class($middleware) : \gettype($middleware)
                 )
             );
         }
