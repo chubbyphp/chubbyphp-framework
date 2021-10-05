@@ -123,10 +123,9 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
  * [ExceptionMiddleware][71]
  * [LazyMiddleware][72]
  * [MiddlewareDispatcher][73]
- * [NewRelicRouteMiddleware][74]
- * [RouteMatcherMiddleware][75]
- * [SlimCallbackMiddleware][76]
- * [SlimLazyMiddleware][77]
+ * [RouteMatcherMiddleware][74]
+ * [SlimCallbackMiddleware][75]
+ * [SlimLazyMiddleware][76]
 
 ### RequestHandler
 
@@ -206,10 +205,9 @@ Dominik Zogg 2021
 [71]: doc/Middleware/ExceptionMiddleware.md
 [72]: doc/Middleware/LazyMiddleware.md
 [73]: doc/Middleware/MiddlewareDispatcher.md
-[74]: doc/Middleware/NewRelicRouteMiddleware.md
-[75]: doc/Middleware/RouteMatcherMiddleware.md
-[76]: doc/Middleware/SlimCallbackMiddleware.md
-[77]: doc/Middleware/SlimLazyMiddleware.md
+[74]: doc/Middleware/RouteMatcherMiddleware.md
+[75]: doc/Middleware/SlimCallbackMiddleware.md
+[76]: doc/Middleware/SlimLazyMiddleware.md
 
 [80]: doc/RequestHandler/CallbackRequestHandler.md
 [81]: doc/RequestHandler/LazyRequestHandler.md
