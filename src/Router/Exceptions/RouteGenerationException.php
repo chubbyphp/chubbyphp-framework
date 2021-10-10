@@ -43,7 +43,6 @@ final class RouteGenerationException extends RouterException
         return $this->name;
     }
 
-    /** @deprecated use getPath */
     public function getPath(): string
     {
         return $this->path;
