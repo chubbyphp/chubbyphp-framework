@@ -10,7 +10,7 @@ final class RouteGenerationException extends RouterException
 {
     private string $name;
 
-    private string $pattern;
+    private string $path;
 
     /** @var array<string, string> */
     private array $attributes;
@@ -23,16 +23,16 @@ final class RouteGenerationException extends RouterException
     /**
      * @param array<string, string> $attributes
      */
-    public static function create(string $name, string $pattern, array $attributes, ?\Throwable $previous = null): self
+    public static function create(string $name, string $path, array $attributes, ?\Throwable $previous = null): self
     {
         $self = new self(sprintf(
-            'Route generation for route "%s" with pattern "%s" with attributes "%s" failed.',
+            'Route generation for route "%s" with path "%s" with attributes "%s" failed.',
             $name,
-            $pattern,
-            json_encode($attributes)
+            $path,
+            json_encode([] !== $attributes ? $attributes : new \stdClass())
         ), 3, $previous);
         $self->name = $name;
-        $self->pattern = $pattern;
+        $self->path = $path;
         $self->attributes = $attributes;
 
         return $self;
@@ -43,9 +43,16 @@ final class RouteGenerationException extends RouterException
         return $this->name;
     }
 
+    /** @deprecated use getPath */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /** @deprecated use getPath */
     public function getPattern(): string
     {
-        return $this->pattern;
+        return $this->path;
     }
 
     /**

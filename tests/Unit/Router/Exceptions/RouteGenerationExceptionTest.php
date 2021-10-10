@@ -28,13 +28,24 @@ final class RouteGenerationExceptionTest extends TestCase
         $exception = RouteGenerationException::create('name', '/name/{name}', ['name' => 'name'], $previous);
 
         self::assertSame(
-            'Route generation for route "name" with pattern "/name/{name}" with attributes "{"name":"name"}" failed.',
+            'Route generation for route "name" with path "/name/{name}" with attributes "{"name":"name"}" failed.',
             $exception->getMessage()
         );
         self::assertSame(3, $exception->getCode());
         self::assertSame('name', $exception->getName());
+        self::assertSame('/name/{name}', $exception->getPath());
         self::assertSame('/name/{name}', $exception->getPattern());
         self::assertSame(['name' => 'name'], $exception->getAttributes());
         self::assertSame($previous, $exception->getPrevious());
+    }
+
+    public function testCreateWithEmptyAttributes(): void
+    {
+        $exception = RouteGenerationException::create('name', '/name/{name}', []);
+
+        self::assertSame(
+            'Route generation for route "name" with path "/name/{name}" with attributes "{}" failed.',
+            $exception->getMessage()
+        );
     }
 }
