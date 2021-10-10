@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\Exceptions;
 
-interface RouterExceptionInterface
+interface HttpExceptionInterface
 {
     /**
      * @return string

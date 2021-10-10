@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\Exceptions;
 
-use Chubbyphp\Framework\Router\RouterException;
-
 final class MissingRouteByNameException extends RouterException
 {
     private string $name;
@@ -17,7 +15,7 @@ final class MissingRouteByNameException extends RouterException
 
     public static function create(string $name): self
     {
-        $self = new self(sprintf('Missing route: "%s"', $name), 1);
+        $self = new self(sprintf('Missing route: "%s"', $name), 2);
         $self->name = $name;
 
         return $self;

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\Exceptions;
 
-use Chubbyphp\Framework\Router\RouterException;
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
 
-final class MethodNotAllowedException extends RouterException implements RouterExceptionInterface
+final class MethodNotAllowedException extends RouterException implements HttpExceptionInterface
 {
     private string $type;
 

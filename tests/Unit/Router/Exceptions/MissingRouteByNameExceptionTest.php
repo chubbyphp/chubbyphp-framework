@@ -27,7 +27,7 @@ final class MissingRouteByNameExceptionTest extends TestCase
         $exception = MissingRouteByNameException::create('name');
 
         self::assertSame('Missing route: "name"', $exception->getMessage());
-        self::assertSame(1, $exception->getCode());
+        self::assertSame(2, $exception->getCode());
         self::assertSame('name', $exception->getName());
     }
 }
