@@ -24,11 +24,11 @@ final class RouteGenerationExceptionTest extends TestCase
 
     public function testCreate(): void
     {
-        $previous = new \TypeError();
+        $previous = new \RuntimeException('Something went wrong');
         $exception = RouteGenerationException::create('name', '/name/{name}', ['name' => 'name'], $previous);
 
         self::assertSame(
-            'Route generation for route "name" with path "/name/{name}" with attributes "{"name":"name"}" failed.',
+            'Route generation for route "name" with path "/name/{name}" with attributes "{"name":"name"}" failed. Something went wrong',
             $exception->getMessage()
         );
         self::assertSame(3, $exception->getCode());
