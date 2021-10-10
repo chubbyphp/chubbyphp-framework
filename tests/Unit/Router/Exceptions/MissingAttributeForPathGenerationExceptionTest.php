@@ -24,6 +24,8 @@ final class MissingAttributeForPathGenerationExceptionTest extends TestCase
 
     public function testCreate(): void
     {
+        error_clear_last();
+
         $exception = MissingAttributeForPathGenerationException::create('name', 'attribute');
 
         self::assertSame(
@@ -33,5 +35,16 @@ final class MissingAttributeForPathGenerationExceptionTest extends TestCase
         self::assertSame(3, $exception->getCode());
         self::assertSame('name', $exception->getName());
         self::assertSame('attribute', $exception->getAttribute());
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(
+            'Use "Chubbyphp\Framework\Router\Exceptions\RouteGenerationException" instead of'
+                .' "Chubbyphp\Framework\Router\Exceptions\MissingAttributeForPathGenerationException"',
+            $error['message']
+        );
     }
 }
