@@ -33,7 +33,7 @@ final class MissingRouteAttributeOnRequestExceptionTest extends TestCase
                 .' "Chubbyphp\Framework\Middleware\RouteMatcherMiddleware" middleware',
             $exception->getMessage()
         );
-        self::assertSame(2, $exception->getCode());
+        self::assertSame(1, $exception->getCode());
     }
 
     public function testCreateWithObject(): void
@@ -47,6 +47,6 @@ final class MissingRouteAttributeOnRequestExceptionTest extends TestCase
                 .' "Chubbyphp\Framework\Middleware\RouteMatcherMiddleware" middleware',
             $exception->getMessage()
         );
-        self::assertSame(2, $exception->getCode());
+        self::assertSame(1, $exception->getCode());
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Middleware;
 
-use Chubbyphp\Framework\Router\Exceptions\RouterExceptionInterface;
+use Chubbyphp\Framework\Router\Exceptions\HttpExceptionInterface;
 use Chubbyphp\Framework\Router\RouteMatcherInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -75,7 +75,7 @@ final class RouteMatcherMiddleware implements MiddlewareInterface
     {
         try {
             $route = $this->routeMatcher->match($request);
-        } catch (RouterExceptionInterface $routerException) {
+        } catch (HttpExceptionInterface $routerException) {
             return $this->routeExceptionResponse($routerException);
         }
 
@@ -88,7 +88,7 @@ final class RouteMatcherMiddleware implements MiddlewareInterface
         return $handler->handle($request);
     }
 
-    private function routeExceptionResponse(RouterExceptionInterface $routerException): ResponseInterface
+    private function routeExceptionResponse(HttpExceptionInterface $routerException): ResponseInterface
     {
         $this->logger->info('Route exception', [
             'title' => $routerException->getTitle(),

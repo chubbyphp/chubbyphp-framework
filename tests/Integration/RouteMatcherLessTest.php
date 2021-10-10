@@ -8,7 +8,7 @@ use Bitty\Http\ResponseFactory as BittyResponseFactory;
 use Bitty\Http\ServerRequestFactory as BittyServerRequestFactory;
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
-use Chubbyphp\Framework\Router\RouterException;
+use Chubbyphp\Framework\Router\Exceptions\RouterException;
 use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use Http\Factory\Guzzle\ResponseFactory as GuzzleResponseFactory;
 use Http\Factory\Guzzle\ServerRequestFactory as GuzzleServerRequestFactory;
