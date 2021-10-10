@@ -6,6 +6,9 @@ namespace Chubbyphp\Framework\Router\Exceptions;
 
 use Chubbyphp\Framework\Router\RouterException;
 
+/**
+ * @deprecated use RouteGenerationException
+ */
 final class NotMatchingValueForPathGenerationException extends RouterException
 {
     private string $name;
@@ -18,6 +21,11 @@ final class NotMatchingValueForPathGenerationException extends RouterException
 
     private function __construct(string $message, int $code, ?\Throwable $previous = null)
     {
+        @trigger_error(
+            sprintf('Use "%s" instead of "%s"', RouteGenerationException::class, self::class),
+            E_USER_DEPRECATED
+        );
+
         parent::__construct($message, $code, $previous);
     }
 

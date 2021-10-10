@@ -13,7 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * @deprecated
+ * @deprecated use RouteMatcherMiddleware
  */
 final class RouterMiddleware implements MiddlewareInterface
 {

@@ -24,6 +24,8 @@ final class NotMatchingValueForPathGenerationExceptionTest extends TestCase
 
     public function testCreate(): void
     {
+        error_clear_last();
+
         $exception = NotMatchingValueForPathGenerationException::create('name', 'attribute', 'value', 'pattern');
 
         self::assertSame(
@@ -36,5 +38,16 @@ final class NotMatchingValueForPathGenerationExceptionTest extends TestCase
         self::assertSame('attribute', $exception->getAttribute());
         self::assertSame('value', $exception->getValue());
         self::assertSame('pattern', $exception->getPattern());
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(
+            'Use "Chubbyphp\Framework\Router\Exceptions\RouteGenerationException" instead of'
+                .' "Chubbyphp\Framework\Router\Exceptions\NotMatchingValueForPathGenerationException"',
+            $error['message']
+        );
     }
 }

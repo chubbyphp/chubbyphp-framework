@@ -67,7 +67,7 @@ Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` c
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^3.5" \
+composer require chubbyphp/chubbyphp-framework "^3.6" \
     chubbyphp/chubbyphp-framework-router-fastroute "^1.2" \
     slim/psr7 "^1.4"
 ```
