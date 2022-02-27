@@ -8,8 +8,6 @@ use Psr\Http\Server\MiddlewareInterface;
 
 final class Group implements GroupInterface
 {
-    private string $path;
-
     /**
      * @var array<MiddlewareInterface>
      */
@@ -21,20 +19,12 @@ final class Group implements GroupInterface
     private array $children = [];
 
     /**
-     * @var array<string, mixed>
-     */
-    private array $pathOptions = [];
-
-    /**
      * @param array<GroupInterface|RouteInterface> $children
      * @param array<MiddlewareInterface>           $middlewares
      * @param array<string, mixed>                 $pathOptions
      */
-    private function __construct(string $path, array $children = [], array $middlewares = [], array $pathOptions = [])
+    private function __construct(private string $path, array $children = [], array $middlewares = [], private array $pathOptions = [])
     {
-        $this->path = $path;
-        $this->pathOptions = $pathOptions;
-
         foreach ($children as $child) {
             $this->addChild($child);
         }
@@ -94,7 +84,7 @@ final class Group implements GroupInterface
                 self::class,
                 GroupInterface::class,
                 RouteInterface::class,
-                \is_object($child) ? \get_class($child) : \gettype($child)
+                get_debug_type($child)
             )
         );
     }

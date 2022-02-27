@@ -44,7 +44,7 @@ final class Routes implements RoutesInterface
                         self::class,
                         $i,
                         RouteInterface::class,
-                        \get_class($route)
+                        $route::class
                     )
                 );
             }

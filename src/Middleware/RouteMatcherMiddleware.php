@@ -55,19 +55,13 @@ final class RouteMatcherMiddleware implements MiddlewareInterface
         </html>
         EOT;
 
-    private RouteMatcherInterface $routeMatcher;
-
-    private ResponseFactoryInterface $responseFactory;
-
     private LoggerInterface $logger;
 
     public function __construct(
-        RouteMatcherInterface $routeMatcher,
-        ResponseFactoryInterface $responseFactory,
+        private RouteMatcherInterface $routeMatcher,
+        private ResponseFactoryInterface $responseFactory,
         ?LoggerInterface $logger = null
     ) {
-        $this->routeMatcher = $routeMatcher;
-        $this->responseFactory = $responseFactory;
         $this->logger = $logger ?? new NullLogger();
     }
 

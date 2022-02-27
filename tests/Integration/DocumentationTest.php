@@ -22,7 +22,7 @@ final class DocumentationTest extends TestCase
             foreach ($this->getPhpBlocks($documentationFile) as $phpBlock) {
                 try {
                     ++$phpBlockCount;
-                    token_get_all($phpBlock, TOKEN_PARSE);
+                    \PhpToken::tokenize($phpBlock, TOKEN_PARSE);
                 } catch (\Error $e) {
                     self::fail(
                         sprintf(

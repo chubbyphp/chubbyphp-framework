@@ -13,17 +13,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class SlimLazyMiddleware implements MiddlewareInterface
 {
-    private ContainerInterface $container;
-
-    private string $id;
-
-    private ResponseFactoryInterface $responseFactory;
-
-    public function __construct(ContainerInterface $container, string $id, ResponseFactoryInterface $responseFactory)
+    public function __construct(private ContainerInterface $container, private string $id, private ResponseFactoryInterface $responseFactory)
     {
-        $this->container = $container;
-        $this->id = $id;
-        $this->responseFactory = $responseFactory;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -36,7 +27,7 @@ final class SlimLazyMiddleware implements MiddlewareInterface
                     __METHOD__,
                     $this->id,
                     'callable',
-                    \is_object($middleware) ? \get_class($middleware) : \gettype($middleware)
+                    get_debug_type($middleware)
                 )
             );
         }

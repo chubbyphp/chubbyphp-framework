@@ -36,7 +36,7 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 
 ## Requirements
 
- * php: ^7.4|^8.0
+ * php: ^8.0
  * [psr/container][20]: ^1.0|^2.0
  * [psr/http-factory][21]: ^1.0.1
  * [psr/http-message-implementation][22]: ^1.0

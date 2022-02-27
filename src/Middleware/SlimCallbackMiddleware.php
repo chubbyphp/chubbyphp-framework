@@ -19,12 +19,9 @@ final class SlimCallbackMiddleware implements MiddlewareInterface
      */
     private $slimCallable;
 
-    private ResponseFactoryInterface $responseFactory;
-
-    public function __construct(callable $slimCallable, ResponseFactoryInterface $responseFactory)
+    public function __construct(callable $slimCallable, private ResponseFactoryInterface $responseFactory)
     {
         $this->slimCallable = $slimCallable;
-        $this->responseFactory = $responseFactory;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

@@ -6,9 +6,12 @@
     },
     "timeout": 10,
     "logs": {
-        "text": "build/phpinfection.log",
-        "badge": {
-            "branch": "master"
+        "text": "build/phpinfection/infection.log",
+        "html": "build/phpinfection/infection.html",
+        "json": "build/phpinfection/infection.json",
+        "summary": "build/phpinfection/summary.log",
+        "stryker": {
+            "report": "master"
         }
     },
     "mutators": {

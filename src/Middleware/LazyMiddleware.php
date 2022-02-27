@@ -12,14 +12,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class LazyMiddleware implements MiddlewareInterface
 {
-    private ContainerInterface $container;
-
-    private string $id;
-
-    public function __construct(ContainerInterface $container, string $id)
+    public function __construct(private ContainerInterface $container, private string $id)
     {
-        $this->container = $container;
-        $this->id = $id;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -32,7 +26,7 @@ final class LazyMiddleware implements MiddlewareInterface
                     __METHOD__,
                     $this->id,
                     MiddlewareInterface::class,
-                    \is_object($middleware) ? \get_class($middleware) : \gettype($middleware)
+                    get_debug_type($middleware)
                 )
             );
         }

@@ -10,23 +10,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class Route implements RouteInterface
 {
-    private string $name;
-
-    private string $method;
-
-    private string $path;
-
-    /**
-     * @var array<string, mixed>
-     */
-    private array $pathOptions = [];
-
     /**
      * @var array<MiddlewareInterface>
      */
     private array $middlewares = [];
-
-    private RequestHandlerInterface $requestHandler;
 
     /**
      * @var array<string, string>
@@ -38,21 +25,16 @@ final class Route implements RouteInterface
      * @param array<string, mixed>       $pathOptions
      */
     private function __construct(
-        string $method,
-        string $path,
-        string $name,
-        RequestHandlerInterface $requestHandler,
+        private string $method,
+        private string $path,
+        private string $name,
+        private RequestHandlerInterface $requestHandler,
         array $middlewares = [],
-        array $pathOptions = []
+        private array $pathOptions = []
     ) {
-        $this->method = $method;
-        $this->path = $path;
-        $this->name = $name;
-        $this->requestHandler = $requestHandler;
         foreach ($middlewares as $middleware) {
             $this->addMiddleware($middleware);
         }
-        $this->pathOptions = $pathOptions;
     }
 
     /**

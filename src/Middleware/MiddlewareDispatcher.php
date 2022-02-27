@@ -50,7 +50,7 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
                         self::class,
                         $i,
                         MiddlewareInterface::class,
-                        \get_class($middleware)
+                        $middleware::class
                     )
                 );
             }

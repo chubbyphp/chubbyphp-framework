@@ -20,7 +20,7 @@ final class MissingRouteAttributeOnRequestException extends RouterException
     {
         return new self(sprintf(
             'Request attribute "route" missing or wrong type "%s", please add the "%s" middleware',
-            \is_object($route) ? \get_class($route) : \gettype($route),
+            get_debug_type($route),
             RouteMatcherMiddleware::class
         ), 1);
     }

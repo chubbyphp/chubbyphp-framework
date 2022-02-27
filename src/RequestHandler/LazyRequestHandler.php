@@ -11,14 +11,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class LazyRequestHandler implements RequestHandlerInterface
 {
-    private ContainerInterface $container;
-
-    private string $id;
-
-    public function __construct(ContainerInterface $container, string $id)
+    public function __construct(private ContainerInterface $container, private string $id)
     {
-        $this->container = $container;
-        $this->id = $id;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -31,7 +25,7 @@ final class LazyRequestHandler implements RequestHandlerInterface
                     __METHOD__,
                     $this->id,
                     RequestHandlerInterface::class,
-                    \is_object($requestHandler) ? \get_class($requestHandler) : \gettype($requestHandler)
+                    get_debug_type($requestHandler)
                 )
             );
         }

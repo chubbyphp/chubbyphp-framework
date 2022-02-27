@@ -12,17 +12,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class SlimLazyRequestHandler implements RequestHandlerInterface
 {
-    private ContainerInterface $container;
-
-    private string $id;
-
-    private ResponseFactoryInterface $responseFactory;
-
-    public function __construct(ContainerInterface $container, string $id, ResponseFactoryInterface $responseFactory)
+    public function __construct(private ContainerInterface $container, private string $id, private ResponseFactoryInterface $responseFactory)
     {
-        $this->container = $container;
-        $this->id = $id;
-        $this->responseFactory = $responseFactory;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -35,7 +26,7 @@ final class SlimLazyRequestHandler implements RequestHandlerInterface
                     __METHOD__,
                     $this->id,
                     'callable',
-                    \is_object($requestHandler) ? \get_class($requestHandler) : \gettype($requestHandler)
+                    get_debug_type($requestHandler)
                 )
             );
         }

@@ -53,19 +53,13 @@ final class ExceptionMiddleware implements MiddlewareInterface
         </html>
         EOT;
 
-    private ResponseFactoryInterface $responseFactory;
-
-    private bool $debug;
-
     private LoggerInterface $logger;
 
     public function __construct(
-        ResponseFactoryInterface $responseFactory,
-        bool $debug = false,
+        private ResponseFactoryInterface $responseFactory,
+        private bool $debug = false,
         ?LoggerInterface $logger = null
     ) {
-        $this->responseFactory = $responseFactory;
-        $this->debug = $debug;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -110,7 +104,7 @@ final class ExceptionMiddleware implements MiddlewareInterface
         $exceptions = [];
         do {
             $exceptions[] = [
-                'class' => \get_class($exception),
+                'class' => $exception::class,
                 'message' => $exception->getMessage(),
                 'code' => $exception->getCode(),
                 'file' => $exception->getFile(),

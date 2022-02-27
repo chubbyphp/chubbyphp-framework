@@ -11,14 +11,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class MiddlewareRequestHandler implements RequestHandlerInterface
 {
-    private MiddlewareInterface $middleware;
-
-    private RequestHandlerInterface $handler;
-
-    public function __construct(MiddlewareInterface $middleware, RequestHandlerInterface $handler)
+    public function __construct(private MiddlewareInterface $middleware, private RequestHandlerInterface $handler)
     {
-        $this->middleware = $middleware;
-        $this->handler = $handler;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

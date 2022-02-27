@@ -13,11 +13,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class RouteRequestHandler implements RequestHandlerInterface
 {
-    private MiddlewareDispatcherInterface $middlewareDispatcher;
-
-    public function __construct(MiddlewareDispatcherInterface $middlewareDispatcher)
+    public function __construct(private MiddlewareDispatcherInterface $middlewareDispatcher)
     {
-        $this->middlewareDispatcher = $middlewareDispatcher;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

@@ -18,12 +18,9 @@ final class SlimCallbackRequestHandler implements RequestHandlerInterface
      */
     private $slimCallable;
 
-    private ResponseFactoryInterface $responseFactory;
-
-    public function __construct(callable $slimCallable, ResponseFactoryInterface $responseFactory)
+    public function __construct(callable $slimCallable, private ResponseFactoryInterface $responseFactory)
     {
         $this->slimCallable = $slimCallable;
-        $this->responseFactory = $responseFactory;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

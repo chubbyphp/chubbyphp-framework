@@ -31,7 +31,7 @@ final class RouteRequestHandlerTest extends TestCase
     {
         $this->expectException(MissingRouteAttributeOnRequestException::class);
         $this->expectExceptionMessage(sprintf(
-            'Request attribute "route" missing or wrong type "NULL", please add the "%s" middleware',
+            'Request attribute "route" missing or wrong type "null", please add the "%s" middleware',
             RouteMatcherMiddleware::class
         ));
 

@@ -27,7 +27,7 @@ final class RouteGenerationException extends RouterException
             'Route generation for route "%s" with path "%s" with attributes "%s" failed.%s',
             $name,
             $path,
-            json_encode([] !== $attributes ? $attributes : new \stdClass()),
+            json_encode([] !== $attributes ? $attributes : new \stdClass(), JSON_THROW_ON_ERROR),
             null !== $previous ? ' '.$previous->getMessage() : '',
         ), 3, $previous);
         $self->name = $name;

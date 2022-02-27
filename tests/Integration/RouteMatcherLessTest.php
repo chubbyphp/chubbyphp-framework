@@ -81,7 +81,7 @@ final class RouteMatcherLessTest extends TestCase
         $body = (string) $response->getBody();
 
         self::assertStringContainsString(
-            'Request attribute "route" missing or wrong type "NULL"'
+            'Request attribute "route" missing or wrong type "null"'
                 .', please add the "Chubbyphp\Framework\Middleware\RouteMatcherMiddleware" middleware',
             $body
         );
@@ -96,7 +96,7 @@ final class RouteMatcherLessTest extends TestCase
     ): void {
         $this->expectException(RouterException::class);
         $this->expectExceptionMessage(
-            'Request attribute "route" missing or wrong type "NULL"'
+            'Request attribute "route" missing or wrong type "null"'
                 .', please add the "Chubbyphp\Framework\Middleware\RouteMatcherMiddleware" middleware'
         );
 
