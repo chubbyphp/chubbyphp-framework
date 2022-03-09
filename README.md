@@ -51,7 +51,7 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 
 Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` can be used.
 
- * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^1.2
+ * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^1.3.1
 
 ### PSR 7 / PSR 17
 
@@ -68,8 +68,8 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 
 ```bash
 composer require chubbyphp/chubbyphp-framework "^4.1" \
-    chubbyphp/chubbyphp-framework-router-fastroute "^1.2" \
-    slim/psr7 "^1.4"
+    chubbyphp/chubbyphp-framework-router-fastroute "^1.3.1" \
+    slim/psr7 "^1.5"
 ```
 
 ## Usage
