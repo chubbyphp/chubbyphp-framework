@@ -60,10 +60,7 @@ final class SlimLazyMiddlewareTest extends TestCase
     public function testProcessWithWrongObject(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\Middleware\SlimLazyMiddleware::process() expects service with id "serviceName"'
-                .' to be callable, stdClass given'
-        );
+        $this->expectExceptionMessage('Argument #1 ($slimCallable) must be of type callable, stdClass given');
 
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -88,10 +85,7 @@ final class SlimLazyMiddlewareTest extends TestCase
     public function testProcessWithString(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\Middleware\SlimLazyMiddleware::process() expects service with id "serviceName"'
-                .' to be callable, string given'
-        );
+        $this->expectExceptionMessage('Argument #1 ($slimCallable) must be of type callable, string given');
 
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);

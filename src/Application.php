@@ -17,9 +17,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class Application implements RequestHandlerInterface
 {
     /**
-     * @var array<MiddlewareInterface>
+     * @var Collection<MiddlewareInterface>
      */
-    private array $middlewares;
+    private Collection $middlewares;
 
     private MiddlewareDispatcherInterface $middlewareDispatcher;
 
@@ -36,11 +36,7 @@ final class Application implements RequestHandlerInterface
         ?RequestHandlerInterface $requestHandler = null,
         ?EmitterInterface $emitter = null
     ) {
-        $this->middlewares = [];
-        foreach ($middlewares as $middleware) {
-            $this->addMiddleware($middleware);
-        }
-
+        $this->middlewares = new Collection($middlewares, [MiddlewareInterface::class]);
         $this->middlewareDispatcher = $middlewareDispatcher ?? new MiddlewareDispatcher();
         $this->requestHandler = $requestHandler ?? new RouteRequestHandler($this->middlewareDispatcher);
         $this->emitter = $emitter ?? new Emitter();
@@ -54,7 +50,7 @@ final class Application implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return $this->middlewareDispatcher->dispatch(
-            $this->middlewares,
+            $this->middlewares->toArray(),
             $this->requestHandler,
             $request
         );
@@ -63,10 +59,5 @@ final class Application implements RequestHandlerInterface
     public function emit(ResponseInterface $response): void
     {
         $this->emitter->emit($response);
-    }
-
-    private function addMiddleware(MiddlewareInterface $middleware): void
-    {
-        $this->middlewares[] = $middleware;
     }
 }

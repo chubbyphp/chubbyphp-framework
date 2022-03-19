@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
+use Chubbyphp\Framework\Collection;
 use Psr\Http\Server\MiddlewareInterface;
 
 final class Group implements GroupInterface
 {
     /**
-     * @var array<MiddlewareInterface>
+     * @var Collection<MiddlewareInterface>
      */
-    private array $middlewares = [];
+    private Collection $middlewares;
 
     /**
-     * @var array<GroupInterface|RouteInterface>
+     * @var Collection<GroupInterface|RouteInterface>
      */
-    private array $children = [];
+    private Collection $children;
 
     /**
      * @param array<GroupInterface|RouteInterface> $children
@@ -25,13 +26,8 @@ final class Group implements GroupInterface
      */
     private function __construct(private string $path, array $children = [], array $middlewares = [], private array $pathOptions = [])
     {
-        foreach ($children as $child) {
-            $this->addChild($child);
-        }
-
-        foreach ($middlewares as $middleware) {
-            $this->addMiddleware($middleware);
-        }
+        $this->children = new Collection($children, [GroupInterface::class, RouteInterface::class]);
+        $this->middlewares = new Collection($middlewares, [MiddlewareInterface::class]);
     }
 
     /**
@@ -54,7 +50,7 @@ final class Group implements GroupInterface
     public function getRoutes(): array
     {
         $routes = [];
-        foreach ($this->children as $child) {
+        foreach ($this->children->toArray() as $child) {
             if ($child instanceof GroupInterface) {
                 foreach ($child->getRoutes() as $route) {
                     $routes[] = $this->createRoute($route);
@@ -67,33 +63,6 @@ final class Group implements GroupInterface
         return $routes;
     }
 
-    /**
-     * @param GroupInterface|mixed|RouteInterface $child
-     */
-    private function addChild($child): void
-    {
-        if ($child instanceof GroupInterface || $child instanceof RouteInterface) {
-            $this->children[] = $child;
-
-            return;
-        }
-
-        throw new \TypeError(
-            sprintf(
-                '%s::addChild() expects parameter 1 to be %s|%s, %s given',
-                self::class,
-                GroupInterface::class,
-                RouteInterface::class,
-                get_debug_type($child)
-            )
-        );
-    }
-
-    private function addMiddleware(MiddlewareInterface $middleware): void
-    {
-        $this->middlewares[] = $middleware;
-    }
-
     private function createRoute(RouteInterface $route): RouteInterface
     {
         return Route::create(
@@ -101,7 +70,7 @@ final class Group implements GroupInterface
             $this->path.$route->getPath(),
             $route->getName(),
             $route->getRequestHandler(),
-            array_merge($this->middlewares, $route->getMiddlewares()),
+            array_merge($this->middlewares->toArray(), $route->getMiddlewares()),
             array_merge_recursive($this->pathOptions, $route->getPathOptions())
         );
     }

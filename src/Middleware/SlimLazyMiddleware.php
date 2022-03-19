@@ -19,18 +19,8 @@ final class SlimLazyMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        /** @var callable $middleware */
         $middleware = $this->container->get($this->id);
-        if (!\is_callable($middleware)) {
-            throw new \TypeError(
-                sprintf(
-                    '%s() expects service with id "%s" to be %s, %s given',
-                    __METHOD__,
-                    $this->id,
-                    'callable',
-                    get_debug_type($middleware)
-                )
-            );
-        }
 
         return (new SlimCallbackMiddleware($middleware, $this->responseFactory))->process($request, $handler);
     }

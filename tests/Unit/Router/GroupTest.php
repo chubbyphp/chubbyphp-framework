@@ -34,8 +34,8 @@ final class GroupTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage(
-            'Chubbyphp\Framework\Router\Group::addChild() expects parameter 1 to be'
-                .' Chubbyphp\Framework\Router\GroupInterface|Chubbyphp\Framework\Router\RouteInterface, stdClass given'
+            'Chubbyphp\Framework\Collection::__construct() expects parameter 1 at index 0 to be '
+                .'Chubbyphp\Framework\Router\GroupInterface|Chubbyphp\Framework\Router\RouteInterface, stdClass given'
         );
 
         Group::create('', [new \stdClass()]);

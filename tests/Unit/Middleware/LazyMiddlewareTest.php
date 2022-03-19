@@ -52,11 +52,8 @@ final class LazyMiddlewareTest extends TestCase
 
     public function testProcessWithWrongObject(): void
     {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\Middleware\LazyMiddleware::process() expects service with id "serviceName"'
-                .' to be Psr\Http\Server\MiddlewareInterface, stdClass given'
-        );
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to undefined method stdClass::process()');
 
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -77,11 +74,8 @@ final class LazyMiddlewareTest extends TestCase
 
     public function testProcessWithString(): void
     {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\Middleware\LazyMiddleware::process() expects service with id "serviceName"'
-                .' to be Psr\Http\Server\MiddlewareInterface, string given'
-        );
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to a member function process() on string');
 
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);

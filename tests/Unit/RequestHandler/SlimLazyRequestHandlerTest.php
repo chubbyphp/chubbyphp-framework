@@ -54,10 +54,7 @@ final class SlimLazyRequestHandlerTest extends TestCase
     public function testHandleWithWrongObject(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\RequestHandler\SlimLazyRequestHandler::handle() expects service with id "serviceName"'
-                .' to be callable, stdClass given'
-        );
+        $this->expectExceptionMessage('Argument #1 ($slimCallable) must be of type callable, stdClass given');
 
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -79,10 +76,7 @@ final class SlimLazyRequestHandlerTest extends TestCase
     public function testHandleWithString(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\RequestHandler\SlimLazyRequestHandler::handle() expects service with id "serviceName"'
-                .' to be callable, string given'
-        );
+        $this->expectExceptionMessage('Argument #1 ($slimCallable) must be of type callable, string given');
 
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);

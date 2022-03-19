@@ -48,11 +48,8 @@ final class LazyRequestHandlerTest extends TestCase
 
     public function testHandleWithWrongObject(): void
     {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\RequestHandler\LazyRequestHandler::handle() expects service with id "serviceName"'
-                .' to be Psr\Http\Server\RequestHandlerInterface, stdClass given'
-        );
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to undefined method stdClass::handle()');
 
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
@@ -70,11 +67,8 @@ final class LazyRequestHandlerTest extends TestCase
 
     public function testHandleWithString(): void
     {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\RequestHandler\LazyRequestHandler::handle() expects service with id "serviceName"'
-                .' to be Psr\Http\Server\RequestHandlerInterface, string given'
-        );
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to a member function handle() on string');
 
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);

@@ -95,16 +95,8 @@ final class MiddlewareDispatcherTest extends TestCase
 
     public function testWithWrongType(): void
     {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            sprintf(
-                '%s::dispatch() expects parameter 1 at index %d to be %s[], %s[] given',
-                MiddlewareDispatcher::class,
-                0,
-                MiddlewareInterface::class,
-                \stdClass::class
-            )
-        );
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to undefined method stdClass::process()');
 
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);

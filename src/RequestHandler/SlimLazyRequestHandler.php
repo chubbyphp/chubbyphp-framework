@@ -18,18 +18,8 @@ final class SlimLazyRequestHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        /** @var callable $requestHandler */
         $requestHandler = $this->container->get($this->id);
-        if (!\is_callable($requestHandler)) {
-            throw new \TypeError(
-                sprintf(
-                    '%s() expects service with id "%s" to be %s, %s given',
-                    __METHOD__,
-                    $this->id,
-                    'callable',
-                    get_debug_type($requestHandler)
-                )
-            );
-        }
 
         return (new SlimCallbackRequestHandler($requestHandler, $this->responseFactory))->handle($request);
     }

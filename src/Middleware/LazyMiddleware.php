@@ -18,18 +18,8 @@ final class LazyMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        /** @var MiddlewareInterface $middleware */
         $middleware = $this->container->get($this->id);
-        if (!$middleware instanceof MiddlewareInterface) {
-            throw new \TypeError(
-                sprintf(
-                    '%s() expects service with id "%s" to be %s, %s given',
-                    __METHOD__,
-                    $this->id,
-                    MiddlewareInterface::class,
-                    get_debug_type($middleware)
-                )
-            );
-        }
 
         return $middleware->process($request, $handler);
     }

@@ -18,8 +18,8 @@ interface UrlGeneratorInterface
     public function generateUrl(
         ServerRequestInterface $request,
         string $name,
-        array $attributes = [],
-        array $queryParams = []
+        array $attributes,
+        array $queryParams
     ): string;
 
     /**
@@ -28,5 +28,5 @@ interface UrlGeneratorInterface
      *
      * @throws RouterException
      */
-    public function generatePath(string $name, array $attributes = [], array $queryParams = []): string;
+    public function generatePath(string $name, array $attributes, array $queryParams): string;
 }

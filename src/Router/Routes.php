@@ -16,7 +16,20 @@ final class Routes implements RoutesInterface
      */
     public function __construct(array $routes)
     {
-        $this->routes = $this->aggregateRoutesByName($routes);
+        foreach ($routes as $i => $route) {
+            if (!$route instanceof RouteInterface) {
+                throw new \TypeError(
+                    sprintf(
+                        '%s::__construct() expects parameter 1 at index %s to be %s, %s given',
+                        self::class,
+                        $i,
+                        RouteInterface::class,
+                        $route::class
+                    )
+                );
+            }
+            $this->routes[$route->getName()] = $route;
+        }
     }
 
     /**
@@ -25,32 +38,5 @@ final class Routes implements RoutesInterface
     public function getRoutesByName(): array
     {
         return $this->routes;
-    }
-
-    /**
-     * @param array<int, RouteInterface> $routes
-     *
-     * @return array<string, RouteInterface>
-     */
-    private function aggregateRoutesByName(array $routes): array
-    {
-        $routesByName = [];
-
-        foreach ($routes as $i => $route) {
-            if (!$route instanceof RouteInterface) {
-                throw new \TypeError(
-                    sprintf(
-                        '%s::__construct() expects parameter 1 at index %d to be %s[], %s[] given',
-                        self::class,
-                        $i,
-                        RouteInterface::class,
-                        $route::class
-                    )
-                );
-            }
-            $routesByName[$route->getName()] = $route;
-        }
-
-        return $routesByName;
     }
 }
