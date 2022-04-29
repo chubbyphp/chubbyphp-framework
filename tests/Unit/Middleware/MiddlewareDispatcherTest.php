@@ -92,29 +92,4 @@ final class MiddlewareDispatcherTest extends TestCase
             $middlewareDispatcher->dispatch([$middleware1, $middleware2], $handler, $request)
         );
     }
-
-    public function testWithWrongType(): void
-    {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            sprintf(
-                '%s::dispatch() expects parameter 1 at index %d to be %s[], %s[] given',
-                MiddlewareDispatcher::class,
-                0,
-                MiddlewareInterface::class,
-                \stdClass::class
-            )
-        );
-
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
-
-        /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
-
-        $middleware = new \stdClass();
-
-        $middlewareDispatcher = new MiddlewareDispatcher();
-        $middlewareDispatcher->dispatch([$middleware], $handler, $request);
-    }
 }

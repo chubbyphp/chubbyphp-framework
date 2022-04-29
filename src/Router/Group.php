@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
+use Chubbyphp\Framework\Collection;
 use Psr\Http\Server\MiddlewareInterface;
 
 final class Group implements GroupInterface
@@ -11,12 +12,12 @@ final class Group implements GroupInterface
     /**
      * @var array<MiddlewareInterface>
      */
-    private array $middlewares = [];
+    private array $middlewares;
 
     /**
      * @var array<GroupInterface|RouteInterface>
      */
-    private array $children = [];
+    private array $children;
 
     /**
      * @param array<GroupInterface|RouteInterface> $children
@@ -25,13 +26,8 @@ final class Group implements GroupInterface
      */
     private function __construct(private string $path, array $children = [], array $middlewares = [], private array $pathOptions = [])
     {
-        foreach ($children as $child) {
-            $this->addChild($child);
-        }
-
-        foreach ($middlewares as $middleware) {
-            $this->addMiddleware($middleware);
-        }
+        $this->children = (new Collection($children, [GroupInterface::class, RouteInterface::class]))->toArray();
+        $this->middlewares = (new Collection($middlewares, [MiddlewareInterface::class]))->toArray();
     }
 
     /**
@@ -65,33 +61,6 @@ final class Group implements GroupInterface
         }
 
         return $routes;
-    }
-
-    /**
-     * @param GroupInterface|mixed|RouteInterface $child
-     */
-    private function addChild($child): void
-    {
-        if ($child instanceof GroupInterface || $child instanceof RouteInterface) {
-            $this->children[] = $child;
-
-            return;
-        }
-
-        throw new \TypeError(
-            sprintf(
-                '%s::addChild() expects parameter 1 to be %s|%s, %s given',
-                self::class,
-                GroupInterface::class,
-                RouteInterface::class,
-                get_debug_type($child)
-            )
-        );
-    }
-
-    private function addMiddleware(MiddlewareInterface $middleware): void
-    {
-        $this->middlewares[] = $middleware;
     }
 
     private function createRoute(RouteInterface $route): RouteInterface

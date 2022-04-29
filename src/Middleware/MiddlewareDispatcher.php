@@ -23,8 +23,6 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
             return $handler->handle($request);
         }
 
-        $this->validateMiddlewares($middlewares);
-
         $middlewares = array_reverse($middlewares);
 
         /** @var MiddlewareInterface $firstMiddleware */
@@ -35,25 +33,5 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
         }
 
         return $firstMiddleware->process($request, $handler);
-    }
-
-    /**
-     * @param array<MiddlewareInterface> $middlewares
-     */
-    private function validateMiddlewares(array $middlewares): void
-    {
-        foreach ($middlewares as $i => $middleware) {
-            if (!$middleware instanceof MiddlewareInterface) {
-                throw new \TypeError(
-                    sprintf(
-                        '%s::dispatch() expects parameter 1 at index %d to be %s[], %s[] given',
-                        self::class,
-                        $i,
-                        MiddlewareInterface::class,
-                        $middleware::class
-                    )
-                );
-            }
-        }
     }
 }
