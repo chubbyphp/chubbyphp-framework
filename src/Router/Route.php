@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
+use Chubbyphp\Framework\Collection;
 use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -13,7 +14,7 @@ final class Route implements RouteInterface
     /**
      * @var array<MiddlewareInterface>
      */
-    private array $middlewares = [];
+    private array $middlewares;
 
     /**
      * @var array<string, string>
@@ -32,9 +33,7 @@ final class Route implements RouteInterface
         array $middlewares = [],
         private array $pathOptions = []
     ) {
-        foreach ($middlewares as $middleware) {
-            $this->addMiddleware($middleware);
-        }
+        $this->middlewares = (new Collection($middlewares, [MiddlewareInterface::class]))->toArray();
     }
 
     /**
@@ -203,10 +202,5 @@ final class Route implements RouteInterface
     public function getAttributes(): array
     {
         return $this->attributes;
-    }
-
-    private function addMiddleware(MiddlewareInterface $middleware): void
-    {
-        $this->middlewares[] = $middleware;
     }
 }

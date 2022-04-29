@@ -36,11 +36,7 @@ final class Application implements RequestHandlerInterface
         ?RequestHandlerInterface $requestHandler = null,
         ?EmitterInterface $emitter = null
     ) {
-        $this->middlewares = [];
-        foreach ($middlewares as $middleware) {
-            $this->addMiddleware($middleware);
-        }
-
+        $this->middlewares = (new Collection($middlewares, [MiddlewareInterface::class]))->toArray();
         $this->middlewareDispatcher = $middlewareDispatcher ?? new MiddlewareDispatcher();
         $this->requestHandler = $requestHandler ?? new RouteRequestHandler($this->middlewareDispatcher);
         $this->emitter = $emitter ?? new Emitter();
@@ -63,10 +59,5 @@ final class Application implements RequestHandlerInterface
     public function emit(ResponseInterface $response): void
     {
         $this->emitter->emit($response);
-    }
-
-    private function addMiddleware(MiddlewareInterface $middleware): void
-    {
-        $this->middlewares[] = $middleware;
     }
 }

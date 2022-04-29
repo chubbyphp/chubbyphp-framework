@@ -23,13 +23,8 @@ final class RoutesTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage(
-            sprintf(
-                '%s::__construct() expects parameter 1 at index %d to be %s[], %s[] given',
-                Routes::class,
-                0,
-                RouteInterface::class,
-                \stdClass::class,
-            )
+            'Chubbyphp\Framework\Router\Routes::__construct() expects parameter 1'
+                .' at index 0 to be Chubbyphp\Framework\Router\RouteInterface, stdClass given'
         );
 
         $route = new \stdClass();
