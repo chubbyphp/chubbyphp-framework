@@ -46,4 +46,11 @@ final class RoutesTest extends TestCase
 
         self::assertSame(['name1' => $route1, 'name2' => $route2], $routes->getRoutesByName());
     }
+
+    public function testWithoutRoutes(): void
+    {
+        $routes = new Routes([]);
+
+        self::assertSame([], $routes->getRoutesByName());
+    }
 }

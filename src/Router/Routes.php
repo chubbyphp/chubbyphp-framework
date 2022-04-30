@@ -9,7 +9,7 @@ final class Routes implements RoutesInterface
     /**
      * @var array<string, RouteInterface>
      */
-    private array $routes;
+    private array $routes = [];
 
     /**
      * @param array<RouteInterface> $routes
