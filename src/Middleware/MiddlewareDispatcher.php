@@ -19,19 +19,10 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
         RequestHandlerInterface $handler,
         ServerRequestInterface $request
     ): ResponseInterface {
-        if ([] === $middlewares) {
-            return $handler->handle($request);
-        }
-
-        $middlewares = array_reverse($middlewares);
-
-        /** @var MiddlewareInterface $firstMiddleware */
-        $firstMiddleware = array_pop($middlewares);
-
-        foreach ($middlewares as $middleware) {
-            $handler = new MiddlewareRequestHandler($middleware, $handler);
-        }
-
-        return $firstMiddleware->process($request, $handler);
+        return array_reduce(
+            array_reverse($middlewares),
+            static fn ($middlewareHandler, $middleware) => new MiddlewareRequestHandler($middleware, $middlewareHandler),
+            $handler
+        )->handle($request);
     }
 }
