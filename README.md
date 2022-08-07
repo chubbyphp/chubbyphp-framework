@@ -32,7 +32,7 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
  * [HTTP Handlers (15)][8]
  * [HTTP Factories (17)][9]
 
-![Application workflow](doc/Resources/workflow.png?raw=true "Application workflow")
+![Workflow](resources/workflow.svg "Workflow")
 
 ## Requirements
 
