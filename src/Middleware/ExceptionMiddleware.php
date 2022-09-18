@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Middleware;
 
+use Chubbyphp\HttpException\HttpException;
+use Chubbyphp\HttpException\HttpExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,40 +17,148 @@ use Psr\Log\NullLogger;
 final class ExceptionMiddleware implements MiddlewareInterface
 {
     private const HTML = <<<'EOT'
+        <!DOCTYPE html>
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-                <title>%s</title>
+                <title>__TITLE__</title>
                 <style>
+                    html {
+                        font-family: Helvetica, Arial, Verdana, sans-serif;
+                        line-height: 1.5;
+                        tab-size: 4;
+                    }
+
                     body {
                         margin: 0;
-                        padding: 30px;
-                        font: 12px/1.5 Helvetica, Arial, Verdana, sans-serif;
                     }
 
-                    h1 {
-                        margin: 0;
-                        font-size: 48px;
-                        font-weight: normal;
-                        line-height: 48px;
+                    * {
+                        border-width: 0;
+                        border-style: solid;
                     }
 
-                    .block {
-                        margin-bottom: 20px;
+                    .container {
+                        width: 100%
                     }
 
-                    .key {
-                        width: 100px;
-                        display: inline-flex;
+                    .mx-auto {
+                        margin-left: auto;
+                        margin-right: auto;
                     }
 
-                    .value {
-                        display: inline-flex;
+                    .mt-12 {
+                        margin-top: 3rem;
+                    }
+
+                    .mb-12 {
+                        margin-bottom: 3rem;
+                    }
+
+                    .text-gray-400 {
+                        --tw-text-opacity: 1;
+                        color: rgba(156, 163, 175, var(--tw-text-opacity));
+                    }
+
+                    .text-5xl {
+                        font-size: 3rem;
+                        line-height: 1;
+                    }
+
+                    .text-right {
+                        text-align: right;
+                    }
+
+                    .tracking-tighter {
+                        letter-spacing: -.05em;
+                    }
+
+                    .flex {
+                        display: flex;
+                    }
+
+                    .flex-row {
+                        flex-direction: row;
+                    }
+
+                    .basis-2\/12 {
+                        flex-basis: 16.666667%;
+                    }
+
+                    .basis-10\/12 {
+                        flex-basis: 83.333333%;
+                    }
+
+                    .space-x-8>:not([hidden])~:not([hidden]) {
+                        --tw-space-x-reverse: 0;
+                        margin-right: calc(2rem * var(--tw-space-x-reverse));
+                        margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)))
+                    }
+
+                    .gap-x-4 {
+                        column-gap: 1rem;
+                    }
+
+                    .gap-y-1\.5 {
+                        row-gap: 0.375rem;
+                    }
+
+                    .grid-cols-1 {
+                        grid-template-columns: repeat(1, minmax(0, 1fr));
+                    }
+
+                    .grid {
+                        display: grid;
+                    }
+
+                    @media (min-width:640px) {
+                        .container {
+                            max-width: 640px
+                        }
+                    }
+
+                    @media (min-width:768px) {
+                        .container {
+                            max-width: 768px
+                        }
+
+                        .md\:grid-cols-8 {
+                            grid-template-columns: repeat(8, minmax(0, 1fr));
+                        }
+
+                        .md\:col-span-7 {
+                            grid-column: span 7/span 7
+                        }
+                    }
+
+                    @media (min-width:1024px) {
+                        .container {
+                            max-width: 1024px
+                        }
+                    }
+
+                    @media (min-width:1280px) {
+                        .container {
+                            max-width: 1280px
+                        }
+                    }
+
+                    @media (min-width:1536px) {
+                        .container {
+                            max-width: 1536px
+                        }
                     }
                 </style>
             </head>
             <body>
-                %s
+                <div class="container mx-auto tracking-tighter mt-12">
+                    <div class="flex flex-row space-x-8">
+                        <div class="basis-1/12 text-5xl text-gray-400 text-right">__STATUS__</div>
+                        <div class="basis-11/12">
+                            <span class="text-5xl">__TITLE__</span>__BODY__
+                        </div>
+                    </div>
+                </div>
             </body>
         </html>
         EOT;
@@ -74,24 +184,44 @@ final class ExceptionMiddleware implements MiddlewareInterface
 
     private function handleException(\Throwable $exception): ResponseInterface
     {
-        $exceptionsData = $this->toExceptionArray($exception);
+        $exception = $exception instanceof HttpExceptionInterface ? $exception : HttpException::createInternalServerError([
+            'detail' => 'A website error has occurred. Sorry for the temporary inconvenience.',
+        ], $exception);
 
-        $this->logger->error('Exception', ['exceptions' => $exceptionsData]);
+        $data = $exception->jsonSerialize();
 
-        $body = '<h1>Application Error</h1>'
-            .'<p>A website error has occurred. Sorry for the temporary inconvenience.</p>';
+        $logMethod = $data['status'] < 500 ? 'info' : 'error';
 
-        if ($this->debug) {
-            $body .= $this->addDebugToBody($exceptionsData);
-        }
+        $exceptions = $this->toExceptionsArray($exception);
 
-        $response = $this->responseFactory->createResponse(500);
+        $this->logger->{$logMethod}('Http Exception', [
+            'data' => $data,
+            'exceptions' => $exceptions,
+        ]);
+
+        $lines = [
+            ...(isset($data['detail']) ? ['<p>'.$data['detail'].'</p>'] : []),
+            ...(isset($data['instance']) ? ['<p>'.$data['instance'].'</p>'] : []),
+            ...($this->debug ? [$this->addDebugToBody($exceptions)] : []),
+        ];
+
+        $response = $this->responseFactory->createResponse($data['status']);
         $response = $response->withHeader('Content-Type', 'text/html');
-        $response->getBody()->write(sprintf(
-            self::HTML,
-            'Application Error',
-            $body
-        ));
+        $response->getBody()->write(
+            str_replace(
+                '__STATUS__',
+                (string) $data['status'],
+                str_replace(
+                    '__TITLE__',
+                    $data['title'],
+                    str_replace(
+                        '__BODY__',
+                        implode('', $lines),
+                        self::HTML
+                    )
+                )
+            )
+        );
 
         return $response;
     }
@@ -99,7 +229,7 @@ final class ExceptionMiddleware implements MiddlewareInterface
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function toExceptionArray(\Throwable $exception): array
+    private function toExceptionsArray(\Throwable $exception): array
     {
         $exceptions = [];
         do {
@@ -121,12 +251,12 @@ final class ExceptionMiddleware implements MiddlewareInterface
      */
     private function addDebugToBody(array $exceptionsData): string
     {
-        $body = '<h2>Details</h2>';
+        $body = '<div class="mt-12">';
         foreach ($exceptionsData as $exceptionData) {
-            $body .= '<div class="block">';
+            $body .= '<div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">';
             foreach ($exceptionData as $key => $value) {
                 $body .= sprintf(
-                    '<div><div class="key"><strong>%s</strong></div><div class="value">%s</div></div>',
+                    '<div><strong>%s</strong></div><div class="md:col-span-7">%s</div>',
                     ucfirst($key),
                     nl2br((string) $value)
                 );

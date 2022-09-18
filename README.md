@@ -37,13 +37,15 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 ## Requirements
 
  * php: ^8.0
- * [psr/container][20]: ^1.0|^2.0
- * [psr/http-factory][21]: ^1.0.1
- * [psr/http-message-implementation][22]: ^1.0
- * [psr/http-message][23]: ^1.0.1
- * [psr/http-server-handler][24]: ^1.0.1
- * [psr/http-server-middleware][25]: ^1.0.1
- * [psr/log][25]: ^1.1
+ * [chubbyphp/chubbyphp-http-exception][20]: ^1.0
+ * [fig/http-message-util][21]: ^1.1.5
+ * [psr/container][22]: ^1.0|^2.0
+ * [psr/http-factory][23]: ^1.0.1
+ * [psr/http-message][24]: ^1.0.1
+ * [psr/http-message-implementation][25]: ^1.0
+ * [psr/http-server-handler][26]: ^1.0.1
+ * [psr/http-server-middleware][27]: ^1.0.1
+ * [psr/log][28]: ^1.1
 
 ## Suggest
 
@@ -51,7 +53,7 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 
 Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` can be used.
 
- * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^1.3.1
+ * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^2.0
 
 ### PSR 7 / PSR 17
 
@@ -67,8 +69,8 @@ Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` c
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^4.2" \
-    chubbyphp/chubbyphp-framework-router-fastroute "^1.3.1" \
+composer require chubbyphp/chubbyphp-framework "^5.0" \
+    chubbyphp/chubbyphp-framework-router-fastroute "^2.0" \
     slim/psr7 "^1.5"
 ```
 
@@ -87,7 +89,7 @@ use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\FastRoute\RouteMatcher;
 use Chubbyphp\Framework\Router\Route;
-use Chubbyphp\Framework\Router\Routes;
+use Chubbyphp\Framework\Router\RoutesByName;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
@@ -98,7 +100,7 @@ $responseFactory = new ResponseFactory();
 
 $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
-    new RouteMatcherMiddleware(new RouteMatcher(new Routes([
+    new RouteMatcherMiddleware(new RouteMatcher(new RoutesByName([
         Route::get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
             static function (ServerRequestInterface $request) use ($responseFactory) {
                 $response = $responseFactory->createResponse();
@@ -156,6 +158,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 ## Migration
 
+ * [4.x to 5.x][213]
  * [3.x to 4.x][212]
  * [2.x to 3.x][211]
  * [1.x to 2.x][210]
@@ -178,13 +181,15 @@ Dominik Zogg 2022
 
 [15]: https://travis-ci.org/chubbyphp/chubbyphp-framework
 
-[20]: https://packagist.org/packages/psr/container
-[21]: https://packagist.org/packages/psr/http-factory
-[22]: https://packagist.org/packages/psr/http-message-implementation
-[23]: https://packagist.org/packages/psr/http-message
-[24]: https://packagist.org/packages/psr/http-server-handler
-[25]: https://packagist.org/packages/psr/http-server-middleware
-[26]: https://packagist.org/packages/psr/log
+[20]: https://packagist.org/packages/chubbyphp/chubbyphp-http-exception
+[21]: https://packagist.org/packages/fig/http-message-util
+[22]: https://packagist.org/packages/psr/container
+[23]: https://packagist.org/packages/psr/http-factory
+[24]: https://packagist.org/packages/psr/http-message
+[25]: https://packagist.org/packages/psr/http-message-implementation
+[26]: https://packagist.org/packages/psr/http-server-handler
+[27]: https://packagist.org/packages/psr/http-server-middleware
+[28]: https://packagist.org/packages/psr/log
 
 [30]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
 
@@ -231,4 +236,6 @@ Dominik Zogg 2022
 [210]: doc/Migration/1.x-2.x.md
 [211]: doc/Migration/2.x-3.x.md
 [212]: doc/Migration/3.x-4.x.md
+[213]: doc/Migration/4.x-5.x.md
+
 [219]: doc/Migration/Slim-Chubbyphp.md
