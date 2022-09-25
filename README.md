@@ -109,7 +109,7 @@ $app = new Application([
                 return $response;
             }
         ))
-    ])), $responseFactory),
+    ]))),
 ]);
 
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
