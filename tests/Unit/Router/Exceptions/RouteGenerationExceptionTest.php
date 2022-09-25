@@ -32,9 +32,6 @@ final class RouteGenerationExceptionTest extends TestCase
             $exception->getMessage()
         );
         self::assertSame(3, $exception->getCode());
-        self::assertSame('name', $exception->getName());
-        self::assertSame('/name/{name}', $exception->getPath());
-        self::assertSame(['name' => 'name'], $exception->getAttributes());
         self::assertSame($previous, $exception->getPrevious());
     }
 

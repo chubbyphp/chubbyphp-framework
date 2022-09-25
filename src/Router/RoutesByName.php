@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-final class Routes implements RoutesInterface
+final class RoutesByName implements RoutesByNameInterface
 {
     /**
      * @var array<string, RouteInterface>
