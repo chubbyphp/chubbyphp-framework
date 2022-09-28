@@ -639,6 +639,8 @@ final class ExceptionMiddlewareTest extends TestCase
                         'type' => 'https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1',
                         'status' => 500,
                         'title' => 'Internal Server Error',
+                        'detail' => null,
+                        'instance' => null,
                     ], $data);
                     self::assertArrayHasKey('exceptions', $context);
                     $exceptions = $context['exceptions'];
@@ -729,6 +731,7 @@ final class ExceptionMiddlewareTest extends TestCase
                         'status' => 500,
                         'title' => 'Internal Server Error',
                         'detail' => 'A website error has occurred. Sorry for the temporary inconvenience.',
+                        'instance' => null,
                     ], $data);
                     self::assertArrayHasKey('exceptions', $context);
                     $exceptions = $context['exceptions'];
