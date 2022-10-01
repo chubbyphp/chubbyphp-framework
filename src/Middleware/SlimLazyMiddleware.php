@@ -13,8 +13,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class SlimLazyMiddleware implements MiddlewareInterface
 {
-    public function __construct(private ContainerInterface $container, private string $id, private ResponseFactoryInterface $responseFactory)
-    {
+    public function __construct(
+        private ContainerInterface $container,
+        private string $id,
+        private ResponseFactoryInterface $responseFactory
+    ) {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

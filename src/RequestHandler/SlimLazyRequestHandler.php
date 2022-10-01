@@ -12,8 +12,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class SlimLazyRequestHandler implements RequestHandlerInterface
 {
-    public function __construct(private ContainerInterface $container, private string $id, private ResponseFactoryInterface $responseFactory)
-    {
+    public function __construct(
+        private ContainerInterface $container,
+        private string $id,
+        private ResponseFactoryInterface $responseFactory
+    ) {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

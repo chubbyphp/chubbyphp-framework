@@ -16,12 +16,16 @@ final class RouteGenerationException extends RouterException
      */
     public static function create(string $name, string $path, array $attributes, ?\Throwable $previous = null): self
     {
-        return new self(sprintf(
-            'Route generation for route "%s" with path "%s" with attributes "%s" failed.%s',
-            $name,
-            $path,
-            json_encode([] !== $attributes ? $attributes : new \stdClass(), JSON_THROW_ON_ERROR),
-            null !== $previous ? ' '.$previous->getMessage() : '',
-        ), 3, $previous);
+        return new self(
+            sprintf(
+                'Route generation for route "%s" with path "%s" with attributes "%s" failed.%s',
+                $name,
+                $path,
+                json_encode([] !== $attributes ? $attributes : new \stdClass(), JSON_THROW_ON_ERROR),
+                null !== $previous ? ' '.$previous->getMessage() : '',
+            ),
+            3,
+            $previous
+        );
     }
 }

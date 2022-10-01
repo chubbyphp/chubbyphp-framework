@@ -24,8 +24,12 @@ final class Group implements GroupInterface
      * @param array<MiddlewareInterface>           $middlewares
      * @param array<string, mixed>                 $pathOptions
      */
-    private function __construct(private string $path, array $children = [], array $middlewares = [], private array $pathOptions = [])
-    {
+    private function __construct(
+        private string $path,
+        array $children = [],
+        array $middlewares = [],
+        private array $pathOptions = []
+    ) {
         $this->children = (new Collection($children, [GroupInterface::class, RouteInterface::class]))->toArray();
         $this->middlewares = (new Collection($middlewares, [MiddlewareInterface::class]))->toArray();
     }

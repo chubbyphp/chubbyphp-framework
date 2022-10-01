@@ -18,10 +18,13 @@ final class MissingRouteAttributeOnRequestException extends RouterException
      */
     public static function create($route): self
     {
-        return new self(sprintf(
-            'Request attribute "route" missing or wrong type "%s", please add the "%s" middleware',
-            get_debug_type($route),
-            RouteMatcherMiddleware::class
-        ), 1);
+        return new self(
+            sprintf(
+                'Request attribute "route" missing or wrong type "%s", please add the "%s" middleware',
+                get_debug_type($route),
+                RouteMatcherMiddleware::class
+            ),
+            1
+        );
     }
 }

@@ -184,15 +184,13 @@ final class ExceptionMiddleware implements MiddlewareInterface
 
     private function handleException(\Throwable $exception): ResponseInterface
     {
-        $exception = $exception instanceof HttpExceptionInterface ? $exception : HttpException::createInternalServerError([
-            'detail' => 'A website error has occurred. Sorry for the temporary inconvenience.',
-        ], $exception);
+        $httpException = $this->exceptionToHttpException($exception);
 
-        $data = $exception->jsonSerialize();
+        $data = $httpException->jsonSerialize();
 
         $logMethod = $data['status'] < 500 ? 'info' : 'error';
 
-        $exceptions = $this->toExceptionsArray($exception);
+        $exceptions = $this->toExceptionsArray($httpException);
 
         $this->logger->{$logMethod}('Http Exception', [
             'data' => $data,
@@ -224,6 +222,17 @@ final class ExceptionMiddleware implements MiddlewareInterface
         );
 
         return $response;
+    }
+
+    private function exceptionToHttpException(\Throwable $exception): HttpExceptionInterface
+    {
+        if ($exception instanceof HttpExceptionInterface) {
+            return $exception;
+        }
+
+        return HttpException::createInternalServerError([
+            'detail' => 'A website error has occurred. Sorry for the temporary inconvenience.',
+        ], $exception);
     }
 
     /**

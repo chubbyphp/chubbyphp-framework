@@ -21,7 +21,7 @@ final class MiddlewareDispatcher implements MiddlewareDispatcherInterface
     ): ResponseInterface {
         return array_reduce(
             array_reverse($middlewares),
-            static fn ($middlewareHandler, $middleware) => new MiddlewareRequestHandler($middleware, $middlewareHandler),
+            static fn ($handler, $middleware) => new MiddlewareRequestHandler($middleware, $handler),
             $handler
         )->handle($request);
     }

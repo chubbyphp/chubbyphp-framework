@@ -12,12 +12,16 @@ final class Emitter implements EmitterInterface
     {
         $statusCode = $response->getStatusCode();
 
-        header(sprintf(
-            'HTTP/%s %s %s',
-            $response->getProtocolVersion(),
-            $statusCode,
-            $response->getReasonPhrase()
-        ), true, $statusCode);
+        header(
+            sprintf(
+                'HTTP/%s %s %s',
+                $response->getProtocolVersion(),
+                $statusCode,
+                $response->getReasonPhrase()
+            ),
+            true,
+            $statusCode
+        );
 
         foreach ($response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
