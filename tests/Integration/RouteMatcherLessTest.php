@@ -22,7 +22,7 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Slim\Psr7\Factory\ResponseFactory as SlimResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory as SlimServerRequestFactory;
 use Sunrise\Http\Message\ResponseFactory as SunriseResponseFactory;
-use Sunrise\Http\ServerRequest\ServerRequestFactory as SunriseServerRequestFactory;
+use Sunrise\Http\Message\ServerRequestFactory as SunriseServerRequestFactory;
 
 /**
  * @coversNothing

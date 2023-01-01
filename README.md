@@ -61,8 +61,8 @@ Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` c
  * [guzzlehttp/psr7][41]: ^1.4.2 (with [http-interop/http-factory-guzzle][42]: ^1.0)
  * [nyholm/psr7][43]: ^1.0
  * [slim/psr7][44]: ^0.5|^1.0
- * [sunrise/http-message][45]: ^1.0 (with [sunrise/http-factory][46]: ^1.0)
- * [laminas/laminas-diactoros][47]: ^2.0
+ * [sunrise/http-message][45]: ^3.0
+ * [laminas/laminas-diactoros][46]: ^2.0
 
 ## Installation
 
@@ -199,8 +199,7 @@ Dominik Zogg 2022
 [43]: https://packagist.org/packages/nyholm/psr7
 [44]: https://packagist.org/packages/slim/psr7
 [45]: https://packagist.org/packages/sunrise/http-message
-[46]: https://packagist.org/packages/sunrise/http-factory
-[47]: https://packagist.org/packages/laminas/laminas-diactoros
+[46]: https://packagist.org/packages/laminas/laminas-diactoros
 
 [60]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 

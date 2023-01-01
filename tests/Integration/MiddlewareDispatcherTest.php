@@ -16,7 +16,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Psr7\Factory\ResponseFactory as SlimResponseFactory;
-use Sunrise\Http\ServerRequest\ServerRequestFactory as SunriseServerRequestFactory;
+use Sunrise\Http\Message\ServerRequestFactory as SunriseServerRequestFactory;
 
 /**
  * @coversNothing
