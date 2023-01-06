@@ -166,7 +166,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 ## Copyright
 
-Dominik Zogg 2022
+2023 Dominik Zogg
 
 [1]: https://web-frameworks-benchmark.netlify.app/result
 
