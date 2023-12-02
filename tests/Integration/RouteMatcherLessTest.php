@@ -28,7 +28,7 @@ use Sunrise\Http\Message\ServerRequestFactory as SunriseServerRequestFactory;
  */
 final class RouteMatcherLessTest extends TestCase
 {
-    public function providePsr7Implementations(): iterable
+    public static function providePsr7Implementations(): iterable
     {
         return [
             'guzzle' => [
