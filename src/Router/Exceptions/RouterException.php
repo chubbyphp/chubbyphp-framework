@@ -4,6 +4,4 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router\Exceptions;
 
-abstract class RouterException extends \LogicException
-{
-}
+abstract class RouterException extends \LogicException {}

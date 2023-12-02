@@ -12,9 +12,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class LazyMiddleware implements MiddlewareInterface
 {
-    public function __construct(private ContainerInterface $container, private string $id)
-    {
-    }
+    public function __construct(private ContainerInterface $container, private string $id) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

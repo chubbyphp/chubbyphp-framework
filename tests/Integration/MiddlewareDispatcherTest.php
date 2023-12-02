@@ -10,7 +10,6 @@ use Chubbyphp\Framework\Middleware\SlimCallbackMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\RequestHandler\SlimCallbackRequestHandler;
 use Chubbyphp\Mock\MockByCallsTrait;
-use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -59,7 +58,7 @@ final class MiddlewareDispatcherTest extends TestCase
                     return $responseFactory->createResponse();
                 }
             ),
-            $serverRequestFactory->createServerRequest(RequestMethod::METHOD_GET, '/hello/test')
+            $serverRequestFactory->createServerRequest('GET', '/hello/test')
         );
     }
 
@@ -109,7 +108,7 @@ final class MiddlewareDispatcherTest extends TestCase
                 },
                 $responseFactory
             ),
-            $serverRequestFactory->createServerRequest(RequestMethod::METHOD_GET, '/hello/test')
+            $serverRequestFactory->createServerRequest('GET', '/hello/test')
         );
     }
 
@@ -155,7 +154,7 @@ final class MiddlewareDispatcherTest extends TestCase
                 },
                 $responseFactory
             ),
-            $serverRequestFactory->createServerRequest(RequestMethod::METHOD_GET, '/hello/test')
+            $serverRequestFactory->createServerRequest('GET', '/hello/test')
         );
     }
 }

@@ -13,9 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class RouteRequestHandler implements RequestHandlerInterface
 {
-    public function __construct(private MiddlewareDispatcherInterface $middlewareDispatcher)
-    {
-    }
+    public function __construct(private MiddlewareDispatcherInterface $middlewareDispatcher) {}
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {

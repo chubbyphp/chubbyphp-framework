@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/chubbyphp/chubbyphp-framework/workflows/CI/badge.svg?branch=master)](https://github.com/chubbyphp/chubbyphp-framework/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/chubbyphp/chubbyphp-framework/badge.svg?branch=master)](https://coveralls.io/github/chubbyphp/chubbyphp-framework?branch=master)
-[![Infection MSI](https://badge.stryker-mutator.io/github.com/chubbyphp/chubbyphp-framework/master)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-framework/master)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchubbyphp%2Fchubbyphp-framework%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-framework/master)[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-framework/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
 [![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-framework/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
 [![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-framework/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
 [![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-framework/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-framework)
@@ -36,16 +36,15 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 
 ## Requirements
 
- * php: ^8.0
- * [chubbyphp/chubbyphp-http-exception][20]: ^1.0.1
- * [fig/http-message-util][21]: ^1.1.5
- * [psr/container][22]: ^1.0|^2.0
- * [psr/http-factory][23]: ^1.0.1
- * [psr/http-message][24]: ^1.0.1
- * [psr/http-message-implementation][25]: ^1.0
- * [psr/http-server-handler][26]: ^1.0.1
- * [psr/http-server-middleware][27]: ^1.0.1
- * [psr/log][28]: ^1.1
+ * php: ^8.1
+ * [chubbyphp/chubbyphp-http-exception][20]: ^1.1
+ * [psr/container][21]: ^1.1.2|^2.0.2
+ * [psr/http-factory][22]: ^1.0.2
+ * [psr/http-message][23]: ^1.1|^2.0
+ * [psr/http-message-implementation][24]: ^1.1|^2.0
+ * [psr/http-server-handler][25]: ^1.0.2
+ * [psr/http-server-middleware][26]: ^1.0.2
+ * [psr/log][27]: ^2.0|^3.0
 
 ## Suggest
 
@@ -53,24 +52,23 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 
 Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` can be used.
 
- * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^2.0
+ * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^2.1
 
 ### PSR 7 / PSR 17
 
- * [bittyphp/http][40]: ^2.0
- * [guzzlehttp/psr7][41]: ^1.4.2 (with [http-interop/http-factory-guzzle][42]: ^1.0)
- * [nyholm/psr7][43]: ^1.0
- * [slim/psr7][44]: ^0.5|^1.0
+ * [guzzlehttp/psr7][40]: ^2.6.1 (with [http-interop/http-factory-guzzle][41]: ^1.2)
+ * [laminas/laminas-diactoros][42]: ^3.3
+ * [nyholm/psr7][43]: ^1.8.1
+ * [slim/psr7][44]: ^1.6.1
  * [sunrise/http-message][45]: ^3.0
- * [laminas/laminas-diactoros][46]: ^2.0
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^5.0" \
-    chubbyphp/chubbyphp-framework-router-fastroute "^2.0" \
+composer require chubbyphp/chubbyphp-framework "^5.1" \
+    chubbyphp/chubbyphp-framework-router-fastroute "^2.1" \
     slim/psr7 "^1.5"
 ```
 
@@ -182,24 +180,22 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 [15]: https://travis-ci.org/chubbyphp/chubbyphp-framework
 
 [20]: https://packagist.org/packages/chubbyphp/chubbyphp-http-exception
-[21]: https://packagist.org/packages/fig/http-message-util
-[22]: https://packagist.org/packages/psr/container
-[23]: https://packagist.org/packages/psr/http-factory
-[24]: https://packagist.org/packages/psr/http-message
-[25]: https://packagist.org/packages/psr/http-message-implementation
-[26]: https://packagist.org/packages/psr/http-server-handler
-[27]: https://packagist.org/packages/psr/http-server-middleware
-[28]: https://packagist.org/packages/psr/log
+[21]: https://packagist.org/packages/psr/container
+[22]: https://packagist.org/packages/psr/http-factory
+[23]: https://packagist.org/packages/psr/http-message
+[24]: https://packagist.org/packages/psr/http-message-implementation
+[25]: https://packagist.org/packages/psr/http-server-handler
+[26]: https://packagist.org/packages/psr/http-server-middleware
+[27]: https://packagist.org/packages/psr/log
 
 [30]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
 
-[40]: https://packagist.org/packages/bittyphp/http
-[41]: https://packagist.org/packages/guzzlehttp/psr7
-[42]: https://packagist.org/packages/http-interop/http-factory-guzzle
+[40]: https://packagist.org/packages/guzzlehttp/psr7
+[41]: https://packagist.org/packages/http-interop/http-factory-guzzle
+[42]: https://packagist.org/packages/laminas/laminas-diactoros
 [43]: https://packagist.org/packages/nyholm/psr7
 [44]: https://packagist.org/packages/slim/psr7
 [45]: https://packagist.org/packages/sunrise/http-message
-[46]: https://packagist.org/packages/laminas/laminas-diactoros
 
 [60]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 

@@ -12,9 +12,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class RouteMatcherMiddleware implements MiddlewareInterface
 {
-    public function __construct(private RouteMatcherInterface $routeMatcher)
-    {
-    }
+    public function __construct(private RouteMatcherInterface $routeMatcher) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

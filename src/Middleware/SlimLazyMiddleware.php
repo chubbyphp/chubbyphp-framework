@@ -17,8 +17,7 @@ final class SlimLazyMiddleware implements MiddlewareInterface
         private ContainerInterface $container,
         private string $id,
         private ResponseFactoryInterface $responseFactory
-    ) {
-    }
+    ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

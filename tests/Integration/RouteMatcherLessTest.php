@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Integration;
 
-use Bitty\Http\ResponseFactory as BittyResponseFactory;
-use Bitty\Http\ServerRequestFactory as BittyServerRequestFactory;
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
 use Chubbyphp\Framework\Router\Exceptions\RouterException;
-use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use Http\Factory\Guzzle\ResponseFactory as GuzzleResponseFactory;
 use Http\Factory\Guzzle\ServerRequestFactory as GuzzleServerRequestFactory;
 use Laminas\Diactoros\ResponseFactory as LaminasResponseFactory;
@@ -31,13 +28,9 @@ use Sunrise\Http\Message\ServerRequestFactory as SunriseServerRequestFactory;
  */
 final class RouteMatcherLessTest extends TestCase
 {
-    public function providePsr7Implementations(): array
+    public function providePsr7Implementations(): iterable
     {
         return [
-            'bitty' => [
-                'responseFactory' => new BittyResponseFactory(),
-                'serverRequestFactory' => new BittyServerRequestFactory(),
-            ],
             'guzzle' => [
                 'responseFactory' => new GuzzleResponseFactory(),
                 'serverRequestFactory' => new GuzzleServerRequestFactory(),
@@ -72,7 +65,7 @@ final class RouteMatcherLessTest extends TestCase
             new ExceptionMiddleware($responseFactory, true),
         ]);
 
-        $request = $serverRequestFactory->createServerRequest(RequestMethod::METHOD_GET, '/hello/test');
+        $request = $serverRequestFactory->createServerRequest('GET', '/hello/test');
 
         $response = $app->handle($request);
 
@@ -102,7 +95,7 @@ final class RouteMatcherLessTest extends TestCase
 
         $app = new Application([]);
 
-        $request = $serverRequestFactory->createServerRequest(RequestMethod::METHOD_GET, '/hello/test');
+        $request = $serverRequestFactory->createServerRequest('GET', '/hello/test');
 
         $app->handle($request);
     }

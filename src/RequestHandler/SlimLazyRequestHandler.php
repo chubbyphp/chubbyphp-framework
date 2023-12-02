@@ -16,8 +16,7 @@ final class SlimLazyRequestHandler implements RequestHandlerInterface
         private ContainerInterface $container,
         private string $id,
         private ResponseFactoryInterface $responseFactory
-    ) {
-    }
+    ) {}
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {

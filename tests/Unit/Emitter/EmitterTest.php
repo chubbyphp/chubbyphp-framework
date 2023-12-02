@@ -8,9 +8,6 @@ namespace Chubbyphp\Framework\Emitter
     {
         private static array $headers = [];
 
-        /**
-         * @param int $http_response_code
-         */
         public static function add(string $header, bool $replace = true, ?int $http_response_code = null): void
         {
             self::$headers[] = [
@@ -31,9 +28,6 @@ namespace Chubbyphp\Framework\Emitter
         }
     }
 
-    /**
-     * @param int $http_response_code
-     */
     function header(string $header, bool $replace = true, ?int $http_response_code = null): void
     {
         TestHeader::add($header, $replace, $http_response_code);

@@ -22,32 +22,29 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "chubbyphp/chubbyphp-http-exception": "^1.0.1",
-        "fig/http-message-util": "^1.1.5",
-        "psr/container": "^1.0|^2.0",
-        "psr/http-factory": "^1.0.1",
-        "psr/http-message": "^1.0.1",
-        "psr/http-message-implementation": "^1.0",
-        "psr/http-server-handler": "^1.0.1",
-        "psr/http-server-middleware": "^1.0.1",
-        "psr/log": "^1.1.4|^2.0|^3.0"
+        "php": "^8.1",
+        "chubbyphp/chubbyphp-http-exception": "^1.1",
+        "psr/container": "^1.1.2|^2.0.2",
+        "psr/http-factory": "^1.0.2",
+        "psr/http-message": "^1.1|^2.0",
+        "psr/http-message-implementation": "^1.1|^2.0",
+        "psr/http-server-handler": "^1.0.2",
+        "psr/http-server-middleware": "^1.0.2",
+        "psr/log": "^2.0|^3.0"
     },
     "require-dev": {
-        "bittyphp/http": "^2.0",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^1.6.1",
-        "guzzlehttp/psr7": "^1.4.2",
-        "http-interop/http-factory-guzzle": "^1.0",
-        "infection/infection": "^0.26.5",
-        "laminas/laminas-diactoros": "^2.0",
-        "nyholm/psr7": "^1.0",
-        "php-coveralls/php-coveralls": "^2.5.2",
-        "phploc/phploc": "^7.0.2",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.4.6",
-        "phpunit/phpunit": "^9.5.16",
-        "slim/psr7": "^0.5|^1.0",
+        "chubbyphp/chubbyphp-mock": "^1.7",
+        "guzzlehttp/psr7": "^2.6.1",
+        "http-interop/http-factory-guzzle": "^1.2",
+        "infection/infection": "^0.27.8",
+        "laminas/laminas-diactoros": "^3.3",
+        "nyholm/psr7": "^1.8.1",
+        "php-coveralls/php-coveralls": "^2.7.0",
+        "phpstan/extension-installer": "^1.3.1",
+        "phpstan/phpstan": "^1.10.45",
+        "phpunit/phpunit": "^10.4.2",
+        "slim/psr7": "^1.6.1",
         "sunrise/http-message": "^3.0"
     },
     "autoload": {
@@ -65,7 +62,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "5.0-dev"
+            "dev-master": "5.1-dev"
         }
     },
     "scripts": {
@@ -76,15 +73,13 @@
             "@test:integration",
             "@test:infection",
             "@test:static-analysis",
-            "@test:loc",
             "@test:cs"
         ],
         "test:cs": "mkdir -p build && PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
-        "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=97 --verbose --coverage=build/phpunit",
+        "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
         "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-result-file=build/phpunit/result.cache",
         "test:lint": "mkdir -p build && find src tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
         "test:static-analysis": "mkdir -p build && bash -c 'vendor/bin/phpstan analyse src --no-progress --level=8 --error-format=junit | tee build/phpstan.junit.xml; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
-        "test:loc": "mkdir -p build && vendor/bin/phploc src | tee build/phploc.log",
         "test:unit": "vendor/bin/phpunit --testsuite=Unit --coverage-text --coverage-clover=build/phpunit/clover.xml --coverage-html=build/phpunit/coverage-html --coverage-xml=build/phpunit/coverage-xml --log-junit=build/phpunit/junit.xml --cache-result-file=build/phpunit/result.cache"
     }
 }

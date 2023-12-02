@@ -13,10 +13,7 @@ final class MissingRouteAttributeOnRequestException extends RouterException
         parent::__construct($message, $code, $previous);
     }
 
-    /**
-     * @param mixed $route
-     */
-    public static function create($route): self
+    public static function create(mixed $route): self
     {
         return new self(
             sprintf(
