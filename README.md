@@ -39,12 +39,13 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
  * php: ^8.1
  * [chubbyphp/chubbyphp-http-exception][20]: ^1.1
  * [psr/container][21]: ^1.1.2|^2.0.2
- * [psr/http-factory][22]: ^1.0.2
- * [psr/http-message][23]: ^1.1|^2.0
- * [psr/http-message-implementation][24]: ^1.1|^2.0
- * [psr/http-server-handler][25]: ^1.0.2
- * [psr/http-server-middleware][26]: ^1.0.2
- * [psr/log][27]: ^2.0|^3.0
+ * [psr/http-factory-implementation][22]: ^1.0
+ * [psr/http-factory][23]: ^1.0.2
+ * [psr/http-message-implementation][24]: ^1.0|^2.0
+ * [psr/http-message][25]: ^1.1|^2.0
+ * [psr/http-server-handler][26]: ^1.0.2
+ * [psr/http-server-middleware][27]: ^1.0.2
+ * [psr/log][28]: ^2.0|^3.0
 
 ## Suggest
 
@@ -181,12 +182,13 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 [20]: https://packagist.org/packages/chubbyphp/chubbyphp-http-exception
 [21]: https://packagist.org/packages/psr/container
-[22]: https://packagist.org/packages/psr/http-factory
-[23]: https://packagist.org/packages/psr/http-message
+[22]: https://packagist.org/packages/psr/http-factory-implementation
+[23]: https://packagist.org/packages/psr/http-factory
 [24]: https://packagist.org/packages/psr/http-message-implementation
-[25]: https://packagist.org/packages/psr/http-server-handler
-[26]: https://packagist.org/packages/psr/http-server-middleware
-[27]: https://packagist.org/packages/psr/log
+[25]: https://packagist.org/packages/psr/http-message
+[26]: https://packagist.org/packages/psr/http-server-handler
+[27]: https://packagist.org/packages/psr/http-server-middleware
+[28]: https://packagist.org/packages/psr/log
 
 [30]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
 
