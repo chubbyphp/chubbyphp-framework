@@ -13,7 +13,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: composer test
-        uses: docker://chubbyphp/ci-php81:latest
+        uses: docker://ghcr.io/chubbyphp/ci-php81:latest
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
@@ -24,7 +24,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: composer test
-        uses: docker://chubbyphp/ci-php82:latest
+        uses: docker://ghcr.io/chubbyphp/ci-php82:latest
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
@@ -35,7 +35,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: composer test
-        uses: docker://chubbyphp/ci-php83:latest
+        uses: docker://ghcr.io/chubbyphp/ci-php83:latest
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
