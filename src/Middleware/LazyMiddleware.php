@@ -19,7 +19,7 @@ final class LazyMiddleware implements MiddlewareInterface
         $middleware = $this->container->get($this->id);
         if (!$middleware instanceof MiddlewareInterface) {
             throw new \TypeError(
-                sprintf(
+                \sprintf(
                     '%s() expects service with id "%s" to be %s, %s given',
                     __METHOD__,
                     $this->id,

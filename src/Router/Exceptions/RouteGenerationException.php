@@ -17,7 +17,7 @@ final class RouteGenerationException extends RouterException
     public static function create(string $name, string $path, array $attributes, ?\Throwable $previous = null): self
     {
         return new self(
-            sprintf(
+            \sprintf(
                 'Route generation for route "%s" with path "%s" with attributes "%s" failed.%s',
                 $name,
                 $path,

@@ -24,7 +24,7 @@ final class SlimLazyMiddleware implements MiddlewareInterface
         $middleware = $this->container->get($this->id);
         if (!\is_callable($middleware)) {
             throw new \TypeError(
-                sprintf(
+                \sprintf(
                     '%s() expects service with id "%s" to be %s, %s given',
                     __METHOD__,
                     $this->id,

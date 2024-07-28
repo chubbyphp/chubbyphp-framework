@@ -23,7 +23,7 @@ final class SlimLazyRequestHandler implements RequestHandlerInterface
         $requestHandler = $this->container->get($this->id);
         if (!\is_callable($requestHandler)) {
             throw new \TypeError(
-                sprintf(
+                \sprintf(
                     '%s() expects service with id "%s" to be %s, %s given',
                     __METHOD__,
                     $this->id,

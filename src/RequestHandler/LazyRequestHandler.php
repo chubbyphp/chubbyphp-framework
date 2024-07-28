@@ -18,7 +18,7 @@ final class LazyRequestHandler implements RequestHandlerInterface
         $requestHandler = $this->container->get($this->id);
         if (!$requestHandler instanceof RequestHandlerInterface) {
             throw new \TypeError(
-                sprintf(
+                \sprintf(
                     '%s() expects service with id "%s" to be %s, %s given',
                     __METHOD__,
                     $this->id,

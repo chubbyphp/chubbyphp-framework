@@ -26,7 +26,7 @@ final class DocumentationTest extends TestCase
                     \PhpToken::tokenize($phpBlock, TOKEN_PARSE);
                 } catch (\Error $e) {
                     self::fail(
-                        sprintf(
+                        \sprintf(
                             'Cannot parse the following code in file "%s", error "%s" : "%s"',
                             $documentationFile,
                             $e->getMessage(),

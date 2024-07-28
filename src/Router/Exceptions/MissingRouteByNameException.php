@@ -13,6 +13,6 @@ final class MissingRouteByNameException extends RouterException
 
     public static function create(string $name): self
     {
-        return new self(sprintf('Missing route: "%s"', $name), 2);
+        return new self(\sprintf('Missing route: "%s"', $name), 2);
     }
 }

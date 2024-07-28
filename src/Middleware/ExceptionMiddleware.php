@@ -264,7 +264,7 @@ final class ExceptionMiddleware implements MiddlewareInterface
         foreach ($exceptionsData as $exceptionData) {
             $body .= '<div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">';
             foreach ($exceptionData as $key => $value) {
-                $body .= sprintf(
+                $body .= \sprintf(
                     '<div><strong>%s</strong></div><div class="md:col-span-7">%s</div>',
                     ucfirst($key),
                     nl2br((string) $value)

@@ -13,7 +13,7 @@ final class Emitter implements EmitterInterface
         $statusCode = $response->getStatusCode();
 
         header(
-            sprintf(
+            \sprintf(
                 'HTTP/%s %s %s',
                 $response->getProtocolVersion(),
                 $statusCode,
@@ -25,7 +25,7 @@ final class Emitter implements EmitterInterface
 
         foreach ($response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
-                header(sprintf('%s: %s', $name, $value), false);
+                header(\sprintf('%s: %s', $name, $value), false);
             }
         }
 
