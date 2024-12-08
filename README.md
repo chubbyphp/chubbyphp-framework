@@ -36,16 +36,16 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 
 ## Requirements
 
- * php: ^8.1
+ * php: ^8.2
  * [chubbyphp/chubbyphp-http-exception][20]: ^1.1
  * [psr/container][21]: ^1.1.2|^2.0.2
  * [psr/http-factory-implementation][22]: ^1.0
- * [psr/http-factory][23]: ^1.0.2
+ * [psr/http-factory][23]: ^1.1
  * [psr/http-message-implementation][24]: ^1.0|^2.0
  * [psr/http-message][25]: ^1.1|^2.0
  * [psr/http-server-handler][26]: ^1.0.2
  * [psr/http-server-middleware][27]: ^1.0.2
- * [psr/log][28]: ^2.0|^3.0
+ * [psr/log][28]: ^2.0|^3.0.2
 
 ## Suggest
 
@@ -54,23 +54,22 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` can be used.
 
  * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^2.1
-
 ### PSR 7 / PSR 17
 
- * [guzzlehttp/psr7][40]: ^2.6.1 (with [http-interop/http-factory-guzzle][41]: ^1.2)
- * [laminas/laminas-diactoros][42]: ^3.3
- * [nyholm/psr7][43]: ^1.8.1
- * [slim/psr7][44]: ^1.6.1
- * [sunrise/http-message][45]: ^3.0
+ * [guzzlehttp/psr7][40]: ^2.7 (with [http-interop/http-factory-guzzle][41]: ^1.2)
+ * [laminas/laminas-diactoros][42]: ^3.5
+ * [nyholm/psr7][43]: ^1.8.2
+ * [slim/psr7][44]: ^1.7
+ * [sunrise/http-message][45]: ^3.2
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^5.1" \
+composer require chubbyphp/chubbyphp-framework "^5.2" \
     chubbyphp/chubbyphp-framework-router-fastroute "^2.1" \
-    slim/psr7 "^1.5"
+    slim/psr7 "^1.7"
 ```
 
 ## Usage

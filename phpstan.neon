@@ -1,2 +1,5 @@
 parameters:
-    ignoreErrors: []
+    ignoreErrors:
+        -
+            message: '/Instanceof between Chubbyphp\\Framework\\Router\\RouteInterface and Chubbyphp\\Framework\\Router\\RouteInterface will always evaluate to true./'
+            path: %currentWorkingDirectory%/src/Router/RoutesByName.php
