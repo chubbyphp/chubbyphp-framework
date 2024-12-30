@@ -29,11 +29,9 @@ final class SlimCallbackMiddleware implements MiddlewareInterface
         return ($this->slimCallable)(
             $request,
             $this->getResponse($request),
-            static function (ServerRequestInterface $request, ResponseInterface $response) use ($handler) {
-                return $handler->handle(
-                    $request->withAttribute(self::ATTRIBUTE_RESPONSE, $response)
-                );
-            }
+            static fn (ServerRequestInterface $request, ResponseInterface $response) => $handler->handle(
+                $request->withAttribute(self::ATTRIBUTE_RESPONSE, $response)
+            )
         );
     }
 
