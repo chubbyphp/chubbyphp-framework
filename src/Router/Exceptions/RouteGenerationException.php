@@ -22,7 +22,7 @@ final class RouteGenerationException extends RouterException
                 $name,
                 $path,
                 json_encode([] !== $attributes ? $attributes : new \stdClass(), JSON_THROW_ON_ERROR),
-                null !== $previous ? ' '.$previous->getMessage() : '',
+                $previous instanceof \Throwable ? ' '.$previous->getMessage() : '',
             ),
             3,
             $previous
