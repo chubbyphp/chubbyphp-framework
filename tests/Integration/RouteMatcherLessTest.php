@@ -28,32 +28,6 @@ use Sunrise\Http\Message\ServerRequestFactory as SunriseServerRequestFactory;
  */
 final class RouteMatcherLessTest extends TestCase
 {
-    public static function providePsr7Implementations(): iterable
-    {
-        return [
-            'guzzle' => [
-                'responseFactory' => new GuzzleResponseFactory(),
-                'serverRequestFactory' => new GuzzleServerRequestFactory(),
-            ],
-            'nyholm' => [
-                'responseFactory' => new NyholmResponseFactory(),
-                'serverRequestFactory' => new NyholmServerRequestFactory(),
-            ],
-            'slim' => [
-                'responseFactory' => new SlimResponseFactory(),
-                'serverRequestFactory' => new SlimServerRequestFactory(),
-            ],
-            'sunrise' => [
-                'responseFactory' => new SunriseResponseFactory(),
-                'serverRequestFactory' => new SunriseServerRequestFactory(),
-            ],
-            'zend' => [
-                'responseFactory' => new LaminasResponseFactory(),
-                'serverRequestFactory' => new LaminasServerRequestFactory(),
-            ],
-        ];
-    }
-
     /**
      * @dataProvider providePsr7Implementations
      */
@@ -98,5 +72,31 @@ final class RouteMatcherLessTest extends TestCase
         $request = $serverRequestFactory->createServerRequest('GET', '/hello/test');
 
         $app->handle($request);
+    }
+
+    public static function providePsr7Implementations(): iterable
+    {
+        return [
+            'guzzle' => [
+                'responseFactory' => new GuzzleResponseFactory(),
+                'serverRequestFactory' => new GuzzleServerRequestFactory(),
+            ],
+            'nyholm' => [
+                'responseFactory' => new NyholmResponseFactory(),
+                'serverRequestFactory' => new NyholmServerRequestFactory(),
+            ],
+            'slim' => [
+                'responseFactory' => new SlimResponseFactory(),
+                'serverRequestFactory' => new SlimServerRequestFactory(),
+            ],
+            'sunrise' => [
+                'responseFactory' => new SunriseResponseFactory(),
+                'serverRequestFactory' => new SunriseServerRequestFactory(),
+            ],
+            'zend' => [
+                'responseFactory' => new LaminasResponseFactory(),
+                'serverRequestFactory' => new LaminasServerRequestFactory(),
+            ],
+        ];
     }
 }
