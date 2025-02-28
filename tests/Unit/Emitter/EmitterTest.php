@@ -38,9 +38,9 @@ namespace Chubbyphp\Tests\Framework\Unit\Emitter
 {
     use Chubbyphp\Framework\Emitter\Emitter;
     use Chubbyphp\Framework\Emitter\TestHeader;
-    use Chubbyphp\Mock\Call;
-    use Chubbyphp\Mock\MockByCallsTrait;
-    use PHPUnit\Framework\MockObject\MockObject;
+    use Chubbyphp\Mock\MockMethod\WithCallback;
+    use Chubbyphp\Mock\MockMethod\WithReturn;
+    use Chubbyphp\Mock\MockObjectBuilder;
     use PHPUnit\Framework\TestCase;
     use Psr\Http\Message\ResponseInterface;
     use Psr\Http\Message\StreamInterface;
@@ -52,26 +52,26 @@ namespace Chubbyphp\Tests\Framework\Unit\Emitter
      */
     final class EmitterTest extends TestCase
     {
-        use MockByCallsTrait;
-
         public function testEmit(): void
         {
-            /** @var MockObject|StreamInterface $responseBody */
-            $responseBody = $this->getMockByCalls(StreamInterface::class, [
-                Call::create('isSeekable')->with()->willReturn(true),
-                Call::create('rewind')->with(),
-                Call::create('eof')->with()->willReturn(false),
-                Call::create('read')->with(256)->willReturn('sample body'),
-                Call::create('eof')->with()->willReturn(true),
+            $builder = new MockObjectBuilder();
+
+            /** @var StreamInterface $responseBody */
+            $responseBody = $builder->create(StreamInterface::class, [
+                new WithReturn('isSeekable', [], true),
+                new WithCallback('rewind', static fn () => null),
+                new WithReturn('eof', [], false),
+                new WithReturn('read', [256], 'sample body'),
+                new WithReturn('eof', [], true),
             ]);
 
-            /** @var MockObject|ResponseInterface $response */
-            $response = $this->getMockByCalls(ResponseInterface::class, [
-                Call::create('getStatusCode')->with()->willReturn(200),
-                Call::create('getProtocolVersion')->with()->willReturn('1.1'),
-                Call::create('getReasonPhrase')->with()->willReturn('OK'),
-                Call::create('getHeaders')->with()->willReturn(['X-Name' => ['value1', 'value2']]),
-                Call::create('getBody')->with()->willReturn($responseBody),
+            /** @var ResponseInterface $response */
+            $response = $builder->create(ResponseInterface::class, [
+                new WithReturn('getStatusCode', [], 200),
+                new WithReturn('getProtocolVersion', [], '1.1'),
+                new WithReturn('getReasonPhrase', [], 'OK'),
+                new WithReturn('getHeaders', [], ['X-Name' => ['value1', 'value2']]),
+                new WithReturn('getBody', [], $responseBody),
             ]);
 
             $emitter = new Emitter();

@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Unit\RequestHandler;
 
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -18,15 +17,15 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class CallbackRequestHandlerTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testHandle(): void
     {
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
+
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
 
         $requestHandler = new CallbackRequestHandler(static fn (ServerRequestInterface $request) => $response);
 

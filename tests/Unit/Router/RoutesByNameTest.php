@@ -6,8 +6,8 @@ namespace Chubbyphp\Tests\Framework\Unit\Router;
 
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RoutesByName;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,8 +17,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class RoutesByNameTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testWithWrongType(): void
     {
         $this->expectException(\TypeError::class);
@@ -34,12 +32,14 @@ final class RoutesByNameTest extends TestCase
 
     public function testGetRoutes(): void
     {
-        $route1 = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getName')->with()->willReturn('name1'),
+        $builder = new MockObjectBuilder();
+
+        $route1 = $builder->create(RouteInterface::class, [
+            new WithReturn('getName', [], 'name1'),
         ]);
 
-        $route2 = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getName')->with()->willReturn('name2'),
+        $route2 = $builder->create(RouteInterface::class, [
+            new WithReturn('getName', [], 'name2'),
         ]);
 
         $routes = new RoutesByName([$route1, $route2]);
