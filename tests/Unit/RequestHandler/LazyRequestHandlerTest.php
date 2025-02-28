@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Unit\RequestHandler;
 
 use Chubbyphp\Framework\RequestHandler\LazyRequestHandler;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -21,24 +20,24 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class LazyRequestHandlerTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testHandle(): void
     {
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
-        /** @var MockObject|RequestHandlerInterface $requestHander */
-        $requestHander = $this->getMockByCalls(RequestHandlerInterface::class, [
-            Call::create('handle')->with($request)->willReturn($response),
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
+
+        /** @var RequestHandlerInterface $originalRequestHandler */
+        $originalRequestHandler = $builder->create(RequestHandlerInterface::class, [
+            new WithReturn('handle', [$request], $response),
         ]);
 
-        /** @var ContainerInterface|MockObject $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with('serviceName')->willReturn($requestHander),
+        /** @var ContainerInterface $container */
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('get', ['serviceName'], $originalRequestHandler),
         ]);
 
         $requestHandler = new LazyRequestHandler($container, 'serviceName');
@@ -54,14 +53,16 @@ final class LazyRequestHandlerTest extends TestCase
                 .' to be Psr\Http\Server\RequestHandlerInterface, stdClass given'
         );
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
 
-        $requestHander = new \stdClass();
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
-        /** @var ContainerInterface|MockObject $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with('serviceName')->willReturn($requestHander),
+        $originalRequestHandler = new \stdClass();
+
+        /** @var ContainerInterface $container */
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('get', ['serviceName'], $originalRequestHandler),
         ]);
 
         $requestHandler = new LazyRequestHandler($container, 'serviceName');
@@ -76,14 +77,16 @@ final class LazyRequestHandlerTest extends TestCase
                 .' to be Psr\Http\Server\RequestHandlerInterface, string given'
         );
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
 
-        $requestHander = '';
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
-        /** @var ContainerInterface|MockObject $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with('serviceName')->willReturn($requestHander),
+        $originalRequestHandler = '';
+
+        /** @var ContainerInterface $container */
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('get', ['serviceName'], $originalRequestHandler),
         ]);
 
         $requestHandler = new LazyRequestHandler($container, 'serviceName');

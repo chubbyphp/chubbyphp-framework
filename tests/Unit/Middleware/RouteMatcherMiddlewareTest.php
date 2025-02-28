@@ -8,9 +8,10 @@ use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Framework\Router\RouteMatcherInterface;
 use Chubbyphp\HttpException\HttpException;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithException;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockMethod\WithReturnSelf;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,32 +24,32 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class RouteMatcherMiddlewareTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testProcess(): void
     {
-        /** @var MockObject|RouteInterface $route */
-        $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getAttributes')->with()->willReturn(['key' => 'value']),
+        $builder = new MockObjectBuilder();
+
+        /** @var RouteInterface $route */
+        $route = $builder->create(RouteInterface::class, [
+            new WithReturn('getAttributes', [], ['key' => 'value']),
         ]);
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('withAttribute')->with('route', $route)->willReturnSelf(),
-            Call::create('withAttribute')->with('key', 'value')->willReturnSelf(),
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, [
+            new WithReturnSelf('withAttribute', ['route', $route]),
+            new WithReturnSelf('withAttribute', ['key', 'value']),
         ]);
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
 
-        /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
-            Call::create('handle')->with($request)->willReturn($response),
+        /** @var RequestHandlerInterface $handler */
+        $handler = $builder->create(RequestHandlerInterface::class, [
+            new WithReturn('handle', [$request], $response),
         ]);
 
-        /** @var MockObject|RouteMatcherInterface $router */
-        $router = $this->getMockByCalls(RouteMatcherInterface::class, [
-            Call::create('match')->with($request)->willReturn($route),
+        /** @var RouteMatcherInterface $router */
+        $router = $builder->create(RouteMatcherInterface::class, [
+            new WithReturn('match', [$request], $route),
         ]);
 
         $middleware = new RouteMatcherMiddleware($router);
@@ -64,15 +65,17 @@ final class RouteMatcherMiddlewareTest extends TestCase
 
         $this->expectExceptionObject($httpException);
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
-        /** @var MockObject|RouteMatcherInterface $router */
-        $router = $this->getMockByCalls(RouteMatcherInterface::class, [
-            Call::create('match')->with($request)->willThrowException($httpException),
+        /** @var RequestHandlerInterface $handler */
+        $handler = $builder->create(RequestHandlerInterface::class, []);
+
+        /** @var RouteMatcherInterface $router */
+        $router = $builder->create(RouteMatcherInterface::class, [
+            new WithException('match', [$request], $httpException),
         ]);
 
         $middleware = new RouteMatcherMiddleware($router);

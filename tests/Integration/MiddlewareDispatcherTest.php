@@ -9,7 +9,6 @@ use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\Middleware\SlimCallbackMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\RequestHandler\SlimCallbackRequestHandler;
-use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,8 +23,6 @@ use Sunrise\Http\Message\ServerRequestFactory as SunriseServerRequestFactory;
  */
 final class MiddlewareDispatcherTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testCallback(): void
     {
         $responseFactory = new SlimResponseFactory();

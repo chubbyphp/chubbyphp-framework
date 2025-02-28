@@ -8,9 +8,8 @@ use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
 use Chubbyphp\Framework\RequestHandler\RouteRequestHandler;
 use Chubbyphp\Framework\Router\Exceptions\MissingRouteAttributeOnRequestException;
 use Chubbyphp\Framework\Router\RouteInterface;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,8 +23,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class RouteRequestHandlerTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testHandleWithoutRoute(): void
     {
         $this->expectException(MissingRouteAttributeOnRequestException::class);
@@ -34,16 +31,18 @@ final class RouteRequestHandlerTest extends TestCase
             .' "Chubbyphp\Framework\Middleware\RouteMatcherMiddleware" middleware'
         );
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('getAttribute')->with('route', null)->willReturn(null),
+        $builder = new MockObjectBuilder();
+
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, [
+            new WithReturn('getAttribute', ['route', null], null),
         ]);
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
 
-        /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
-        $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class);
+        /** @var MiddlewareDispatcherInterface $middlewareDispatcher */
+        $middlewareDispatcher = $builder->create(MiddlewareDispatcherInterface::class, []);
 
         $requestHandler = new RouteRequestHandler($middlewareDispatcher);
 
@@ -52,29 +51,31 @@ final class RouteRequestHandlerTest extends TestCase
 
     public function testHandleWithRoute(): void
     {
-        /** @var MiddlewareInterface|MockObject $middleware */
-        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|RequestHandlerInterface $requestHandler */
-        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class);
+        /** @var MiddlewareInterface $middleware */
+        $middleware = $builder->create(MiddlewareInterface::class, []);
 
-        /** @var MockObject|RouteInterface $route */
-        $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
-            Call::create('getRequestHandler')->with()->willReturn($requestHandler),
+        /** @var RequestHandlerInterface $innerRequestHandler */
+        $innerRequestHandler = $builder->create(RequestHandlerInterface::class, []);
+
+        /** @var RouteInterface $route */
+        $route = $builder->create(RouteInterface::class, [
+            new WithReturn('getMiddlewares', [], [$middleware]),
+            new WithReturn('getRequestHandler', [], $innerRequestHandler),
         ]);
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('getAttribute')->with('route', null)->willReturn($route),
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, [
+            new WithReturn('getAttribute', ['route', null], $route),
         ]);
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
 
-        /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
-        $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
-            Call::create('dispatch')->with([$middleware], $requestHandler, $request)->willReturn($response),
+        /** @var MiddlewareDispatcherInterface $middlewareDispatcher */
+        $middlewareDispatcher = $builder->create(MiddlewareDispatcherInterface::class, [
+            new WithReturn('dispatch', [[$middleware], $innerRequestHandler, $request], $response),
         ]);
 
         $requestHandler = new RouteRequestHandler($middlewareDispatcher);

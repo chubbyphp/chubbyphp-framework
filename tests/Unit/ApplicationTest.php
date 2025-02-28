@@ -8,8 +8,10 @@ use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Emitter\EmitterInterface;
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithCallback;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -24,52 +26,48 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class ApplicationTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testInvoke(): void
     {
-        /** @var MiddlewareInterface|MockObject $routeIndependMiddleware */
-        $routeIndependMiddleware = $this->getMockByCalls(MiddlewareInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MiddlewareInterface|MockObject $middleware */
-        $middleware = $this->getMockByCalls(MiddlewareInterface::class);
+        /** @var MiddlewareInterface $routeIndependentMiddleware */
+        $routeIndependentMiddleware = $builder->create(MiddlewareInterface::class, []);
+
+        /** @var MiddlewareInterface $middleware */
+        $middleware = $builder->create(MiddlewareInterface::class, []);
 
         /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+        $handler = $builder->create(RequestHandlerInterface::class, []);
 
         /** @var MockObject|RouteInterface $route */
-        $route = $this->getMockByCalls(RouteInterface::class, [
-            Call::create('getMiddlewares')->with()->willReturn([$middleware]),
-            Call::create('getRequestHandler')->with()->willReturn($handler),
+        $route = $builder->create(RouteInterface::class, [
+            new WithReturn('getMiddlewares', [], [$middleware]),
+            new WithReturn('getRequestHandler', [], $handler),
         ]);
 
         /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('getAttribute')->with('route', null)->willReturn($route),
+        $request = $builder->create(ServerRequestInterface::class, [
+            new WithReturn('getAttribute', ['route', null], $route),
         ]);
 
         /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        $response = $builder->create(ResponseInterface::class, []);
 
-        /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
-        $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
-            Call::create('dispatch')
-                ->willReturnCallback(
-                    static function (
-                        array $middlewares,
-                        RequestHandlerInterface $requestHandler,
-                        ServerRequestInterface $request
-                    ) use ($routeIndependMiddleware) {
-                        self::assertSame([$routeIndependMiddleware], $middlewares);
+        /** @var MiddlewareDispatcherInterface $middlewareDispatcher */
+        $middlewareDispatcher = $builder->create(MiddlewareDispatcherInterface::class, [
+            new WithCallback(
+                'dispatch',
+                static function (array $middlewares, RequestHandlerInterface $requestHandler, ServerRequestInterface $req) use ($routeIndependentMiddleware): ResponseInterface {
+                    TestCase::assertSame([$routeIndependentMiddleware], $middlewares);
 
-                        return $requestHandler->handle($request);
-                    }
-                ),
-            Call::create('dispatch')->with([$middleware], $handler, $request)->willReturn($response),
+                    return $requestHandler->handle($req);
+                }
+            ),
+            new WithReturn('dispatch', [[$middleware], $handler, $request], $response),
         ]);
 
         $application = new Application([
-            $routeIndependMiddleware,
+            $routeIndependentMiddleware,
         ], $middlewareDispatcher);
 
         self::assertSame($response, $application($request));
@@ -77,51 +75,52 @@ final class ApplicationTest extends TestCase
 
     public function testHandle(): void
     {
-        /** @var MiddlewareInterface|MockObject $routeIndependMiddleware */
-        $routeIndependMiddleware = $this->getMockByCalls(MiddlewareInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var MiddlewareInterface $routeIndependentMiddleware */
+        $routeIndependentMiddleware = $builder->create(MiddlewareInterface::class, []);
 
         /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $request = $builder->create(ServerRequestInterface::class, []);
 
         /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        $response = $builder->create(ResponseInterface::class, []);
 
-        /** @var MiddlewareDispatcherInterface|MockObject $middlewareDispatcher */
-        $middlewareDispatcher = $this->getMockByCalls(MiddlewareDispatcherInterface::class, [
-            Call::create('dispatch')
-                ->willReturnCallback(
-                    static function (
-                        array $middlewares,
-                        RequestHandlerInterface $requestHandler,
-                        ServerRequestInterface $request
-                    ) use ($routeIndependMiddleware) {
-                        self::assertSame([$routeIndependMiddleware], $middlewares);
+        /** @var MiddlewareDispatcherInterface $middlewareDispatcher */
+        $middlewareDispatcher = $builder->create(MiddlewareDispatcherInterface::class, [
+            new WithCallback(
+                'dispatch',
+                static function (array $middlewares, RequestHandlerInterface $requestHandler, ServerRequestInterface $req) use ($routeIndependentMiddleware): ResponseInterface {
+                    TestCase::assertSame([$routeIndependentMiddleware], $middlewares);
 
-                        return $requestHandler->handle($request);
-                    }
-                ),
+                    return $requestHandler->handle($req);
+                }
+            ),
         ]);
 
         /** @var MockObject|RequestHandlerInterface $requestHandler */
-        $requestHandler = $this->getMockByCalls(RequestHandlerInterface::class, [
-            Call::create('handle')->with($request)->willReturn($response),
+        $requestHandler = $builder->create(RequestHandlerInterface::class, [
+            new WithReturn('handle', [$request], $response),
         ]);
 
         $application = new Application([
-            $routeIndependMiddleware,
+            $routeIndependentMiddleware,
         ], $middlewareDispatcher, $requestHandler);
 
         self::assertSame($response, $application->handle($request));
     }
 
+    #[DoesNotPerformAssertions]
     public function testEmit(): void
     {
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var EmitterInterface|MockObject $emitter */
-        $emitter = $this->getMockByCalls(EmitterInterface::class, [
-            Call::create('emit')->with($response),
+        /** @var MockObject|ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
+
+        /** @var EmitterInterface $emitter */
+        $emitter = $builder->create(EmitterInterface::class, [
+            new WithReturn('emit', [$response], null),
         ]);
 
         $application = new Application([], null, null, $emitter);

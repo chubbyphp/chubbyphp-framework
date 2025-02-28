@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Unit\Middleware;
 
 use Chubbyphp\Framework\Middleware\LazyMiddleware;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -22,27 +21,27 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class LazyMiddlewareTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testProcess(): void
     {
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
-        /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
 
-        /** @var MiddlewareInterface|MockObject $middleware */
-        $middleware = $this->getMockByCalls(MiddlewareInterface::class, [
-            Call::create('process')->with($request, $handler)->willReturn($response),
+        /** @var RequestHandlerInterface $handler */
+        $handler = $builder->create(RequestHandlerInterface::class, []);
+
+        /** @var MiddlewareInterface $originalMiddleware */
+        $originalMiddleware = $builder->create(MiddlewareInterface::class, [
+            new WithReturn('process', [$request, $handler], $response),
         ]);
 
-        /** @var ContainerInterface|MockObject $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with('serviceName')->willReturn($middleware),
+        /** @var ContainerInterface $container */
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('get', ['serviceName'], $originalMiddleware),
         ]);
 
         $middleware = new LazyMiddleware($container, 'serviceName');
@@ -58,17 +57,19 @@ final class LazyMiddlewareTest extends TestCase
                 .' to be Psr\Http\Server\MiddlewareInterface, stdClass given'
         );
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
-        $middleware = new \stdClass();
+        /** @var RequestHandlerInterface $handler */
+        $handler = $builder->create(RequestHandlerInterface::class, []);
 
-        /** @var ContainerInterface|MockObject $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with('serviceName')->willReturn($middleware),
+        $originalMiddleware = new \stdClass();
+
+        /** @var ContainerInterface $container */
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('get', ['serviceName'], $originalMiddleware),
         ]);
 
         $middleware = new LazyMiddleware($container, 'serviceName');
@@ -83,17 +84,19 @@ final class LazyMiddlewareTest extends TestCase
                 .' to be Psr\Http\Server\MiddlewareInterface, string given'
         );
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
-        $middleware = '';
+        /** @var RequestHandlerInterface $handler */
+        $handler = $builder->create(RequestHandlerInterface::class, []);
 
-        /** @var ContainerInterface|MockObject $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with('serviceName')->willReturn($middleware),
+        $originalMiddleware = '';
+
+        /** @var ContainerInterface $container */
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('get', ['serviceName'], $originalMiddleware),
         ]);
 
         $middleware = new LazyMiddleware($container, 'serviceName');

@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Unit\Middleware;
 
 use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
-use Chubbyphp\Framework\Middleware\MiddlewareRequestHandler;
-use Chubbyphp\Mock\Argument\ArgumentInstanceOf;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithCallback;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockMethod\WithReturnSelf;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,19 +22,19 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class MiddlewareDispatcherTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testWithoutMiddlewares(): void
     {
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
-        /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
-            Call::create('handle')->with($request)->willReturn($response),
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
+
+        /** @var RequestHandlerInterface $handler */
+        $handler = $builder->create(RequestHandlerInterface::class, [
+            new WithReturn('handle', [$request], $response),
         ]);
 
         $middlewareDispatcher = new MiddlewareDispatcher();
@@ -45,44 +44,50 @@ final class MiddlewareDispatcherTest extends TestCase
 
     public function testWithMiddlewares(): void
     {
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('withAttribute')->with('middleware', 1)->willReturnSelf(),
-            Call::create('withAttribute')->with('middleware', 2)->willReturnSelf(),
+        $builder = new MockObjectBuilder();
+
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, [
+            new WithReturnSelf('withAttribute', ['middleware', 1]),
+            new WithReturnSelf('withAttribute', ['middleware', 2]),
         ]);
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
 
-        /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class, [
-            Call::create('handle')->with($request)->willReturn($response),
+        /** @var RequestHandlerInterface $handler */
+        $handler = $builder->create(RequestHandlerInterface::class, [
+            new WithReturn('handle', [$request], $response),
         ]);
 
-        /** @var MiddlewareInterface|MockObject $middleware1 */
-        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class, [
-            Call::create('process')
-                ->with($request, new ArgumentInstanceOf(MiddlewareRequestHandler::class))
-                ->willReturnCallback(
-                    static function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
-                        $request->withAttribute('middleware', 1);
+        /** @var MiddlewareInterface $middleware1 */
+        $middleware1 = $builder->create(MiddlewareInterface::class, [
+            new WithCallback(
+                'process',
+                static function (
+                    ServerRequestInterface $request,
+                    RequestHandlerInterface $requestHandler
+                ) {
+                    $request = $request->withAttribute('middleware', 1);
 
-                        return $handler->handle($request);
-                    }
-                ),
+                    return $requestHandler->handle($request);
+                },
+            ),
         ]);
 
-        /** @var MiddlewareInterface|MockObject $middleware2 */
-        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class, [
-            Call::create('process')
-                ->with($request, $handler)
-                ->willReturnCallback(
-                    static function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
-                        $request->withAttribute('middleware', 2);
+        /** @var MiddlewareInterface $middleware2 */
+        $middleware2 = $builder->create(MiddlewareInterface::class, [
+            new WithCallback(
+                'process',
+                static function (
+                    ServerRequestInterface $request,
+                    RequestHandlerInterface $requestHandler
+                ) {
+                    $request = $request->withAttribute('middleware', 2);
 
-                        return $handler->handle($request);
-                    }
-                ),
+                    return $requestHandler->handle($request);
+                },
+            ),
         ]);
 
         $middlewareDispatcher = new MiddlewareDispatcher();

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Framework\Unit\RequestHandler;
 
 use Chubbyphp\Framework\RequestHandler\SlimCallbackRequestHandler;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -20,22 +19,22 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class SlimCallbackRequestHandlerTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testHandleWithoutExistingResponse(): void
     {
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('getAttribute')->with('response', null)->willReturn(null),
-            Call::create('getAttributes')->with()->willReturn(['key1' => 'value1', 'key2' => 'value2']),
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
+
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, [
+            new WithReturn('getAttribute', ['response', null], null),
+            new WithReturn('getAttributes', [], ['key1' => 'value1', 'key2' => 'value2']),
         ]);
 
-        /** @var MockObject|ResponseFactoryInterface $responseFactory */
-        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
-            Call::create('createResponse')->with(200, '')->willReturn($response),
+        /** @var ResponseFactoryInterface $responseFactory */
+        $responseFactory = $builder->create(ResponseFactoryInterface::class, [
+            new WithReturn('createResponse', [200, ''], $response),
         ]);
 
         $requestHandler = new SlimCallbackRequestHandler(
@@ -58,19 +57,23 @@ final class SlimCallbackRequestHandlerTest extends TestCase
 
     public function testHandleWithExistingResponse(): void
     {
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('getAttribute')->with('response', null)->willReturn($response),
-            Call::create('getAttributes')
-                ->with()
-                ->willReturn(['key1' => 'value1', 'key2' => 'value2', 'response' => $response]),
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
+
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, [
+            new WithReturn('getAttribute', ['response', null], $response),
+            new WithReturn(
+                'getAttributes',
+                [],
+                ['key1' => 'value1', 'key2' => 'value2', 'response' => $response]
+            ),
         ]);
 
-        /** @var MockObject|ResponseFactoryInterface $responseFactory */
-        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
+        /** @var ResponseFactoryInterface $responseFactory */
+        $responseFactory = $builder->create(ResponseFactoryInterface::class, []);
 
         $requestHandler = new SlimCallbackRequestHandler(
             static function (
