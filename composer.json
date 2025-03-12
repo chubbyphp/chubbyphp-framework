@@ -35,7 +35,7 @@
     },
     "require-dev": {
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^2.0@dev",
+        "chubbyphp/chubbyphp-mock": "^2.0",
         "guzzlehttp/psr7": "^2.7",
         "http-interop/http-factory-guzzle": "^1.2",
         "infection/infection": "^0.29.13",
