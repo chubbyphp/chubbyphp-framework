@@ -2,12 +2,14 @@
 
 * text=auto eol=lf
 
-.gitattributes export-ignore
-.github/ export-ignore
-.gitignore export-ignore
-.php-cs-fixer.php export-ignore
-infection.json export-ignore
-phpstan.neon export-ignore
-phpunit.xml export-ignore
-tests/ export-ignore
+.gitattributes           export-ignore
+.github/                 export-ignore
+.gitignore               export-ignore
+.php-cs-fixer.php        export-ignore
+.php_cs                  export-ignore
+infection.json           export-ignore
+LICENSE                  export-ignore
+phpstan.neon             export-ignore
+phpunit.xml              export-ignore
 sonar-project.properties export-ignore
+tests/                   export-ignore
