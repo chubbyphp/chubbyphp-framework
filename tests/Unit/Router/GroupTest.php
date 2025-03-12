@@ -7,7 +7,7 @@ namespace Chubbyphp\Tests\Framework\Unit\Router;
 use Chubbyphp\Framework\Router\Group;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\RouteInterface;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Server\MiddlewareInterface;
@@ -20,8 +20,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class GroupTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testMinimal(): void
     {
         $group = Group::create('');
@@ -42,17 +40,19 @@ final class GroupTest extends TestCase
 
     public function testMaximal(): void
     {
-        /** @var MiddlewareInterface|MockObject $middleware1 */
-        $middleware1 = $this->getMockByCalls(MiddlewareInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MiddlewareInterface|MockObject $middleware2 */
-        $middleware2 = $this->getMockByCalls(MiddlewareInterface::class);
+        /** @var MiddlewareInterface $middleware1 */
+        $middleware1 = $builder->create(MiddlewareInterface::class, []);
 
-        /** @var MiddlewareInterface|MockObject $middleware3 */
-        $middleware3 = $this->getMockByCalls(MiddlewareInterface::class);
+        /** @var MiddlewareInterface $middleware2 */
+        $middleware2 = $builder->create(MiddlewareInterface::class, []);
+
+        /** @var MiddlewareInterface $middleware3 */
+        $middleware3 = $builder->create(MiddlewareInterface::class, []);
 
         /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $this->getMockByCalls(RequestHandlerInterface::class);
+        $handler = $builder->create(RequestHandlerInterface::class, []);
 
         $group = Group::create('/{id}', [
             Route::get('/{slug}', 'element_read', $handler, [$middleware2], ['tokens' => ['slug' => '[a-z]+']]),
@@ -72,7 +72,7 @@ final class GroupTest extends TestCase
 
         self::assertCount(3, $routes);
 
-        /** @var RouteInterface */
+        /** @var RouteInterface $route1 */
         $route1 = $routes[0];
 
         self::assertSame('element_read', $route1->getName());
@@ -82,7 +82,7 @@ final class GroupTest extends TestCase
         self::assertSame([$middleware1, $middleware2], $route1->getMiddlewares());
         self::assertSame($handler, $route1->getRequestHandler());
 
-        /** @var RouteInterface */
+        /** @var RouteInterface $route2 */
         $route2 = $routes[1];
 
         self::assertSame('another_route', $route2->getName());
@@ -95,7 +95,7 @@ final class GroupTest extends TestCase
         self::assertSame([$middleware1, $middleware2, $middleware3], $route2->getMiddlewares());
         self::assertSame($handler, $route2->getRequestHandler());
 
-        /** @var RouteInterface */
+        /** @var RouteInterface $route3 */
         $route3 = $routes[2];
 
         self::assertSame('yet_another_route', $route3->getName());
