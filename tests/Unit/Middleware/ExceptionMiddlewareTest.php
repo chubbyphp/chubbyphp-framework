@@ -8,7 +8,6 @@ use Chubbyphp\Framework\Middleware\ExceptionMiddleware;
 use Chubbyphp\HttpException\HttpException;
 use Chubbyphp\Mock\MockMethod\WithCallback;
 use Chubbyphp\Mock\MockMethod\WithException;
-use Chubbyphp\Mock\MockMethod\WithoutReturn;
 use Chubbyphp\Mock\MockMethod\WithReturn;
 use Chubbyphp\Mock\MockMethod\WithReturnSelf;
 use Chubbyphp\Mock\MockObjectBuilder;
@@ -212,7 +211,7 @@ final class ExceptionMiddlewareTest extends TestCase
 
         /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $builder->create(StreamInterface::class, [
-            new WithoutReturn('write', [$expectedBody]),
+            new WithReturn('write', [$expectedBody], \strlen($expectedBody)),
         ]);
 
         /** @var MockObject|ResponseInterface $response */
@@ -397,7 +396,7 @@ final class ExceptionMiddlewareTest extends TestCase
 
         /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $builder->create(StreamInterface::class, [
-            new WithoutReturn('write', [$expectedBody]),
+            new WithReturn('write', [$expectedBody], \strlen($expectedBody)),
         ]);
 
         /** @var MockObject|ResponseInterface $response */
@@ -616,7 +615,7 @@ final class ExceptionMiddlewareTest extends TestCase
 
         /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $builder->create(StreamInterface::class, [
-            new WithoutReturn('write', [$expectedBody]),
+            new WithReturn('write', [$expectedBody], \strlen($expectedBody)),
         ]);
 
         /** @var MockObject|ResponseInterface $response */
@@ -688,7 +687,7 @@ final class ExceptionMiddlewareTest extends TestCase
 
         /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $builder->create(StreamInterface::class, [
-            new WithCallback('write', static function (string $html): void {
+            new WithCallback('write', static function (string $html): int {
                 self::assertStringContainsString(
                     '<p>A website error has occurred. Sorry for the temporary inconvenience.</p>',
                     $html
@@ -706,6 +705,8 @@ final class ExceptionMiddlewareTest extends TestCase
                 self::assertStringContainsString('<div class="md:col-span-7">logic exception</div>', $html);
                 self::assertStringContainsString('<div><strong>Code</strong></div>', $html);
                 self::assertStringContainsString('<div class="md:col-span-7">42</div>', $html);
+
+                return \strlen($html);
             }),
         ]);
 
