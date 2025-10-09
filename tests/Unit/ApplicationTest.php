@@ -6,7 +6,6 @@ namespace Chubbyphp\Tests\Framework\Unit;
 
 use Chubbyphp\Framework\Application;
 use Chubbyphp\Framework\Emitter\EmitterInterface;
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Chubbyphp\Mock\MockMethod\WithCallback;
 use Chubbyphp\Mock\MockMethod\WithReturn;
@@ -30,14 +29,29 @@ final class ApplicationTest extends TestCase
     {
         $builder = new MockObjectBuilder();
 
-        /** @var MiddlewareInterface $routeIndependentMiddleware */
-        $routeIndependentMiddleware = $builder->create(MiddlewareInterface::class, []);
+        /** @var MockObject|ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
 
         /** @var MiddlewareInterface $middleware */
-        $middleware = $builder->create(MiddlewareInterface::class, []);
+        $middleware = $builder->create(MiddlewareInterface::class, [
+            new WithCallback(
+                'process',
+                static fn (
+                    ServerRequestInterface $request,
+                    RequestHandlerInterface $requestHandler
+                ) => $requestHandler->handle($request)
+            ),
+        ]);
 
         /** @var MockObject|RequestHandlerInterface $handler */
-        $handler = $builder->create(RequestHandlerInterface::class, []);
+        $handler = $builder->create(RequestHandlerInterface::class, [
+            new WithCallback(
+                'handle',
+                static fn (
+                    ServerRequestInterface $request,
+                ) => $response,
+            ),
+        ]);
 
         /** @var MockObject|RouteInterface $route */
         $route = $builder->create(RouteInterface::class, [
@@ -50,25 +64,20 @@ final class ApplicationTest extends TestCase
             new WithReturn('getAttribute', ['route', null], $route),
         ]);
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $builder->create(ResponseInterface::class, []);
-
-        /** @var MiddlewareDispatcherInterface $middlewareDispatcher */
-        $middlewareDispatcher = $builder->create(MiddlewareDispatcherInterface::class, [
+        /** @var MiddlewareInterface $routeIndependentMiddleware */
+        $routeIndependentMiddleware = $builder->create(MiddlewareInterface::class, [
             new WithCallback(
-                'dispatch',
-                static function (array $middlewares, RequestHandlerInterface $requestHandler, ServerRequestInterface $req) use ($routeIndependentMiddleware): ResponseInterface {
-                    TestCase::assertSame([$routeIndependentMiddleware], $middlewares);
-
-                    return $requestHandler->handle($req);
-                }
+                'process',
+                static fn (
+                    ServerRequestInterface $request,
+                    RequestHandlerInterface $requestHandler
+                ) => $requestHandler->handle($request)
             ),
-            new WithReturn('dispatch', [[$middleware], $handler, $request], $response),
         ]);
 
         $application = new Application([
             $routeIndependentMiddleware,
-        ], $middlewareDispatcher);
+        ]);
 
         self::assertSame($response, $application($request));
     }
@@ -77,35 +86,55 @@ final class ApplicationTest extends TestCase
     {
         $builder = new MockObjectBuilder();
 
-        /** @var MiddlewareInterface $routeIndependentMiddleware */
-        $routeIndependentMiddleware = $builder->create(MiddlewareInterface::class, []);
-
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $builder->create(ServerRequestInterface::class, []);
-
         /** @var MockObject|ResponseInterface $response */
         $response = $builder->create(ResponseInterface::class, []);
 
-        /** @var MiddlewareDispatcherInterface $middlewareDispatcher */
-        $middlewareDispatcher = $builder->create(MiddlewareDispatcherInterface::class, [
+        /** @var MiddlewareInterface $middleware */
+        $middleware = $builder->create(MiddlewareInterface::class, [
             new WithCallback(
-                'dispatch',
-                static function (array $middlewares, RequestHandlerInterface $requestHandler, ServerRequestInterface $req) use ($routeIndependentMiddleware): ResponseInterface {
-                    TestCase::assertSame([$routeIndependentMiddleware], $middlewares);
-
-                    return $requestHandler->handle($req);
-                }
+                'process',
+                static fn (
+                    ServerRequestInterface $request,
+                    RequestHandlerInterface $requestHandler
+                ) => $requestHandler->handle($request)
             ),
         ]);
 
-        /** @var MockObject|RequestHandlerInterface $requestHandler */
-        $requestHandler = $builder->create(RequestHandlerInterface::class, [
-            new WithReturn('handle', [$request], $response),
+        /** @var MockObject|RequestHandlerInterface $handler */
+        $handler = $builder->create(RequestHandlerInterface::class, [
+            new WithCallback(
+                'handle',
+                static fn (
+                    ServerRequestInterface $request,
+                ) => $response,
+            ),
+        ]);
+
+        /** @var MockObject|RouteInterface $route */
+        $route = $builder->create(RouteInterface::class, [
+            new WithReturn('getMiddlewares', [], [$middleware]),
+            new WithReturn('getRequestHandler', [], $handler),
+        ]);
+
+        /** @var MockObject|ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, [
+            new WithReturn('getAttribute', ['route', null], $route),
+        ]);
+
+        /** @var MiddlewareInterface $routeIndependentMiddleware */
+        $routeIndependentMiddleware = $builder->create(MiddlewareInterface::class, [
+            new WithCallback(
+                'process',
+                static fn (
+                    ServerRequestInterface $request,
+                    RequestHandlerInterface $requestHandler
+                ) => $requestHandler->handle($request)
+            ),
         ]);
 
         $application = new Application([
             $routeIndependentMiddleware,
-        ], $middlewareDispatcher, $requestHandler);
+        ]);
 
         self::assertSame($response, $application->handle($request));
     }
@@ -123,7 +152,7 @@ final class ApplicationTest extends TestCase
             new WithReturn('emit', [$response], null),
         ]);
 
-        $application = new Application([], null, null, $emitter);
+        $application = new Application([], $emitter);
         $application->emit($response);
     }
 }

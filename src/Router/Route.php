@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-use Chubbyphp\Framework\Collection;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -32,7 +31,7 @@ final class Route implements RouteInterface
         array $middlewares = [],
         private array $pathOptions = []
     ) {
-        $this->middlewares = (new Collection($middlewares, [MiddlewareInterface::class]))->toArray();
+        $this->middlewares = $middlewares;
     }
 
     /**

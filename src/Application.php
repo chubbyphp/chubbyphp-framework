@@ -6,8 +6,7 @@ namespace Chubbyphp\Framework;
 
 use Chubbyphp\Framework\Emitter\Emitter;
 use Chubbyphp\Framework\Emitter\EmitterInterface;
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
+use Chubbyphp\Framework\Middleware\PipeMiddleware;
 use Chubbyphp\Framework\RequestHandler\RouteRequestHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,14 +15,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class Application implements RequestHandlerInterface
 {
-    /**
-     * @var array<MiddlewareInterface>
-     */
-    private array $middlewares;
+    private PipeMiddleware $pipeMiddleware;
 
-    private MiddlewareDispatcherInterface $middlewareDispatcher;
-
-    private RequestHandlerInterface $requestHandler;
+    private RequestHandlerInterface $routeRequestHandler;
 
     private EmitterInterface $emitter;
 
@@ -32,13 +26,10 @@ final class Application implements RequestHandlerInterface
      */
     public function __construct(
         array $middlewares,
-        ?MiddlewareDispatcherInterface $middlewareDispatcher = null,
-        ?RequestHandlerInterface $requestHandler = null,
         ?EmitterInterface $emitter = null
     ) {
-        $this->middlewares = (new Collection($middlewares, [MiddlewareInterface::class]))->toArray();
-        $this->middlewareDispatcher = $middlewareDispatcher ?? new MiddlewareDispatcher();
-        $this->requestHandler = $requestHandler ?? new RouteRequestHandler($this->middlewareDispatcher);
+        $this->pipeMiddleware = new PipeMiddleware($middlewares);
+        $this->routeRequestHandler = new RouteRequestHandler();
         $this->emitter = $emitter ?? new Emitter();
     }
 
@@ -49,11 +40,7 @@ final class Application implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->middlewareDispatcher->dispatch(
-            $this->middlewares,
-            $this->requestHandler,
-            $request
-        );
+        return $this->pipeMiddleware->process($request, $this->routeRequestHandler);
     }
 
     public function emit(ResponseInterface $response): void

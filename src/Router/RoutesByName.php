@@ -17,17 +17,6 @@ final class RoutesByName implements RoutesByNameInterface
     public function __construct(array $routes)
     {
         foreach ($routes as $i => $route) {
-            if (!$route instanceof RouteInterface) {
-                throw new \TypeError(
-                    \sprintf(
-                        '%s::__construct() expects parameter 1 at index %s to be %s, %s given',
-                        self::class,
-                        $i,
-                        RouteInterface::class,
-                        $route::class
-                    )
-                );
-            }
             $this->routes[$route->getName()] = $route;
         }
     }

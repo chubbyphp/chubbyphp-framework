@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\Router;
 
-use Chubbyphp\Framework\Collection;
 use Psr\Http\Server\MiddlewareInterface;
 
 final class Group implements GroupInterface
@@ -30,8 +29,8 @@ final class Group implements GroupInterface
         array $middlewares = [],
         private array $pathOptions = []
     ) {
-        $this->children = (new Collection($children, [GroupInterface::class, RouteInterface::class]))->toArray();
-        $this->middlewares = (new Collection($middlewares, [MiddlewareInterface::class]))->toArray();
+        $this->children = $children;
+        $this->middlewares = $middlewares;
     }
 
     /**

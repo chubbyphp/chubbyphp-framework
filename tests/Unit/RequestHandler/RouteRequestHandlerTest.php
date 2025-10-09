@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Unit\RequestHandler;
 
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
 use Chubbyphp\Framework\RequestHandler\RouteRequestHandler;
 use Chubbyphp\Framework\Router\Exceptions\MissingRouteAttributeOnRequestException;
 use Chubbyphp\Framework\Router\RouteInterface;
+use Chubbyphp\Mock\MockMethod\WithCallback;
 use Chubbyphp\Mock\MockMethod\WithReturn;
 use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
@@ -41,10 +41,7 @@ final class RouteRequestHandlerTest extends TestCase
         /** @var ResponseInterface $response */
         $response = $builder->create(ResponseInterface::class, []);
 
-        /** @var MiddlewareDispatcherInterface $middlewareDispatcher */
-        $middlewareDispatcher = $builder->create(MiddlewareDispatcherInterface::class, []);
-
-        $requestHandler = new RouteRequestHandler($middlewareDispatcher);
+        $requestHandler = new RouteRequestHandler();
 
         self::assertSame($response, $requestHandler->handle($request));
     }
@@ -53,11 +50,29 @@ final class RouteRequestHandlerTest extends TestCase
     {
         $builder = new MockObjectBuilder();
 
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
+
         /** @var MiddlewareInterface $middleware */
-        $middleware = $builder->create(MiddlewareInterface::class, []);
+        $middleware = $builder->create(MiddlewareInterface::class, [
+            new WithCallback(
+                'process',
+                static fn (
+                    ServerRequestInterface $request,
+                    RequestHandlerInterface $requestHandler
+                ) => $requestHandler->handle($request)
+            ),
+        ]);
 
         /** @var RequestHandlerInterface $innerRequestHandler */
-        $innerRequestHandler = $builder->create(RequestHandlerInterface::class, []);
+        $innerRequestHandler = $builder->create(RequestHandlerInterface::class, [
+            new WithCallback(
+                'handle',
+                static fn (
+                    ServerRequestInterface $request,
+                ) => $response,
+            ),
+        ]);
 
         /** @var RouteInterface $route */
         $route = $builder->create(RouteInterface::class, [
@@ -70,15 +85,7 @@ final class RouteRequestHandlerTest extends TestCase
             new WithReturn('getAttribute', ['route', null], $route),
         ]);
 
-        /** @var ResponseInterface $response */
-        $response = $builder->create(ResponseInterface::class, []);
-
-        /** @var MiddlewareDispatcherInterface $middlewareDispatcher */
-        $middlewareDispatcher = $builder->create(MiddlewareDispatcherInterface::class, [
-            new WithReturn('dispatch', [[$middleware], $innerRequestHandler, $request], $response),
-        ]);
-
-        $requestHandler = new RouteRequestHandler($middlewareDispatcher);
+        $requestHandler = new RouteRequestHandler();
 
         self::assertSame($response, $requestHandler->handle($request));
     }

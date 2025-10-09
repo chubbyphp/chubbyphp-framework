@@ -17,19 +17,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class RoutesByNameTest extends TestCase
 {
-    public function testWithWrongType(): void
-    {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\Router\RoutesByName::__construct() expects parameter 1'
-                .' at index 0 to be Chubbyphp\Framework\Router\RouteInterface, stdClass given'
-        );
-
-        $route = new \stdClass();
-
-        new RoutesByName([$route]);
-    }
-
     public function testGetRoutes(): void
     {
         $builder = new MockObjectBuilder();

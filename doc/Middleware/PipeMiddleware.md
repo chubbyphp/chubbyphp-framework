@@ -1,4 +1,4 @@
-# MiddlewareDispatcher
+# PipeMiddleware
 
 ## Methods
 
@@ -7,7 +7,7 @@
 ```php
 <?php
 
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\Middleware\PipeMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -37,7 +37,7 @@ $handler = new class() implements RequestHandlerInterface {
     }
 };
 
-$middlewareDispatcher = new MiddlewareDispatcher();
+$pipeMiddleware = new PipeMiddleware([$middleware1, $middleware2]);
 
-$response = $middlewareDispatcher->dispatch([$middleware1, $middleware2], $handler, $request);
+$response = $pipeMiddleware->dispatch($request, $handler);
 ```
