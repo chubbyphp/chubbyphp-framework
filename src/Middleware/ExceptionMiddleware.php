@@ -16,7 +16,7 @@ use Psr\Log\NullLogger;
 
 final class ExceptionMiddleware implements MiddlewareInterface
 {
-    private const HTML = <<<'EOT'
+    private const string HTML = <<<'EOT'
         <!DOCTYPE html>
         <html>
             <head>

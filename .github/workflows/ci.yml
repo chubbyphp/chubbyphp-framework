@@ -6,17 +6,6 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  php82:
-    name: PHP 8.2
-    runs-on: ubuntu-24.04
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-      - name: composer test
-        uses: docker://ghcr.io/chubbyphp/ci-php82:latest
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
   php83:
     name: PHP 8.3
     runs-on: ubuntu-24.04
@@ -36,6 +25,17 @@ jobs:
         uses: actions/checkout@v4
       - name: composer test
         uses: docker://ghcr.io/chubbyphp/ci-php84:latest
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+  php85:
+    name: PHP 8.5
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: composer test
+        uses: docker://ghcr.io/chubbyphp/ci-php85:latest
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}

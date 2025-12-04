@@ -13,6 +13,7 @@ use Laminas\Diactoros\ResponseFactory as LaminasResponseFactory;
 use Laminas\Diactoros\ServerRequestFactory as LaminasServerRequestFactory;
 use Nyholm\Psr7\Factory\Psr17Factory as NyholmResponseFactory;
 use Nyholm\Psr7\Factory\Psr17Factory as NyholmServerRequestFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
@@ -28,9 +29,7 @@ use Sunrise\Http\Message\ServerRequestFactory as SunriseServerRequestFactory;
  */
 final class RouteMatcherLessTest extends TestCase
 {
-    /**
-     * @dataProvider providePsr7Implementations
-     */
+    #[DataProvider('providePsr7Implementations')]
     public function testMissingRouteMatcherMiddleware(
         ResponseFactoryInterface $responseFactory,
         ServerRequestFactoryInterface $serverRequestFactory
@@ -54,9 +53,7 @@ final class RouteMatcherLessTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider providePsr7Implementations
-     */
+    #[DataProvider('providePsr7Implementations')]
     public function testMissingRouteMatcherMiddlewareWithoutExceptionMiddleware(
         ResponseFactoryInterface $responseFactory,
         ServerRequestFactoryInterface $serverRequestFactory
