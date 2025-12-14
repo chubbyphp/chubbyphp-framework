@@ -9,29 +9,16 @@ use Psr\Http\Server\MiddlewareInterface;
 final class Group implements GroupInterface
 {
     /**
-     * @var array<MiddlewareInterface>
-     */
-    private array $middlewares;
-
-    /**
-     * @var array<GroupInterface|RouteInterface>
-     */
-    private array $children;
-
-    /**
      * @param array<GroupInterface|RouteInterface> $children
      * @param array<MiddlewareInterface>           $middlewares
      * @param array<string, mixed>                 $pathOptions
      */
     private function __construct(
         private string $path,
-        array $children = [],
-        array $middlewares = [],
+        private array $children = [],
+        private array $middlewares = [],
         private array $pathOptions = []
-    ) {
-        $this->children = $children;
-        $this->middlewares = $middlewares;
-    }
+    ) {}
 
     /**
      * @param array<GroupInterface|RouteInterface> $children
