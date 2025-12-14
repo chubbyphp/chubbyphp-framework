@@ -17,20 +17,15 @@ final class Application implements RequestHandlerInterface
 {
     private PipeMiddleware $pipeMiddleware;
 
-    private RequestHandlerInterface $routeRequestHandler;
-
-    private EmitterInterface $emitter;
-
     /**
      * @param array<MiddlewareInterface> $middlewares
      */
     public function __construct(
         array $middlewares,
-        ?EmitterInterface $emitter = null
+        private RequestHandlerInterface $routeRequestHandler = new RouteRequestHandler(),
+        private EmitterInterface $emitter = new Emitter()
     ) {
         $this->pipeMiddleware = new PipeMiddleware($middlewares);
-        $this->routeRequestHandler = new RouteRequestHandler();
-        $this->emitter = $emitter ?? new Emitter();
     }
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface

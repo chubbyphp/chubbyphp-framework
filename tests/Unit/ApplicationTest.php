@@ -147,12 +147,15 @@ final class ApplicationTest extends TestCase
         /** @var MockObject|ResponseInterface $response */
         $response = $builder->create(ResponseInterface::class, []);
 
+        /** @var RequestHandlerInterface $routeRequestHandler */
+        $routeRequestHandler = $builder->create(RequestHandlerInterface::class, []);
+
         /** @var EmitterInterface $emitter */
         $emitter = $builder->create(EmitterInterface::class, [
             new WithReturn('emit', [$response], null),
         ]);
 
-        $application = new Application([], $emitter);
+        $application = new Application([], $routeRequestHandler, $emitter);
         $application->emit($response);
     }
 }
