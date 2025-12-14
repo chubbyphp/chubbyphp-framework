@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Framework\Unit\Middleware;
 
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
+use Chubbyphp\Framework\Middleware\PipeMiddleware;
 use Chubbyphp\Mock\MockMethod\WithCallback;
 use Chubbyphp\Mock\MockMethod\WithReturn;
 use Chubbyphp\Mock\MockMethod\WithReturnSelf;
@@ -16,11 +16,11 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * @covers \Chubbyphp\Framework\Middleware\MiddlewareDispatcher
+ * @covers \Chubbyphp\Framework\Middleware\PipeMiddleware
  *
  * @internal
  */
-final class MiddlewareDispatcherTest extends TestCase
+final class PipeMiddlewareTest extends TestCase
 {
     public function testWithoutMiddlewares(): void
     {
@@ -37,9 +37,9 @@ final class MiddlewareDispatcherTest extends TestCase
             new WithReturn('handle', [$request], $response),
         ]);
 
-        $middlewareDispatcher = new MiddlewareDispatcher();
+        $pipeMiddleware = new PipeMiddleware([]);
 
-        self::assertSame($response, $middlewareDispatcher->dispatch([], $handler, $request));
+        self::assertSame($response, $pipeMiddleware->process($request, $handler));
     }
 
     public function testWithMiddlewares(): void
@@ -90,11 +90,11 @@ final class MiddlewareDispatcherTest extends TestCase
             ),
         ]);
 
-        $middlewareDispatcher = new MiddlewareDispatcher();
+        $pipeMiddleware = new PipeMiddleware([$middleware1, $middleware2]);
 
         self::assertSame(
             $response,
-            $middlewareDispatcher->dispatch([$middleware1, $middleware2], $handler, $request)
+            $pipeMiddleware->process($request, $handler)
         );
     }
 }

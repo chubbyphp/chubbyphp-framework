@@ -27,17 +27,6 @@ final class GroupTest extends TestCase
         self::assertSame([], $group->getRoutes());
     }
 
-    public function testWithInvalidChildren(): void
-    {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Chubbyphp\Framework\Collection::__construct() expects parameter 1 at index 0 to be '
-                .'Chubbyphp\Framework\Router\GroupInterface|Chubbyphp\Framework\Router\RouteInterface, stdClass given'
-        );
-
-        Group::create('', [new \stdClass()]);
-    }
-
     public function testMaximal(): void
     {
         $builder = new MockObjectBuilder();

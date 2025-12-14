@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Framework\RequestHandler;
 
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcherInterface;
+use Chubbyphp\Framework\Middleware\PipeMiddleware;
 use Chubbyphp\Framework\Router\Exceptions\MissingRouteAttributeOnRequestException;
 use Chubbyphp\Framework\Router\RouteInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -13,8 +13,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class RouteRequestHandler implements RequestHandlerInterface
 {
-    public function __construct(private MiddlewareDispatcherInterface $middlewareDispatcher) {}
-
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $route = $request->getAttribute('route');
@@ -23,10 +21,6 @@ final class RouteRequestHandler implements RequestHandlerInterface
             throw MissingRouteAttributeOnRequestException::create($route);
         }
 
-        return $this->middlewareDispatcher->dispatch(
-            $route->getMiddlewares(),
-            $route->getRequestHandler(),
-            $request
-        );
+        return (new PipeMiddleware($route->getMiddlewares()))->process($request, $route->getRequestHandler());
     }
 }

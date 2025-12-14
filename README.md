@@ -69,7 +69,7 @@ Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` c
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^5.3" \
+composer require chubbyphp/chubbyphp-framework "^6.0" \
     chubbyphp/chubbyphp-framework-router-fastroute "^2.3" \
     slim/psr7 "^1.7"
 ```
@@ -124,7 +124,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
  * [CallbackMiddleware][70]
  * [ExceptionMiddleware][71]
  * [LazyMiddleware][72]
- * [MiddlewareDispatcher][73]
+ * [PipeMiddleware][73]
  * [RouteMatcherMiddleware][74]
  * [SlimCallbackMiddleware][75]
  * [SlimLazyMiddleware][76]
@@ -158,6 +158,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 ## Migration
 
+ * [5.x to 6.x][214]
  * [4.x to 5.x][213]
  * [3.x to 4.x][212]
  * [2.x to 3.x][211]
@@ -208,7 +209,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 [70]: doc/Middleware/CallbackMiddleware.md
 [71]: doc/Middleware/ExceptionMiddleware.md
 [72]: doc/Middleware/LazyMiddleware.md
-[73]: doc/Middleware/MiddlewareDispatcher.md
+[73]: doc/Middleware/PipeMiddleware.md
 [74]: doc/Middleware/RouteMatcherMiddleware.md
 [75]: doc/Middleware/SlimCallbackMiddleware.md
 [76]: doc/Middleware/SlimLazyMiddleware.md
@@ -236,5 +237,6 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 [211]: doc/Migration/2.x-3.x.md
 [212]: doc/Migration/3.x-4.x.md
 [213]: doc/Migration/4.x-5.x.md
+[214]: doc/Migration/5.x-6.x.md
 
 [219]: doc/Migration/Slim-Chubbyphp.md

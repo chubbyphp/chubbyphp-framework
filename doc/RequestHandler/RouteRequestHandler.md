@@ -7,7 +7,6 @@
 ```php
 <?php
 
-use Chubbyphp\Framework\Middleware\MiddlewareDispatcher;
 use Chubbyphp\Framework\RequestHandler\RouteRequestHandler;
 use Psr\Http\Message\ServerRequestInterface;
 use Some\Psr7\Response;
@@ -16,9 +15,7 @@ use Some\Psr7\ServerRequest;
 $request = new ServerRequest();
 $response = new Response();
 
-$middlewareDispatcher = new MiddlewareDispatcher();
+$handler = new RouteRequestHandler();
 
-$callbackHandler = new RouteRequestHandler($middlewareDispatcher);
-
-$response = $callbackHandler->handle($request);
+$response = $handler->handle($request);
 ```
