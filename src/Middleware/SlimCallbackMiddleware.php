@@ -12,7 +12,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class SlimCallbackMiddleware implements MiddlewareInterface
 {
-    private const ATTRIBUTE_RESPONSE = 'response';
+    private const string ATTRIBUTE_RESPONSE = 'response';
 
     /**
      * @var callable

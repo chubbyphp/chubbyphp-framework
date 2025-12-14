@@ -36,7 +36,7 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 
 ## Requirements
 
- * php: ^8.2
+ * php: ^8.3
  * [chubbyphp/chubbyphp-http-exception][20]: ^1.2
  * [psr/container][21]: ^1.1.2|^2.0.2
  * [psr/http-factory-implementation][22]: ^1.0
@@ -53,7 +53,9 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 
 Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` can be used.
 
- * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^2.1
+ * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^2.3
+ * [chubbyphp/chubbyphp-framework-router-symfony][31]: ^2.3
+
 ### PSR 7 / PSR 17
 
  * [guzzlehttp/psr7][40]: ^2.7 (with [http-interop/http-factory-guzzle][41]: ^1.2)
@@ -67,8 +69,8 @@ Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` c
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^5.2" \
-    chubbyphp/chubbyphp-framework-router-fastroute "^2.1" \
+composer require chubbyphp/chubbyphp-framework "^6.0" \
+    chubbyphp/chubbyphp-framework-router-fastroute "^2.3" \
     slim/psr7 "^1.7"
 ```
 
@@ -191,6 +193,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 [28]: https://packagist.org/packages/psr/log
 
 [30]: https://github.com/chubbyphp/chubbyphp-framework-router-fastroute#usage
+[31]: https://github.com/chubbyphp/chubbyphp-framework-router-symfony#usage
 
 [40]: https://packagist.org/packages/guzzlehttp/psr7
 [41]: https://packagist.org/packages/http-interop/http-factory-guzzle

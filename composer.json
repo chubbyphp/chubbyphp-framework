@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "chubbyphp/chubbyphp-http-exception": "^1.2",
         "psr/container": "^1.1.2|^2.0.2",
         "psr/http-factory-implementation": "^1.0",
@@ -35,18 +35,18 @@
     },
     "require-dev": {
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^2.0",
-        "guzzlehttp/psr7": "^2.7",
+        "chubbyphp/chubbyphp-mock": "^2.0.1",
+        "guzzlehttp/psr7": "^2.8",
         "http-interop/http-factory-guzzle": "^1.2",
-        "infection/infection": "^0.29.13",
-        "laminas/laminas-diactoros": "^3.5",
+        "infection/infection": "^0.31.9",
+        "laminas/laminas-diactoros": "^3.8",
         "nyholm/psr7": "^1.8.2",
-        "php-coveralls/php-coveralls": "^2.7.0",
+        "php-coveralls/php-coveralls": "^2.9",
         "phpstan/extension-installer": "^1.4.3",
-        "phpstan/phpstan": "^2.1.6",
-        "phpunit/phpunit": "^11.5.10",
-        "slim/psr7": "^1.7",
-        "sunrise/http-message": "^3.4.2"
+        "phpstan/phpstan": "^2.1.32",
+        "phpunit/phpunit": "^12.4.5",
+        "slim/psr7": "^1.8",
+        "sunrise/http-message": "^3.7"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\Framework\\": "src/" }
@@ -67,7 +67,7 @@
         }
     },
     "scripts": {
-        "fix:cs": "mkdir -p build && PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --cache-file=build/phpcs.cache",
+        "fix:cs": "mkdir -p build && vendor/bin/php-cs-fixer fix --cache-file=build/phpcs.cache",
         "test": [
             "@test:lint",
             "@test:unit",
@@ -76,7 +76,7 @@
             "@test:static-analysis",
             "@test:cs"
         ],
-        "test:cs": "mkdir -p build && PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
+        "test:cs": "mkdir -p build && vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
         "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
         "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-directory=build/phpunit",
         "test:lint": "mkdir -p build && find src tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
