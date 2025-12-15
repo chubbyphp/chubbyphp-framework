@@ -16,7 +16,7 @@ final class RoutesByName implements RoutesByNameInterface
      */
     public function __construct(array $routes)
     {
-        foreach ($routes as $i => $route) {
+        foreach ($routes as $route) {
             $this->routes[$route->getName()] = $route;
         }
     }
