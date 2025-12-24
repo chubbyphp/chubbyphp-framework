@@ -273,6 +273,7 @@ final class ExceptionMiddleware implements MiddlewareInterface
 
             $body .= '</div>';
         }
+        $body .= '</div>';
 
         return $body;
     }
