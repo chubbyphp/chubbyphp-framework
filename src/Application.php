@@ -15,15 +15,15 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class Application implements RequestHandlerInterface
 {
-    private PipeMiddleware $pipeMiddleware;
+    private readonly PipeMiddleware $pipeMiddleware;
 
     /**
      * @param array<MiddlewareInterface> $middlewares
      */
     public function __construct(
         array $middlewares,
-        private RequestHandlerInterface $routeRequestHandler = new RouteRequestHandler(),
-        private EmitterInterface $emitter = new Emitter()
+        private readonly RequestHandlerInterface $routeRequestHandler = new RouteRequestHandler(),
+        private readonly EmitterInterface $emitter = new Emitter()
     ) {
         $this->pipeMiddleware = new PipeMiddleware($middlewares);
     }

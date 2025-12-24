@@ -19,12 +19,12 @@ final class Route implements RouteInterface
      * @param array<string, mixed>       $pathOptions
      */
     private function __construct(
-        private string $method,
-        private string $path,
-        private string $name,
-        private RequestHandlerInterface $requestHandler,
-        private array $middlewares = [],
-        private array $pathOptions = []
+        private readonly string $method,
+        private readonly string $path,
+        private readonly string $name,
+        private readonly RequestHandlerInterface $requestHandler,
+        private readonly array $middlewares = [],
+        private readonly array $pathOptions = []
     ) {}
 
     /**

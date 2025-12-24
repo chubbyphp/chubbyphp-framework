@@ -14,7 +14,7 @@ final class PipeMiddleware implements MiddlewareInterface
     /**
      * @var array<MiddlewareInterface>
      */
-    private array $middlewares;
+    private readonly array $middlewares;
 
     /**
      * @param array<MiddlewareInterface> $middlewares

@@ -163,11 +163,11 @@ final class ExceptionMiddleware implements MiddlewareInterface
         </html>
         EOT;
 
-    private LoggerInterface $logger;
+    private readonly LoggerInterface $logger;
 
     public function __construct(
-        private ResponseFactoryInterface $responseFactory,
-        private bool $debug = false,
+        private readonly ResponseFactoryInterface $responseFactory,
+        private readonly bool $debug = false,
         ?LoggerInterface $logger = null
     ) {
         $this->logger = $logger ?? new NullLogger();

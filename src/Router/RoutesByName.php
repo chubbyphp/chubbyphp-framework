@@ -9,16 +9,19 @@ final class RoutesByName implements RoutesByNameInterface
     /**
      * @var array<string, RouteInterface>
      */
-    private array $routes = [];
+    private readonly array $routesByName;
 
     /**
      * @param array<RouteInterface> $routes
      */
     public function __construct(array $routes)
     {
+        $routesByName = [];
         foreach ($routes as $route) {
-            $this->routes[$route->getName()] = $route;
+            $routesByName[$route->getName()] = $route;
         }
+
+        $this->routesByName = $routesByName;
     }
 
     /**
@@ -26,6 +29,6 @@ final class RoutesByName implements RoutesByNameInterface
      */
     public function getRoutesByName(): array
     {
-        return $this->routes;
+        return $this->routesByName;
     }
 }

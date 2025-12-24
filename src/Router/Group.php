@@ -14,10 +14,10 @@ final class Group implements GroupInterface
      * @param array<string, mixed>                 $pathOptions
      */
     private function __construct(
-        private string $path,
-        private array $children = [],
-        private array $middlewares = [],
-        private array $pathOptions = []
+        private readonly string $path,
+        private readonly array $children = [],
+        private readonly array $middlewares = [],
+        private readonly array $pathOptions = []
     ) {}
 
     /**
