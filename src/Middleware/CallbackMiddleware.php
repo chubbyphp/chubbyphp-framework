@@ -14,7 +14,7 @@ final class CallbackMiddleware implements MiddlewareInterface
     /**
      * @var callable
      */
-    private $callback;
+    private readonly mixed $callback;
 
     public function __construct(callable $callback)
     {

@@ -13,7 +13,7 @@ final class CallbackRequestHandler implements RequestHandlerInterface
     /**
      * @var callable
      */
-    private $callback;
+    private readonly mixed $callback;
 
     public function __construct(callable $callback)
     {

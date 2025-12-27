@@ -17,7 +17,7 @@ final class SlimCallbackMiddleware implements MiddlewareInterface
     /**
      * @var callable
      */
-    private $slimCallable;
+    private readonly mixed $slimCallable;
 
     public function __construct(callable $slimCallable, private readonly ResponseFactoryInterface $responseFactory)
     {
