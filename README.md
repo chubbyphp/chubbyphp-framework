@@ -37,7 +37,7 @@ A minimal, highly [performant][1] middleware [PSR-15][8] microframework built wi
 ## Requirements
 
  * php: ^8.3
- * [chubbyphp/chubbyphp-http-exception][20]: ^1.2
+ * [chubbyphp/chubbyphp-http-exception][20]: ^1.3.1
  * [psr/container][21]: ^1.1.2|^2.0.2
  * [psr/http-factory-implementation][22]: ^1.0
  * [psr/http-factory][23]: ^1.1

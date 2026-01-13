@@ -236,7 +236,7 @@ final class ExceptionMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array{class: string, message: string, code: int, file: string, line: int, trace: string}>
      */
     private function toExceptionsArray(\Throwable $exception): array
     {
@@ -256,7 +256,7 @@ final class ExceptionMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param array<array<string, string>> $exceptionsData
+     * @param array<int, array{class: string, message: string, code: int, file: string, line: int, trace: string}> $exceptionsData
      */
     private function addDebugToBody(array $exceptionsData): string
     {
