@@ -69,7 +69,7 @@ Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` c
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60].
 
 ```bash
-composer require chubbyphp/chubbyphp-framework "^6.0.2" \
+composer require chubbyphp/chubbyphp-framework "^6.1" \
     chubbyphp/chubbyphp-framework-router-fastroute "^2.3.3" \
     slim/psr7 "^1.8"
 ```
@@ -115,9 +115,51 @@ $app = new Application([
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 ```
 
+Or with the [ApplicationBuilder][67] facade, which wires the very same middleware pipe:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\Framework\Facade\ApplicationBuilder;
+use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
+use Chubbyphp\Framework\Router\FastRoute\RouteMatcher;
+use Chubbyphp\Framework\Router\RoutesByNameInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Psr7\Factory\ResponseFactory;
+use Slim\Psr7\Factory\ServerRequestFactory;
+
+require __DIR__.'/vendor/autoload.php';
+
+$responseFactory = new ResponseFactory();
+$createRouteMatcher = static fn (RoutesByNameInterface $routes) => new RouteMatcher($routes);
+
+$app = ApplicationBuilder::create($responseFactory, $createRouteMatcher, debug: true)
+    ->get('/hello/{name:[a-z]+}', 'hello', new CallbackRequestHandler(
+        static function (ServerRequestInterface $request) use ($responseFactory) {
+            $response = $responseFactory->createResponse();
+            $response->getBody()->write(sprintf('Hello, %s', $request->getAttribute('name')));
+
+            return $response;
+        }
+    ))
+    ->build();
+
+$app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
+```
+
 ### Emitter
 
  * [Emitter][65]
+
+### Facade
+
+ * [AbstractCollector][66]
+ * [ApplicationBuilder][67]
+ * [GroupCollector][68]
 
 ### Middleware
 
@@ -128,6 +170,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
  * [RouteMatcherMiddleware][74]
  * [SlimCallbackMiddleware][75]
  * [SlimLazyMiddleware][76]
+ * [UrlGeneratorMiddleware][77]
 
 ### RequestHandler
 
@@ -205,6 +248,9 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 [60]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
 
 [65]: doc/Emitter/Emitter.md
+[66]: doc/Facade/AbstractCollector.md
+[67]: doc/Facade/ApplicationBuilder.md
+[68]: doc/Facade/GroupCollector.md
 
 [70]: doc/Middleware/CallbackMiddleware.md
 [71]: doc/Middleware/ExceptionMiddleware.md
@@ -213,6 +259,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 [74]: doc/Middleware/RouteMatcherMiddleware.md
 [75]: doc/Middleware/SlimCallbackMiddleware.md
 [76]: doc/Middleware/SlimLazyMiddleware.md
+[77]: doc/Middleware/UrlGeneratorMiddleware.md
 
 [80]: doc/RequestHandler/CallbackRequestHandler.md
 [81]: doc/RequestHandler/LazyRequestHandler.md
