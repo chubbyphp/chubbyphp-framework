@@ -46,8 +46,9 @@ use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware;
 use Chubbyphp\Framework\RequestHandler\SlimCallbackRequestHandler;
 use Chubbyphp\Framework\Router\FastRoute\RouteMatcher;
 use Chubbyphp\Framework\Router\Route;
-use Chubbyphp\Framework\Router\Routes;
-use Psr\Http\Message\ServerRequestInterface;
+use Chubbyphp\Framework\Router\RoutesByName;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
@@ -57,7 +58,7 @@ $responseFactory = new ResponseFactory();
 
 $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
-    new RouteMatcherMiddleware(new RouteMatcher(new Routes([
+    new RouteMatcherMiddleware(new RouteMatcher(new RoutesByName([
         Route::get('/hello/{name}', 'hello', new SlimCallbackRequestHandler(
             static function (Request $request, Response $response, $args) {
                 $name = $args['name'];
@@ -67,7 +68,7 @@ $app = new Application([
             },
             $responseFactory
         ))
-    ])), $responseFactory),
+    ]))),
 ]);
 
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
@@ -88,7 +89,7 @@ use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware;
 use Chubbyphp\Framework\RequestHandler\CallbackRequestHandler;
 use Chubbyphp\Framework\Router\FastRoute\RouteMatcher;
 use Chubbyphp\Framework\Router\Route;
-use Chubbyphp\Framework\Router\Routes;
+use Chubbyphp\Framework\Router\RoutesByName;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
@@ -99,7 +100,7 @@ $responseFactory = new ResponseFactory();
 
 $app = new Application([
     new ExceptionMiddleware($responseFactory, true),
-    new RouteMatcherMiddleware(new RouteMatcher(new Routes([
+    new RouteMatcherMiddleware(new RouteMatcher(new RoutesByName([
         Route::get('/hello/{name}', 'hello', new CallbackRequestHandler(
             static function (ServerRequestInterface $request) use ($responseFactory) {
                 $name = $request->getAttribute('name');
@@ -109,7 +110,7 @@ $app = new Application([
                 return $response;
             }
         ))
-    ])), $responseFactory),
+    ]))),
 ]);
 
 $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
