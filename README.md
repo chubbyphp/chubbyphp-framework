@@ -156,7 +156,6 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 ## Migration
 
- * [3.x to 4.x][212]
  * [2.x to 3.x][211]
  * [1.x to 2.x][210]
  * [Slim to Chubbyphp][219]
@@ -230,5 +229,4 @@ Dominik Zogg 2021
 
 [210]: doc/Migration/1.x-2.x.md
 [211]: doc/Migration/2.x-3.x.md
-[212]: doc/Migration/3.x-4.x.md
 [219]: doc/Migration/Slim-Chubbyphp.md

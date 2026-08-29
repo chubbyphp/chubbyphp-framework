@@ -31,6 +31,8 @@ $app->run();
 
 ## Chubbyphp
 
+Requires `chubbyphp/chubbyphp-framework` `^3.5` and `chubbyphp/chubbyphp-framework-router-fastroute` `^1.2`.
+
 ### Keep Controller (RequestHandler) signature
 
 ```php
@@ -47,7 +49,8 @@ use Chubbyphp\Framework\RequestHandler\SlimCallbackRequestHandler;
 use Chubbyphp\Framework\Router\FastRoute\RouteMatcher;
 use Chubbyphp\Framework\Router\Route;
 use Chubbyphp\Framework\Router\Routes;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
