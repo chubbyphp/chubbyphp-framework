@@ -21,16 +21,7 @@
 
 ## Description
 
-A minimal, highly [performant][1] middleware [PSR-15][8] microframework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.
-
- * [Basic Coding Standard (1)][2]
- * [Coding Style Guide (2)][3]
- * [Logger Interface (3)][4]
- * [Autoloading Standard (4)][5]
- * [HTTP Message Interface (7)][6]
- * [Container Interface (11)][7]
- * [HTTP Handlers (15)][8]
- * [HTTP Factories (17)][9]
+A minimal, highly [performant][1] middleware microframework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use. It is built on [PSR-7][6] (HTTP message), [PSR-15][8] (handlers / middleware) and [PSR-17][9] (HTTP factories), with optional [PSR-11][7] container and [PSR-3][4] logger integration.
 
 ![Workflow](resources/workflow.svg "Workflow")
 
@@ -214,10 +205,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 [1]: https://web-frameworks-benchmark.netlify.app/result
 
-[2]: https://www.php-fig.org/psr/psr-1
-[3]: https://www.php-fig.org/psr/psr-2
 [4]: https://www.php-fig.org/psr/psr-3
-[5]: https://www.php-fig.org/psr/psr-4
 [6]: https://www.php-fig.org/psr/psr-7
 [7]: https://www.php-fig.org/psr/psr-11
 [8]: https://www.php-fig.org/psr/psr-15
