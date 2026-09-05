@@ -23,7 +23,7 @@
     ],
     "require": {
         "php": "^8.3",
-        "chubbyphp/chubbyphp-http-exception": "^1.3.3",
+        "chubbyphp/chubbyphp-http-exception": "^1.3.4",
         "psr/container": "^1.1.2|^2.0.2",
         "psr/http-factory": "^1.1",
         "psr/http-factory-implementation": "^1.0",
@@ -35,18 +35,18 @@
     },
     "require-dev": {
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^2.2.1",
-        "guzzlehttp/psr7": "^2.8",
+        "chubbyphp/chubbyphp-mock": "^2.2.2",
+        "guzzlehttp/psr7": "^2.13.1",
         "http-interop/http-factory-guzzle": "^1.2.1",
-        "infection/infection": "^0.34.0",
+        "infection/infection": "^0.35.4",
         "laminas/laminas-diactoros": "^3.8",
         "nyholm/psr7": "^1.8.2",
         "php-coveralls/php-coveralls": "^2.9.1",
         "phpstan/extension-installer": "^1.4.3",
-        "phpstan/phpstan": "^2.2.5",
-        "phpunit/phpunit": "^12.5.30",
+        "phpstan/phpstan": "^2.2.13",
+        "phpunit/phpunit": "^12.5.34",
         "slim/psr7": "^1.8",
-        "sunrise/http-message": "^3.7"
+        "sunrise/http-message": "^3.8.0"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\Framework\\": "src/" }
