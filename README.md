@@ -28,7 +28,7 @@ A minimal, highly [performant][1] middleware microframework built with as little
 ## Requirements
 
  * php: ^8.3
- * [chubbyphp/chubbyphp-http-exception][20]: ^1.3.4
+ * [chubbyphp/chubbyphp-http-exception][20]: ^1.3.5
  * [psr/container][21]: ^1.1.2|^2.0.2
  * [psr/http-factory-implementation][22]: ^1.0
  * [psr/http-factory][23]: ^1.1
@@ -44,13 +44,13 @@ A minimal, highly [performant][1] middleware microframework built with as little
 
 Any Router which implements `Chubbyphp\Framework\Router\RouteMatcherInterface` can be used.
 
- * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^2.3.4
- * [chubbyphp/chubbyphp-framework-router-symfony][31]: ^2.3.4
+ * [chubbyphp/chubbyphp-framework-router-fastroute][30]: ^2.3.5
+ * [chubbyphp/chubbyphp-framework-router-symfony][31]: ^2.3.5
 
 ### PSR 7 / PSR 17
 
- * [guzzlehttp/psr7][40]: ^2.13.1 (with [http-interop/http-factory-guzzle][41]: ^1.2.1)
- * [laminas/laminas-diactoros][42]: ^3.8
+ * [guzzlehttp/psr7][40]: ^2.13.2 (with [http-interop/http-factory-guzzle][41]: ^1.2.1)
+ * [laminas/laminas-diactoros][42]: ^3.9
  * [nyholm/psr7][43]: ^1.8.2
  * [slim/psr7][44]: ^1.8
  * [sunrise/http-message][45]: ^3.8.0
@@ -61,7 +61,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-framework][60
 
 ```bash
 composer require chubbyphp/chubbyphp-framework "^6.1" \
-    chubbyphp/chubbyphp-framework-router-fastroute "^2.3.4" \
+    chubbyphp/chubbyphp-framework-router-fastroute "^2.3.5" \
     slim/psr7 "^1.8"
 ```
 
