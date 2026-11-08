@@ -203,7 +203,7 @@ $app->emit($app->handle((new ServerRequestFactory())->createFromGlobals()));
 
 2026 Dominik Zogg
 
-[1]: https://web-frameworks-benchmark.netlify.app/result
+[1]: https://web-frameworks-benchmark.vercel.app/result?f=chubbyphp,chubbyphp-swoole,chubbyphp-workerman
 
 [4]: https://www.php-fig.org/psr/psr-3
 [6]: https://www.php-fig.org/psr/psr-7
