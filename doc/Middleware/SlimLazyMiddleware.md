@@ -12,6 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Some\Psr11\Container;
+use Some\Psr7\Response;
 use Some\Psr7\ResponseFactory;
 use Some\Psr7\ServerRequest;
 

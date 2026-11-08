@@ -10,8 +10,8 @@
 use Chubbyphp\Framework\RequestHandler\SlimCallbackRequestHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Some\Psr7\ServerRequest;
 use Some\Psr7\ResponseFactory;
+use Some\Psr7\ServerRequest;
 
 $request = new ServerRequest();
 

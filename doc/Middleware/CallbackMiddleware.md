@@ -2,7 +2,7 @@
 
 ## Methods
 
-### handle
+### process
 
 ```php
 <?php
@@ -27,5 +27,5 @@ $callbackMiddleware = new CallbackMiddleware(
     static fn (ServerRequestInterface $request, RequestHandlerInterface $handler) => $handler->handle($request)
 );
 
-$response = $callbackMiddleware->handle($request, $handler);
+$response = $callbackMiddleware->process($request, $handler);
 ```

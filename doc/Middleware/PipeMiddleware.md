@@ -2,7 +2,7 @@
 
 ## Methods
 
-### dispatch
+### process
 
 ```php
 <?php
@@ -12,6 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 use Some\Psr7\ServerRequest;
 
 $request = new ServerRequest();
@@ -39,5 +40,5 @@ $handler = new class() implements RequestHandlerInterface {
 
 $pipeMiddleware = new PipeMiddleware([$middleware1, $middleware2]);
 
-$response = $pipeMiddleware->dispatch($request, $handler);
+$response = $pipeMiddleware->process($request, $handler);
 ```

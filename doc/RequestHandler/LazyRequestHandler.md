@@ -15,7 +15,7 @@ $request = new ServerRequest();
 
 $container = new Container();
 
-$lazyMiddleware = new LazyRequestHandler($container, 'requestHandler');
+$lazyRequestHandler = new LazyRequestHandler($container, 'requestHandler');
 
-$response = $lazyMiddleware->handle($request);
+$response = $lazyRequestHandler->handle($request);
 ```

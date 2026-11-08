@@ -2,7 +2,7 @@
 
 ## Methods
 
-### handle
+### process
 
 ```php
 <?php
@@ -11,8 +11,9 @@ use Chubbyphp\Framework\Middleware\SlimCallbackMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Some\Psr7\ServerRequest;
+use Some\Psr7\Response;
 use Some\Psr7\ResponseFactory;
+use Some\Psr7\ServerRequest;
 
 $request = new ServerRequest();
 
@@ -30,5 +31,5 @@ $callbackMiddleware = new SlimCallbackMiddleware(
     $responseFactory
 );
 
-$response = $callbackMiddleware->handle($request, $handler);
+$response = $callbackMiddleware->process($request, $handler);
 ```

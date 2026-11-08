@@ -17,7 +17,7 @@ $request = new ServerRequest();
 $container = new Container();
 $responseFactory = new ResponseFactory();
 
-$lazyMiddleware = new SlimLazyRequestHandler($container, 'requestHandler', $responseFactory);
+$lazyRequestHandler = new SlimLazyRequestHandler($container, 'requestHandler', $responseFactory);
 
-$response = $lazyMiddleware->handle($request);
+$response = $lazyRequestHandler->handle($request);
 ```

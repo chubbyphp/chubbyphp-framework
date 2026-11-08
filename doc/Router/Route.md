@@ -29,9 +29,9 @@ $middleware = new class() implements MiddlewareInterface {
 };
 
 $route = Route::create(
-    Route::GET,
+    'GET',
     '/{id}',
-    'list',
+    'read',
     $handler,
     [$middleware],
     ['requirements' => ['id' => '\d+']]
@@ -379,7 +379,7 @@ $handler = new class() implements RequestHandlerInterface {
 
 $route = Route::get('/', 'get', $handler);
 
-$handler = $route->getRequestHandler();
+$requestHandler = $route->getRequestHandler();
 ```
 
 ### withAttributes

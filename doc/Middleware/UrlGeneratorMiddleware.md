@@ -11,12 +11,15 @@ so it is available within the following middlewares and request handlers.
 <?php
 
 use Chubbyphp\Framework\Middleware\UrlGeneratorMiddleware;
-use Chubbyphp\Framework\Router\Some\UrlGenerator;
+use Chubbyphp\Framework\Router\Route;
+use Chubbyphp\Framework\Router\RoutesByName;
 use Chubbyphp\Framework\Router\UrlGeneratorInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 use Some\Psr7\ServerRequest;
+use Some\Router\UrlGenerator;
 
 $request = new ServerRequest();
 
@@ -32,7 +35,11 @@ $handler = new class() implements RequestHandlerInterface {
     }
 };
 
-$urlGeneratorMiddleware = new UrlGeneratorMiddleware(new UrlGenerator());
+$urlGenerator = new UrlGenerator(new RoutesByName([
+    Route::get('/pets/{id}', 'pet_read', $handler),
+]));
+
+$urlGeneratorMiddleware = new UrlGeneratorMiddleware($urlGenerator);
 
 $response = $urlGeneratorMiddleware->process($request, $handler);
 ```

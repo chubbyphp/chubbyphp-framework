@@ -8,12 +8,15 @@
 <?php
 
 use Chubbyphp\Framework\Middleware\RouteMatcherMiddleware;
-use Chubbyphp\Framework\Router\Some\RouteMatcher;
+use Chubbyphp\Framework\RequestHandler\RouteRequestHandler;
+use Chubbyphp\Framework\Router\Route;
+use Chubbyphp\Framework\Router\RoutesByName;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Some\Psr7\Response;
 use Some\Psr7\ServerRequest;
-use Some\Psr7\ResponseFactory;
+use Some\Router\RouteMatcher;
 
 $request = new ServerRequest();
 
@@ -24,10 +27,11 @@ $handler = new class() implements RequestHandlerInterface {
     }
 };
 
-$routeMatcher = new RouteMatcher();
-$responseFactory = new ResponseFactory();
+$routeMatcher = new RouteMatcher(new RoutesByName([
+    Route::get('/', 'index', $handler),
+]));
 
-$RouteMatcherMiddleware = new RouteMatcherMiddleware($routeMatcher, $responseFactory);
+$routeMatcherMiddleware = new RouteMatcherMiddleware($routeMatcher);
 
-$response = $RouteMatcherMiddleware->process($request, $handler);
+$response = $routeMatcherMiddleware->process($request, new RouteRequestHandler());
 ```
